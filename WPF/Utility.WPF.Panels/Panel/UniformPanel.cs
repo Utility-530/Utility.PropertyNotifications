@@ -1,7 +1,6 @@
 ﻿namespace Auxide.Controls
 {
     using System;
-    using System.Collections;
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
@@ -83,8 +82,6 @@
             }
         }
 
-
-
         public static Size MeasureOverride(Size availableSize, UIElementCollection children, bool columnsChanged, bool rowsChanged, int columns, int rows)
         {
             var individualSize = GetChildSize(availableSize, columns, rows);
@@ -99,7 +96,6 @@
             }
             return availableSize;
         }
-
 
         /// <summary>
         /// Arrange the children

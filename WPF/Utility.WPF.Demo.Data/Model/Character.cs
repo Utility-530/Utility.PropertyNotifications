@@ -1,6 +1,3 @@
-using AnyClone;
-using Newtonsoft.Json;
-using SQLite;
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -8,6 +5,9 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using AnyClone;
+using Newtonsoft.Json;
+using SQLite;
 using Utility.Interfaces.Generic.Data;
 using Utility.Interfaces.NonGeneric;
 
@@ -98,6 +98,7 @@ namespace Utility.WPF.Demo.Data.Model
                 RaisePropertyChanged();
             }
         }
+
         [Ignore]
         public Color Color
         {
@@ -119,8 +120,6 @@ namespace Utility.WPF.Demo.Data.Model
         }
 
         public TimeSpan TimeSpan => TimeSpan.FromMinutes(Math.Pow(Age, 3));
-
-
 
         public override string ToString()
         {

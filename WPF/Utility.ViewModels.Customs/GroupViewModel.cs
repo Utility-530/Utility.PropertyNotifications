@@ -1,9 +1,10 @@
-﻿using DynamicData;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using DynamicData;
+using ReactiveUI;
+
 //using Utility.Common.Models;
 using Utility.Helpers;
 using Utility.Models;

@@ -1,12 +1,11 @@
-﻿using Castle.Core.Internal;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Utility.WPF.Abstract;
 using Utility.WPF.Controls.Base;
 using Utility.WPF.Controls.Lists.Infrastructure;
-using Utility.WPF.Templates;
-using Utility.WPF.Abstract;
 using Utility.WPF.Models;
+using Utility.WPF.Templates;
 
 namespace Utility.WPF.Controls.Lists
 {
@@ -56,6 +55,7 @@ namespace Utility.WPF.Controls.Lists
             get => GetValue(OutputProperty);
             protected set => SetValue(OutputPropertyKey, value);
         }
+
         #endregion properties
 
         protected override void PrepareContainerForItemOverride(CheckBox element, object item)

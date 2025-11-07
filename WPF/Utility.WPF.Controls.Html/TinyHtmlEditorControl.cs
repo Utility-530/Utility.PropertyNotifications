@@ -1,11 +1,8 @@
-﻿using AvalonEditB;
-using AvalonEditB.Highlighting;
-using System.IO;
-using System.Text.RegularExpressions;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
-using TheArtOfDev.HtmlRenderer.Demo.WPF;
+using AvalonEditB;
+using AvalonEditB.Highlighting;
 using TinyHtml.Wpf;
 using Utility.WPF.Controls.Base;
 
@@ -38,11 +35,11 @@ namespace Utility.WPF.Controls.Html
 
         private void TinyHtmlEditorControl_Unloaded(object sender, RoutedEventArgs e)
         {
-            this.RemoveLogicalChild(this.Content);    
+            this.RemoveLogicalChild(this.Content);
             this.Content = null;
             _htmlControl = null;
 
-            this.RemoveLogicalChild(this.Header);   
+            this.RemoveLogicalChild(this.Header);
             this.Header = null;
             _textEditor = null;
         }
@@ -58,8 +55,6 @@ namespace Utility.WPF.Controls.Html
             set { SetValue(HtmlProperty, value); }
         }
 
-
-
         public override void OnApplyTemplate()
         {
             //this.Movement = Enums.XYMovement.TopToBottom;
@@ -67,7 +62,7 @@ namespace Utility.WPF.Controls.Html
             _htmlControl = this.Content as HtmlControl;
             _htmlControl.Html = Html;
             //_htmlControl.Html = Html;
-            // its necessary to set the header in code-behind because of the difficulty detaching the TextEditor 
+            // its necessary to set the header in code-behind because of the difficulty detaching the TextEditor
             // when control is unloaded
             this.Header ??= new TextEditor()
             {
@@ -89,7 +84,7 @@ namespace Utility.WPF.Controls.Html
             _htmlControl.Html = GetFixedHtml();
         }
 
-        string GetFixedHtml()
+        private string GetFixedHtml()
         {
             var html = GetHtmlEditorText();
 
@@ -123,13 +118,13 @@ namespace Utility.WPF.Controls.Html
             return html;
         }
 
-        string GetHtmlEditorText()
+        private string GetHtmlEditorText()
         {
             //return new TextRange(_htmlEditor.Document.ContentStart, _htmlEditor.Document.ContentEnd).Text;
             return _textEditor?.Document.Text ?? string.Empty;
         }
 
-        void combine()
+        private void combine()
         {
             string cssFile = "sakura.css";
             //string cssFile = "pico.min.css";

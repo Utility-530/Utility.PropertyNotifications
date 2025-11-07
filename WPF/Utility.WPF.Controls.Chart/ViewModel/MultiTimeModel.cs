@@ -1,8 +1,4 @@
-﻿using OxyPlot;
-using OxyPlot.Wpf;
-using RandomColorGenerator;
-using Splat;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
@@ -12,8 +8,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
+using OxyPlot;
+using OxyPlot.Wpf;
+using RandomColorGenerator;
+using Splat;
 using Utility.Helpers;
-using Utility.Helpers.Ex;
 
 namespace Utility.WPF.Controls.Chart.ViewModels
 {

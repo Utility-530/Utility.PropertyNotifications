@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Utility.Helpers.NonGeneric;
@@ -62,7 +61,6 @@ namespace Utility.Trees
                     key = value;
                     this.RaisePropertyChanged(previous, value);
                 }
-
             }
         }
 
@@ -90,8 +88,6 @@ namespace Utility.Trees
                     m_items[index] = value as ITree;
             }
         }
-
-
 
         public virtual async void Add(object data)
         {
@@ -122,7 +118,6 @@ namespace Utility.Trees
                 }
                 else
                 {
-
                 }
                 return;
             }
@@ -163,7 +158,6 @@ namespace Utility.Trees
         {
             m_items.Clear();
         }
-
 
         public virtual async Task<Tree> AsyncClone()
         {
@@ -215,7 +209,6 @@ namespace Utility.Trees
             }
         }
 
-
         public virtual IEnumerable Children
         {
             get
@@ -223,7 +216,6 @@ namespace Utility.Trees
                 return m_items;
             }
         }
-
 
         public IIndex Index
         {
@@ -246,7 +238,6 @@ namespace Utility.Trees
                     yield return 0;
                 }
             }
-
         }
 
         public int Depth
@@ -298,7 +289,6 @@ namespace Utility.Trees
         protected void InvokeCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
         {
             this.CollectionChanged?.Invoke(sender, args);
-
         }
 
         public virtual IEnumerator<ITree> GetEnumerator()
@@ -311,13 +301,11 @@ namespace Utility.Trees
             return GetEnumerator();
         }
 
-
         protected virtual IList CreateChildren()
         {
             var collection = new ObservableCollection<ITree>();
             return collection;
         }
-
 
         public override string ToString()
         {
@@ -330,7 +318,6 @@ namespace Utility.Trees
         {
             return (other as IGetKey)?.Key?.Equals(this.Key) == true;
         }
-
 
         bool IEquatable<IReadOnlyTree>.Equals(IReadOnlyTree? other)
         {
@@ -349,7 +336,6 @@ namespace Utility.Trees
         {
             m_items.RemoveAt(index);
         }
-
 
         public bool Contains(ITree item)
         {
@@ -391,6 +377,5 @@ namespace Utility.Trees
             }
             return -1;
         }
-
     }
 }

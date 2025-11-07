@@ -1,11 +1,6 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Specialized;
 using System.Windows;
+using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Behaviors
 {
@@ -39,7 +34,7 @@ namespace Utility.WPF.Behaviors
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             //if (e.Action == NotifyCollectionChangedAction.Add)
-                InvokeActions(e);
+            InvokeActions(e);
         }
     }
 }

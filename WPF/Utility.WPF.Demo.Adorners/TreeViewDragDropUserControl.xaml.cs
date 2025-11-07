@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Utility.WPF.Demo.Adorners
 {
@@ -25,9 +15,8 @@ namespace Utility.WPF.Demo.Adorners
         {
             InitializeComponent();
             LastChildren(XAML_TreeView);
-
-
         }
+
         // 이벤트를 등록함
         private void LastChildren(ItemsControl control)
         {
@@ -43,20 +32,21 @@ namespace Utility.WPF.Demo.Adorners
             {
                 LastChildren(i);
             }
-
-
         }
 
-        TreeViewItem selectedTreeViewItem;
-        TreeViewItem changedTreeViewItem;
-        Collocate collocate;
-        enum Collocate
+        private TreeViewItem selectedTreeViewItem;
+        private TreeViewItem changedTreeViewItem;
+        private Collocate collocate;
+
+        private enum Collocate
         {
             Upper,
             Child,
             Lower
         }
-        Point mousePos;
+
+        private Point mousePos;
+
         // 마우스를 클릭 했을 때
         private void XAML_TreeView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -72,7 +62,6 @@ namespace Utility.WPF.Demo.Adorners
             TreeViewItem selfSender = sender as TreeViewItem;
 
             (sender as TreeViewItem).FontWeight = FontWeights.UltraBold; // 글자 굵게하여 강조
-
 
             // TODO 3단계 분류
             // 상단 : 아이템을 같은 Depth로 상단 배치
@@ -90,16 +79,12 @@ namespace Utility.WPF.Demo.Adorners
                 collocate = Collocate.Child;
 
                 Console.WriteLine("자식 배치");
-
             }
             else
             {
                 collocate = Collocate.Lower;
                 Console.WriteLine("하단 배치");
-
             }
-
-
         }
 
         // 교환
@@ -112,7 +97,7 @@ namespace Utility.WPF.Demo.Adorners
                 {
                     throw (new Exception());
                 }
-                // 본인과 같으면 
+                // 본인과 같으면
                 if (selectedTreeViewItem.Equals(changedTreeViewItem))
                 {
                     throw (new Exception());
@@ -132,15 +117,16 @@ namespace Utility.WPF.Demo.Adorners
                         case Collocate.Upper:
                             parent.Items.Insert(index, selectedTreeViewItem);
                             break;
+
                         case Collocate.Child:
                             changedTreeViewItem.Items.Add(selectedTreeViewItem);
                             break;
+
                         case Collocate.Lower:
                             index++;
                             parent.Items.Insert(index, selectedTreeViewItem);
                             break;
                     }
-
                 }
                 catch (Exception)
                 {
@@ -150,7 +136,6 @@ namespace Utility.WPF.Demo.Adorners
             }
             catch
             {
-
             }
             finally
             {
@@ -160,14 +145,12 @@ namespace Utility.WPF.Demo.Adorners
                 }
                 catch
                 {
-
                 }
 
                 (XAML_TreeView.Items[0] as TreeViewItem).IsSelected = false;
                 selectedTreeViewItem = null;
                 changedTreeViewItem = null;
             }
-
         }
 
         // 아이템이 나가면
@@ -175,7 +158,6 @@ namespace Utility.WPF.Demo.Adorners
         {
             changedTreeViewItem = null;
             (sender as TreeViewItem).FontWeight = FontWeights.Normal;
-
         }
 
         private void TreeViewItem_MouseMove(object sender, MouseEventArgs e)
@@ -191,9 +173,7 @@ namespace Utility.WPF.Demo.Adorners
                 }
                 else
                 {
-
                 }
-
             }
         }
 

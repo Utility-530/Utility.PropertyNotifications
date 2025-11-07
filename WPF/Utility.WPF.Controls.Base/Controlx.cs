@@ -1,5 +1,4 @@
-﻿using Evan.Wpf;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +8,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using Utility.WPF.Reactives;
-using Utility.Helpers;
+using Evan.Wpf;
 using Utility.Helpers.Reflection;
-using Utility.WPF.Properties;
-using Utility.WPF.Helpers;
 using Utility.Reactives;
+using Utility.WPF.Helpers;
+using Utility.WPF.Properties;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.Base
 {
@@ -175,7 +174,7 @@ namespace Utility.WPF.Controls.Base
                         return control
                             .LoadedChanges()
                             .Subscribe(a =>
-                            {                         
+                            {
                                 var t = dependencyObject
                                 .FindChildren<FrameworkElement>()
                                 .ToArray();
@@ -192,7 +191,7 @@ namespace Utility.WPF.Controls.Base
                 .Return(dependencyObject
                 .FindVisualChildren<FrameworkElement>()
                 .ToArray())
-                .SelectMany(); 
+                .SelectMany();
         }
     }
 
@@ -349,7 +348,6 @@ namespace Utility.WPF.Controls.Base
         //    });
         //}
     }
-
 
     public class DependencyPropertyFactory<TControl> where TControl : DependencyObject
     {

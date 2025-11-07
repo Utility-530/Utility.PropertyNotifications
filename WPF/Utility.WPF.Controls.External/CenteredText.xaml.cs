@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Utility.WPF.Controls.External
 {
@@ -23,7 +13,6 @@ namespace Utility.WPF.Controls.External
         public CenteredText()
         {
             InitializeComponent();
-          
         }
 
         public static readonly DependencyProperty ElementProperty = DependencyProperty
@@ -48,7 +37,7 @@ namespace Utility.WPF.Controls.External
             set { SetValue(ElementProperty, value); }
         }
 
-        void Content_Loaded(object sender, RoutedEventArgs e)
+        private void Content_Loaded(object sender, RoutedEventArgs e)
         {
             FrameworkElement elem = sender as FrameworkElement;
             int w = (int)elem.ActualWidth;
@@ -87,7 +76,7 @@ namespace Utility.WPF.Controls.External
             }
         }
 
-        bool TryFindGlyphs(BitmapSource src, out Rect rc)
+        private bool TryFindGlyphs(BitmapSource src, out Rect rc)
         {
             int left = int.MaxValue;
             int toRight = -1;
@@ -117,5 +106,4 @@ namespace Utility.WPF.Controls.External
             return (toRight > left) && (toBottom > top);
         }
     }
-
 }

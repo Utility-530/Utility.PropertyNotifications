@@ -1,18 +1,18 @@
-﻿using System.Reactive.Linq;
+﻿using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 using System.Reflection;
-using Utility.Interfaces.Generic;
-using Utility.Interfaces.NonGeneric;
-using Key = Utility.Models.Key;
-using GuidBase = Utility.Models.GuidBase;
-using Utility.Observables.Generic;
-using Utility.Observables.NonGeneric;
+using System.Runtime.CompilerServices;
 using LanguageExt;
 using Utility.Helpers;
-using System.Collections.ObjectModel;
-using System.Runtime.CompilerServices;
+using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
+using Utility.Interfaces.Reactive.NonGeneric;
+using Utility.Observables.Generic;
+using Utility.Observables.NonGeneric;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
-using Utility.Interfaces.Reactive.NonGeneric;
+using GuidBase = Utility.Models.GuidBase;
+using Key = Utility.Models.Key;
 
 namespace Utility.Infrastructure
 {
@@ -43,7 +43,7 @@ namespace Utility.Infrastructure
 
     public record SubjectKey(Guid Source, Guid Target, Guid Node);
 
-    public abstract class BaseObject : NotifyPropertyClass, IKey<Key> 
+    public abstract class BaseObject : NotifyPropertyClass, IKey<Key>
     {
         public static IResolver Resolver { get; set; }
 
@@ -145,7 +145,6 @@ namespace Utility.Infrastructure
             // if return type is not an observable
             if (single == default)
             {
-
                 if (instance.TryGetPrivateFieldValue("_source", out var source))
                     return TrySubscribe(source, action, onError, onCompleted, onProgress);
                 else if (instance.TryGetPrivateFieldValue("_value", out var value))
@@ -172,6 +171,7 @@ namespace Utility.Infrastructure
             throw new Exception("D5 666SVds sss");
         }
     }
+
     public interface IIOType
     {
         Type InType { get; }
@@ -181,7 +181,9 @@ namespace Utility.Infrastructure
     public interface IObserverIOType : IIOType
     {
         public Key Key { get; }
+
         bool Unlock(GuidValue guidValue);
+
         void Send(GuidValue guidValue);
     }
 
@@ -202,7 +204,7 @@ namespace Utility.Infrastructure
         public Key Key { get; }
 
         public Type InType { get; }
-        
+
         public Type OutType { get; }
 
         public List<IDisposable> disposables { get; } = new();
@@ -219,7 +221,7 @@ namespace Utility.Infrastructure
             {
                 output = methodInfo._(parameter.Value);
 
-                if(output is IGetGuid guid)
+                if (output is IGetGuid guid)
                 {
                     var value = new GuidValue(guid, guidValue);
                     Outputs.Add(value);
@@ -248,7 +250,6 @@ namespace Utility.Infrastructure
             e => resolver.Send(new GuidValue(GuidBase.OnError(GetGuid(), e), guidValue)),
             () =>
             {
-
                 if (disposable is not null)
                 {
                     disposable?.Dispose();
@@ -268,11 +269,9 @@ namespace Utility.Infrastructure
                     throw new Exception(" dfdfff444");
                 resolver.Send(new GuidValue(guid, guidValue));
             }
-
-
         }
 
-        Type GetOutType()
+        private Type GetOutType()
         {
             if (methodInfo.OutType.GetGenericArguments().SingleOrDefault() is Type type)
                 return type;
@@ -280,8 +279,7 @@ namespace Utility.Infrastructure
                 return methodInfo.OutType;
         }
 
-
-        Guid GetGuid()
+        private Guid GetGuid()
         {
             return GetOutType().GUID;
         }
@@ -311,7 +309,6 @@ namespace Utility.Infrastructure
             return other?.InType.Equals(this.InType) ==
                 other?.OutType.Equals(this.OutType) == true;
         }
-
 
         public override string ToString()
         {

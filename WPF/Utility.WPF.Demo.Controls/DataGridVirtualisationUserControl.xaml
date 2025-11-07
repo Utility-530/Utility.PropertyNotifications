@@ -25,7 +25,6 @@
     </UserControl.Resources>
 
     <UniformGrid Columns="3">
-  
 
         <Grid x:Name="Grid2">
             <Grid.RowDefinitions>

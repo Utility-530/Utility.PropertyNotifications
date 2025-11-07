@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Text;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Utility.WPF.Colours
 {
@@ -15,6 +15,5 @@ namespace Utility.WPF.Colours
                 ((((hashCode >> 16) & 0xFF) + 255) / 2).ToString("X") +
                 ((((hashCode >> 08) & 0xFF) + 255) / 2).ToString("X");
         }
-
     }
 }

@@ -5,7 +5,6 @@
     xmlns:btns="http://schemas.utility.com/buttons"
     xmlns:tree="clr-namespace:Utility.WPF.Controls.Trees">
 
-
     <tree:IndentConverter x:Key="IndentConverter" />
 
     <ControlTemplate x:Key="TreeViewItemControlTemplate" TargetType="{x:Type tree:CustomTreeViewItem}">
@@ -169,7 +168,4 @@
         <Setter Property="Template" Value="{StaticResource TreeViewItemControlTemplate}" />
         <Setter Property="IsExpanded" Value="True" />
     </Style>
-
-
-
 </ResourceDictionary>

@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Models
 {
-
     public class Key<T> : Key
     {
         public Key(Guid guid) : base(guid, typeof(T).Name, typeof(T))
         {
         }
     }
+
     public class Key : ISerialise, IGetGuid, IType, IName, IEquatable, IEquatable<ISerialise>
     {
         public Key(Guid guid, string name, Type type)
@@ -50,7 +45,6 @@ namespace Utility.Models
             var obj = JsonSerializer.Serialize(this);
             return obj;
         }
-
 
         public bool Equals(IEquatable? other)
         {

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using Utility.ViewModels;
 using Utility.WPF.Demo.Date.Infrastructure.Repository;
 
 namespace Utility.WPF.Demo.Date

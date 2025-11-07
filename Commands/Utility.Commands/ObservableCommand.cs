@@ -8,7 +8,7 @@ namespace Utility.Commands
     {
         private bool canExecute;
         private Func<IObserver<bool>, object> methodToExecute_;
-        List<IObserver<object>> observers = new();
+        private List<IObserver<object>> observers = new();
         private object? id;
         private readonly Action<IObserver<bool>> methodToExecute;
 
@@ -23,7 +23,6 @@ namespace Utility.Commands
             this.canExecute = canExecute;
             this.methodToExecute_ = methodToExecute;
         }
-
 
         public ObservableCommand(object? id = null)
         {
@@ -43,8 +42,7 @@ namespace Utility.Commands
         public bool CanExecute(object? parameter) => canExecute;
 
         public void Execute(object? parameter)
-        {      
-
+        {
             if (methodToExecute != null)
             {
                 methodToExecute.Invoke(this);
@@ -58,7 +56,7 @@ namespace Utility.Commands
                     observer.OnNext(output);
                 }
             }
-            else if(methodToExecute_!=null)
+            else if (methodToExecute_ != null)
             {
                 var output = methodToExecute_.Invoke(this);
 
@@ -98,6 +96,5 @@ namespace Utility.Commands
                 observer.OnNext(output);
             return new Disposer<object>(observers, observer);
         }
-
     }
 }

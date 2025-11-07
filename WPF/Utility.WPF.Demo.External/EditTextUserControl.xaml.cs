@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Utility.WPF.Helpers;
-using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Demo.External
 {
@@ -28,32 +19,28 @@ namespace Utility.WPF.Demo.External
         public EditTextUserControl()
         {
             InitializeComponent();
-//            Observable.FromEventPattern<MouseButtonEventHandler, MouseEventArgs>(
-//                   s => editpath.PreviewMouseUp += s,
-//                   s => editpath.PreviewMouseUp -= s)
-//                .Subscribe(a =>
-//            {
-//                layer ??= AdornerLayer.GetAdornerLayer(TextBlock);
-//                var adorner = new DirectEditTextBoxAdorner(TextBlock, TextBlock);
-//                layer.Add(adorner);
+            //            Observable.FromEventPattern<MouseButtonEventHandler, MouseEventArgs>(
+            //                   s => editpath.PreviewMouseUp += s,
+            //                   s => editpath.PreviewMouseUp -= s)
+            //                .Subscribe(a =>
+            //            {
+            //                layer ??= AdornerLayer.GetAdornerLayer(TextBlock);
+            //                var adorner = new DirectEditTextBoxAdorner(TextBlock, TextBlock);
+            //                layer.Add(adorner);
 
-////                Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
-////                    s => adorner.LostFocus += s,
-////                    s => adorner.LostFocus -= s)
-////                .Subscribe(a =>
-////                {
-////   layer ??= AdornerLayer.GetAdornerLayer(TextBlock);
-////   layer.Clear();
-////});
+            ////                Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
+            ////                    s => adorner.LostFocus += s,
+            ////                    s => adorner.LostFocus -= s)
+            ////                .Subscribe(a =>
+            ////                {
+            ////   layer ??= AdornerLayer.GetAdornerLayer(TextBlock);
+            ////   layer.Clear();
+            ////});
 
-
-//            });
-
-       
+            //            });
         }
-
-
     }
+
     public abstract class DirectEditAdorner : Adorner
     {
         protected readonly VisualCollection visualChildren;
@@ -170,7 +157,6 @@ namespace Utility.WPF.Demo.External
             _mainUiElement = textBox;
             visualChildren.Add(textBox);
         }
-
 
         private void FocusTextBox()
         {

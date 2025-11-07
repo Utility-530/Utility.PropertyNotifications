@@ -1,10 +1,8 @@
-﻿
-
-namespace Utility.WPF.Attached
-{  
+﻿namespace Utility.WPF.Attached
+{
     //<a href="https://www.codeproject.com/Articles/72229/WPF-Animate-Visibility-Property-Update?pageflow=FixedWidth"/>
-     //WPF: Animate Visibility Property - Update
-     //Arik Poznanski
+    //WPF: Animate Visibility Property - Update
+    //Arik Poznanski
 
     //Apr 13, 2010
 
@@ -23,7 +21,6 @@ namespace Utility.WPF.Attached
     using System.Windows.Data;
     using System.Windows.Media.Animation;
 
-
     /// <summary>
     /// Supplies attached properties that provides visibility of animations
     /// </summary>
@@ -35,6 +32,7 @@ namespace Utility.WPF.Attached
             /// No animation
             /// </summary>
             None,
+
             /// <summary>
             /// Fade in / Fade out
             /// </summary>
@@ -73,7 +71,7 @@ namespace Utility.WPF.Attached
         }
 
         /// <summary>
-        /// Using a DependencyProperty as the backing store for AnimationType.  
+        /// Using a DependencyProperty as the backing store for AnimationType.
         /// This enables animation, styling, binding, etc...
         /// </summary>
         public static readonly DependencyProperty AnimationTypeProperty =
@@ -105,7 +103,7 @@ namespace Utility.WPF.Attached
         }
 
         /// <summary>
-        /// Using a DependencyProperty as the backing store for IgnoreFirstTime.  
+        /// Using a DependencyProperty as the backing store for IgnoreFirstTime.
         /// This enables animation, styling, binding, etc...
         /// </summary>
         public static readonly DependencyProperty IgnoreFirstTimeProperty =
@@ -114,7 +112,6 @@ namespace Utility.WPF.Attached
                 typeof(bool),
                 typeof(VisibilityAnimation),
                 new UIPropertyMetadata(false));
-
 
         /// <summary>
         /// AnimationType property changed
@@ -132,7 +129,7 @@ namespace Utility.WPF.Attached
                 return;
             }
 
-            // If AnimationType is set to True on this framework element, 
+            // If AnimationType is set to True on this framework element,
             if (GetAnimationType(frameworkElement) != AnimationType.None)
             {
                 // Add this framework element to hooked list
@@ -213,8 +210,8 @@ namespace Utility.WPF.Attached
             var visibility = (Visibility)baseValue;
 
             // If Visibility value hasn't change, do nothing.
-            // This can happen if the Visibility property is set using data 
-            // binding and the binding source has changed 
+            // This can happen if the Visibility property is set using data
+            // binding and the binding source has changed
             // but the new visibility value hasn't changed.
             if (visibility == frameworkElement.Visibility)
             {
@@ -227,7 +224,7 @@ namespace Utility.WPF.Attached
                 return baseValue;
             }
 
-            // if element has IgnoreFirstTime flag set, then ignore the first time 
+            // if element has IgnoreFirstTime flag set, then ignore the first time
             // the property is coerced.
             if (GetIgnoreFirstTime(frameworkElement))
             {
@@ -242,30 +239,30 @@ namespace Utility.WPF.Attached
                 return baseValue;
             }
 
-            // If we get here, it means we have to start fade in or fade out animation. 
-            // In any case return value of this method will be Visibility.Visible, 
+            // If we get here, it means we have to start fade in or fade out animation.
+            // In any case return value of this method will be Visibility.Visible,
             // to allow the animation.
             var doubleAnimation = new DoubleAnimation
             {
                 Duration = new Duration(TimeSpan.FromMilliseconds(ANIMATION_DURATION))
             };
 
-            // When animation completes, set the visibility value to the requested 
+            // When animation completes, set the visibility value to the requested
             // value (baseValue)
             doubleAnimation.Completed += (sender, eventArgs) =>
             {
                 if (visibility == Visibility.Visible)
                 {
-                    // In case we change into Visibility.Visible, the correct value 
+                    // In case we change into Visibility.Visible, the correct value
                     // is already set
                     // So just update the animation started flag
                     UpdateAnimationStartedFlag(frameworkElement);
                 }
                 else
                 {
-                    // This will trigger value coercion again 
-                    // but UpdateAnimationStartedFlag() function will reture true this time, 
-                    // thus animation will not be triggered. 
+                    // This will trigger value coercion again
+                    // but UpdateAnimationStartedFlag() function will reture true this time,
+                    // thus animation will not be triggered.
                     if (BindingOperations.IsDataBound(frameworkElement,
                         UIElement.VisibilityProperty))
                     {
@@ -302,7 +299,7 @@ namespace Utility.WPF.Attached
             frameworkElement.BeginAnimation(UIElement.OpacityProperty, doubleAnimation);
 
             // Make sure the element remains visible during the animation
-            // The original requested value will be set in the completed event of 
+            // The original requested value will be set in the completed event of
             // the animation
             return Visibility.Visible;
         }
@@ -329,6 +326,5 @@ namespace Utility.WPF.Attached
 
             return animationStarted;
         }
-
     }
 }

@@ -6,7 +6,3 @@ public abstract class BasePropertyDescriptor(Descriptor Descriptor, object Insta
 {
     public object Instance { get; } = Instance;
 }
-
-
-
-

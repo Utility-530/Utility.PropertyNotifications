@@ -1,11 +1,9 @@
-using System;
-
 namespace openStudioFileLine
 {
-    using EnvDTE;
     using System.Runtime.InteropServices;
     using System.Runtime.Versioning;
     using System.Security;
+    using EnvDTE;
 
     public static class LineNavigator
     {

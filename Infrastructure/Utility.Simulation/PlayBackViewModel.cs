@@ -31,9 +31,5 @@ namespace Utility.Simulation
                 RaisePropertyChanged();
             }
         }
-
-
-
-
     }
 }

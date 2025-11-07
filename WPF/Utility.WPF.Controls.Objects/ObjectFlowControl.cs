@@ -292,8 +292,10 @@ namespace Utility.WPF.Controls.Objects
         }
 
         private bool? isCompleted = true;
+
         // private double height;
         private ColumnDefinition treeCol;
+
         private TreeView treeView1;
         private GridSplitter gridSplitter;
         private FlowDocumentScrollViewer docViewer;
@@ -440,7 +442,6 @@ namespace Utility.WPF.Controls.Objects
             };
 
             static IEnumerable<(PropertyInfo, object?)> GetInformation(object e) => e.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(info => (info, info.GetIndexParameters().Length == 0 ? info.GetValue(e) : null));
-  
 
             static IEnumerable<(string name, Inline[] inlines)> EnumerateProperties((PropertyInfo, object?)[] props, string? innerProperty, double fontSize)
             {

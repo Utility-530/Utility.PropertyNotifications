@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
 using System.Windows;
+using System.Windows.Data;
 
 namespace Utility.WPF
 {
@@ -26,10 +22,10 @@ namespace Utility.WPF
         public string Property { get; set; }
 
         /// <summary>
-        /// Gets/sets whether the spy will return the CurrentItem of the 
+        /// Gets/sets whether the spy will return the CurrentItem of the
         /// ICollectionView that wraps the data context, assuming it is
-        /// a collection of some sort. If the data context is not a 
-        /// collection, this property has no effect. 
+        /// a collection of some sort. If the data context is not a
+        /// collection, this property has no effect.
         /// The default value is true.
         /// </summary>
         public bool IsSynchronizedWithCurrentItem { get; set; }
@@ -46,7 +42,7 @@ namespace Utility.WPF
             typeof(DataContextSpy),
             new PropertyMetadata(null, null, OnCoerceDataContext));
 
-        static object OnCoerceDataContext(DependencyObject depObj, object value)
+        private static object OnCoerceDataContext(DependencyObject depObj, object value)
         {
             DataContextSpy spy = depObj as DataContextSpy;
             if (spy == null)

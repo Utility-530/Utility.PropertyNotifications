@@ -1,5 +1,4 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Microsoft.Xaml.Behaviors;
 using Utility.Changes;
 using Utility.Reactives;
 using Utility.WPF.Helpers;
@@ -22,24 +22,19 @@ namespace Utility.WPF.Demo.Adorners
     /// </summary>
     public partial class TreeViewHoverUserControl : UserControl
     {
-
         public TreeViewHoverUserControl()
         {
             InitializeComponent();
         }
     }
 
-
-
     public class MouseMoveItems : Behavior<TreeView>
     {
-
         public ObservableCollection<object> Items { get; } = new();
 
         protected override void OnAttached()
         {
             base.OnAttached();
-
 
             AssociatedObject
                 .MouseMoves()
@@ -60,8 +55,9 @@ namespace Utility.WPF.Demo.Adorners
     {
         public static readonly DependencyProperty ItemsProperty =
         DependencyProperty.Register("Items", typeof(IEnumerable), typeof(HighlightItems), new PropertyMetadata(changed));
+
         private AdornerLayer layer;
-        Dictionary<TreeViewItem, DropTargetHintAdorner> dictionary = new();
+        private Dictionary<TreeViewItem, DropTargetHintAdorner> dictionary = new();
 
         private static void changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -73,8 +69,6 @@ namespace Utility.WPF.Demo.Adorners
 
         private void update(IEnumerable enumerable)
         {
-
-
             enumerable.AndChanges<object>().Subscribe(a =>
             {
                 foreach (var item in a)
@@ -90,7 +84,6 @@ namespace Utility.WPF.Demo.Adorners
                         if (_value is TreeViewItem value)
 
                             tvi = value;
-
                         else
                             tvi = (TreeViewItem)(AssociatedObject.ItemContainerGenerator.ContainerFromItem(item));
                         if (type == Changes.Type.Add)
@@ -102,14 +95,13 @@ namespace Utility.WPF.Demo.Adorners
                         {
                             layer.Remove(dictionary[tvi]);
                             dictionary.Remove(tvi);
-                        }         
+                        }
                         else if (type == Changes.Type.Reset)
                         {
                             layer.Clear();
                             dictionary.Clear();
                         }
                     }
-
                 }
             });
         }
@@ -120,13 +112,11 @@ namespace Utility.WPF.Demo.Adorners
             set { SetValue(ItemsProperty, value); }
         }
 
-
         protected override void OnAttached()
         {
             base.OnAttached();
         }
     }
-
 
     /// <summary>
     /// This adorner is used to display hints for where items can be dropped.
@@ -161,7 +151,6 @@ namespace Utility.WPF.Demo.Adorners
             this.presenter = new ContentPresenter()
             {
                 IsHitTestVisible = false,
-
             };
             //var binding = new Binding(nameof(this.Object))
             //{
@@ -228,6 +217,5 @@ namespace Utility.WPF.Demo.Adorners
         public void Update(object hintData)
         {
         }
-
     }
 }

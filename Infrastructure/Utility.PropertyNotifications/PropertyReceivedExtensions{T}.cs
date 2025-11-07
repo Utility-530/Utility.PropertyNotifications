@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
-using Utility.Interfaces;
 using Utility.Helpers.Reflection;
+using Utility.Interfaces;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyNotifications
@@ -47,7 +47,6 @@ namespace Utility.PropertyNotifications
                         var value = _getter.Invoke(_target);
                         if (includeNulls || !Comparison.IsDefaultValue(value))
                             _observer.OnNext(value);
-
                     }
                 }
 

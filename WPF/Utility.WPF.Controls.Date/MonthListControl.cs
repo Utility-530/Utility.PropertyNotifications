@@ -2,7 +2,6 @@
 
 namespace Utility.WPF.Controls.Date
 {
-
     public class MonthListControl : MonthControl
     {
         static MonthListControl()

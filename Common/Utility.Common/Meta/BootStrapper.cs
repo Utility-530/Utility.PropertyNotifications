@@ -1,8 +1,8 @@
-﻿using Autofac;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Autofac;
 using Utility.Helpers.Reflection;
 
 namespace Utility.Common
@@ -18,7 +18,6 @@ namespace Utility.Common
 
         public void AutoRegister(IEnumerable<Assembly>? assembliesToScan = null)
         {
-
             ContainerBuilder builder = new();
             foreach (IBootStrapper? bootStrapper in BootStrappers())
             {
@@ -34,7 +33,6 @@ namespace Utility.Common
         }
 
         public static Resolver Instance { get; } = new Resolver();
-
 
         public T Resolve<T>() where T : notnull
         {

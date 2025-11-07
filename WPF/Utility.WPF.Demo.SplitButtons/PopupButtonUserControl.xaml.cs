@@ -12,9 +12,9 @@ namespace Utility.WPF.Demo.SplitButtons
         {
             InitializeComponent();
         }
+
         private void MenuItemClick(object sender, RoutedEventArgs e)
         {
-
         }
     }
 }

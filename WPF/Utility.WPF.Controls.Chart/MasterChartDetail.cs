@@ -1,17 +1,17 @@
-﻿using DynamicData;
-using Evan.Wpf;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Utility.WPF.Reactives;
+using DynamicData;
+using Evan.Wpf;
+using ReactiveUI;
 using Utility.WPF.Abstract;
 using Utility.WPF.Controls.Master;
 using Utility.WPF.Helpers;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.Chart
 {

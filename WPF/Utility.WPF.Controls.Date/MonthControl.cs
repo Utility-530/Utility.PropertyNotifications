@@ -25,11 +25,13 @@ public class MonthControl : Control
     //}
 
     #region properties
+
     public IValueConverter ValueConverter
     {
         get => (IValueConverter)GetValue(ValueConverterProperty);
         set => SetValue(ValueConverterProperty, value);
     }
+
     public object SelectedItem
     {
         get => GetValue(SelectedItemProperty);
@@ -81,7 +83,6 @@ public class MonthControl : Control
     }
 }
 
-
 /// <summary>
 /// Override <see cref="PrepareContainerForItemOverride(DependencyObject, object)"/>
 /// and sets the content of the <see cref="DayControl"/> with <see cref="ValueConverter"/>
@@ -91,7 +92,7 @@ public class DayListBox : ListBox
     public static readonly DependencyProperty ValueConverterProperty =
         DependencyProperty.Register("ValueConverter", typeof(IValueConverter), typeof(DayListBox), new PropertyMetadata());
 
-    protected sealed override void PrepareContainerForItemOverride(DependencyObject element, object item)
+    protected override sealed void PrepareContainerForItemOverride(DependencyObject element, object item)
     {
         if (element is not ListBoxItem t)
             throw new System.Exception("s fdsd  77ffs");
@@ -112,6 +113,5 @@ public class DayListBox : ListBox
 
     protected override void OnPreviewKeyDown(KeyEventArgs e)
     {
-
     }
 }

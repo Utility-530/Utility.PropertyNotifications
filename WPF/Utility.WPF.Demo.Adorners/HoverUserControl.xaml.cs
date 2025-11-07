@@ -1,8 +1,8 @@
-﻿using MaterialDesignThemes.Wpf;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using MaterialDesignThemes.Wpf;
 using Utility.Commands;
 using Utility.WPF.Adorners;
 
@@ -13,8 +13,6 @@ namespace Utility.WPF.Demo.Adorners
     /// </summary>
     public partial class HoverUserControl : UserControl
     {
-
-
         public HoverUserControl()
         {
             InitializeComponent();
@@ -23,8 +21,6 @@ namespace Utility.WPF.Demo.Adorners
             Grid1.DataContext = this;
 
             //adornerController = new(Square3Grid);
-
-
         }
 
         //Square3Grid.DataContext = new Characters();
@@ -41,20 +37,15 @@ namespace Utility.WPF.Demo.Adorners
                 TextBlock1.Text = TextBlock1.Text.Remove(TextBlock1.Text.Length - 9);
             }
         }
-
-
-
-
-
     }
 
     public class PlusAdornerBehavior : AdornerBehavior
     {
-        override protected Adorner CreateAdorner() => new PlusAdorner(AssociatedObject, Command);
+        protected override Adorner CreateAdorner() => new PlusAdorner(AssociatedObject, Command);
     }
 
     public class PopUpAdornerBehavior : AdornerBehavior
     {
-        override protected Adorner CreateAdorner() => new FrameworkElementAdorner<PopupBox>(AssociatedObject as FrameworkElement, ()=> Application.Current.Resources["PopupBox"] as FrameworkElement);
+        protected override Adorner CreateAdorner() => new FrameworkElementAdorner<PopupBox>(AssociatedObject as FrameworkElement, () => Application.Current.Resources["PopupBox"] as FrameworkElement);
     }
 }

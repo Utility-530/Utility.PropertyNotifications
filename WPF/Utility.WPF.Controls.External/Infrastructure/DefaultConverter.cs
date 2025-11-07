@@ -1,15 +1,8 @@
-﻿using Custom.Controls;
-using Microsoft.Xaml.Behaviors;
-using Microsoft.Xaml.Behaviors.Core;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
-using System.Windows.Input;
+using Custom.Controls;
+using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Controls.External
 {
@@ -30,7 +23,7 @@ namespace Utility.WPF.Controls.External
     {
         protected override void Invoke(object parameter)
         {
-            if(TargetObject is EditableTextBlock e)
+            if (TargetObject is EditableTextBlock e)
             {
                 e.Text = e.OldText;
                 e.IsInEditMode = false;

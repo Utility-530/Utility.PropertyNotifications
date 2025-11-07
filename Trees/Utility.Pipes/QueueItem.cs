@@ -10,7 +10,5 @@
         public DateTime DateTime { get; }
 
         public abstract void Invoke();
-   
     }
 }
-

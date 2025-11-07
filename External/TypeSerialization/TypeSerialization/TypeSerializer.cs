@@ -22,7 +22,7 @@ namespace TypeSerialization
                 return nameof(Type);
 
             if (!type.IsGenericType)
-                return Types.Defaults.Value.Contains(type)? type.Name: AsString(type);
+                return Types.Defaults.Value.Contains(type) ? type.Name : AsString(type);
 
             var nameLength = type.Name.IndexOf('`');
             var name = nameLength < 0 ? type.Name : type.Name.Substring(0, nameLength);
@@ -55,7 +55,5 @@ namespace TypeSerialization
         {
             return AsString(type.Assembly.ToString(), type.Namespace, type.Name);
         }
-
-
     }
 }

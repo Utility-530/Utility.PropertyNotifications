@@ -1,12 +1,12 @@
+using System.Collections;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using Utility.Collections;
+using Utility.Infrastructure;
+using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-using System.Collections;
-using System.ComponentModel;
-using Utility.Infrastructure;
 using Utility.Trees.Abstractions;
-using Utility.Interfaces.Generic;
 
 namespace Utility.Nodes
 {
@@ -25,6 +25,7 @@ namespace Utility.Nodes
         {
             _children.CollectionChanged += (s, e) => CollectionChanged?.Invoke(this, e);
         }
+
         string IGetKey.Key { get; }
         string ISetKey.Key { set => throw new NotImplementedException(); }
 

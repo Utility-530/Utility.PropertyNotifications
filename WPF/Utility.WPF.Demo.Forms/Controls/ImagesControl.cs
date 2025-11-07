@@ -4,7 +4,6 @@ using Utility.WPF.Controls.Hybrid;
 
 namespace Utility.WPF.Demo.Forms.Controls
 {
-
     internal class ImagesControl : MasterListControl
     {
         private readonly FileBrowserCommand command;
@@ -30,5 +29,4 @@ namespace Utility.WPF.Demo.Forms.Controls
             command.Execute(null);
         }
     }
-
 }

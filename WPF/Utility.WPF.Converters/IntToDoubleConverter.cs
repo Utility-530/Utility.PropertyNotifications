@@ -14,9 +14,9 @@ namespace Utility.WPF.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value is double d)
+            if (value is double d)
             {
-                if(double.IsNaN(d))
+                if (double.IsNaN(d))
                 {
                     return DependencyProperty.UnsetValue;
                 }

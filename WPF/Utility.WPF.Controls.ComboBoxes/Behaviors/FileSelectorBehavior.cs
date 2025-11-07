@@ -1,13 +1,12 @@
-﻿using LanguageExt;
-using ReactiveUI;
-using System.Collections;
+﻿using System.Collections;
 using System.IO;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using LanguageExt;
+using ReactiveUI;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
@@ -84,18 +83,16 @@ namespace Utility.WPF.Controls.ComboBoxes
                 }
             });
 
-
             base.OnAttached();
         }
 
-        static void set(FileSelectorBehavior FileSystemInfoSelector, IEnumerable enumerable)
+        private static void set(FileSelectorBehavior FileSystemInfoSelector, IEnumerable enumerable)
         {
             var assemblyTree = enumerable.Cast<DirectoryInfo>().Select(a => DirectoryModel.Create(a, FileSystemInfoSelector.ExcludesFiles == false)).ToArray().ToViewModelTree();
             FileSystemInfoSelector.AssociatedObject.ItemsSource = assemblyTree;
         }
 
-
-        void ChangeFileSystemInfo(IReadOnlyTree tree, FileSystemInfo _FileSystemInfo)
+        private void ChangeFileSystemInfo(IReadOnlyTree tree, FileSystemInfo _FileSystemInfo)
         {
             if (tree.Descendant(a => filter(_FileSystemInfo, a)) is IReadOnlyTree { } innerTree)
             {
@@ -117,9 +114,9 @@ namespace Utility.WPF.Controls.ComboBoxes
             {
                 case "root":
                     return false;
+
                 case IFileSystemInfo { FileSystemInfo.FullName: { } _fullName } _fsi:
                     {
-
                         var xe = _fullName.Split("\\")[a.level - 1];
                         var split = _FileSystemInfo.FullName.Split("\\");
                         if (split.Length < a.level)
@@ -143,8 +140,8 @@ namespace Utility.WPF.Controls.ComboBoxes
             return false;
         }
 
-
         #region properties
+
         public bool ExcludesFiles
         {
             get { return (bool)GetValue(ExcludesFilesProperty); }
@@ -157,7 +154,6 @@ namespace Utility.WPF.Controls.ComboBoxes
             set { SetValue(FileSystemInfoProperty, value); }
         }
 
-
         public IEnumerable Directories
         {
             get { return (IEnumerable)GetValue(DirectoriesProperty); }
@@ -169,22 +165,22 @@ namespace Utility.WPF.Controls.ComboBoxes
             get { return (bool)GetValue(UseEntryAssemblyProperty); }
             set { SetValue(UseEntryAssemblyProperty, value); }
         }
+
         #endregion properties
 
-        class CustomItemTemplateSelector : DataTemplateSelector
+        private class CustomItemTemplateSelector : DataTemplateSelector
         {
             public override DataTemplate SelectTemplate(object item, DependencyObject container)
             {
                 if (item is IGetValue { Value: FileSystemInfo data } tree)
                 {
-                        return TemplateGenerator.CreateDataTemplate(() =>
-                        {
-                            var textBlock = new TextBlock { Text = data.Name };
-                            return textBlock;
-                        });
+                    return TemplateGenerator.CreateDataTemplate(() =>
+                    {
+                        var textBlock = new TextBlock { Text = data.Name };
+                        return textBlock;
+                    });
 
                     return TemplateGenerator.CreateDataTemplate(() => new Ellipse { Fill = Brushes.Black, Height = 2, Width = 2, VerticalAlignment = VerticalAlignment.Bottom, ToolTip = new ContentControl { Content = data }, Margin = new Thickness(4, 0, 4, 0) });
-
                 }
                 else if (item is IFileSystemInfo { FileSystemInfo: { } info })
                 {
@@ -201,6 +197,5 @@ namespace Utility.WPF.Controls.ComboBoxes
 
             public static CustomItemTemplateSelector Instance { get; } = new();
         }
-
     }
 }

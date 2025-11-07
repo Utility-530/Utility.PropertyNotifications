@@ -1,10 +1,10 @@
-﻿using SQLite;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Utility.Persists.Infrastructure;
+using SQLite;
 using Utility.Interfaces.Generic.Data;
 using Utility.Interfaces.NonGeneric.Data;
+using Utility.Persists.Infrastructure;
 
 namespace Utility.Persists
 {

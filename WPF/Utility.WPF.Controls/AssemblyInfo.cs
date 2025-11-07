@@ -11,4 +11,4 @@ using System.Windows.Markup;
 )]
 [assembly: XmlnsPrefix("http://schemas.utility.com/", "util")]
 [assembly: XmlnsDefinition("http://schemas.utility.com", "Utility.WPF.Controls")]
-[assembly: XmlnsDefinition("http://schemas.utility.com", "Utility.WPF.Controls.Infrastructure")] 
+[assembly: XmlnsDefinition("http://schemas.utility.com", "Utility.WPF.Controls.Infrastructure")]

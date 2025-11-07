@@ -10,6 +10,6 @@ using System.Windows.Markup;
                                               // app, or any theme specific resource dictionaries)
 )]
 [assembly: XmlnsPrefix("http://schemas.utility.com/animation", "anim")]
-[assembly: XmlnsDefinition("http://schemas.utility.com/animation", "Utility.WPF.Animation")] 
-[assembly: XmlnsDefinition("http://schemas.utility.com/animation", "Utility.WPF.Animations")] 
-[assembly: XmlnsDefinition("http://schemas.utility.com/animation", "animTextBox")] 
+[assembly: XmlnsDefinition("http://schemas.utility.com/animation", "Utility.WPF.Animation")]
+[assembly: XmlnsDefinition("http://schemas.utility.com/animation", "Utility.WPF.Animations")]
+[assembly: XmlnsDefinition("http://schemas.utility.com/animation", "animTextBox")]

@@ -10,4 +10,4 @@ using System.Windows.Markup;
                                               // app, or any theme specific resource dictionaries)
 )]
 [assembly: XmlnsPrefix("http://schemas.utility.com/chart", "chart")]
-[assembly: XmlnsDefinition("http://schemas.utility.com/chart", "Utility.WPF.Controls.Chart")] 
+[assembly: XmlnsDefinition("http://schemas.utility.com/chart", "Utility.WPF.Controls.Chart")]

@@ -1,17 +1,17 @@
-﻿using DynamicData;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using DynamicData;
 using Endless;
+using Utility.Collections;
+using Utility.Common.Contract;
+using Utility.Common.Models;
+using Utility.Extensions;
 using Utility.Helpers.Ex;
 using Utility.PropertyNotifications;
-using Utility.Extensions;
-using Utility.Collections;
-using Utility.Common.Models;
-using Utility.Common.Contract;
 
 namespace Utility.Services
 {
@@ -69,6 +69,7 @@ namespace Utility.Services
                           }
                       case NotifyCollectionChangedAction.Move:
                           break;
+
                       default:
                           throw new ArgumentOutOfRangeException();
                   }
@@ -162,7 +163,6 @@ namespace Utility.Services
         {
             disposable?.Dispose();
         }
-
 
         public IDisposable Subscribe(IObserver<CollectionChangeMessage> observer)
         {

@@ -9,4 +9,3 @@ namespace Utility.Attributes
         public DataType DataType { get; } = dataType;
     }
 }
-

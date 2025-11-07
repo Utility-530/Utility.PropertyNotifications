@@ -1,9 +1,6 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using Utility.Commands;
-using Utility.WPF.Adorners;
 
 namespace Utility.WPF.Demo.Adorners
 {
@@ -23,13 +20,12 @@ namespace Utility.WPF.Demo.Adorners
             // Assuming you have an ItemsControl named "MyItemsControl" in XAML
             // and you want to show a "+" button where the next item would be
 
-
             // Add the adorner (you would typically do this after the ItemsControl is loaded)
             //this.Loaded += (s, e) =>
             //{
             //    LastItemPositionAdornerHelper.AddLastItemAdorner(MyItemsControl, () =>
             //    {
-            //        MessageBox.Show("Add new item clicked!");   
+            //        MessageBox.Show("Add new item clicked!");
             //    });
             //};
         }

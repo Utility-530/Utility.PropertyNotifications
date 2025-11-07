@@ -7,7 +7,8 @@ namespace Utility.WPF.Markup
     [MarkupExtensionReturnType(typeof(object))]
     public class ArrayExtension : MarkupExtension
     {
-        public ArrayExtension() {
+        public ArrayExtension()
+        {
             Item = new Binding();
         }
 
@@ -21,7 +22,6 @@ namespace Utility.WPF.Markup
             Item = binding;
         }
 
-
         public object Item { get; set; }
 
         public override object ProvideValue(IServiceProvider serviceProvider)
@@ -33,8 +33,8 @@ namespace Utility.WPF.Markup
             {
                 var newBinding = new Binding
                 {
-                    Path = binding.Path,   
-     
+                    Path = binding.Path,
+
                     Mode = binding?.Mode ?? BindingMode.OneWay,
                     Converter = new SingleToArrayConverter()
                 };
@@ -74,5 +74,3 @@ namespace Utility.WPF.Markup
         }
     }
 }
-
-

@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Utility.Interfaces.NonGeneric;
 
@@ -27,7 +25,6 @@ namespace Utility.Reactives
 
         public List<object> Observations { get; } = new();
 
-
         public virtual void OnNext(T value)
         {
             (onNext ?? throw new NotImplementedException()).Invoke(value);
@@ -42,7 +39,7 @@ namespace Utility.Reactives
         {
             (onError ?? throw new NotImplementedException()).Invoke(error);
         }
- 
+
         public bool Equals(IEquatable other)
         {
             throw new NotImplementedException();

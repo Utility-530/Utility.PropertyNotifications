@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Xml.Linq;
+using Evan.Wpf;
+using Utility.WPF.Abstract;
 using Utility.WPF.Controls.Base;
 using Utility.WPF.Controls.Lists.Infrastructure;
-using Utility.WPF.Helpers;
-using Utility.WPF.Abstract;
-using Evan.Wpf;
 using Utility.WPF.Models;
 
 namespace Utility.WPF.Controls.Lists
@@ -18,8 +15,10 @@ namespace Utility.WPF.Controls.Lists
         private DifferenceHelper differenceHelper;
         private static readonly DependencyPropertyKey OutputPropertyKey = DependencyHelper.RegisterReadOnly();
         public static readonly DependencyProperty IsCheckedPathProperty = DependencyHelper.Register();
+
         //public static readonly DependencyProperty OutputProperty = DependencyProperty.RegisterReadOnly("Output", typeof(object), typeof(CheckBoxesComboControl));
         public static readonly RoutedEvent OutputChangeEvent = EventManager.RegisterRoutedEvent("OutputChange", RoutingStrategy.Bubble, typeof(OutputChangedEventHandler<CheckedRoutedEventArgs>), typeof(CheckBoxesComboControl));
+
         public static readonly DependencyProperty IsSelectedPathProperty = DependencyHelper.Register();
         public static readonly DependencyProperty KeyPathProperty = DependencyHelper.Register();
         public static readonly DependencyProperty IsDisabledShownProperty = DependencyHelper.Register();
@@ -35,7 +34,6 @@ namespace Utility.WPF.Controls.Lists
         {
             Loaded += OnChange;
             AddHandler(System.Windows.Controls.Primitives.ButtonBase.ClickEvent, new RoutedEventHandler(CloseButtonClick), true);
-
         }
 
         private void CloseButtonClick(object sender, RoutedEventArgs e)
@@ -62,7 +60,7 @@ namespace Utility.WPF.Controls.Lists
             get => (string)GetValue(IsCheckedPathProperty);
             set => SetValue(IsCheckedPathProperty, value);
         }
-              
+
         public string KeyPath
         {
             get => (string)GetValue(KeyPathProperty);

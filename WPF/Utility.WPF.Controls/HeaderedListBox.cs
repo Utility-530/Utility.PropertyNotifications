@@ -1,8 +1,8 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using ReactiveUI;
 
 namespace Utility.WPF.Controls
 {

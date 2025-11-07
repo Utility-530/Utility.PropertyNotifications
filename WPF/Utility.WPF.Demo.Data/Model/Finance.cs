@@ -1,9 +1,9 @@
-﻿using Endless;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using Endless;
 using Utility.Helpers;
 
 namespace Utility.WPF.Demo.Data.Model

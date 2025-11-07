@@ -1,5 +1,4 @@
-﻿using Microsoft.Xaml.Behaviors.Core;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +6,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Input;
+using Microsoft.Xaml.Behaviors.Core;
 using Utility.Helpers;
 
 namespace Utility.WPF.Demo.Common.ViewModels

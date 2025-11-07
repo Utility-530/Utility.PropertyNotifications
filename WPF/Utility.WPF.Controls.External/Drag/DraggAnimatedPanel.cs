@@ -1,14 +1,12 @@
 ﻿/*Developed by (doiTTeam)=>doiTTeam.mail = devdoiTTeam@gmail.com*/
+
 using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Navigation;
 
 namespace DraggAnimatedPanel
 {
@@ -18,10 +16,13 @@ namespace DraggAnimatedPanel
     public partial class DraggAnimatedPanel : Panel
     {
         #region private vars
-        Size _calculatedSize;
-        bool _isNotFirstArrange = false;
-        int columns, rows;
-        #endregion
+
+        private Size _calculatedSize;
+        private bool _isNotFirstArrange = false;
+        private int columns, rows;
+
+        #endregion private vars
+
         static DraggAnimatedPanel()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DraggAnimatedPanel), new FrameworkPropertyMetadata(typeof(DraggAnimatedPanel)));
@@ -34,12 +35,12 @@ namespace DraggAnimatedPanel
             this.LostMouseCapture += OnLostMouseCapture;
         }
 
-        UIElement GetChildThatHasMouseOver()
+        private UIElement GetChildThatHasMouseOver()
         {
             return GetParent(Mouse.DirectlyOver as DependencyObject, (ve) => Children.Contains(ve as UIElement)) as UIElement;
         }
 
-        Point GetItemVisualPoint(UIElement element)
+        private Point GetItemVisualPoint(UIElement element)
         {
             TransformGroup group = (TransformGroup)element.RenderTransform;
             TranslateTransform trans = (TranslateTransform)group.Children[0];
@@ -47,18 +48,20 @@ namespace DraggAnimatedPanel
             return new Point(trans.X, trans.Y);
         }
 
-        int GetIndexFromPoint(double x, double y)
+        private int GetIndexFromPoint(double x, double y)
         {
             int columnIndex = (int)Math.Truncate(x / itemContainterWidth);
             int rowIndex = (int)Math.Truncate(y / itemContainterHeight);
             return columns * rowIndex + columnIndex;
         }
-        int GetIndexFromPoint(Point p)
+
+        private int GetIndexFromPoint(Point p)
         {
             return GetIndexFromPoint(p.X, p.Y);
         }
 
-        #region dependency properties		
+        #region dependency properties
+
         public static readonly DependencyProperty ItemsWidthProperty =
           DependencyProperty.Register(
                   "ItemsWidth",
@@ -91,45 +94,54 @@ namespace DraggAnimatedPanel
                   typeof(DraggAnimatedPanel),
                   new FrameworkPropertyMetadata(null));
 
-        #endregion
+        #endregion dependency properties
 
         #region properties
+
         public double ItemsWidth
         {
             get { return (double)GetValue(ItemsWidthProperty); }
             set { SetValue(ItemsWidthProperty, value); }
         }
+
         public double ItemsHeight
         {
             get { return (double)GetValue(ItemsHeightProperty); }
             set { SetValue(ItemsHeightProperty, value); }
         }
+
         public Thickness ItemSeparation
         {
             get { return (Thickness)this.GetValue(ItemSeparationProperty); }
             set { this.SetValue(ItemSeparationProperty, value); }
         }
+
         public int AnimationMilliseconds
         {
             get { return (int)GetValue(AnimationMillisecondsProperty); }
             set { SetValue(AnimationMillisecondsProperty, value); }
         }
+
         private double itemContainterHeight
         {
             get { return ItemSeparation.Top + ItemsHeight + ItemSeparation.Bottom; }
         }
+
         private double itemContainterWidth
         {
             get { return ItemSeparation.Left + ItemsWidth + ItemSeparation.Right; }
         }
+
         public ICommand SwapCommand
         {
             get { return (ICommand)GetValue(SwapCommandProperty); }
             set { SetValue(SwapCommandProperty, value); }
         }
-        #endregion
 
-        #region transformation things		
+        #endregion properties
+
+        #region transformation things
+
         private void AnimateAll()
         {
             //Apply exactly the same algorithm, but instide of Arrange a call AnimateTo method
@@ -165,9 +177,11 @@ namespace DraggAnimatedPanel
             anim.DecelerationRatio = 0.7;
             return anim;
         }
-        #endregion
+
+        #endregion transformation things
 
         #region measure
+
         protected override Size MeasureOverride(Size availableSize)
         {
             Size itemContainerSize = new Size(itemContainterWidth, itemContainterHeight);
@@ -197,9 +211,11 @@ namespace DraggAnimatedPanel
             }
             return _calculatedSize;
         }
-        #endregion
+
+        #endregion measure
 
         #region arrange
+
         protected override Size ArrangeOverride(Size finalSize)
         {
             Size _finalItemSize = new Size(ItemsWidth, ItemsHeight);
@@ -224,9 +240,11 @@ namespace DraggAnimatedPanel
 
             return _calculatedSize;
         }
-        #endregion
+
+        #endregion arrange
 
         #region Static
+
         //this can be an extension method
         public static DependencyObject GetParent(DependencyObject o, Func<DependencyObject, bool> matchFunction)
         {
@@ -237,7 +255,8 @@ namespace DraggAnimatedPanel
             } while (t != null && !matchFunction.Invoke(t));
             return t;
         }
-        #endregion
+
+        #endregion Static
 
         //TODO: Add IsEditing property
         //TODO: Add Scale transform to items for fill items area

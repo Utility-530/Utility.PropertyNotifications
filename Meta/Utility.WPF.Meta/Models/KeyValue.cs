@@ -5,5 +5,4 @@
         public virtual object? Value { get; }
         public virtual string GroupKey { get; }
     }
-
 }

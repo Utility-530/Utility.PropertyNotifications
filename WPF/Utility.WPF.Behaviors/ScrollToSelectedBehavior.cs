@@ -24,7 +24,6 @@
 //            base.OnDetaching();
 //        }
 
-
 //        private async void SelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
 //        {
 //            if (AssociatedObject.SelectedItem == null)
@@ -47,7 +46,6 @@
 //                await Task.Delay(1); // wait for scrolling to complete - it takes a moment
 //                listItem = (FrameworkElement)AssociatedObject.ItemContainerGenerator.ContainerFromItem(item);
 //            }
-
 
 //            var index = (int)AssociatedObject.ItemContainerGenerator.IndexFromContainer(listItem);
 
@@ -72,7 +70,6 @@
 //            // better yet if building for Windows 8.1 to make the scrolling smoother use:
 //            // scrollViewer.ChangeView(null, desiredOffset, null);
 //        }
-
 
 //        Point GetElementPosition(FrameworkElement childElement, FrameworkElement absoluteElement)
 //        {

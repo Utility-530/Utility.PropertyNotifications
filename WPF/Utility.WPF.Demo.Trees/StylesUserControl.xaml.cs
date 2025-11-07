@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,6 +7,8 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Utility.Commands;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Extensions;
@@ -17,7 +18,6 @@ using Utility.PropertyNotifications;
 using Utility.Reactives;
 using Utility.WPF.Controls.Trees;
 using Utility.WPF.Demo.Common.ViewModels;
-using Newtonsoft.Json.Converters;
 using NodeVM = Utility.Nodes.NodeViewModel;
 
 namespace Utility.WPF.Demo.Trees
@@ -27,7 +27,6 @@ namespace Utility.WPF.Demo.Trees
     /// </summary>
     public partial class StylesUserControl : UserControl
     {
-
         private static void TreeViewItem_Collapsed(object sender, RoutedEventArgs e)
         {
             if (sender is TreeViewItem treeViewItem)
@@ -43,14 +42,14 @@ namespace Utility.WPF.Demo.Trees
                 subject.OnNext(new(NotifyCollectionChangedAction.Add, treeViewItem));
             }
         }
-        static ReplaySubject<NotifyCollectionChangedEventArgs> subject = new ReplaySubject<NotifyCollectionChangedEventArgs>();
+
+        private static ReplaySubject<NotifyCollectionChangedEventArgs> subject = new ReplaySubject<NotifyCollectionChangedEventArgs>();
 
         public static IObservable<NotifyCollectionChangedEventArgs> Observable => subject;
 
         public SettingsViewModel Settings { get; } = new();
 
         public IEnumerable Items { get; set; }
-
 
         public StylesUserControl()
         {
@@ -60,11 +59,9 @@ namespace Utility.WPF.Demo.Trees
             Items = new[] { NodeVM.Create(null, [NodeVM.Create(null, []), NodeVM.Create(null, [NodeVM.Create(null, []), NodeVM.Create(null, [])]), NodeVM.Create(null, [NodeVM.Create(null, [])])]) };
 
             JsonConvert.DefaultSettings = () => settings;
-
-
         }
 
-        JsonSerializerSettings settings = new()
+        private JsonSerializerSettings settings = new()
         {
             TypeNameHandling = TypeNameHandling.All,
             //Formatting = Formatting.Indented,
@@ -72,14 +69,11 @@ namespace Utility.WPF.Demo.Trees
 
                 new StringEnumConverter(),
                 //new TypeConverter(),
-      
+
                 new NodeConverter(),
                 new MetadataConverter()
                     ]
         };
-
-
-
 
         public class Comparer : IComparer<object>
         {
@@ -87,26 +81,24 @@ namespace Utility.WPF.Demo.Trees
             {
                 return (x as NodeVM)?.Order.CompareTo((y as NodeVM)?.Order) ?? 0;
             }
-
         }
+
         private void CustomStyleUserControl_Loaded(object sender, RoutedEventArgs e)
         {
             Initialise();
         }
 
-        void Initialise()
+        private void Initialise()
         {
             var _collection = Reactives.TreeViewHelper.VisibleItems(MyTreeView).ToCollection(out _);
             var foo = new Uri("/Utility.WPF.Controls.Trees;component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute);
             var resourceDictionary = new ResourceDictionary() { Source = foo };
             var collection = new ObservableCollection<ButtonViewModel>();
 
-
             try
             {
                 foreach (var style in FindResourcesByType(resourceDictionary, typeof(CustomTreeViewItem)).ToArray())
                 {
-
                     collection.Add(new ButtonViewModel
                     {
                         Header = style.Key,
@@ -128,13 +120,8 @@ namespace Utility.WPF.Demo.Trees
                 Settings.Buttons = collection;
                 Settings.RaisePropertyChanged(nameof(Settings.Buttons));
             }
-
-
             catch (Exception ex) { }
-
-
         }
-
 
         private IEnumerable<KeyValuePair<string?, Style>> FindResourcesByType(ResourceDictionary resources, Type type)
         {
@@ -145,12 +132,8 @@ namespace Utility.WPF.Demo.Trees
         }
     }
 
-   
-
-
     public class SettingsViewModel : NotifyPropertyClass
     {
-
         public IEnumerable Buttons { get; set; }
     }
 
@@ -158,7 +141,6 @@ namespace Utility.WPF.Demo.Trees
     {
         public override Style SelectStyle(object item, DependencyObject container)
         {
-
             return Current;
 
             //return base.SelectStyle(item, container);
@@ -168,5 +150,4 @@ namespace Utility.WPF.Demo.Trees
 
         public static CustomTreeItemContainerStyleSelector Instance { get; } = new();
     }
-
 }

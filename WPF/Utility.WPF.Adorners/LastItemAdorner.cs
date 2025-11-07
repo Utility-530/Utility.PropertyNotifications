@@ -15,12 +15,13 @@ namespace Utility.WPF.Adorners
     /// </summary>
     public class LastItemAdorner : Adorner
     {
-        enum VisualState
+        private enum VisualState
         {
             Pressed,
             Hovered,
             Normal
         }
+
         private readonly ItemsControl _itemsControl;
         private readonly Action content;
         private VisualState currentState;
@@ -37,8 +38,6 @@ namespace Utility.WPF.Adorners
             //AddLogicalChild(_content);
         }
 
-
-
         public ICommand Command
         {
             get { return (ICommand)GetValue(CommandProperty); }
@@ -48,8 +47,6 @@ namespace Utility.WPF.Adorners
         // Using a DependencyProperty as the backing store for Command.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CommandProperty =
             DependencyProperty.Register("Command", typeof(ICommand), typeof(LastItemAdorner), new PropertyMetadata());
-
-
 
         //protected override Visual GetVisualChild(int index)
         //{
@@ -133,19 +130,14 @@ namespace Utility.WPF.Adorners
             e.Handled = true;
         }
 
-
-
         public int Size
         {
             get { return (int)GetValue(SizeProperty); }
             set { SetValue(SizeProperty, value); }
         }
 
-
         public static readonly DependencyProperty SizeProperty =
             DependencyProperty.Register("Size", typeof(int), typeof(LastItemAdorner), new PropertyMetadata(10));
-
-
 
         protected override void OnRender(DrawingContext drawingContext)
         {
@@ -159,7 +151,6 @@ namespace Utility.WPF.Adorners
                     VisualState.Normal => Colors.DarkSlateGray,
                     VisualState.Hovered => Colors.DarkOrange
                 }), 2.0);
-
 
             if (AdornedElement is FrameworkElement control)
             {
@@ -182,7 +173,6 @@ namespace Utility.WPF.Adorners
                 drawingContext.DrawLine(renderPen,
                     new Point(center.X, center.Y - plusSize),
                     new Point(center.X, center.Y + plusSize));
-
             }
         }
 
@@ -241,7 +231,7 @@ namespace Utility.WPF.Adorners
                 if (itemsControl != null)
                 {
                     var point = lastChild.TranslatePoint(new Point(0, lastChild.ActualHeight), itemsControl);
-                    double y = point.Y ;
+                    double y = point.Y;
                     if (lastChild is FrameworkElement fe)
                         y += fe.Margin.Bottom;
 

@@ -26,7 +26,6 @@ namespace Utility.Common
                 return func(x).CompareTo(func(y));
             else
                 return func(y).CompareTo(func(x));
-
         }
     }
 

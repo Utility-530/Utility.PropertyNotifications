@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using Tiny.Toolkits;
 
 namespace Utility.WPF.Controls.Base
 {
@@ -28,11 +23,11 @@ namespace Utility.WPF.Controls.Base
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            if(e.Property == IsCheckedProperty)
+            if (e.Property == IsCheckedProperty)
             {
                 if (e.NewValue is null)
                     return;
-                if((bool)e.NewValue == true)
+                if ((bool)e.NewValue == true)
                 {
                     this.Content = new Path()
                     {
@@ -42,7 +37,7 @@ namespace Utility.WPF.Controls.Base
                         Data = Utility.WPF.Helpers.ResourceHelper.FindResource<Geometry>("NotNull") ?? (Geometry)resource()["NotNull"]
                     };
                 }
-                else if((bool)e.NewValue == false)
+                else if ((bool)e.NewValue == false)
                 {
                     this.Content = new Path()
                     {
@@ -50,12 +45,12 @@ namespace Utility.WPF.Controls.Base
                         StrokeThickness = 2,
                         Stretch = Stretch.UniformToFill,
                         Data = Utility.WPF.Helpers.ResourceHelper.FindResource<Geometry>("Null") ?? (Geometry)resource()["Null"]
-
                     };
                 }
             }
             base.OnPropertyChanged(e);
         }
+
         private ResourceDictionary resource()
         {
             if (resourceDictionary != null)

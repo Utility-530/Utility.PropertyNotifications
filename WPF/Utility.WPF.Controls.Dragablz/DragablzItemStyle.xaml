@@ -4,9 +4,9 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:conv="http://schemas.utility.com/converters"
     xmlns:res="http://schemas.utility.com/resourcedictionary"
-    xmlns:dragablz1="clr-namespace:Utility.WPF.Controls.Dragablz"
-    xmlns:conv="http://schemas.utility.com/converters">
+    xmlns:dragablz1="clr-namespace:Utility.WPF.Controls.Dragablz">
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary  Source="/Utility.WPF.Geometries;component/Resources.xaml" />

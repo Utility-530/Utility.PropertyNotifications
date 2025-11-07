@@ -10,4 +10,4 @@ using System.Windows.Markup;
                                               // app, or any theme specific resource dictionaries)
 )]
 [assembly: XmlnsPrefix("http://schemas.utility.com/dragablz", "drag")]
-[assembly: XmlnsDefinition("http://schemas.utility.com/dragablz", "Utility.WPF.Controls.Dragablz")] 
+[assembly: XmlnsDefinition("http://schemas.utility.com/dragablz", "Utility.WPF.Controls.Dragablz")]

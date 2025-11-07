@@ -2,9 +2,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml" />
-
     </ResourceDictionary.MergedDictionaries>
-
 
     <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
         <Grid>
@@ -50,7 +48,6 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-
     <ControlTemplate x:Key="ComboBoxToggleButton2" TargetType="{x:Type ToggleButton}">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -78,7 +75,6 @@
                             </GradientStopCollection>
                         </LinearGradientBrush.GradientStops>
                     </LinearGradientBrush>
-
                 </Border.Background>
             </Border>
             <Border
@@ -138,5 +134,4 @@
             </VisualStateManager.VisualStateGroups>
         </Grid>
     </ControlTemplate>
-
 </ResourceDictionary>

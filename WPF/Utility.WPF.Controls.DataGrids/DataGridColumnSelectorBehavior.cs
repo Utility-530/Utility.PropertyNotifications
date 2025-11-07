@@ -1,12 +1,11 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Collections;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Controls.DataGrids
 {
@@ -14,7 +13,6 @@ namespace Utility.WPF.Controls.DataGrids
     {
         public static readonly DependencyProperty DataTemplateSelectorProperty =
             DependencyProperty.Register("DataTemplateSelector", typeof(DataTemplateSelector), typeof(DataGridColumnSelectorBehavior), new PropertyMetadata());
-
 
         protected override void OnAttached()
         {
@@ -70,7 +68,6 @@ namespace Utility.WPF.Controls.DataGrids
 
             return templateColumn;
         }
-
     }
 
     public class CustomDataGridColumn : DataGridBoundColumn
@@ -120,7 +117,6 @@ namespace Utility.WPF.Controls.DataGrids
         }
     }
 
-
     public class CustomComboBoxColumn : DataGridColumn
     {
         public DataTemplateSelector DataTemplateSelector { get; set; }
@@ -152,7 +148,7 @@ namespace Utility.WPF.Controls.DataGrids
             {
                 ItemsSource = Items
             };
-            comboBox.SetBinding(ComboBox.SelectedItemProperty, new Binding { Source = dataItem, Path = new PropertyPath(PropertyName), Mode = BindingMode.TwoWay  });
+            comboBox.SetBinding(ComboBox.SelectedItemProperty, new Binding { Source = dataItem, Path = new PropertyPath(PropertyName), Mode = BindingMode.TwoWay });
 
             //var binding = new Binding
             //{
@@ -160,7 +156,6 @@ namespace Utility.WPF.Controls.DataGrids
             //    Path = _binding.Path,
             //};
             return comboBox;
-
         }
     }
 }

@@ -17,6 +17,7 @@ namespace Utility.WPF.Controls.Tabs
             get { return (ICommand)GetValue(AddTabCommandProperty); }
             set { SetValue(AddTabCommandProperty, value); }
         }
+
         public bool AutoScrollToEnd
         {
             get { return (bool)GetValue(AutoScrollToEndProperty); }

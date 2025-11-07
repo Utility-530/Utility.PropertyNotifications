@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Utility.PropertyDescriptors.Types
+﻿namespace Utility.PropertyDescriptors.Types
 {
     public enum Kind
     {
         Property,
         Method,
-
     }
 
     public interface IKind

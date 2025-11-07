@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Utility.WPF.Attached
 {
     public class FileEx
     {
-
         public static readonly DependencyProperty SourceProperty =
             DependencyProperty.RegisterAttached(
                 "Source",
@@ -78,4 +73,3 @@ namespace Utility.WPF.Attached
         }
     }
 }
-

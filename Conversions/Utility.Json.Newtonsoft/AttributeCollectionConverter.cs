@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Utility.Conversions.Json.Newtonsoft
 {
@@ -21,7 +21,7 @@ namespace Utility.Conversions.Json.Newtonsoft
                 serializer.Serialize(writer, attribute.GetType());
 
                 writer.WritePropertyName("Attribute");
-                serializer.Serialize(writer, attribute, attribute.GetType());        
+                serializer.Serialize(writer, attribute, attribute.GetType());
 
                 writer.WriteEndObject();
             }
@@ -30,7 +30,7 @@ namespace Utility.Conversions.Json.Newtonsoft
         }
 
         public override AttributeCollection ReadJson(JsonReader reader, Type objectType, AttributeCollection existingValue, bool hasExistingValue, JsonSerializer serializer)
-        {   
+        {
             return new AttributeCollection(select().ToArray());
 
             IEnumerable<Attribute> select()

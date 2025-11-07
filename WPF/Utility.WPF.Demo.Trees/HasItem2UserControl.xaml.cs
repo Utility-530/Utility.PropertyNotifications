@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
-using Utility.Helpers;
 
 namespace Utility.WPF.Demo.Trees
 {
@@ -19,11 +18,9 @@ namespace Utility.WPF.Demo.Trees
             MyTreeView.ItemsSource = new[] { tree };
         }
 
-        ITree tree = new Tree("root")
+        private ITree tree = new Tree("root")
         {
-
         };
-
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -35,7 +32,4 @@ namespace Utility.WPF.Demo.Trees
             tree = tree.Children.Cast<ITree>().LastOrDefault() ?? tree;
         }
     }
-
-
-
 }

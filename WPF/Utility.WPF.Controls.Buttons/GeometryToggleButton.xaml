@@ -3,8 +3,6 @@
                     xmlns:local="clr-namespace:Utility.WPF.Controls.Buttons"
                     xmlns:wpf="http://schemas.utility.com/utilitywpf">
 
-
-
     <!--Control colors.-->
     <Color x:Key="WindowColor">#FFE8EDF9</Color>
     <Color x:Key="ContentAreaColorLight">#FFC5CBF9</Color>
@@ -23,7 +21,6 @@
 
     <Color x:Key="ControlMouseOverColor">#FF3843C4</Color>
     <Color x:Key="ControlPressedColor">#FF211AA9</Color>
-
 
     <Color x:Key="GlyphColor">#FF444444</Color>
     <Color x:Key="GlyphMouseOver">sc#1, 0.004391443, 0.002428215, 0.242281124</Color>
@@ -76,12 +73,9 @@
         </LinearGradientBrush.GradientStops>
     </LinearGradientBrush>
 
-
-
-
     <ControlTemplate x:Key="GTBControlTemplate" TargetType="{x:Type local:GeometryToggleButton}">
-        <Grid Height="{TemplateBinding Height}" 
-              Width="{TemplateBinding Width}" 
+        <Grid Height="{TemplateBinding Height}"
+              Width="{TemplateBinding Width}"
               VerticalAlignment="{TemplateBinding VerticalAlignment}"
               Background="{TemplateBinding Background}"
               HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
@@ -129,7 +123,7 @@
                 (GradientBrush.GradientStops)[1].(GradientStop.Color)"
                                           Storyboard.TargetName="Border">
                                 <EasingColorKeyFrame KeyTime="0:0:0.5"
-                               Value="{Binding Data, Source={StaticResource CheckedBackground}}" /> 
+                               Value="{Binding Data, Source={StaticResource CheckedBackground}}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>-->
                     </VisualState>
@@ -137,32 +131,31 @@
                     <VisualState x:Name="Indeterminate" />
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
-            <Border x:Name="Border"     
-                    CornerRadius="50" 
+            <Border x:Name="Border"
+                    CornerRadius="50"
                     BorderThickness="1"
                     VerticalAlignment="{TemplateBinding VerticalAlignment}"
                     Background="{TemplateBinding Background}"
                     HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
 
-
                 <Grid Background="Transparent">
                     <Path
                                     x:Name="ButtonPath"
-                                   
+
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Data="{TemplateBinding Data}"
                                     Stretch="Uniform"
                                     Fill="{TemplateBinding Fill}"
                                     Stroke="{TemplateBinding Foreground}"
-                            
-                               StrokeEndLineCap="Round" 
-                                StrokeLineJoin="Round"  
+
+                               StrokeEndLineCap="Round"
+                                StrokeLineJoin="Round"
                                 StrokeStartLineCap="Round"
                                     StrokeThickness="{TemplateBinding StrokeThickness}">
                     </Path>
                 </Grid>
-            </Border>        
+            </Border>
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">

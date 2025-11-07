@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Newtonsoft.Json;
 using Utility.Attributes;
 using Utility.Helpers;
 using Utility.Helpers.Reflection;
@@ -14,7 +14,6 @@ namespace Utility.Conversions.Json.Newtonsoft
 {
     public class MetadataConverter : JsonConverter
     {
-
         public const string IsEnum = "$isenum";
         public const string IsReadonly = "$isreadonly";
         public const string Type = "$type";
@@ -66,7 +65,6 @@ namespace Utility.Conversions.Json.Newtonsoft
                 try
                 {
                     propValue = prop.GetValue(value);
-
                 }
                 catch (Exception ex)
                 {
@@ -79,7 +77,7 @@ namespace Utility.Conversions.Json.Newtonsoft
                 {
                     stringBuilder.AppendLine(IsReadonly);
                 }
-        
+
                 if (prop.PropertyType == typeof(IntPtr))
                 {
                 }
@@ -94,7 +92,6 @@ namespace Utility.Conversions.Json.Newtonsoft
                     stringBuilder.AppendLine(IsEnum);
                     writer.WritePropertyName(stringBuilder.ToString());
                     serializer.Serialize(writer, propValue);
-
                 }
                 else if (prop.PropertyType.FullName == "System.Windows.Point" || prop.PropertyType.FullName == "System.Windows.Media.Color")
                 {

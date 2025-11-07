@@ -4,6 +4,7 @@
     {
         // --- Real Assets ---
         Property,           // e.g. real estate, land, buildings
+
         Vehicle,            // cars, boats, aircraft, etc.
         Equipment,          // machinery, computers, office equipment
         PreciousMetals,     // gold, silver, platinum, etc.
@@ -12,6 +13,7 @@
 
         // --- Financial Assets ---
         Savings,            // bank accounts, cash equivalents
+
         Investment,         // generic category (e.g. stocks, bonds, funds)
         Stock,              // individual shares
         Bond,               // government or corporate bonds
@@ -24,21 +26,22 @@
 
         // --- Intangible Assets ---
         IntellectualProperty, // patents, trademarks, copyrights
+
         BrandValue,           // goodwill, brand recognition
         SoftwareLicense,      // owned software or rights to use it
         DomainName,           // valuable internet domains
 
         // --- Business & Equity ---
         BusinessOwnership,   // private company shares, partnerships
+
         EquityStake,         // minority/majority ownership in a business
         Franchise,           // franchise rights or territories
 
         // --- Miscellaneous / General ---
         Cash,                // physical cash
+
         Receivable,          // money owed (accounts receivable, loans)
         Commodity,           // oil, natural gas, agricultural products
         Other                // catch-all for anything not listed
     }
-
-
 }

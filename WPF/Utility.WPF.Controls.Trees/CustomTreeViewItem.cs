@@ -1,10 +1,8 @@
-﻿using System.Windows.Controls;
+﻿using System.Collections;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
-using System.Collections;
-using System;
 using Position2D = Utility.Enums.Position2D;
-
 
 namespace Utility.WPF.Controls.Trees
 {
@@ -15,7 +13,6 @@ namespace Utility.WPF.Controls.Trees
 
         private static void _removeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            
         }
 
         public static readonly DependencyProperty TreeViewProperty = DependencyProperty.Register("TreeView", typeof(TreeView), typeof(CustomTreeViewItem), new PropertyMetadata());
@@ -44,7 +41,7 @@ namespace Utility.WPF.Controls.Trees
         public static readonly DependencyProperty ArrangementProperty = DependencyProperty.Register("Arrangement", typeof(Utility.Enums.Arrangement), typeof(CustomTreeViewItem), new PropertyMetadata(_changed));
         public static readonly DependencyProperty RowsProperty = DependencyProperty.Register("Rows", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty ColumnsProperty = DependencyProperty.Register("Columns", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
-        public static readonly DependencyProperty IsAugmentableProperty =  DependencyProperty.Register("IsAugmentable", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty IsAugmentableProperty = DependencyProperty.Register("IsAugmentable", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty ErrorsProperty = DependencyProperty.Register("Errors", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty ContentVisibilityProperty = DependencyProperty.Register("ContentVisibility", typeof(System.Windows.Visibility), typeof(CustomTreeViewItem), new PropertyMetadata(Visibility.Visible));
         public static readonly DependencyProperty ConnectorPositionProperty = DependencyProperty.Register("ConnectorPosition", typeof(Position2D), typeof(CustomTreeViewItem), new PropertyMetadata(Position2D.None));
@@ -53,7 +50,6 @@ namespace Utility.WPF.Controls.Trees
 
         private static void _changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-
         }
 
         #region Properties
@@ -69,12 +65,12 @@ namespace Utility.WPF.Controls.Trees
             get { return (TreeView)GetValue(TreeViewProperty); }
             set { SetValue(TreeViewProperty, value); }
         }
+
         public Position2D ConnectorPosition
         {
             get { return (Position2D)GetValue(ConnectorPositionProperty); }
             set { SetValue(ConnectorPositionProperty, value); }
         }
-
 
         public IEnumerable Errors
         {
@@ -105,7 +101,6 @@ namespace Utility.WPF.Controls.Trees
             get { return (bool)GetValue(IsEditableProperty); }
             set { SetValue(IsEditableProperty, value); }
         }
-
 
         public bool? IsValid
         {
@@ -232,7 +227,7 @@ namespace Utility.WPF.Controls.Trees
             get { return (Orientation)GetValue(OrientationProperty); }
             set { SetValue(OrientationProperty, value); }
         }
-                
+
         public int Rows
         {
             get { return (int)GetValue(RowsProperty); }
@@ -244,7 +239,7 @@ namespace Utility.WPF.Controls.Trees
             get { return (int)GetValue(ColumnsProperty); }
             set { SetValue(ColumnsProperty, value); }
         }
-        
+
         public Utility.Enums.Arrangement Arrangement
         {
             get { return (Utility.Enums.Arrangement)GetValue(ArrangementProperty); }
@@ -262,11 +257,11 @@ namespace Utility.WPF.Controls.Trees
             get { return (string)GetValue(ItemsPanelTemplateProperty); }
             set { SetValue(ItemsPanelTemplateProperty, value); }
         }
+
         #endregion Properties
 
         private static void IsEditingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-
         }
     }
 }

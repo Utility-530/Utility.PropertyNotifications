@@ -22,7 +22,7 @@ namespace Utility.WPF.Templates
             {
                 throw new Exception($"Unexpected type for item {item.GetType().Name}");
             }
-            if(item is IAutoList { AutoList:{ } list } autoList)
+            if (item is IAutoList { AutoList: { } list } autoList)
             {
                 return this.Templates["Combo"] as DataTemplate;
             }
@@ -34,13 +34,11 @@ namespace Utility.WPF.Templates
             if (item is DataTemplate dataTemplate)
                 return dataTemplate;
 
-
             if (value == null)
                 return NullTemplate ??= TemplateFactory.CreateNullTemplate();
 
-
             return Templates["Missing"] as DataTemplate ?? throw new Exception("dfs 33091111111");
-        
+
             Type? get()
             {
                 if (item is IType { Type: { } type })
@@ -63,11 +61,8 @@ namespace Utility.WPF.Templates
         private Type[] newMethod()
         {
             var keys = this.Templates.Keys.OfType<DataTemplateKey>().ToArray();
-            return keys.Select(a => a.DataType).OfType<Type>().ToArray(); 
+            return keys.Select(a => a.DataType).OfType<Type>().ToArray();
         }
-
-
-
 
         public override ResourceDictionary Templates
         {
@@ -81,7 +76,6 @@ namespace Utility.WPF.Templates
                 return valueTemplates;
             }
         }
-
 
         public static ValueDataTemplateSelector Instance => new();
     }
@@ -111,7 +105,6 @@ namespace Utility.WPF.Templates
             {
                 return template.Templates[new DataTemplateKey(typeof(Type))] as DataTemplate;
             }
-
 
             if (template.Templates.Contains(new DataTemplateKey(type)))
                 return template.Templates[new DataTemplateKey(type)] as DataTemplate;

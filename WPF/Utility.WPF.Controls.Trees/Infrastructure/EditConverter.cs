@@ -15,11 +15,9 @@ namespace Utility.WPF.Controls.Trees
     //        IValueConverter valueConverter = null;
     //        if(values.SingleOrDefault(a=>a is IEnumerable) is IEnumerable a)
     //        {
-
     //        }
     //        if (values.SingleOrDefault(a => a is IEnumerable) is IEnumerable a)
     //        {
-
     //        }
     //    }
 
@@ -33,14 +31,14 @@ namespace Utility.WPF.Controls.Trees
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value is IEnumerable enumerable)
+            if (value is IEnumerable enumerable)
             {
                 var type = value.GetType();
                 Type elementType = null;
                 if (type.GenericTypeArguments().Length == 1)
                 {
                     elementType = type.InnerType();
-                    if(elementType==typeof(object))
+                    if (elementType == typeof(object))
                     {
                         elementType = TypeHelper.CommonBaseClass(enumerable);
                     }

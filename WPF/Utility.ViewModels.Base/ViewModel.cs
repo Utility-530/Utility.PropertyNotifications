@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Utility.Interfaces.NonGeneric;
 
 namespace Utility.ViewModels
 {
@@ -14,6 +13,7 @@ namespace Utility.ViewModels
     public abstract class ViewModel : INotifyPropertyChanged
     {
         #region propertyChanged
+
         /// <inheritdoc />
         /// <summary>
         ///     The event on property changed
@@ -31,7 +31,6 @@ namespace Utility.ViewModels
         }
 
         #endregion propertyChanged
-
 
         /// <summary>
         ///     Set a property and raise the <see cref="PropertyChanged" /> event
@@ -67,11 +66,7 @@ namespace Utility.ViewModels
         public int GridRow { get; set; }
     }
 
-
-
     //public class ValueViewModel : ViewModel, IValue
     //{
-
     //}
-
 }

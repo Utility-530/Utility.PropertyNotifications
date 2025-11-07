@@ -1,8 +1,5 @@
-﻿using DryIoc;
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -12,7 +9,6 @@ using Utility.WPF.Controls.Trees;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
-
     public class ComboBoxTreeView : ComboBox
     {
         public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register("SelectedItems", typeof(IEnumerable), typeof(ComboBoxTreeView), new PropertyMetadata(null));
@@ -27,7 +23,6 @@ namespace Utility.WPF.Controls.ComboBoxes
         public static readonly DependencyProperty TreeItemContainerStyleProperty = DependencyProperty.Register("TreeItemContainerStyle", typeof(Style), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty ToggleButtonTemplateProperty = DependencyProperty.Register("ToggleButtonTemplate", typeof(ControlTemplate), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty IsOpenProperty = DependencyProperty.Register("IsOpen", typeof(bool), typeof(ComboBoxTreeView), new PropertyMetadata(_changed));
-
 
         public event EventHandler<ValueCoercingEventArgs>? ValueCoercing;
 
@@ -64,6 +59,7 @@ namespace Utility.WPF.Controls.ComboBoxes
         }
 
         public delegate void SelectedNodeEventHandler(object sender, SelectedNodeEventArgs e);
+
         public delegate void CheckedItemsChangedEventHandler(object sender, CheckedItemsEventArgs e);
 
         public class SelectedNodeEventArgs : RoutedEventArgs
@@ -93,12 +89,10 @@ namespace Utility.WPF.Controls.ComboBoxes
             this.DropDownOpened += ComboBoxTreeView_DropDownOpened;
             this.LostFocus += ComboBoxTreeView_LostFocus;
             SelectedItems = List;
-
         }
 
         private void ComboBoxTreeView_DropDownOpened(object? sender, EventArgs e)
         {
-
         }
 
         private void ComboBoxTreeView_LostFocus(object sender, RoutedEventArgs e)
@@ -157,7 +151,6 @@ namespace Utility.WPF.Controls.ComboBoxes
             base.OnApplyTemplate();
         }
 
-
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (TreeView.SelectedItem != null)
@@ -170,11 +163,11 @@ namespace Utility.WPF.Controls.ComboBoxes
                 //IsDropDownOpen = false;
             }
         }
+
         private void ToggleButton_Checked(object sender, RoutedEventArgs e)
         {
             if (ToggleButton.IsChecked == false)
             {
-
             }
         }
 
@@ -197,7 +190,6 @@ namespace Utility.WPF.Controls.ComboBoxes
 
                 RaiseEvent(args);
             }
-
         }
 
         protected override void OnDropDownClosed(EventArgs e)
@@ -286,6 +278,7 @@ namespace Utility.WPF.Controls.ComboBoxes
             get { return (DataTemplateSelector)GetValue(SelectedItemTemplateSelectorProperty); }
             set { SetValue(SelectedItemTemplateSelectorProperty, value); }
         }
+
         public bool IsError
         {
             get { return (bool)GetValue(IsErrorProperty); }
@@ -333,7 +326,7 @@ namespace Utility.WPF.Controls.ComboBoxes
         }
     }
 
-    static class TreeHelper
+    internal static class TreeHelper
     {
         public static IEnumerable<object> GetAncestors(object vm, Func<object, object> parent)
         {

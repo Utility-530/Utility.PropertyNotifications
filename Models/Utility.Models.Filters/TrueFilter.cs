@@ -1,5 +1,4 @@
-﻿using Utility.Models;
-using Utility.Interfaces.NonGeneric;
+﻿using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Models.Filters
 {
@@ -8,6 +7,7 @@ namespace Utility.Models.Filters
         public TrueFilter() : base("True")
         {
         }
+
         public override Property<bool> Value { get; } = new Property<bool>(true);
 
         public override bool Evaluate(object value)

@@ -1,13 +1,8 @@
-﻿using Chronic;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Newtonsoft.Json.Linq;
 using Utility.Helpers.Reflection;
 using Utility.WPF.ResourceDictionarys;
 
@@ -58,10 +53,8 @@ namespace Utility.WPF.Controls.Objects
             return find("TreeListViewItemStyle");
 
             Style find(string key) => Resources.FindResource<Style>(key);
-
         }
 
         public Collection<ResourceDictionary> Resources { get; } = new();
-
     }
 }

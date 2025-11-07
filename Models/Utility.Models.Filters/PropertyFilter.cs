@@ -1,6 +1,4 @@
-﻿using DynamicData;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -10,6 +8,8 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
+using DynamicData;
+using ReactiveUI;
 using Utility.Reactives;
 
 namespace Utility.Models.Filters
@@ -69,7 +69,7 @@ namespace Utility.Models.Filters
             selections?.Connect().DisposeWith(disposable);
             return selections?
                 .Subscribe(observer)
-                .DisposeWith(disposable)?? Disposable.Empty;
+                .DisposeWith(disposable) ?? Disposable.Empty;
         }
 
         //public static PT Create<PT, TR>(Expression<Func<T, TR>> expression) where PT:PropertyFilter<TR>, new()

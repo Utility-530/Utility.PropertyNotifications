@@ -4,12 +4,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using Utility.WPF.Controls.Lists.Infrastructure;
-using Utility.WPF.Helpers;
-using Utility.WPF.Abstract;
-using Utility.Helpers.NonGeneric;
 using System.Windows.Data;
-using System.Xml.Linq;
+using Utility.Helpers.NonGeneric;
+using Utility.WPF.Abstract;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Controls.Lists.Infrastructure
 {
@@ -33,7 +31,6 @@ namespace Utility.WPF.Controls.Lists.Infrastructure
             BindingFactory factory = new(item);
             if (string.IsNullOrEmpty(checkedPath.IsCheckedPath) == false)
                 element.SetBinding(ToggleButton.IsCheckedProperty, factory.TwoWay(checkedPath.IsCheckedPath));
-
 
             //if (string.IsNullOrEmpty(selector.SelectedValuePath) == false)
             //{
@@ -62,7 +59,6 @@ namespace Utility.WPF.Controls.Lists.Infrastructure
             {
                 throw new Exception("77 sdf4 fdgdgp;p;p");
             }
-
 
             //if (sender is not System.Windows.Controls.Primitives.Selector selector)
             //{
@@ -100,7 +96,6 @@ namespace Utility.WPF.Controls.Lists.Infrastructure
                         }
                         catch (Exception ex)
                         {
-
                         }
                     }
                 }

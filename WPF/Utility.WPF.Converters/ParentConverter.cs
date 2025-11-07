@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Converters
 {
@@ -18,25 +12,23 @@ namespace Utility.WPF.Converters
         {
             if (value is FrameworkElement child)
             {
-                if (parameter is int i )
+                if (parameter is int i)
                 {
                     if (i == 0)
                     {
                         return VisualTreeHelper.GetParent(child);
-                    }   
-           
+                    }
                     else
                     {
                         return Convert(VisualTreeHelper.GetParent(child), targetType, i - 1, culture);
                     }
-                }           
+                }
                 if (int.TryParse(parameter.ToString(), out var i2))
                 {
                     if (i2 == 0)
                     {
                         return VisualTreeHelper.GetParent(child);
-                    }   
-           
+                    }
                     else
                     {
                         return Convert(VisualTreeHelper.GetParent(child), targetType, i2 - 1, culture);

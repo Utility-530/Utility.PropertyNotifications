@@ -23,7 +23,6 @@ namespace Utility.ViewModels
             IsChecked = isChecked;
         }
 
-
         public override bool? IsChecked { get => isChecked; set => this.RaiseAndSetIfChanged(ref isChecked, value); }
 
         public override bool IsSelected { get; set; }

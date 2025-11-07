@@ -1,9 +1,10 @@
 ﻿#region Assembly Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+
 // C:\Users\declan\.nuget\packages\microsoft.xaml.behaviors.wpf\1.1.77\lib\net6.0-windows7.0\Microsoft.Xaml.Behaviors.dll
 // Decompiled with ICSharpCode.Decompiler 7.1.0.6543
+
 #endregion
 
-using Microsoft.Xaml.Behaviors;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Behaviors
 {
@@ -33,7 +35,6 @@ namespace Utility.WPF.Behaviors
         public static readonly DependencyProperty EventArgsParameterPathProperty = DependencyProperty.Register("EventArgsParameterPath", typeof(string), typeof(InvokeCommandAction), new PropertyMetadata(null));
 
         public static readonly DependencyProperty IgnoreNullsProperty = DependencyProperty.Register("IgnoreNulls", typeof(bool), typeof(InvokeCommandAction), new PropertyMetadata(false));
-
 
         //
         // Summary:
@@ -105,8 +106,6 @@ namespace Utility.WPF.Behaviors
             }
         }
 
-
-
         public bool IgnoreNulls
         {
             get { return (bool)GetValue(IgnoreNullsProperty); }
@@ -114,7 +113,6 @@ namespace Utility.WPF.Behaviors
         }
 
         // Using a DependencyProperty as the backing store for IgnoreNulls.  This enables animation, styling, binding, etc...
-
 
         //
         // Summary:

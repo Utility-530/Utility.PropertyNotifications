@@ -15,7 +15,7 @@ namespace Utility.Models
 
         public IDisposable Subscribe(IObserver<IReadOnlyTree> observer)
         {
-            foreach(var factory in _factories.Values)
+            foreach (var factory in _factories.Values)
             {
                 observer.OnNext(factory.Value);
             }

@@ -1,11 +1,11 @@
-﻿using Bogus;
-using DynamicData;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Controls;
+using Bogus;
+using DynamicData;
 using Utility.Helpers;
 
 namespace Utility.WPF.Demo.Controls

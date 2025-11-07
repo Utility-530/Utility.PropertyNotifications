@@ -4,5 +4,4 @@
     {
         bool Save(T o);
     }
-
 }

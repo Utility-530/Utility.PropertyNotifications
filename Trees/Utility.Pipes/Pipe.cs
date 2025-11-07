@@ -24,15 +24,12 @@ namespace Utility.Pipes
             }
         }
 
-
-
         public QueueItem? Next => Forward.FirstOrDefault() ?? Back.FirstOrDefault() ?? Backlog.FirstOrDefault();
 
         Pipe()
         {
             current = SynchronizationContext.Current ?? throw new Exception("FGD $$$$$");
         }
-
 
         public void New(QueueItem forwardItem)
         {
@@ -41,10 +38,8 @@ namespace Utility.Pipes
 
         public void GoBack(QueueItem queueItem)
         {
-
             Back.Add(queueItem);
         }
-
 
         public void Queue(QueueItem queueItem)
         {
@@ -55,7 +50,6 @@ namespace Utility.Pipes
         {
             current.Send((a) =>
             {
-
                 if (Next != null)
                 {
                     var next = Next;
@@ -68,7 +62,6 @@ namespace Utility.Pipes
                         Back.Remove(next);
                     else if (Forward.Contains(next))
                         Forward.Remove(next);
-
                 }
             }, null);
         }
@@ -86,4 +79,3 @@ namespace Utility.Pipes
         public static Pipe Instance { get; } = new();
     }
 }
-

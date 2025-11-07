@@ -1,5 +1,4 @@
-﻿
-using Utility.Meta;
+﻿using Utility.Meta;
 
 namespace Utility.PropertyDescriptors
 {
@@ -11,7 +10,6 @@ namespace Utility.PropertyDescriptors
     {
     }
 
-
     public class PropertiesDescriptor(Descriptor Descriptor, object Instance) : BasePropertyDescriptor(Descriptor, Instance), IPropertiesDescriptor, IGetType
     {
         public static string _Name => "Properties";
@@ -19,7 +17,6 @@ namespace Utility.PropertyDescriptors
 
         public override IEnumerable Items()
         {
-
             var descriptors = TypeDescriptor.GetProperties(Instance);
 
             foreach (Descriptor descriptor in descriptors)

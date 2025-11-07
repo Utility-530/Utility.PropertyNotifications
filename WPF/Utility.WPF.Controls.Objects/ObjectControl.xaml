@@ -1,10 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:system="clr-namespace:System;assembly=System.Runtime"
-                    xmlns:controls="clr-namespace:Utility.WPF.Controls.Objects"
                     xmlns:converter="http://schemas.utility.com/converters"
-                    xmlns:panel="http://schemas.utility.com/panels">
-    
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+                    xmlns:controls="clr-namespace:Utility.WPF.Controls.Objects">
+
     <Style TargetType="{x:Type controls:ObjectControl}" BasedOn="{StaticResource {x:Type ContentControl}}">
         <Style.Resources>
             <system:Int32 x:Key="Factor">2</system:Int32>
@@ -19,7 +18,7 @@
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal" />
-                                <!--<panel:AnimatedWrapPanel AnimationTime="0:0:0.5" VerticalAlignment="Center"/>-->
+                                <!--<panel:AnimatedWrapPanel AnimationTime="0:0:0.5" VerticalAlignment="Center" />-->
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
@@ -36,7 +35,7 @@
                                 Text="{Binding Key}"
                                 Margin="2,0,2,0"
                                 TextWrapping="WrapWithOverflow" />
-                                <controls:ObjectControl
+                                    <controls:ObjectControl
                                     Grid.Column="1" Margin="1"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"

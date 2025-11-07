@@ -1,8 +1,7 @@
-﻿using SQLite;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using SQLite;
 using Utility.Interfaces.Generic.Data;
 using Utility.Interfaces.NonGeneric;
-
 
 namespace Utility.Entities
 {
@@ -14,15 +13,19 @@ namespace Utility.Entities
 
         [Attributes.Column(width: 120)]
         public string? Group { get; set; }
+
         [Attributes.Column(width: 120)]
         public string? Class { get; set; }
+
         [Attributes.Column(width: 120)]
         public string? Name { get; set; }
 
-        [Attributes.Column(width:120)]
+        [Attributes.Column(width: 120)]
         public string? UserName { get; set; }
+
         [Attributes.Column(width: 120)]
         public string? Password { get; set; }
+
         public string? OtherUserName { get; set; }
         public string? Pin { get; set; }
         public string? URL { get; set; }
@@ -34,7 +37,7 @@ namespace Utility.Entities
 
         public int CompareTo(object? obj)
         {
-            if(obj is UserProfile m)
+            if (obj is UserProfile m)
             {
                 return m.AddDate.CompareTo(m.AddDate);
             }
@@ -60,8 +63,6 @@ namespace Utility.Entities
             return clone;
         }
 
-
         public string Copy() => Password;
     }
 }
-

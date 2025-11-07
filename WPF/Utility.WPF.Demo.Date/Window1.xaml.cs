@@ -1,5 +1,4 @@
-﻿using DateWork.Models;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using Utility.WPF.Controls.Date.Model;
 
@@ -10,7 +9,7 @@ namespace Utility.WPF.Demo.Date
     /// </summary>
     public partial class Window1 : Window
     {
-       readonly DateModel dateModel = new DateMonthModel();
+        private readonly DateModel dateModel = new DateMonthModel();
 
         public Window1()
         {

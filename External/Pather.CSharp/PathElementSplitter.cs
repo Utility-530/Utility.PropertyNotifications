@@ -13,6 +13,7 @@ namespace Pather.CSharp
     public class PathElementSplitter : IPathElementSplitter
     {
         private IList<IPathElementFactory> pathElementFactories;
+
         /// <summary>
         /// contains the path element factories used to resolve given paths
         /// more specific factories must be before more generic ones, because the first applicable one is taken
@@ -28,8 +29,6 @@ namespace Pather.CSharp
             }
         }
 
-
-
         public IList<IPathElement> ToPathElements(string path)
         {
             var pathElements = new List<IPathElement>();
@@ -38,7 +37,7 @@ namespace Pather.CSharp
             {
                 var pathElement = createPathElement(tempPath, out tempPath);
                 pathElements.Add(pathElement);
-                //remove the dots chaining properties 
+                //remove the dots chaining properties
                 //no PathElement could do this reliably
                 //the only appropriate one would be Property, but there doesn't have to be a dot at the beginning (if it is the first PathElement, e.g. "Property1.Property2")
                 //and I don't want that knowledge in PropertyFactory

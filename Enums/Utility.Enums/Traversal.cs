@@ -12,22 +12,21 @@
         None,
         LeftToRight = 1,
         RightToLeft = 2
-    }  
-    
+    }
+
     public enum YTraversal : byte
     {
         None,
         TopToBottom = 1,
         BottomToTop = 2
-    }   
-    
+    }
+
     public enum ZTraversal : byte
     {
         None,
         FrontToBack = 1,
         BackToFront = 2
     }
-
 
     public enum XYTraversal : byte
     {
@@ -37,8 +36,6 @@
 
         TopToBottom = 4,
         BottomToTop = 8,
-
-
     }
 
     public enum XZTraversal : byte
@@ -51,16 +48,17 @@
         FrontToBack = 16,
         BackToFront = 32,
     }
+
     public enum YZTraversal : byte
     {
         None,
-
 
         TopToBottom = 4,
         BottomToTop = 8,
         FrontToBack = 16,
         BackToFront = 32,
     }
+
     public enum XYZTraversal : byte
     {
         None,

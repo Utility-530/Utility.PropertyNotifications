@@ -1,23 +1,20 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System.Reflection;
-using System;
+﻿using System;
 using System.Linq;
+using System.Reflection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Utility.Conversions.Json.Newtonsoft
 {
     public class ParameterInfoJsonConverter : JsonConverter<ParameterInfo>
     {
-
         public override void WriteJson(JsonWriter writer, ParameterInfo value, JsonSerializer serializer)
         {
-
             // Begin object
             writer.WriteStartObject();
 
             writer.WritePropertyName("$type");
             writer.WriteValue("System.Reflection.ParameterInfo");
-
 
             // Write each property to JSON
             writer.WritePropertyName("TypeName");

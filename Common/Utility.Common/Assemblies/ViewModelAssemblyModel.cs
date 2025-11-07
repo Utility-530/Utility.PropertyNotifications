@@ -1,6 +1,6 @@
-﻿using Autofac;
+﻿using System.Threading.Tasks;
+using Autofac;
 using Nito.AsyncEx;
-using System.Threading.Tasks;
 using Utility.WPF.Models;
 
 namespace Utility.Common.Assemblies

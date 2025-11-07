@@ -1,8 +1,8 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.Xaml.Behaviors;
 using Utility.Commands;
 
 namespace Utility.WPF.Behaviors
@@ -29,7 +29,7 @@ namespace Utility.WPF.Behaviors
                 })
             };
 
-            AssociatedObject.ContextMenu = new ContextMenu { };  
+            AssociatedObject.ContextMenu = new ContextMenu { };
             AssociatedObject.ContextMenu.Items.Add(menuItem);
             AssociatedObject.ContextMenu.Items.Add(menuItem2);
             AssociatedObject.ContextMenu.Items.Add(new Separator());
@@ -41,4 +41,3 @@ namespace Utility.WPF.Behaviors
         }
     }
 }
-

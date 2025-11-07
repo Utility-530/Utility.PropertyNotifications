@@ -1,9 +1,5 @@
-﻿using System;
-using System.Drawing;
-using System.Windows;
+﻿using System.Drawing;
 using Utility.Interfaces.Exs.Diagrams;
-using Utility.Interfaces.NonGeneric;
-using Utility.Models;
 using Utility.PropertyNotifications;
 
 namespace Utility.Nodes

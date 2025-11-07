@@ -1,5 +1,4 @@
-﻿
-namespace Utility.Structs
+﻿namespace Utility.Structs
 {
     public readonly struct ValueChange
     {
@@ -9,8 +8,8 @@ namespace Utility.Structs
             Value = value;
         }
 
-        public string Name { get;  }
+        public string Name { get; }
 
-        public object Value { get;  }
+        public object Value { get; }
     }
 }

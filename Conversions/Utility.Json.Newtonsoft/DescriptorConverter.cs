@@ -1,16 +1,15 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System;
-using System.ComponentModel;
+﻿using System;
 using System.Collections;
-using Utility.Meta;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Utility.Meta;
 
 namespace Utility.Conversions.Json.Newtonsoft
 {
     public class DescriptorConverter : JsonConverter<PropertyDescriptor>
     {
-
         public override void WriteJson(JsonWriter writer, PropertyDescriptor value, JsonSerializer serializer)
         {
             // Begin object
@@ -41,7 +40,6 @@ namespace Utility.Conversions.Json.Newtonsoft
             // Read the JSON object
             var jObject = JObject.Load(reader);
 
-
             var propertyName = jObject["Name"]?.ToString();
             if (string.IsNullOrEmpty(propertyName))
             {
@@ -69,7 +67,7 @@ namespace Utility.Conversions.Json.Newtonsoft
                     return propertyDescriptor;
                 else
                     return new RootDescriptor(typeof(Collection<object>));
-                    //throw new Exception($"{type}.{propertyName}");
+                //throw new Exception($"{type}.{propertyName}");
             }
             else
                 throw new JsonSerializationException($"Unable to resolve type: {typeName}");

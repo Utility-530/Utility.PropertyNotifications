@@ -1,10 +1,10 @@
-﻿using DynamicData;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
+using DynamicData;
+using Newtonsoft.Json;
 using Utility.Collections;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.NonGeneric;
@@ -26,7 +26,6 @@ namespace Utility.Models.Trees
         {
             IsExpanded = true;
         }
-
 
         [JsonIgnore]
         public CustomCollection<Assembly> Assemblies
@@ -55,7 +54,6 @@ namespace Utility.Models.Trees
             }
         }
 
-
         [JsonIgnore]
         public GlobalAssembliesModel GlobalAssembliesModel
         {
@@ -64,8 +62,6 @@ namespace Utility.Models.Trees
                 globalAssembliesModel = value;
             }
         }
-
-
 
         public override IEnumerable<IReadOnlyTree> Items()
         {
@@ -110,6 +106,7 @@ namespace Utility.Models.Trees
                         properties.InsertSpecial(_level, pInfo);
                     }
                     break;
+
                 case PropertyModel { } pm:
                     {
                         pm.WithChangesTo(a => a.Value).Cast<PropertyInfo>().Subscribe(x =>
@@ -124,7 +121,6 @@ namespace Utility.Models.Trees
 
         public override void Subtraction(IReadOnlyTree subtract)
         {
-
             switch (subtract)
             {
                 case AssemblyTypePropertyModel { Assembly: { } _assembly, Type: { } _type, Value: { } _property }:
@@ -153,15 +149,12 @@ namespace Utility.Models.Trees
                         properties.RemoveAtSpecial(level);
                     }
                     break;
-
             }
             base.Subtraction(subtract);
-
         }
 
         public override void Replacement(IReadOnlyTree @new, IReadOnlyTree old)
         {
-
             switch (@new)
             {
                 case AssemblyModel { Assembly: { } assembly }:
@@ -181,7 +174,6 @@ namespace Utility.Models.Trees
                         var level = @new.Level(this);
                         properties.ReplaceSpecial(level, pInfo);
                         break;
-
                     }
 
                 default:
@@ -216,6 +208,7 @@ namespace Utility.Models.Trees
             }
             return true;
         }
+
         public bool TrySetValue(object instance, object value)
         {
             if (Types.Any() == false)
@@ -242,7 +235,6 @@ namespace Utility.Models.Trees
             }
             Properties[i].SetValue(instance, value);
             return true;
-
         }
     }
 }

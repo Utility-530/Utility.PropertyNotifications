@@ -4,7 +4,6 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Utility.Interfaces.NonGeneric;
-using Utility.Trees.Abstractions;
 using Utility.WPF.Controls.ComboBoxes;
 using Utility.WPF.Helpers;
 using Utility.WPF.Reactives;
@@ -13,7 +12,7 @@ namespace Utility.WPF.Controls.FileSystem
 {
     public class FolderComboBrowser : FolderBrowser<ComboBoxTreeView>
     {
-        FileSelectorBehavior behavior = new() { ExcludesFiles = true };
+        private FileSelectorBehavior behavior = new() { ExcludesFiles = true };
 
         public FolderComboBrowser()
         {

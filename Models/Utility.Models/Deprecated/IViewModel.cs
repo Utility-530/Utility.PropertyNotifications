@@ -4,7 +4,6 @@
 //{
 //    public interface IViewModel
 //    {
-
 //        Type Type { get; set; }
 
 //        // Dock
@@ -33,7 +32,6 @@
 //        string ItemsPanelTemplateKey { get; set; }
 
 //        // Templates
-
 
 //        // margin
 //        double Left { get; set; }

@@ -28,7 +28,6 @@
 //        public BaseCollectionModel() :
 //            base()
 //        {
-
 //            this.Children
 //                .AndAdditions<IReadOnlyTree>()
 //                .Subscribe(a =>
@@ -68,7 +67,6 @@
 //            set => this.RaisePropertyReceived<TValue>(ref this.value, (TValue)value);
 //        }
 
-
 //        public TValue? Get()
 //        {
 //            return value;
@@ -99,7 +97,6 @@
 
 //        //public override ObservableCollection<T> Collection { get; } = [];
 
-
 //        public void Initialise()
 //        {
 //            this.WithChangesTo(a => a.Limit)
@@ -123,13 +120,10 @@
 //        }
 //    }
 
-
 //    public class CollectionModel<TModel>(Func<Model>? create = null) : ListModel
 //    {
-
 //    }
 //    public class CollectionModel() : CollectionModel<NodeViewModel>()
 //    {
-
 //    }
 //}

@@ -32,6 +32,7 @@ namespace Utility.Interfaces.Exs
     {
         bool IsValueLoaded { get; set; }
     }
+
     public interface IIsValueSaved
     {
         bool IsValueSaved { get; set; }
@@ -56,7 +57,6 @@ namespace Utility.Interfaces.Exs
     {
         bool IsChildrenTracked { get; set; }
     }
-
 
     public interface IIsChildrenRefreshed
     {
@@ -108,7 +108,6 @@ namespace Utility.Interfaces.Exs
         Orientation Orientation { get; set; }
     }
 
-
     public interface IArrangement
     {
         Arrangement Arrangement { get; set; }
@@ -124,12 +123,10 @@ namespace Utility.Interfaces.Exs
         Position2D ConnectorPosition { get; set; }
     }
 
-
     public interface IIsReactivationRequired
     {
         bool IsReactivationRequested { get; set; }
     }
-
 
     public interface IDataTemplate
     {

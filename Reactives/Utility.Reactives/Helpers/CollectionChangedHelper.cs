@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Utility.Changes;
 using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
-using Utility.Changes;
-using Type = Utility.Changes.Type;
-using System.Collections.Generic;
 using O = System.Reactive.Linq.Observable;
-using System.Collections.ObjectModel;
+using Type = Utility.Changes.Type;
 
 namespace Utility.Reactives
 {
@@ -79,7 +79,6 @@ namespace Utility.Reactives
                 .Where(a => a.Action == NotifyCollectionChangedAction.Replace)
                 .SelectMany(x => x.NewItems?.Cast<T>().Join(x.OldItems?.Cast<T>(), a => true, b => true, (a, b) => (a, b)))
                 : O.Empty<(T @new, T old)>();
-
         }
 
         public static IObservable<NotifyCollectionChangedAction> ToActionsObservable<T>(this INotifyCollectionChanged notifyCollectionChanged)
@@ -149,7 +148,6 @@ namespace Utility.Reactives
                   .DistinctUntilChanged();
         }
 
-
         public static IObservable<T> AndAdditions<T>(this IEnumerable collection)
         {
             return Observable.Create<T>(observer =>
@@ -188,13 +186,14 @@ namespace Utility.Reactives
                 return Additions<TR>((INotifyCollectionChanged)collection).Subscribe(observer);
             });
         }
+
         public static IObservable<TR> SelfAndAdditions<TR>(this IEnumerable collection)
         {
             return O.Create<TR>(observer =>
             {
                 foreach (TR x in collection)
                     observer.OnNext(x);
-                if(collection is INotifyCollectionChanged incc)
+                if (collection is INotifyCollectionChanged incc)
                     return Additions<TR>(incc).Subscribe(observer);
                 return Disposable.Empty;
             });
@@ -231,8 +230,6 @@ namespace Utility.Reactives
                             .StartWith(Change<TR>.None);
         }
 
-
-
         public static IObservable<TR> SelfAndAdditions<TR>(this ObservableCollection<TR> collection)
         {
             return SelfAndAdditions<ObservableCollection<TR>, TR>(collection);
@@ -242,10 +239,12 @@ namespace Utility.Reactives
         {
             return Subtractions<ObservableCollection<TR>, TR>(collection);
         }
+
         public static IObservable<Change<TR>> Changes<TR>(this ObservableCollection<TR> collection)
         {
             return Changes<ObservableCollection<TR>, TR>(collection);
         }
+
         public static IObservable<(TR, TR)> Replacements<TR>(this ObservableCollection<TR> collection)
         {
             return Replacements<ObservableCollection<TR>, TR>(collection);

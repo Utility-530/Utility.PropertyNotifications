@@ -1,5 +1,4 @@
-﻿
-namespace Utility.PropertyDescriptors;
+﻿namespace Utility.PropertyDescriptors;
 
 internal class BooleanValue(Descriptor Descriptor, object Instance) : ValueDescriptor<bool>(Descriptor, Instance)
 {
@@ -63,7 +62,6 @@ internal class NullableIntegerValue(Descriptor Descriptor, object Instance) : Nu
 
 internal class LongValue(Descriptor Descriptor, object Instance) : ValueDescriptor<long>(Descriptor, Instance);
 
-
 internal class NullableLongValue(Descriptor Descriptor, object Instance) : NullableValueDescriptor<long>(Descriptor, Instance);
 
 internal class NullValue(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IValue
@@ -76,7 +74,6 @@ internal class NullValue(Descriptor Descriptor, object Instance) : ValueDescript
     {
         return null;
     }
-
 
     public override void Initialise(object? item = null)
     {
@@ -92,11 +89,9 @@ internal class NullValue(Descriptor Descriptor, object Instance) : ValueDescript
     }
 }
 
-
 internal class StructValue(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance)
 {
 }
-
 
 internal class StringValue(Descriptor Descriptor, object Instance) : ValueDescriptor<string>(Descriptor, Instance)
 {

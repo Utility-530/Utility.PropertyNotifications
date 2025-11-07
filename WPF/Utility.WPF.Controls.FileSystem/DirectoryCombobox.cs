@@ -1,10 +1,10 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using ReactiveUI;
 
 namespace Utility.WPF.Controls.FileSystem
 {

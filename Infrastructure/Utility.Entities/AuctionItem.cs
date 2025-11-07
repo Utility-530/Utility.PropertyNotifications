@@ -3,7 +3,6 @@ using SQLite;
 using Utility.Interfaces.Generic.Data;
 using Utility.Interfaces.NonGeneric;
 
-
 namespace Utility.Entities
 {
     public class AuctionItem : Entity, IId<Guid>, IIdSet<Guid>, IClone
@@ -24,14 +23,13 @@ namespace Utility.Entities
 
         public AuctionItem()
         {
-
         }
 
         [PrimaryKey]
         [Attributes.Column(ignore: true)]
-
         [JsonIgnore]
         public Guid Id { get; set; }
+
         public string? RelativePath { get; set; }
         //public string? Title { get; set; }
         //public string? SubTitle { get; set; }

@@ -10,4 +10,4 @@ using System.Windows.Markup;
                                               // app, or any theme specific resource dictionaries)
 )]
 [assembly: XmlnsPrefix("http://schemas.utility.com/dialog", "dil")]
-[assembly: XmlnsDefinition("http://schemas.utility.com/dialog", "Utility.WPF.Controls.Dialog")] 
+[assembly: XmlnsDefinition("http://schemas.utility.com/dialog", "Utility.WPF.Controls.Dialog")]

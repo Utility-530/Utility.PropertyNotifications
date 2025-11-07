@@ -1,4 +1,3 @@
-
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,7 +10,6 @@ namespace Utility.WPF.Controls.SplitButtons
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(SplitButton), new FrameworkPropertyMetadata(typeof(SplitButton)));
         }
-
 
         /// <summary>
         ///     The DependencyProperty for the Content property.
@@ -72,15 +70,15 @@ namespace Utility.WPF.Controls.SplitButtons
             //    {
             //        if (TemplatedParent != null && FrameworkObject.IsEffectiveAncestor(logicalParent, this))
             //        {
-            //            // In the case that this SplitButton belongs in a parent template 
-            //            // and represents the content of a parent, we do not wish to change 
+            //            // In the case that this SplitButton belongs in a parent template
+            //            // and represents the content of a parent, we do not wish to change
             //            // the logical ancestry of the content.
             //            return;
             //        }
             //        else
             //        {
             //            // If the new content was previously hooked up to the logical
-            //            // tree then we sever it from the old parent. 
+            //            // tree then we sever it from the old parent.
             //            LogicalTreeHelper.RemoveLogicalChild(logicalParent, newContent);
             //        }
             //    }
@@ -135,7 +133,6 @@ namespace Utility.WPF.Controls.SplitButtons
                         new FrameworkPropertyMetadata(
                                 (DataTemplate)null,
                               new PropertyChangedCallback(OnContentTemplateChanged)));
-
 
         /// <summary>
         ///     ContentTemplate is the template used to display the content of the control.
@@ -229,7 +226,6 @@ namespace Utility.WPF.Controls.SplitButtons
                         new FrameworkPropertyMetadata(
                                 (String)null,
                               new PropertyChangedCallback(OnContentStringFormatChanged)));
-
 
         /// <summary>
         ///     ContentStringFormat is the format used to display the content of

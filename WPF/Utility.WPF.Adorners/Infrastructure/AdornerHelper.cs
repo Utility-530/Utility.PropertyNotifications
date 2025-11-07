@@ -10,7 +10,6 @@ namespace Utility.WPF.Adorners.Infrastructure
             AdornerCollection? adorners = AdornerEx.GetAdorners(adornedElement);
             if (adorners.Count > 0)
             {
-
             }
             if (adorners.IndexOf(adorner) == -1)
             {

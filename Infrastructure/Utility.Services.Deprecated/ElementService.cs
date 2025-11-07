@@ -1,8 +1,7 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Utility.Extensions;
 using Utility.Common.Models;
-
+using Utility.Extensions;
 
 namespace Utility.Services.Deprecated
 {

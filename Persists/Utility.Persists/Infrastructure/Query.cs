@@ -9,12 +9,12 @@ namespace Utility.Persists
 
     public class MaxRowIdResult : IQueryResult
     {
-
         public MaxRowIdResult(int id, bool isSuccess)
         {
             Id = id;
             IsSuccess = isSuccess;
         }
+
         public int Id { get; }
 
         public bool IsSuccess { get; }

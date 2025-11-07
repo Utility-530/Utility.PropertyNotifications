@@ -1,11 +1,8 @@
-﻿using Utility.Interfaces.Exs;
-
-namespace Utility.PropertyDescriptors
+﻿namespace Utility.PropertyDescriptors
 {
     public interface ICollectionDescriptor : IDescriptor, IProliferation, ICount, IObserver<RefreshEventArgs>
     {
         Type ElementType { get; }
-
     }
 
     public interface ICollectionHeadersDescriptor : IDescriptor, ICount
@@ -30,6 +27,7 @@ namespace Utility.PropertyDescriptors
     public interface IPropertiesDescriptor : IDescriptor
     {
     }
+
     public interface IReferenceDescriptor : IDescriptor, ICount
     {
         object Instance { get; }

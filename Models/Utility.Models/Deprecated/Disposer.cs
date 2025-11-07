@@ -3,7 +3,6 @@
 
 //namespace Utility.Models;
 
-
 //public class Disposer<TObserver, T> : IDisposable where TObserver : IObserver<T>
 //{
 //    private readonly ICollection<TObserver> observers;
@@ -57,8 +56,6 @@
 
 //public interface IObservable
 //{
-
 //    IDisposable Subscribe(IObserver value);
-
 
 //}

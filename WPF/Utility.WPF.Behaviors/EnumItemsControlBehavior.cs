@@ -1,12 +1,8 @@
 ﻿#nullable enable
 
-using Evan.Wpf;
-using Microsoft.Xaml.Behaviors;
-using ReactiveUI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -14,10 +10,10 @@ using System.Reactive.Subjects;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
 using Endless;
-using Utility.WPF.Behaviors;
+using Evan.Wpf;
+using Microsoft.Xaml.Behaviors;
+using ReactiveUI;
 
 namespace Utility.WPF.Behaviors
 {
@@ -28,8 +24,10 @@ namespace Utility.WPF.Behaviors
 
         public static readonly DependencyProperty EnumTypeProperty = DependencyProperty.Register("EnumType", typeof(Type), typeof(EnumItemsControlBehavior), new PropertyMetadata(EnumTypeChanged));
         public static readonly DependencyProperty EnumFilterCollectionProperty = DependencyHelper.Register<IEnumerable>();
+
         public static readonly DependencyProperty IsNullOptionIncludedProperty =
             DependencyProperty.Register("IsNullOptionIncluded", typeof(bool), typeof(EnumItemsControlBehavior), new PropertyMetadata());
+
         //public static readonly DependencyProperty SelectedEnumProperty =
         //    DependencyProperty.Register("SelectedEnum", typeof(Enum), typeof(EnumSelectorBehavior), new FrameworkPropertyMetadata
         //    {
@@ -132,7 +130,6 @@ namespace Utility.WPF.Behaviors
             get { return (bool)GetValue(IsNullOptionIncludedProperty); }
             set { SetValue(IsNullOptionIncludedProperty, value); }
         }
-
 
         #endregion properties
 

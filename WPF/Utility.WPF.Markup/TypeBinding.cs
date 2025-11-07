@@ -1,8 +1,8 @@
-﻿using Hardcodet.Wpf.DataBinding;
-using System;
+﻿using System;
 using System.Linq;
-using System.Windows.Markup;
 using System.Reflection;
+using System.Windows.Markup;
+using Hardcodet.Wpf.DataBinding;
 
 namespace Utility.WPF.Markup
 {
@@ -12,7 +12,7 @@ namespace Utility.WPF.Markup
         public TypeBinding()
         {
         }
-                
+
         public Type? Type { get; set; }
 
         public override object ProvideValue(IServiceProvider serviceProvider)

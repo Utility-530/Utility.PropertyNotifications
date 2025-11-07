@@ -1,6 +1,6 @@
-﻿using Utility.Interfaces;
+﻿using Utility.Helpers.Reflection;
+using Utility.Interfaces;
 using Utility.Interfaces.NonGeneric;
-using Utility.Helpers.Reflection;
 
 namespace Utility.PropertyNotifications
 {
@@ -20,7 +20,7 @@ namespace Utility.PropertyNotifications
             }
 
             public object Reference => _target;
-            
+
             private class Subscription : IDisposable
             {
                 private readonly INotifyPropertyReceived _target;

@@ -6,7 +6,6 @@ namespace Utility.Reactives
 {
     public static class TaskHelper
     {
-
         public static Task<T> ToTask<T>(this IObservable<T> enumerable)
         {
             T t = default;

@@ -16,7 +16,7 @@ namespace CustomHelper
         /// <summary>
         /// Custom Type provider implementation - delegated through static methods.
         /// </summary>
-        private readonly CustomTypeHelper<Dynamic>? _helper = new ();
+        private readonly CustomTypeHelper<Dynamic>? _helper = new();
 
         //// Existing known properties
         //private string _firstName;

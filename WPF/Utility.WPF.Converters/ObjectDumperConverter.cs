@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace Utility.WPF.Converters
@@ -20,6 +16,6 @@ namespace Utility.WPF.Converters
             throw new NotImplementedException();
         }
 
-        public static ObjectDumperConverter Instance { get; } =new ObjectDumperConverter();
+        public static ObjectDumperConverter Instance { get; } = new ObjectDumperConverter();
     }
 }

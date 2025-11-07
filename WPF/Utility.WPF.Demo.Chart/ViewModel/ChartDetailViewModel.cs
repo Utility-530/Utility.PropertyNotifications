@@ -1,8 +1,8 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows.Media;
+using ReactiveUI;
 using static Utility.WPF.Controls.Chart.ViewModels.MultiTimeModel;
 
 namespace Utility.WPF.Chart.Demo.ViewModels

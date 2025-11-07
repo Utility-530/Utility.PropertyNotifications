@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 using Utility.Enums;
 using Utility.Structs;
 
@@ -9,6 +9,7 @@ namespace Utility.Conversions.Json.Newtonsoft
     public class DimensionConverter : JsonConverter<Dimension>
     {
         public override bool CanWrite => false;
+
         public override Dimension ReadJson(JsonReader reader, Type objectType, Dimension existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null)
@@ -27,11 +28,9 @@ namespace Utility.Conversions.Json.Newtonsoft
                 {
                     return new Dimension(1, x);
                 }
-
             }
             // Read the JSON object
             var jObject = JObject.Load(reader);
-
 
             double value = 1;
             var propertyName = jObject["Value"]?.ToString();

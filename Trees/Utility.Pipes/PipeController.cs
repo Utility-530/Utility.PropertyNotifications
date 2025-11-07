@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Reactive;
-using System.Threading;
-using System.Timers;
+﻿using System.Reactive;
 using System.Windows.Input;
 using Utility.Commands;
 using Utility.PropertyNotifications;
@@ -18,8 +14,6 @@ namespace Utility.Pipes
 
         public PipeController()
         {
-
-
             dispatcherTimer = new DispatcherTimer();
             //dispatcherTimer.Tick += new EventHandler<object>(dispatcherTimer_Tick);
             dispatcherTimer.Interval = TimeSpan.FromSeconds(0.1);
@@ -50,7 +44,6 @@ namespace Utility.Pipes
 
         public void Initialise()
         {
-
         }
 
         public bool IsPlaying
@@ -66,12 +59,8 @@ namespace Utility.Pipes
         public ICommand StepCommand { get; set; }
     }
 
-
     public interface IPipeInitialiser
     {
         void Initialise();
     }
-
-
 }
-

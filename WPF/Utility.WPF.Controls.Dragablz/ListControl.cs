@@ -1,14 +1,14 @@
-﻿using Dragablz;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using Dragablz;
+using Utility.Helpers.Reflection;
 using Utility.WPF.Attached;
 using Utility.WPF.Helpers;
-using Utility.Helpers.Reflection;
 
 namespace Utility.WPF.Controls.Dragablz
 {

@@ -1,8 +1,8 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Controls;
+using ReactiveUI;
 
 namespace Utility.WPF.Demo.Animation
 {

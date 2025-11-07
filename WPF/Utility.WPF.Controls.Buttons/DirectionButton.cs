@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using Utility.Enums;
@@ -16,14 +12,15 @@ namespace Utility.WPF.Controls.Buttons
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DirectionButton), new FrameworkPropertyMetadata(typeof(DirectionButton)));
         }
-        int i = 0;
+
+        private int i = 0;
+
         public DirectionButton()
         {
             this.Click += (s, e) =>
             {
                 this.Movement = convert(this.Movement);
                 this.SetValue(Base.IntegerProperty, (++i % 4) + 1);
-
             };
 
             static XYTraversal convert(XYTraversal movement)
@@ -32,12 +29,16 @@ namespace Utility.WPF.Controls.Buttons
                 {
                     case (XYTraversal.BottomToTop):
                         return XYTraversal.RightToLeft;
+
                     case XYTraversal.None:
                         return XYTraversal.LeftToRight;
+
                     case XYTraversal.LeftToRight:
                         return XYTraversal.BottomToTop;
+
                     case XYTraversal.RightToLeft:
                         return XYTraversal.TopToBottom;
+
                     case XYTraversal.TopToBottom:
                         return XYTraversal.LeftToRight;
                 }
@@ -53,7 +54,5 @@ namespace Utility.WPF.Controls.Buttons
 
         public static readonly DependencyProperty MovementProperty =
             DependencyProperty.Register("Movement", typeof(XYTraversal), typeof(DirectionButton), new PropertyMetadata(XYTraversal.TopToBottom));
-
-
     }
 }

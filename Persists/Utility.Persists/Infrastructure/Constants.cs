@@ -15,6 +15,5 @@
             public const string Name = "Data";
             public const string DateFormat = "yyyy-MM-dd";
         }
-
     }
 }

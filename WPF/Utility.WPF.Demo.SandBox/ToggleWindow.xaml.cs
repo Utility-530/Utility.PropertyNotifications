@@ -14,8 +14,6 @@ namespace Utility.WPF.SandBox
             InitializeComponent();
         }
 
-
-
         public XYTraversal Movement
         {
             get { return (XYTraversal)GetValue(MovementProperty); }
@@ -25,10 +23,7 @@ namespace Utility.WPF.SandBox
         // Using a DependencyProperty as the backing store for Movement.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MovementProperty =
             DependencyProperty.Register("Movement", typeof(XYTraversal), typeof(ToggleWindow), new PropertyMetadata(XYTraversal.LeftToRight));
-
-
     }
-
 
     public class Ex
     {
@@ -37,8 +32,10 @@ namespace Utility.WPF.SandBox
         typeof(int),
         typeof(Ex),
         new FrameworkPropertyMetadata(int.MinValue, TimedTextPropertyChanged));
-        static bool changed;
-        static RepeatButton repeatButton;
+
+        private static bool changed;
+        private static RepeatButton repeatButton;
+
         private static void TimedTextPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is RepeatButton r && repeatButton == null)
@@ -51,9 +48,7 @@ namespace Utility.WPF.SandBox
             changed = true;
             SetTimedText(d, (GetTimedText(d) + 1) % 4);
             changed = false;
-
         }
-
 
         public static void SetTimedText(DependencyObject textBlock, int value)
         {
@@ -66,4 +61,3 @@ namespace Utility.WPF.SandBox
         }
     }
 }
-

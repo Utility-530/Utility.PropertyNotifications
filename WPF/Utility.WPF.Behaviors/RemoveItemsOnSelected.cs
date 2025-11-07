@@ -1,10 +1,10 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Controls.Primitives;
+using Microsoft.Xaml.Behaviors;
 using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Behaviors
@@ -20,7 +20,7 @@ namespace Utility.WPF.Behaviors
         private static void RemoveItemsOnSelectedAddItemsOnDeselected(Selector selector)
         {
             //var collection = new ObservableCollection<object>(selector.ItemsSource.Cast<object>());
-            Stack<(int, object)> removedObjects = new ();
+            Stack<(int, object)> removedObjects = new();
             IEnumerable itemsSource = null;
             selector.Changes().Subscribe(a =>
             {

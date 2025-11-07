@@ -13,13 +13,12 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Utility.Helpers.NonGeneric;
-using Utility.WPF.Controls.Base;
 using Utility.Helpers.Reflection;
+using Utility.WPF.Controls.Base;
 using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls
 {
-
     using static DependencyPropertyFactory<SliderItemsControl>;
 
     public class KeyRange : INotifyPropertyChanged
@@ -45,7 +44,6 @@ namespace Utility.WPF.Controls
 
         public event PropertyChangedEventHandler PropertyChanged;
     }
-
 
     public class SliderItemsControl : Controlx
     {

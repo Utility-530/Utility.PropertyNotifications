@@ -1,6 +1,4 @@
 ﻿using RazorEngine.Templating;
-using Utility.Entities;
-using Utility.Models;
 using Utility.Services.Meta;
 using Utility.Structs;
 
@@ -12,12 +10,9 @@ namespace Utility.Services
 
     public readonly record struct RazorFileDTO(string Content, object Value, string Text);
 
-
     public class RazorService //: IObserver<FilePath>, IObserver<Instance>, IObservable<RazorEngineOutput>
     {
-
-        CancellationTokenSource? source = null;
-
+        private CancellationTokenSource? source = null;
 
         public async Task<RazorFileDTO> ToRazorFile(FilePath filePath, object instance)
         {

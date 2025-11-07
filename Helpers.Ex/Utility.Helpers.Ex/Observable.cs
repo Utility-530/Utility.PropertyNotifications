@@ -5,14 +5,11 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utility.Helpers.Ex
 {
     public static class ObservableHelper
     {
-
         public static IObservable<T> WhereNotDefault<T>(this IObservable<T> observable)
         {
             return observable.Where(a => !(a?.Equals(default(T)) ?? false));
@@ -31,8 +28,6 @@ namespace Utility.Helpers.Ex
             .Subscribe(observer.OnNext)
         : Disposable.Empty;
     });
-
-
     }
 
     public static class EnumerableHelper
@@ -50,8 +45,4 @@ Observable.Create<object>(observer =>
         : Disposable.Empty;
 });
     }
-
-
 }
-
-

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Reflection;
 
 namespace Utility.Interfaces
 {
@@ -14,7 +13,6 @@ namespace Utility.Interfaces
     {
         public PropertyReceivedEventArgs(string? propertyName, object? value, object? oldValue, object? source = null) : base(propertyName)
         {
-
             Value = value;
             OldValue = oldValue;
             Source = source;

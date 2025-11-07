@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TheArtOfDev.HtmlRenderer.Demo.Common;
+﻿using System.IO;
 using TheArtOfDev.HtmlRenderer.Core.Entities;
+using TheArtOfDev.HtmlRenderer.Demo.Common;
 
 namespace TheArtOfDev.HtmlRenderer.Demo.WPF
 {
@@ -24,7 +19,6 @@ namespace TheArtOfDev.HtmlRenderer.Demo.WPF
         /// <summary>
         /// Get stylesheet by given key.
         /// </summary>
-
 
         public static string GetStylesheet(string src)
         {
@@ -59,18 +53,25 @@ namespace TheArtOfDev.HtmlRenderer.Demo.WPF
             {
                 case "htmlicon":
                     return Resources.Html32;
+
                 case "staricon":
                     return Resources.Favorites32;
+
                 case "fonticon":
                     return Resources.Font32;
+
                 case "commenticon":
                     return Resources.Comment16;
+
                 case "imageicon":
                     return Resources.Image32;
+
                 case "methodicon":
                     return Resources.Method16;
+
                 case "propertyicon":
                     return Resources.Property16;
+
                 case "eventicon":
                     return Resources.Event16;
             }

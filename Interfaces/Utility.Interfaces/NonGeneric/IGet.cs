@@ -3,5 +3,5 @@
     public interface IGet
     {
         public object? Get(string name);
-    }  
+    }
 }

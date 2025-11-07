@@ -1,6 +1,3 @@
-﻿using System;
-
-namespace Utility.WPF.Mixins
+﻿namespace Utility.WPF.Mixins
 {
-
 }

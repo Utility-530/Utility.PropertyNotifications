@@ -9,7 +9,6 @@ namespace Utility.Models.Trees
 
         public ComparisonModel()
         {
-
         }
 
         public ComparisonType Type
@@ -44,14 +43,18 @@ namespace Utility.Models.Trees
                     {
                         case CustomStringComparison.Contains:
                             return value1.ToString().Contains(value2.ToString());
+
                         case CustomStringComparison.EqualTo:
                             return value1.ToString().Equals(value2.ToString());
+
                         case CustomStringComparison.NotEqualTo:
                             return value1.ToString().Equals(value2.ToString()) == false;
+
                         case CustomStringComparison.DoesNotContain:
                             return value1.ToString().Contains(value2.ToString()) == false;
                     }
                     break;
+
                 case ComparisonType.Number:
                     bool success1 = int.TryParse(value1.ToString(), out int int1);
                     bool success2 = int.TryParse(value1.ToString(), out int int2);
@@ -60,27 +63,33 @@ namespace Utility.Models.Trees
                         {
                             case NumberComparison.GreaterThanOrEqualTo:
                                 return int1 >= int2;
+
                             case NumberComparison.GreaterThan:
                                 return int1 > int2;
+
                             case NumberComparison.LessThan:
                                 return int1 < int2;
+
                             case NumberComparison.EqualTo:
                                 return int1 == int2;
+
                             case NumberComparison.NotEqualTo:
                                 return int1 != int2;
+
                             case NumberComparison.LessThanOrEqualTo:
                                 return int1 <= int2;
                         }
                     return false;
                     break;
+
                 case ComparisonType.Boolean:
                     switch ((BooleanComparison)Value)
                     {
                         case BooleanComparison.EqualTo:
                             return value1.ToString().Equals(value2.ToString());
+
                         case BooleanComparison.NotEqualTo:
                             return value1.ToString().Equals(value2.ToString()) == false;
-
                     }
                     break;
             }

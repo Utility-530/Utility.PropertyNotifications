@@ -1,5 +1,4 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
@@ -9,10 +8,11 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Markup;
+using ReactiveUI;
 using Utility.Commands;
+using Utility.Helpers.Reflection;
 using Utility.WPF.Abstract;
 using Utility.WPF.Reactives;
-using Utility.Helpers.Reflection;
 
 namespace Utility.WPF.Markup
 {
@@ -56,7 +56,8 @@ namespace Utility.WPF.Markup
 
         public ConversionType ConversionType { get; init; } = ConversionType.Default;
 
-        object? value = null;
+        private object? value = null;
+
         /// <summary>
         /// Retrieves the context in which the markup extension is used, and (if used in the
         /// context of an event or a method) returns an event handler that executes the
@@ -251,6 +252,7 @@ namespace Utility.WPF.Markup
                     throw new Exception("s33333dfsdsd");
             }
         }
+
         internal class MyEventArgs : EventArgs
         {
             public object? a;

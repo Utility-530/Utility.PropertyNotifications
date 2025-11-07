@@ -1,19 +1,14 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:cb="clr-namespace:Utility.WPF.Controls.ComboBoxes"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:trees="http://schemas.utility.com/trees">
+    xmlns:trees="http://schemas.utility.com/trees"
+    xmlns:cb="clr-namespace:Utility.WPF.Controls.ComboBoxes">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboBoxToggleButton.xaml" />
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml" />
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CheckableTreeViewItem.xaml" />
     </ResourceDictionary.MergedDictionaries>
-
-
-
 
     <ControlTemplate x:Key="ComboBox_ToggleButton" TargetType="{x:Type ToggleButton}">
 
@@ -51,7 +46,6 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-
 
     <Style x:Key="ButtonComboBoxTreeViewStyle" TargetType="{x:Type cb:ComboBoxTreeView}">
         <Setter Property="TreeItemContainerStyle" Value="{StaticResource CheckableTreeViewItemStyle}" />
@@ -115,7 +109,6 @@
                                     </Grid>
                                 </Popup>
                             </Grid>
-
                         </Border>
                         <TextBlock
                             x:Name="ErrorTextBlock"
@@ -163,8 +156,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
-
-
 </ResourceDictionary>

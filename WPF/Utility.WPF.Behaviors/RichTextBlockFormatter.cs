@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Documents;
 using ColorCode;
 using ColorCode.Common;
 using ColorCode.Parsing;
 using ColorCode.Styling;
 using SourceChord.FluentWPF;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Documents;
 using Utility.WPF.Behaviors.Helper;
 
 namespace Utility.WPF.Behaviors

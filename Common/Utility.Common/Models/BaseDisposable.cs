@@ -1,6 +1,6 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.Reactive.Disposables;
+using ReactiveUI;
 
 namespace Utility.Common.Models
 {

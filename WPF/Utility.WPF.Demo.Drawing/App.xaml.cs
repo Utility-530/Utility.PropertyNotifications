@@ -1,12 +1,6 @@
-﻿using Autofac;
+﻿using System.Windows;
+using Autofac;
 using Splat.Autofac;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
 using Utility.WPF.Meta;
 
 namespace Utility.WPF.Demo.Drawing

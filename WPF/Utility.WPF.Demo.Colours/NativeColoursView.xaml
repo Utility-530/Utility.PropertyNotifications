@@ -1,70 +1,66 @@
 ﻿<UserControl x:Class="Utility.WPF.Demo.Colours.NativeColoursView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Utility.WPF.Demo.Colours"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="1000">
-  
+
     <FrameworkElement.Resources>
         <Style TargetType="{x:Type Border}">
             <Setter Property="CornerRadius" Value="8" ></Setter>
 
-
             <Setter Property="BorderThickness" Value="2" ></Setter>
             <Setter Property="Margin" Value="1" ></Setter>
-
         </Style>
         <Storyboard x:Key="Storyboard1">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="stackPanel" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
-                <EasingDoubleKeyFrame KeyTime="00:00:10" Value="-2000"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:10" Value="-2000" />
             </DoubleAnimationUsingKeyFrames>
-
         </Storyboard>
         <Storyboard x:Key="Storyboard2">
             <Int32AnimationUsingKeyFrames Storyboard.TargetName="uniformGrid" Storyboard.TargetProperty="(UniformGrid.Rows)">
-                <EasingInt32KeyFrame KeyTime="00:00:4" Value="5"/>
+                <EasingInt32KeyFrame KeyTime="00:00:4" Value="5" />
             </Int32AnimationUsingKeyFrames>
             <Int32AnimationUsingKeyFrames Storyboard.TargetName="uniformGrid" Storyboard.TargetProperty="(UniformGrid.Columns)">
-                <EasingInt32KeyFrame KeyTime="00:00:4" Value="5"/>
+                <EasingInt32KeyFrame KeyTime="00:00:4" Value="5" />
             </Int32AnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="Storyboard3">
             <ColorAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                <EasingColorKeyFrame KeyTime="00:00:0.2" Value="{x:Static SystemColors.ActiveBorderColor}"/>
+                <EasingColorKeyFrame KeyTime="00:00:0.2" Value="{x:Static SystemColors.ActiveBorderColor}" />
             </ColorAnimationUsingKeyFrames>
             <ColorAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                <EasingColorKeyFrame KeyTime="00:00:0.4" Value="{x:Static SystemColors.ActiveCaptionColor}"/>
+                <EasingColorKeyFrame KeyTime="00:00:0.4" Value="{x:Static SystemColors.ActiveCaptionColor}" />
             </ColorAnimationUsingKeyFrames>
             <ColorAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                <EasingColorKeyFrame KeyTime="00:00:0.6" Value="{x:Static SystemColors.ActiveCaptionTextColor}"/>
+                <EasingColorKeyFrame KeyTime="00:00:0.6" Value="{x:Static SystemColors.ActiveCaptionTextColor}" />
             </ColorAnimationUsingKeyFrames>
             <ColorAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                <EasingColorKeyFrame KeyTime="00:00:0.8" Value="{x:Static SystemColors.AppWorkspaceColor}"/>
+                <EasingColorKeyFrame KeyTime="00:00:0.8" Value="{x:Static SystemColors.AppWorkspaceColor}" />
             </ColorAnimationUsingKeyFrames>
             <ColorAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                <EasingColorKeyFrame KeyTime="00:00:1.0" Value="{x:Static SystemColors.GradientActiveCaptionColor}"/>
+                <EasingColorKeyFrame KeyTime="00:00:1.0" Value="{x:Static SystemColors.GradientActiveCaptionColor}" />
             </ColorAnimationUsingKeyFrames>
             <ColorAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                <EasingColorKeyFrame KeyTime="00:00:1.2" Value="{x:Static SystemColors.InactiveBorderColor}"/>
+                <EasingColorKeyFrame KeyTime="00:00:1.2" Value="{x:Static SystemColors.InactiveBorderColor}" />
             </ColorAnimationUsingKeyFrames>
             <ColorAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                <EasingColorKeyFrame KeyTime="00:00:1.4" Value="{x:Static SystemColors.InactiveCaptionColor}"/>
+                <EasingColorKeyFrame KeyTime="00:00:1.4" Value="{x:Static SystemColors.InactiveCaptionColor}" />
             </ColorAnimationUsingKeyFrames>
             <ColorAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                <EasingColorKeyFrame KeyTime="00:00:1.6" Value="{x:Static SystemColors.InactiveCaptionTextColor}"/>
+                <EasingColorKeyFrame KeyTime="00:00:1.6" Value="{x:Static SystemColors.InactiveCaptionTextColor}" />
             </ColorAnimationUsingKeyFrames>
             <!--<ColorAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                <EasingColorKeyFrame KeyTime="00:00:0.9" Value="{x:Static SystemColors.InactiveSelectionHighlightColor}"/>
+                <EasingColorKeyFrame KeyTime="00:00:0.9" Value="{x:Static SystemColors.InactiveSelectionHighlightColor}" />
             </ColorAnimationUsingKeyFrames>-->
             <ColorAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                <EasingColorKeyFrame KeyTime="00:00:1.8" Value="{x:Static SystemColors.InfoColor}"/>
+                <EasingColorKeyFrame KeyTime="00:00:1.8" Value="{x:Static SystemColors.InfoColor}" />
             </ColorAnimationUsingKeyFrames>
-
         </Storyboard>
 
-        <!--<Style TargetType="{x:Type HeaderedContentControl}" >
+        <!--<Style TargetType="{x:Type HeaderedContentControl}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type HeaderedContentControl}">
@@ -72,7 +68,7 @@
                             <Grid>
                                 <ContentPresenter ContentSource="Header" ContentTemplate="{TemplateBinding HeaderTemplate}" />
                             </Grid>
-                            <ContentPresenter/>
+                            <ContentPresenter />
                         </StackPanel>
                     </ControlTemplate>
                 </Setter.Value>
@@ -90,14 +86,14 @@
     </FrameworkElement.Resources>
     <FrameworkElement.Triggers>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-            <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
-            <BeginStoryboard Storyboard="{StaticResource Storyboard2}"/>
-            <BeginStoryboard Storyboard="{StaticResource Storyboard3}"/>
+            <BeginStoryboard Storyboard="{StaticResource Storyboard1}" />
+            <BeginStoryboard Storyboard="{StaticResource Storyboard2}" />
+            <BeginStoryboard Storyboard="{StaticResource Storyboard3}" />
         </EventTrigger>
     </FrameworkElement.Triggers>
 
-    <UniformGrid Rows="1" >
-        <Grid x:Name="grid" Background="Transparent" >
+    <UniformGrid Rows="1">
+        <Grid x:Name="grid" Background="Transparent">
             <Border>
                 <TextBlock Text="{Binding ElementName=Light, Path=Background}"></TextBlock>
             </Border>
@@ -127,7 +123,6 @@
             <Border Background="SeaShell"></Border>
             <Border Background="WhiteSmoke"></Border>
             <Border Background="Tan"></Border>
-
         </UniformGrid>
         <Ellipse></Ellipse>
         <UniformGrid Columns="1">
@@ -174,10 +169,10 @@
             </FrameworkElement.Resources>
             <Panel.RenderTransform>
                 <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform/>
+                    <ScaleTransform />
+                    <SkewTransform />
+                    <RotateTransform />
+                    <TranslateTransform />
                 </TransformGroup>
             </Panel.RenderTransform>
             <Border Background="BurlyWood" ></Border>

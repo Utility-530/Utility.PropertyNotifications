@@ -1,59 +1,56 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Custom.Controls" 
+                    xmlns:local="clr-namespace:Custom.Controls"
                     xmlns:hex="http://hexinnovation.com/math"
                     xmlns:ex="clr-namespace:Utility.WPF.Controls.External"
                     xmlns:res="http://schemas.utility.com/resourcedictionary" xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
 
     <ResourceDictionary.MergedDictionaries>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <hex:MathConverter x:Key="MathConverter"></hex:MathConverter>
     <ex:DefaultConverter x:Key="DefaultConverter"></ex:DefaultConverter>
-    
+
     <Style TargetType="{x:Type local:EditableTextBlock}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate x:Name="editableTextBlockTemplate" TargetType="{x:Type local:EditableTextBlock}">
                     <Grid Height="{Binding FontSize,  Converter={StaticResource MathConverter}, ConverterParameter=x+16, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <Border x:Name="Var_Animation_0to1" Width="0"
-                               />
-              
-                        <Border Grid.Column="1" BorderThickness="1.0" x:Name="b1" BorderBrush="WhiteSmoke" >
+                        <Border x:Name="Var_Animation_0to1" Width="0" />
+
+                        <Border Grid.Column="1" BorderThickness="1.0" x:Name="b1" BorderBrush="WhiteSmoke">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="2"/>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="2" />
                                 </Grid.RowDefinitions>
                                 <ContentPresenter ContentSource="Content" />
                                 <Rectangle HorizontalAlignment="Stretch"
-                                           x:Name="UnderLine"                                      
+                                           x:Name="UnderLine"
                                            Grid.Row="1"
-                                           Fill="{TemplateBinding Foreground}" 
-                                           Height="{Binding FontSize,  Converter={StaticResource MathConverter}, ConverterParameter=x/16, RelativeSource={RelativeSource Mode=TemplatedParent}}" >
+                                           Fill="{TemplateBinding Foreground}"
+                                           Height="{Binding FontSize,  Converter={StaticResource MathConverter}, ConverterParameter=x/16, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                                     <Rectangle.Opacity>
                                         <MultiBinding Converter="{StaticResource MathConverter}" ConverterParameter="x ? 0 : y">
                                             <Binding RelativeSource="{RelativeSource Mode=TemplatedParent}" Path="IsInEditMode"></Binding>
-                                            <Binding ElementName="Var_Animation_0to1" Path="Width"/>
+                                            <Binding ElementName="Var_Animation_0to1" Path="Width" />
                                         </MultiBinding>
                                     </Rectangle.Opacity>
-                                </Rectangle>            
+                                </Rectangle>
                             </Grid>
-                                             
                         </Border>
-                        <Border  Grid.Column="0" x:Name="editpath"   Width="{Binding FontSize,  Converter={StaticResource MathConverter}, ConverterParameter=x, RelativeSource={RelativeSource Mode=TemplatedParent}}" >
+                        <Border  Grid.Column="0" x:Name="editpath"   Width="{Binding FontSize,  Converter={StaticResource MathConverter}, ConverterParameter=x, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                             <Border.Opacity>
                                 <MultiBinding Converter="{StaticResource MathConverter}" ConverterParameter="x ? 0 : y">
                                     <Binding RelativeSource="{RelativeSource Mode=TemplatedParent}" Path="IsInEditMode"></Binding>
-                                    <Binding ElementName="Var_Animation_0to1" Path="Width"/>
+                                    <Binding ElementName="Var_Animation_0to1" Path="Width" />
                                 </MultiBinding>
                             </Border.Opacity>
                             <Border.Visibility>
@@ -82,24 +79,24 @@
                             </Path>
 
                             <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="PreviewMouseDown">   
+                                <i:EventTrigger EventName="PreviewMouseDown">
                                     <i:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}}" PropertyName="IsInEditMode" Value="True"></i:ChangePropertyAction>
                                 </i:EventTrigger>
-                            </i:Interaction.Triggers>                         
+                            </i:Interaction.Triggers>
                         </Border>
 
-                        <Border CornerRadius="100" Grid.Column="2" x:Name="cancelpath" 
-                                
-                                Width="{Binding FontSize,  Converter={StaticResource MathConverter}, ConverterParameter=x, RelativeSource={RelativeSource Mode=TemplatedParent}}" >
+                        <Border CornerRadius="100" Grid.Column="2" x:Name="cancelpath"
+
+                                Width="{Binding FontSize,  Converter={StaticResource MathConverter}, ConverterParameter=x, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                             <Border.Visibility>
                                 <MultiBinding Converter="{StaticResource MathConverter}" ConverterParameter="x ? 'Visible' : 'Collapsed'">
                                     <Binding RelativeSource="{RelativeSource Mode=TemplatedParent}" Path="IsInEditMode"></Binding>
                                 </MultiBinding>
-                            </Border.Visibility>                           
-                            
-                            <Path x:Name="cross" Data="{StaticResource Cross}" 
+                            </Border.Visibility>
+
+                            <Path x:Name="cross" Data="{StaticResource Cross}"
                                   StrokeThickness="{Binding FontSize,  Converter={StaticResource MathConverter}, ConverterParameter=x/6, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                  Stretch="Uniform"  
+                                  Stretch="Uniform"
                                   VerticalAlignment="Center"
                                   Margin="0,0,0,0">
                                 <Path.Style>
@@ -119,8 +116,6 @@
                                     </Style>
                                 </Path.Style>
                             </Path>
-                            
-         
 
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="PreviewMouseUp">
@@ -129,11 +124,11 @@
                                     <i:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}}" PropertyName="IsInEditMode" Value="false"></i:ChangePropertyAction>-->
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
-                   
-                          
 
                             <!--<Trigger Property="IsPressed" Value="true">
-                                --><!--<Setter TargetName="backgroundEllipse" Property="Fill" Value="{StaticResource PressedBackgroundBrush}" />--><!--
+                                -->
+                            <!--<Setter TargetName="backgroundEllipse" Property="Fill" Value="{StaticResource PressedBackgroundBrush}" />-->
+                            <!--
                                 <Setter TargetName="backgroundEllipse" Property="Stroke" Value="{Binding PressedBackgroundBrush, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                                 <Setter TargetName="ButtonPath" Property="Stroke" Value="{Binding PressedForegroundBrush, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                             </Trigger>-->
@@ -142,14 +137,14 @@
                     <ControlTemplate.Triggers>
                         <EventTrigger RoutedEvent="MouseEnter">
                             <BeginStoryboard>
-                                <Storyboard >
-                                    <DoubleAnimation Storyboard.TargetName="Var_Animation_0to1" Storyboard.TargetProperty="Width" To="1" Duration="0:0:0.5" />     
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="Var_Animation_0to1" Storyboard.TargetProperty="Width" To="1" Duration="0:0:0.5" />
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>
                         <EventTrigger RoutedEvent="MouseLeave">
-                            <BeginStoryboard >
-                                <Storyboard >
+                            <BeginStoryboard>
+                                <Storyboard>
                                     <DoubleAnimation Storyboard.TargetName="Var_Animation_0to1" Storyboard.TargetProperty="Width" To="0" Duration="0:0:0.5" />
                                 </Storyboard>
                             </BeginStoryboard>
@@ -158,6 +153,5 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-
     </Style>
 </ResourceDictionary>

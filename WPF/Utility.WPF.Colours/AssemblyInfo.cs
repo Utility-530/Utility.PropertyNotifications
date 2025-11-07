@@ -11,4 +11,3 @@ using System.Windows.Markup;
 )]
 [assembly: XmlnsPrefix("http://schemas.utility.com/colours", "c")]
 [assembly: XmlnsDefinition("http://schemas.utility.com/colours", "Utility.WPF.Colours")]
-

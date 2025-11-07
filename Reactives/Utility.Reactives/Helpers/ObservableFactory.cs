@@ -1,20 +1,16 @@
-﻿using DynamicData.Kernel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using DynamicData.Kernel;
 
 namespace Utility.Reactives
 {
-
     public static class ObservableFactory
     {
-
-
         public static IObservable<T> ToObservable<T>(this Task<T> task)
         {
             if (task.IsCompleted)
@@ -31,7 +27,6 @@ namespace Utility.Reactives
                 {
                     observer.OnError(ex);
                 }
-
             }));
         }
 
@@ -91,10 +86,8 @@ namespace Utility.Reactives
                     {
                         Console.WriteLine(ex.Message);
                     }
-
                 }, () => Console.WriteLine("Observer has unsubscribed from timed observable"));
             });
-
         }
 
         public static IObservable<T> MakeTimedObservable<T>(Func<T> act, Func<TimeSpan> fts, bool skipinitial = false)
@@ -111,10 +104,8 @@ namespace Utility.Reactives
                     {
                         Console.WriteLine(ex.Message);
                     }
-
                 }, () => Console.WriteLine("Observer has unsubscribed from timed observable"));
             });
-
         }
 
         public static IObservable<T> MakeTimedObservable<T>(Func<T> act, TimeSpan ts, int limit, bool skipinitial = false)
@@ -133,12 +124,9 @@ namespace Utility.Reactives
                     {
                         Console.WriteLine(ex.Message);
                     }
-
                 }, () => Console.WriteLine("Observer has unsubscribed from timed observable"));
             });
-
         }
-
 
         public static IObservable<T> MakeTimedObservable<T>(Func<T> act, TimeSpan ts, bool skipinitial = false)
         {
@@ -155,12 +143,9 @@ namespace Utility.Reactives
                     {
                         Console.WriteLine(ex.Message);
                     }
-
                 }, () => Console.WriteLine("Observer has unsubscribed from timed observable"));
             });
-
         }
-
 
         public static IObservable<T> MakeTimedObservable<T>(Func<long, T> act, TimeSpan ts, bool skipinitial = false)
         {
@@ -177,13 +162,9 @@ namespace Utility.Reactives
                     {
                         Console.WriteLine(ex.Message);
                     }
-
                 }, () => Console.WriteLine("Observer has unsubscribed from timed observable"));
             });
-
         }
-
-
 
         //public static IObservable<T> BuildMany<T>(Func<IEnumerable<T>> f, int seconds, int limit = 0)
         //{
@@ -198,9 +179,6 @@ namespace Utility.Reactives
 
         //}
 
-
-
-
         public static IObservable<T> Build<T>(Func<T> f, Func<TimeSpan> fts, int limit = 0)
         {
             if (limit == 0)
@@ -209,37 +187,23 @@ namespace Utility.Reactives
             else
                 return ObservableFactory
                      .MakeTimedObservable(f, fts, limit);
-
         }
-
-
 
         public static IObservable<T> Build<T>(Func<T> func, TimeSpan ts, IScheduler scheduler = null)
         {
-
             Func<IObserver<T>, Action> fca = observer => () => observer.OnNext(func());
 
             return Build(fca, ts, scheduler);
-
         }
-
-
 
         private static IObservable<T> Build<T>(Func<IObserver<T>, Action> fca, TimeSpan ts, IScheduler scheduler = null, params IDisposable[] disposable)
         {
-
             return Observable.Create<T>(observer =>
             {
-
                 fca(observer)();
                 scheduler = scheduler ?? TaskPoolScheduler.Default;
                 return new System.Reactive.Disposables.CompositeDisposable(disposable.Concat(new[] { scheduler.ScheduleRecurringAction(ts, fca(observer)) }));
-
             });
         }
-
-
     }
-
-
 }

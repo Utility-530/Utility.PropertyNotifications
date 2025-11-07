@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
@@ -8,14 +7,14 @@ using Utility.Enums;
 using Utility.Helpers;
 
 [assembly: XmlnsDefinition("urn:diagram-designer-ns", "WPF.Connectors")]
+
 namespace Utility.WPF.Trees.Connectors
 {
-//    public class ConnectionEventArgs(FrameworkElement frameworkElement, Connector connector, RoutedEvent routedEvent) : RoutedEventArgs(routedEvent)
-//    {
-//        public FrameworkElement FrameworkElement { get; } = frameworkElement;
-//        public Connector Connector { get; } = connector;
-//    }
-
+    //    public class ConnectionEventArgs(FrameworkElement frameworkElement, Connector connector, RoutedEvent routedEvent) : RoutedEventArgs(routedEvent)
+    //    {
+    //        public FrameworkElement FrameworkElement { get; } = frameworkElement;
+    //        public Connector Connector { get; } = connector;
+    //    }
 
     public class ConnectorAdorner : Adorner
     {
@@ -31,12 +30,10 @@ namespace Utility.WPF.Trees.Connectors
             this.Width = Connector.width; this.Height = Connector.height;
             this._position = position.HasValue ? position : Position2D.All;
 
-
             // fired when layout changes
             adornedElement.LayoutUpdated += Connector_LayoutUpdated;
             this.context = context;
         }
-
 
         public event RoutedEventHandler Connection
         {
@@ -44,7 +41,7 @@ namespace Utility.WPF.Trees.Connectors
             remove { RemoveHandler(ConnectionEvent, value); }
         }
 
-        void Connector_LayoutUpdated(object sender, EventArgs e)
+        private void Connector_LayoutUpdated(object sender, EventArgs e)
         {
             InvalidateVisual();
         }
@@ -52,35 +49,32 @@ namespace Utility.WPF.Trees.Connectors
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseLeftButtonUp(e);
-        //}
+            //}
 
-        //protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        //{
-        //    base.OnMouseLeftButtonDown(e);
- 
+            //protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+            //{
+            //    base.OnMouseLeftButtonDown(e);
+
             if (context != null)
             {
                 this.dragStartPoint = new Point?(e.GetPosition(context));
 
                 if (AdornedElement is FrameworkElement frameworkElement && dragStartPoint is Point point)
                 {
-                    
                     connector = Match(frameworkElement, context, point);
                     if (connector == null)
                         throw new InvalidOperationException();
-              
 
                     //else
                     //    Ex.Connector
                 }
-                
+
                 //e.Handled = true;
             }
         }
 
         public Connector Match(FrameworkElement frameworkElement, FrameworkElement canvas, Point point)
         {
-
             foreach (var x in rects(frameworkElement))
             {
                 var pos = x.Rect();
@@ -108,7 +102,6 @@ namespace Utility.WPF.Trees.Connectors
                 //var canvas = GetTreeView(this.AdornedElement);
                 //if (canvas != null)
                 //{
-
                 //    AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(canvas);
                 //    if (adornerLayer != null)
                 //    {
@@ -134,7 +127,6 @@ namespace Utility.WPF.Trees.Connectors
             }
         }
 
-
         private IEnumerable<Connector> rects(FrameworkElement frameworkElement)
         {
             foreach (var x in EnumHelper.SeparateFlags(_position.Value))
@@ -144,19 +136,21 @@ namespace Utility.WPF.Trees.Connectors
                     case Position2D.Top:
                         yield return new TopConnector(frameworkElement);
                         break;
+
                     case Position2D.Right:
                         yield return new RightConnector(frameworkElement);
                         break;
+
                     case Position2D.Bottom:
                         yield return new BottomConnector(frameworkElement);
                         break;
+
                     case Position2D.Left:
                         yield return new LeftConnector(frameworkElement);
                         break;
                 }
             }
         }
-
 
         public void Remove()
         {
@@ -165,6 +159,6 @@ namespace Utility.WPF.Trees.Connectors
             {
                 adornerLayer.Remove(this);
             }
-        }      
-    } 
+        }
+    }
 }

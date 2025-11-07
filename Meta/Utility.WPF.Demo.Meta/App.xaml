@@ -9,8 +9,6 @@
             <TextBlock Text="sdffd"></TextBlock>
         </DataTemplate>
 
-        <local:ViewModelItemTemplateSelector x:Key="ItemTemplateSelector"/>
-
+        <local:ViewModelItemTemplateSelector x:Key="ItemTemplateSelector" />
     </Application.Resources>
-
 </Application>

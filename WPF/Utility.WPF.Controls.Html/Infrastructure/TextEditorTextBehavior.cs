@@ -1,20 +1,11 @@
-﻿using AvalonEditB;
-using ColorCode.Compilation.Languages;
+﻿using System.Windows;
+using AvalonEditB;
 using Microsoft.Xaml.Behaviors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-
 
 namespace Utility.WPF.Controls.Html
 {
     public class TextEditorTextBehavior : Behavior<TextEditor>
     {
-
-
         public string Html
         {
             get { return (string)GetValue(HtmlProperty); }
@@ -26,9 +17,9 @@ namespace Utility.WPF.Controls.Html
 
         protected override void OnAttached()
         {
-            if(Html is { } html)
+            if (Html is { } html)
             {
-                AssociatedObject.Text = html;   
+                AssociatedObject.Text = html;
             }
             base.OnAttached();
         }

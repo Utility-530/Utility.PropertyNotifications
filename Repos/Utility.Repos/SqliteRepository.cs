@@ -5,7 +5,6 @@ using _Key = Utility.Models.Key;
 
 namespace Utility.Repos
 {
-
     public partial class SqliteRepository : IRepository
     {
         public record Table
@@ -56,7 +55,6 @@ namespace Utility.Repos
 
         public IEquatable Key => new Key<SqliteRepository>(Guids.SQLite);
 
-
         private void Initialise()
         {
             initialisationTask = Task.WhenAll(
@@ -85,7 +83,6 @@ namespace Utility.Repos
 
                 await connection.RunInTransactionAsync(c =>
                 {
-
                     if (value is Key { Guid: Guid valueGuid, Name: var name } && valueGuid == guid)
                     {
                         if (single.Name != name)
@@ -121,7 +118,6 @@ namespace Utility.Repos
                 throw new Exception("676 ere 4323");
             }
         }
-
 
         public async Task<IEquatable[]> FindKeys(IEquatable key)
         {

@@ -1,15 +1,12 @@
-﻿using Microsoft.Xaml.Behaviors;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using Microsoft.Xaml.Behaviors;
+using ReactiveUI;
 using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Behaviors
@@ -64,7 +61,6 @@ namespace Utility.WPF.Behaviors
                 });
         }
 
-
         private void OnClick(object sender, RoutedEventArgs routedEventArgs)
         {
             if (sender is not MenuItem menuItem)
@@ -80,7 +76,6 @@ namespace Utility.WPF.Behaviors
                             .ToList()
                             .ForEach(item =>
                             {
-
                                 if (item.IsChecked = item == menuItem)
                                     SelectedItem = item.DataContext;
                             });
@@ -102,6 +97,5 @@ namespace Utility.WPF.Behaviors
                     return ret;
                 });
         }
-
     }
 }

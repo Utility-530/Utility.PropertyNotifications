@@ -1,17 +1,12 @@
-﻿using System.Collections;
-using System.ComponentModel;
-using System.Globalization;
-using System.Reflection;
+﻿using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Text;
 using Utility.Conversions;
 
 namespace Utilities
 {
     public static class EnumConverter
     {
-
         //public static string ConcatenateCollection(IEnumerable collection, string expression, string separator)
         //{
         //    return ConcatenateCollection(collection, expression, separator, null);
@@ -106,7 +101,6 @@ namespace Utilities
             }
         }
 
-   
         public static string ConvertToUnsecureString(this SecureString securePassword)
         {
             if (securePassword == null)

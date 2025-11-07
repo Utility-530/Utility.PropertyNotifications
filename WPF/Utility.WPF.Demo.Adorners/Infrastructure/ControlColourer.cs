@@ -1,16 +1,15 @@
-﻿using RandomColorGenerator;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using RandomColorGenerator;
 using Utility.WPF.Attached;
 using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Demo.Adorners.Infrastructure
 {
-
     internal class ControlColourer
     {
         private readonly DependencyObject dependencyObject;
@@ -29,8 +28,8 @@ namespace Utility.WPF.Demo.Adorners.Infrastructure
                 Brush background = child.Background;
                 Guid guid = (Guid?)child.GetValue(Ex.KeyProperty) ?? Guid.NewGuid();
                 child.SetValue(Ex.KeyProperty, guid);
-                child.Background = tempBrushes.ContainsKey(guid) ? 
-                    tempBrushes[guid] : 
+                child.Background = tempBrushes.ContainsKey(guid) ?
+                    tempBrushes[guid] :
                     RandomColor
                     .GetColor(ColorScheme.Random, Luminosity.Bright)
                     .ToMediaBrush();
@@ -58,5 +57,4 @@ namespace Utility.WPF.Demo.Adorners.Infrastructure
             }
         }
     }
-
 }

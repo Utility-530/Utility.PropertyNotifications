@@ -1,11 +1,10 @@
-﻿using ReactiveUI;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ReactiveUI;
 using Utility.Collections;
 using Utility.Enums;
 using Utility.Helpers;
@@ -121,11 +120,11 @@ namespace Utility.WPF.Controls.Buttons
 
         protected override void LastChanged(Enum @enum)
         {
-            if(@enum is Playback.Pause)
+            if (@enum is Playback.Pause)
             {
                 toggle.IsChecked = false;
             }
-            else if(@enum is Playback.Play)
+            else if (@enum is Playback.Play)
             {
                 toggle.IsChecked = true;
             }
@@ -148,9 +147,8 @@ namespace Utility.WPF.Controls.Buttons
             {
                 toggle.IsEnabled = true;
             }
-           base.EnableChanged(@enum);
+            base.EnableChanged(@enum);
         }
-
 
         private void Toggle_Unchecked(object sender, RoutedEventArgs e)
         {
@@ -168,7 +166,6 @@ namespace Utility.WPF.Controls.Buttons
             {
                 x.Value.IsEnabled = false;
             }
-
         }
     }
 
@@ -208,7 +205,6 @@ namespace Utility.WPF.Controls.Buttons
 
         protected virtual void LastChanged(Enum @enum)
         {
-
         }
 
         protected virtual void EnableChanged(Enum @enum)
@@ -284,6 +280,7 @@ namespace Utility.WPF.Controls.Buttons
             get { return (Enum)GetValue(EnabledProperty); }
             set { SetValue(EnabledProperty, value); }
         }
+
         public Enum Last
         {
             get { return (Enum)GetValue(LastProperty); }

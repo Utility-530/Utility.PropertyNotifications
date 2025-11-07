@@ -5,6 +5,7 @@ namespace Utility.Services.Deprecated;
 public interface IFilterService<T> : IObservable<Func<T, bool>>
 {
 }
+
 public interface IRefreshObserver : IObserver<Unit>
 {
 }

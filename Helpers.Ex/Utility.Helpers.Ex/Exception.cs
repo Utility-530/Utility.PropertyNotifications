@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Splat;
 
 namespace Utility.Helpers.Ex
@@ -20,7 +18,5 @@ namespace Utility.Helpers.Ex
                 // You'll need to either rethrow here, or return default(T) etc
             }
         }
-
-
     }
 }

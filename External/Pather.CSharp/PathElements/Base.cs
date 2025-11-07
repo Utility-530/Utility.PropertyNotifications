@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Pather.CSharp.PathElements
 {
@@ -20,6 +17,7 @@ namespace Pather.CSharp.PathElements
         }
 
         public abstract object Apply(object target);
+
         public abstract void Apply(object target, object value);
     }
 }

@@ -29,7 +29,7 @@
                             x:Name="DayControl"
                             HorizontalAlignment="Stretch"
                             Content="{Binding }"
-                            Day="{Binding }"/>
+                            Day="{Binding }" />
                     <!--  Current="{Binding Current, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctrl:MonthGridControl}, Converter={StaticResource DefaultConverter}}"  -->
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
@@ -49,33 +49,33 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctrl:MonthGridControl">
-                  
-                        <Grid x:Name="LayoutRoot" >
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="40" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
 
-                            <!--<Border
+                    <Grid x:Name="LayoutRoot">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <!--<Border
                                 BorderBrush="#D3D3D3"
                                 BorderThickness="0,1,0,0">-->
-                            <UniformGrid VerticalAlignment="Center" Rows="1" >
-                                <Panel.Resources>
-                                    <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
-                                        <Setter Property="FontSize" Value="26" />
-                                        <Setter Property="TextAlignment" Value="Center" />
-                                    </Style>
-                                </Panel.Resources>
-                                <TextBlock Text="Mon" />
-                                <TextBlock Text="Tues" />
-                                <TextBlock Text="Wed" />
-                                <TextBlock Text="Thurs" />
-                                <TextBlock Text="Fri" />
-                                <TextBlock Text="Sat" />
-                                <TextBlock Text="Sun" />
-                            </UniformGrid>
-                            <!--</Border>-->
-                            <ctrl:DayListBox
+                        <UniformGrid VerticalAlignment="Center" Rows="1">
+                            <Panel.Resources>
+                                <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
+                                    <Setter Property="FontSize" Value="26" />
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                </Style>
+                            </Panel.Resources>
+                            <TextBlock Text="Mon" />
+                            <TextBlock Text="Tues" />
+                            <TextBlock Text="Wed" />
+                            <TextBlock Text="Thurs" />
+                            <TextBlock Text="Fri" />
+                            <TextBlock Text="Sat" />
+                            <TextBlock Text="Sun" />
+                        </UniformGrid>
+                        <!--</Border>-->
+                        <ctrl:DayListBox
                                 x:Name="CalendarDaysListBox"
                                 Grid.Row="1"
                                 Margin="0"
@@ -84,18 +84,17 @@
                                 ItemContainerStyle="{StaticResource DayListBoxItem}"
                                 ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                                <!--  ItemTemplate="{StaticResource DayDataTemplate}">  -->
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <UniformGrid Columns="7" Rows="6"/>
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                                <i:Interaction.Behaviors>
-                                    <b:LeftRightMoveFocusBehavior/>
-                                </i:Interaction.Behaviors>
-                            </ctrl:DayListBox>
-                        </Grid>
-                    
+                            <!--  ItemTemplate="{StaticResource DayDataTemplate}">  -->
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="7" Rows="6" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <i:Interaction.Behaviors>
+                                <b:LeftRightMoveFocusBehavior />
+                            </i:Interaction.Behaviors>
+                        </ctrl:DayListBox>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

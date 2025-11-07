@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utility.WPF.Demo.Data
 {
@@ -21,6 +17,5 @@ namespace Utility.WPF.Demo.Data
         }
 
         public static Resources Instance => _lazyResources.Value;
-
     }
 }

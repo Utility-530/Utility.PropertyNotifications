@@ -1,9 +1,8 @@
-﻿
-namespace Utility.Randoms
+﻿namespace Utility.Randoms
 {
     public static class Names
     {
-        public readonly static List<string> Values = new()
+        public static readonly List<string> Values = new()
         {
             "Madeline Haggerty",
             "Eldon Deaver",
@@ -106,7 +105,6 @@ namespace Utility.Randoms
             "Lona Engler",
             "Oren Kesten",
         };
-
 
         public static string Random(this System.Random random)
         {

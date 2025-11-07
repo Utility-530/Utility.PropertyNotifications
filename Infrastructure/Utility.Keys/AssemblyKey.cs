@@ -10,11 +10,9 @@ namespace Utility.ProjectStructure
 
         public string Name => Assembly.GetName().Name;
 
-
         public override string ToString()
         {
             return Assembly.FullName;
         }
     }
 }
-

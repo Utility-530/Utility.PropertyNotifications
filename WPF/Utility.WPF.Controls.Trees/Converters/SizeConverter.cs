@@ -32,6 +32,4 @@ namespace Utility.WPF.Controls.Trees
             throw new NotImplementedException();
         }
     }
-
-
 }

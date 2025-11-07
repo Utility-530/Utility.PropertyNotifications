@@ -16,5 +16,5 @@ namespace Utility.WPF.Models
         public ICollection<ChangedItem> Dictionary { get; }
 
         public record struct ChangedItem(object Key, bool? Old, bool? New);
-    }  
+    }
 }

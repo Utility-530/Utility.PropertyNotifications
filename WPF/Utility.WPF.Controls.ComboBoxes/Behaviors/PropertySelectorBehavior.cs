@@ -1,10 +1,9 @@
-﻿using ReactiveUI;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using ReactiveUI;
 using Utility.Interfaces.NonGeneric;
-using Utility.Nodes;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Extensions;
 using Utility.WPF.Reactives;
@@ -66,7 +65,6 @@ namespace Utility.WPF.Controls.ComboBoxes
                     }
                 });
 
-
             AssociatedObject.OnLoaded(a =>
             {
                 if (Type is Type type)
@@ -85,7 +83,7 @@ namespace Utility.WPF.Controls.ComboBoxes
             base.OnAttached();
         }
 
-        void ChangeInfo(IReadOnlyTree tree, PropertyInfo _propertyInfo)
+        private void ChangeInfo(IReadOnlyTree tree, PropertyInfo _propertyInfo)
         {
             if (tree.Descendant(a => (a.tree as IGetValue).Value is PropertyInfo type && type == _propertyInfo || (a.tree as IGetValue).Value is IPropertyInfo itype && itype.PropertyInfo == _propertyInfo) is IReadOnlyTree { } innerTree)
             {
@@ -101,8 +99,6 @@ namespace Utility.WPF.Controls.ComboBoxes
             }
         }
 
-
-
         public Type Type
         {
             get { return (Type)GetValue(TypeProperty); }
@@ -114,8 +110,6 @@ namespace Utility.WPF.Controls.ComboBoxes
             get { return (PropertyInfo)GetValue(PropertyInfoProperty); }
             set { SetValue(PropertyInfoProperty, value); }
         }
-
-
 
         public Type Filter
         {

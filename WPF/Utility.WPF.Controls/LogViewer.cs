@@ -1,10 +1,10 @@
-﻿using global::Splat;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Reactive.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using global::Splat;
+using ReactiveUI;
 using Utility.WPF.Controls.Base;
 
 namespace Utility.WPF.Controls

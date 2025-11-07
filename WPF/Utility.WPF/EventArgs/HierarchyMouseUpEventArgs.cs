@@ -6,13 +6,8 @@ namespace Utility.WPF
     {
         public HierarchyMouseUpEventArgs(RoutedEvent routedEvent, object source) : base(routedEvent, source)
         {
-
         }
-
     }
 
-
     public delegate void HierarchyMouseUpEventHandler(object sender, HierarchyMouseUpEventArgs e);
-
-
 }

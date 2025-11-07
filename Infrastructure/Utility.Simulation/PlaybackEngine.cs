@@ -1,30 +1,22 @@
-﻿using Moq;
-using Splat;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reactive.Concurrency;
+﻿using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Utility.Enums;
 using Utility.Helpers;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
-using Utility.Services;
 using Utility.ServiceLocation;
+using Utility.Services;
 
 namespace Utility.Simulation
 {
     public class PlaybackEngine : IPlaybackEngine
     {
-        Playback defaultValue;
-        PlaybackService service => Globals.Resolver.Resolve<PlaybackService>();
-        PlayBackViewModel playBackviewmodel => Globals.Resolver.Resolve<PlayBackViewModel>();
-        HistoryViewModel viewmodel => Globals.Resolver.Resolve<HistoryViewModel>();
+        private Playback defaultValue;
+        private PlaybackService service => Globals.Resolver.Resolve<PlaybackService>();
+        private PlayBackViewModel playBackviewmodel => Globals.Resolver.Resolve<PlayBackViewModel>();
+        private HistoryViewModel viewmodel => Globals.Resolver.Resolve<HistoryViewModel>();
 
         public PlaybackEngine(Playback playback = Playback.Play)
         {
@@ -44,7 +36,6 @@ namespace Utility.Simulation
                     }
                     if (viewmodel.Collection.Count <= viewmodel.Index)
                     {
-
                     }
                 });
 
@@ -68,7 +59,6 @@ namespace Utility.Simulation
                         if ((int)item.Value - (int)item.PreviousValue > 0)
                         {
                             methodAction.Do();
-
                         }
                         else
                         {
@@ -77,7 +67,6 @@ namespace Utility.Simulation
                     }
                     else
                         throw new Exception("3433 d2sa");
-
                 });
 
             Observable

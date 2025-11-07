@@ -13,7 +13,8 @@ namespace Utility.WPF.Demo.External
             this.InitializeComponent();
         }
 
-        Command<int[]> _swap;
+        private Command<int[]> _swap;
+
         public Command<int[]> SwapCommand
         {
             get

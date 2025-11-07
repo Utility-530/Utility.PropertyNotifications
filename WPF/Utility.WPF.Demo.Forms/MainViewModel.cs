@@ -1,7 +1,7 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Reactive.Linq;
+using ReactiveUI;
 using Utility.Persists;
 using Utility.PropertyNotifications;
 using Utility.WPF.Demo.Forms.Infrastructure;

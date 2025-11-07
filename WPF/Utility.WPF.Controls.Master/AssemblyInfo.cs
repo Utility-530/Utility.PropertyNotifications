@@ -10,4 +10,4 @@ using System.Windows.Markup;
                                               // app, or any theme specific resource dictionaries)
 )]
 [assembly: XmlnsPrefix("http://schemas.utility.com/master", "mas")]
-[assembly: XmlnsDefinition("http://schemas.utility.com/master", "Utility.WPF.Controls.Master")] 
+[assembly: XmlnsDefinition("http://schemas.utility.com/master", "Utility.WPF.Controls.Master")]

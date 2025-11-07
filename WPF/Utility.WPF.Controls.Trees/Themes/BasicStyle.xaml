@@ -7,8 +7,6 @@
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-
-
     <Style x:Key="GenericTreeViewItem" TargetType="{x:Type TreeViewItem}">
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Background" Value="Transparent" />
@@ -189,6 +187,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
 </ResourceDictionary>

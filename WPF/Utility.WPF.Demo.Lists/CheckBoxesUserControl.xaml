@@ -9,12 +9,12 @@
     xmlns:view="http://schemas.utility.com/lists"
     xmlns:controls="http://schemas.utility.com"
     xmlns:factory="clr-namespace:Utility.WPF.Demo.Data.Factory;assembly=Utility.WPF.Demo.Data"
-    xmlns:viewModel="clr-namespace:Utility.ViewModels;assembly=Utility.ViewModels.Customs" 
+    xmlns:viewModel="clr-namespace:Utility.ViewModels;assembly=Utility.ViewModels.Customs"
     xmlns:ad="http://schemas.utility.com/adorners"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:infra="clr-namespace:Utility.WPF.Demo.Lists.Infrastructure" 
+    xmlns:infra="clr-namespace:Utility.WPF.Demo.Lists.Infrastructure"
     xmlns:temp="http://schemas.utility.com/templates"
-    xmlns:btns="http://schemas.utility.com/buttons" 
+    xmlns:btns="http://schemas.utility.com/buttons"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -24,7 +24,7 @@
         <infra:CommandConverter x:Key="CommandConverter" />
     </FrameworkElement.Resources>
 
-    <UniformGrid>        
+    <UniformGrid>
         <!--<GroupBox Header="CheckBoxesListControl">
             <DockPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <btns:ToggleButton x:Name="OrientationToggleButton"
@@ -47,12 +47,12 @@
             </FrameworkElement.DataContext>
             <DockPanel VerticalAlignment="Center" HorizontalAlignment="Center">
 
-                <TextBlock Text="{Binding CountViewModel.Count}"/>
+                <TextBlock Text="{Binding CountViewModel.Count}" />
                 <view:CheckBoxesListControl
                     DataContext="{Binding FilterCollectionViewModel}"
                     DockPanel.Dock="Top"
                     DisplayMemberPath="Header"
-                
+
                     OutputChange="{utl:Command Command, ConversionType=Default}"
                     ItemsSource="{Binding FilterCollection}"
                     IsCheckedPath="IsChecked"
@@ -62,7 +62,6 @@
                 <DataGrid ItemsSource="{Binding CollectionViewModel.Collection}" />
             </DockPanel>
         </GroupBox>-->
-
 
         <GroupBox x:Name="CheckBoxesListControl" Header="CheckBoxesListControl"
               d:DataContext="{d:DesignInstance infra:FilteredCustomCheckBoxesViewModel }"
@@ -76,38 +75,38 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type factory:StringMatchFilter}">
                     <TextBox MinWidth="100" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                </DataTemplate>                
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type factory:PropertyFilter}">
-                    <ComboBox Width="50" ItemsSource="{Binding Values}" SelectedItem="{Binding Path=SelectedValue}"/>
+                    <ComboBox Width="50" ItemsSource="{Binding Values}" SelectedItem="{Binding Path=SelectedValue}" />
                 </DataTemplate>
 
                 <DataTemplate DataType="{x:Type viewModel:CheckContentViewModel}">
-                    <Grid >
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding Header}" />
-                        <ContentControl Content="{Binding Content}" 
+                        <ContentControl Content="{Binding Content}"
                                         Grid.Column="1"
-                                        ContentTemplateSelector="{x:Static temp:CustomDataTemplateSelector.Instance}">                            
+                                        ContentTemplateSelector="{x:Static temp:CustomDataTemplateSelector.Instance}">
                         </ContentControl>
                     </Grid>
                 </DataTemplate>
             </FrameworkElement.Resources>
 
-            <DockPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
+            <DockPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <ToolBar DockPanel.Dock="Top">
                     <Label>Count</Label>
                     <TextBlock VerticalAlignment="Center" Text="{Binding CountViewModel.Count}" Margin="2" ></TextBlock>
-              
+
                     <Label Margin="30,0">Filtered Count</Label>
                     <TextBlock VerticalAlignment="Center" Text="{Binding FilteredCountViewModel.Count}" Foreground="Gray" Margin="2"></TextBlock>
-                  
+
                     <Label Margin="30,0">Orientation</Label>
-                    <btns:ToggleButton x:Name="ToggleButton" 
-                                     VerticalAlignment="Center"  
-                                       Width="100" 
+                    <btns:ToggleButton x:Name="ToggleButton"
+                                     VerticalAlignment="Center"
+                                       Width="100"
                                 Content="{x:Static Orientation.Horizontal}"
                                 UnCheckedContent="{x:Static Orientation.Vertical}">
                     </btns:ToggleButton>
@@ -119,7 +118,7 @@
                     SelectedValuePath="Header"
                     OutputChange="{utl1:Command Command, ConversionType=Default, Converter={StaticResource CommandConverter}}"
                     ItemsSource="{Binding Collection}"
-                    IsCheckedPath="IsChecked"                  
+                    IsCheckedPath="IsChecked"
                     Orientation="{Binding ElementName=ToggleButton, Path=Content}">
                 </view:CheckBoxesListControl>
                 <DataGrid ItemsSource="{Binding CollectionViewModel.Collection}" />

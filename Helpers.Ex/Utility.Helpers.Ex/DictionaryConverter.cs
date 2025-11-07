@@ -18,7 +18,6 @@ namespace Utility.Helpers.Ex
     {
         private const BindingFlags BindingFlags1 = BindingFlags.Public | BindingFlags.Instance;
 
-
         public static OrderedDictionary Convert(object value, IValueConverter<(PropertyInfo, object), string?> valueConverter, IComparer<string>? comparer = null)
         {
             var arr = SelectMembers(value.GetType(), comparer).ToArray();
@@ -56,8 +55,6 @@ namespace Utility.Helpers.Ex
                 yield return KeyValuePair.Create(obj.GetType().Name.Humanize(LetterCasing.Title), dict);
             }
         }
-
-
 
         private static string? Get(IValueConverter<(PropertyInfo, object), string?> valueConverter, object value, PropertyInfo memberInfo)
         {

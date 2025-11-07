@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:view1="http://schemas.utility.com/dragablz"
-             xmlns:local111="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common" 
+             xmlns:local111="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common"
              xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
              xmlns:res="http://schemas.utility.com/resourcedictionary"
              mc:Ignorable="d"

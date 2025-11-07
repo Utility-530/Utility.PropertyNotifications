@@ -1,9 +1,9 @@
-﻿using System.Windows.Controls;
-using System.Windows;
-using Utility.Models;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using Utility.Models;
 using Utility.Structs;
-using System.Collections.Generic;
 
 namespace Utility.WPF.Controls.Objects
 {
@@ -22,7 +22,7 @@ namespace Utility.WPF.Controls.Objects
                 {
                     if (x.template(schema, column) is DataTemplate template)
                         column.CellTemplate = template;
-       
+
                     if (x.exclude(schema, column))
                     {
                         x.Columns.Remove(column);
@@ -32,17 +32,17 @@ namespace Utility.WPF.Controls.Objects
                         widths.Add(column, dim);
                 }
 
-                if(widths.Any())
+                if (widths.Any())
                 {
                     var total = widths.Sum(a => a.Value.Value);
-                    foreach(var c in widths)
+                    foreach (var c in widths)
                     {
                         c.Key.Width = c.Value.Value;
                     }
                 }
             }
         }
-        
+
         static TreeListViewItem()
         {
         }
@@ -50,7 +50,6 @@ namespace Utility.WPF.Controls.Objects
         public TreeListViewItem()
         {
             Columns = new GridViewColumnCollection();
-
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
@@ -79,28 +78,25 @@ namespace Utility.WPF.Controls.Objects
             }
         }
 
-        bool exclude(Schema schema, GridViewColumn column)
+        private bool exclude(Schema schema, GridViewColumn column)
         {
             return schema?.Properties.SingleOrDefault(a => a.Name.Equals((column.Header as ContentControl)?.Content)) is SchemaProperty { IsVisible: false };
-
         }
 
-        DataTemplate? template(Schema schema, GridViewColumn column)
+        private DataTemplate? template(Schema schema, GridViewColumn column)
         {
             var str = (column.Header as ContentControl)?.Content;
             if (schema?.Properties.SingleOrDefault(a => a.Name.Equals(str)) is SchemaProperty { Template: { } template })
                 return Application.Current.Resources[template] as DataTemplate;
             return null;
-
         }
-        
-        Dimension? width(Schema schema, GridViewColumn column)
+
+        private Dimension? width(Schema schema, GridViewColumn column)
         {
             var str = (column.Header as ContentControl)?.Content;
             if (schema?.Properties.SingleOrDefault(a => a.Name.Equals(str)) is SchemaProperty { ColumnWidth: { } width })
                 return width;
             return null;
-
         }
 
         #region Properties
@@ -110,7 +106,6 @@ namespace Utility.WPF.Controls.Objects
             get { return (Schema)GetValue(SchemaProperty); }
             set { SetValue(SchemaProperty, value); }
         }
-
 
         /// <summary>
         /// Gets or sets the collection of System.Windows.Controls.GridViewColumn
@@ -134,12 +129,9 @@ namespace Utility.WPF.Controls.Objects
 
         #endregion Properties
 
-
         protected override DependencyObject GetContainerForItemOverride()
         {
             return new TreeListViewItem();
         }
     }
 }
-
-

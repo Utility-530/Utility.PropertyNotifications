@@ -3,5 +3,4 @@
                               xmlns:base="clr-namespace:Utility.WPF.Controls.Base"
                               xmlns:res="http://schemas.utility.com/resourcedictionary"
                               Type="{x:Type base:SelectorAndContentControl}">
-        
 </res:AutoResourceDictionary>

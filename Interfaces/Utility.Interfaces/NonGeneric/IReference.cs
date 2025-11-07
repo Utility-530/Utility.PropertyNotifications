@@ -4,15 +4,13 @@
     {
     }
 
-    public interface IGetReference 
+    public interface IGetReference
     {
         object Reference { get; }
-
     }
 
     public interface ISetReference
     {
         object Reference { set; }
-
     }
 }

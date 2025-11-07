@@ -1,5 +1,5 @@
-﻿using Utility.WPF.Demo.Data.Model;
-using Utility.Models.Filters;
+﻿using Utility.Models.Filters;
+using Utility.WPF.Demo.Data.Model;
 
 namespace Utility.WPF.Demo.Data.Factory
 {

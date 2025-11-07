@@ -1,6 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows;
 
 namespace Utility.WPF.Helpers
 {
@@ -15,8 +15,8 @@ namespace Utility.WPF.Helpers
         private static TreeViewItem _currentItem = null;
 
         //
-        // IsMouseDirectlyOverItem:  A DependencyProperty that will be true only on the 
-        // TreeViewItem that the mouse is directly over.  I.e., this won't be set on that 
+        // IsMouseDirectlyOverItem:  A DependencyProperty that will be true only on the
+        // TreeViewItem that the mouse is directly over.  I.e., this won't be set on that
         // parent item.
         //
         // This is the only public member, and is read-only.
@@ -43,7 +43,7 @@ namespace Utility.WPF.Helpers
         private static object CalculateIsMouseDirectlyOverItem(DependencyObject item, object value)
         {
             // This method is called when the IsMouseDirectlyOver property is being calculated
-            // for a TreeViewItem.  
+            // for a TreeViewItem.
 
             if (item == _currentItem)
                 return true;
@@ -59,7 +59,6 @@ namespace Utility.WPF.Helpers
         private static readonly RoutedEvent UpdateOverItemEvent = EventManager.RegisterRoutedEvent(
             "UpdateOverItem", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(MyTreeViewHelper));
 
-
         static MyTreeViewHelper()
         {
             // Get all Mouse enter/leave events for TreeViewItem.
@@ -70,13 +69,12 @@ namespace Utility.WPF.Helpers
             EventManager.RegisterClassHandler(typeof(TreeViewItem), UpdateOverItemEvent, new RoutedEventHandler(OnUpdateOverItem));
         }
 
-
         //
         // OnUpdateOverItem:  This method is a listener for the UpdateOverItemEvent.  When it is received,
         // it means that the sender is the closest TreeViewItem to the mouse (closest in the sense of the tree,
         // not geographically).
 
-        static void OnUpdateOverItem(object sender, RoutedEventArgs args)
+        private static void OnUpdateOverItem(object sender, RoutedEventArgs args)
         {
             // Mark this object as the tree view item over which the mouse
             // is currently positioned.
@@ -95,7 +93,7 @@ namespace Utility.WPF.Helpers
         // the IsMouseDirectlyOverItem property on the previous TreeViewItem and the new
         // TreeViewItem.
 
-        static void OnMouseTransition(object sender, MouseEventArgs args)
+        private static void OnMouseTransition(object sender, MouseEventArgs args)
         {
             lock (IsMouseDirectlyOverItemProperty)
             {
@@ -119,7 +117,6 @@ namespace Utility.WPF.Helpers
 
                     RoutedEventArgs newItemArgs = new RoutedEventArgs(UpdateOverItemEvent);
                     currentPosition.RaiseEvent(newItemArgs);
-
                 }
             }
         }

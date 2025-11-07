@@ -1,26 +1,25 @@
-﻿using AutoCompleteTextBox.Editors;
-using MintPlayer.ObservableCollection;
-using System;
-using Type = System.Type;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reactive.Subjects;
 using System.Windows.Data;
+using AutoCompleteTextBox.Editors;
+using MintPlayer.ObservableCollection;
 using Utility.Changes;
 using Utility.Helpers;
+using Type = System.Type;
 
 namespace Utility.WPF.Templates
 {
-
     public record SuggestionPrompt(string Filter, object Value);
 
     public class ComboSuggestionProvider : IComboSuggestionProvider, IObservable<SuggestionPrompt>
     {
-        ReplaySubject<SuggestionPrompt> replaySubject = new();
+        private ReplaySubject<SuggestionPrompt> replaySubject = new();
 
         private ObservableCollection<string> suggestions = new();
- 
+
         public ComboSuggestionProvider(object value)
         {
             Value = value;
@@ -47,15 +46,14 @@ namespace Utility.WPF.Templates
 
     public class AutoCompleteConverter : IValueConverter, IObservable<SuggestionPrompt>, IObserver<Change>
     {
-        readonly Dictionary<object, ComboSuggestionProvider> dictionary = new();
-        ReplaySubject<SuggestionPrompt> replaySubject = new();
+        private readonly Dictionary<object, ComboSuggestionProvider> dictionary = new();
+        private ReplaySubject<SuggestionPrompt> replaySubject = new();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return dictionary.Get(value, (a) =>
             {
-                
-                var provider= new ComboSuggestionProvider(a);
+                var provider = new ComboSuggestionProvider(a);
                 provider.Subscribe(replaySubject);
                 return provider;
             });
@@ -85,7 +83,6 @@ namespace Utility.WPF.Templates
 
         public void OnNext(Change value)
         {
-          
         }
     }
 }

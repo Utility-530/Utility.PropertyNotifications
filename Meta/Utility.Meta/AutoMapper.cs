@@ -14,8 +14,4 @@ namespace Utility.Meta
 
         public static IMapper Instance { get; } = new AutoMapperSingleton().mapper;
     }
-
-
 }
-
-

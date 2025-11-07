@@ -1,5 +1,4 @@
 ﻿using SQLite;
-using System;
 
 namespace Utility.Entities
 {
@@ -7,6 +6,7 @@ namespace Utility.Entities
     {
         [PrimaryKey]
         public Guid Guid { get; set; }
+
         public Guid ParentId { get; set; }
         public DateTime Time { get; set; }
         public string Source { get; set; }

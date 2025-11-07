@@ -1,14 +1,14 @@
 ﻿#nullable enable
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NodaTime;
-using NodaTime.Serialization.JsonNet;
 using System;
 using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NodaTime;
+using NodaTime.Serialization.JsonNet;
 
 namespace Utility.Helpers.Ex
 {
@@ -111,7 +111,6 @@ namespace Utility.Helpers.Ex
             }
         }
 
-
         public static void Reset(this JObject jObject)
         {
             foreach (var x in jObject.Properties())
@@ -124,26 +123,27 @@ namespace Utility.Helpers.Ex
                 {
                     x.Value = AsDefaultEnum(x).ToString();
                 }
-
                 else if (x.Value is JValue jValue)
                     switch (jValue.Type)
                     {
                         case JTokenType.String:
                             x.Value = string.Empty;
                             break;
+
                         case JTokenType.Float:
                             x.Value = 0.0;
                             break;
+
                         case JTokenType.Integer:
                             x.Value = 0;
                             break;
+
                         case JTokenType.TimeSpan:
                             x.Value = TimeSpan.Zero;
                             break;
                     }
                 else if (x.Value is JToken token)
                 {
-
                 }
                 else
                 {
@@ -164,13 +164,12 @@ namespace Utility.Helpers.Ex
             }
             return false;
         }
+
         public static Enum AsDefaultEnum(this JProperty jProperty)
         {
-
             var type = Type.GetType(jProperty.Parent["$type"].Value<string>());
             var prop = type.GetProperty(jProperty.Name);
             return Enum.GetValues(prop.PropertyType).Cast<Enum>().First();
-
         }
     }
 

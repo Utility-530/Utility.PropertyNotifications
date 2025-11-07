@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Reactive.Subjects;
 using Utility.Observables;
-using Utility.Observables.Generic;
 
 namespace Utility.Common.Models
 {
     public class OutputNode<TOut> : IObservable<TOut>, IDisposable
     {
-        ReplaySubject<TOut> outSubject = new(1);
+        private ReplaySubject<TOut> outSubject = new(1);
         private readonly Disposable disposer;
 
         private OutputNode(Func<IObservable<TOut>> func)
@@ -36,6 +35,7 @@ namespace Utility.Common.Models
         }
 
         #region dispose
+
         // Implement IDisposable.
         // Do not make this method virtual.
         // A derived class should not be able to override this method.
@@ -44,11 +44,12 @@ namespace Utility.Common.Models
             disposer.Dispose(true);
             // This object will be cleaned up by the Dispose method.
             // Therefore, you should call GC.SupressFinalize to
-            // take this object off the finalization queue 
+            // take this object off the finalization queue
             // and prevent finalization code for this object
             // from executing a second time.
             GC.SuppressFinalize(this);
         }
-        #endregion
+
+        #endregion dispose
     }
 }

@@ -1,8 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
+using Newtonsoft.Json;
 
 namespace Utility.Meta
 {
@@ -18,7 +17,6 @@ namespace Utility.Meta
             }
             if (parentType == null)
             {
-
             }
             PropertyType = type;
             ComponentType = parentType;
@@ -60,6 +58,7 @@ namespace Utility.Meta
                 return Activator.CreateInstance(type);
             }
         }
+
         public override void ResetValue(object component)
         {
             throw new NotImplementedException();
@@ -170,5 +169,4 @@ namespace Utility.Meta
             return base.ToString();
         }
     }
-
 }

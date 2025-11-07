@@ -105,7 +105,6 @@
             return defaultValue;
         }
 
-
         //public static T ChangeType<T>(object input, T defaultValue)
         //{
         //    return ChangeType(input, defaultValue, null);

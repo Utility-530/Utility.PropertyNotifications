@@ -8,7 +8,8 @@ namespace Utility.WPF.Demo.Lists
     /// </summary>
     public partial class CheckBoxesUserControl : UserControl
     {
-        bool flag;
+        private bool flag;
+
         public CheckBoxesUserControl()
         {
             InitializeComponent();

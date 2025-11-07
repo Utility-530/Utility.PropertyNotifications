@@ -283,7 +283,7 @@ namespace Utility.Common.Collections
 
         #region INotifyCollectionChanged
 
-        private readonly List<NotifyCollectionChangedEventHandler> m_collectionChanged = new ();
+        private readonly List<NotifyCollectionChangedEventHandler> m_collectionChanged = new();
 
         public event NotifyCollectionChangedEventHandler CollectionChanged
         {

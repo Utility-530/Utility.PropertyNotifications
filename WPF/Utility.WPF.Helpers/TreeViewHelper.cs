@@ -4,7 +4,6 @@ namespace Utility.WPF.Helpers
 {
     public static class TreeViewHelper
     {
-
         public static T? FindRecursive<T>(this ItemsControl treeView, object instance) where T : Control
         {
             foreach (var item in treeView.Items)
@@ -59,5 +58,3 @@ namespace Utility.WPF.Helpers
         }
     }
 }
-
-

@@ -1,10 +1,10 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using Microsoft.Xaml.Behaviors;
 using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Behaviors
@@ -132,8 +132,6 @@ namespace Utility.WPF.Behaviors
                 e.Handled = true;
             }
         }
-
-
 
         protected override void OnDetaching()
         {

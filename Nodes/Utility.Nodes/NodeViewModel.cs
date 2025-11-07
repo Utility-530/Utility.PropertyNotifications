@@ -2,11 +2,11 @@
 using System.Collections.Specialized;
 using System.Windows.Input;
 using Utility.Commands;
+using Utility.Interfaces;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Keys;
 using Utility.Nodify.Base;
 using Utility.Trees.Abstractions;
-using Utility.Interfaces;
 
 namespace Utility.Nodes
 {

@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
+﻿using System;
 using System.Reflection;
-using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Utility.Conversions.Json.Newtonsoft
 {
@@ -15,7 +15,6 @@ namespace Utility.Conversions.Json.Newtonsoft
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             return PropertyInfoJsonConverter.Read(reader);
-
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -26,7 +25,6 @@ namespace Utility.Conversions.Json.Newtonsoft
 
     public class PropertyInfoJsonConverter : JsonConverter<PropertyInfo>
     {
-
         public override void WriteJson(JsonWriter writer, PropertyInfo value, JsonSerializer serializer)
         {
             // Begin object

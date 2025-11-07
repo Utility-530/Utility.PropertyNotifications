@@ -1,6 +1,6 @@
-﻿using ReactiveUI;
+﻿using System.Windows.Controls;
+using ReactiveUI;
 using Splat;
-using System.Windows.Controls;
 using Utility.Commands;
 
 namespace Utility.WPF.Demo.Controls

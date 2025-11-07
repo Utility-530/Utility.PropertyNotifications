@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using TheArtOfDev.HtmlRenderer.WPF;
 using Utility.WPF.Controls.Base;
-using static AvalonEditB.Document.TextDocumentWeakEventManager;
 
 namespace Utility.WPF.Controls.Html
 {
@@ -16,29 +10,27 @@ namespace Utility.WPF.Controls.Html
     {
         string Html { get; set; }
     }
+
     public class HtmlControl : SplitControl, IHtmlControl
     {
         private bool _updateLock;
         private HtmlPanel? _htmlPanel;
         private System.Windows.Controls.WebBrowser _webBrowser;
-        bool applyFlag = false;
-        bool update = false;
+        private bool applyFlag = false;
+        private bool update = false;
 
         public static readonly DependencyProperty HtmlProperty = DependencyProperty.Register("Html", typeof(string), typeof(HtmlControl), new PropertyMetadata(changed));
-
 
         static HtmlControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(HtmlControl), new FrameworkPropertyMetadata(typeof(HtmlControl)));
         }
 
-
         public string Html
         {
             get { return (string)GetValue(HtmlProperty); }
             set { SetValue(HtmlProperty, value); }
         }
-
 
         private static void changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -86,11 +78,8 @@ namespace Utility.WPF.Controls.Html
             Cursor = Cursors.Arrow;
             _updateLock = false;
 
-
             UpdateWebBrowserHtml();
-
         }
-
 
         public void UpdateWebBrowserHtml()
         {
@@ -104,8 +93,6 @@ namespace Utility.WPF.Controls.Html
             /// Fix the raw html by replacing bridge object properties calls with path to file with the data returned from the property.
             /// </summary>
             /// <returns>fixed html</returns>
-
-
         }
     }
 }

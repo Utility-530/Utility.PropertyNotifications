@@ -1,6 +1,4 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
 
 namespace Utility.WPF.Demo.Logs
 {
@@ -10,5 +8,4 @@ namespace Utility.WPF.Demo.Logs
     public partial class App : Application
     {
     }
-
 }

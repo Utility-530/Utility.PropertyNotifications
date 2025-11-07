@@ -115,7 +115,6 @@
 
                         <ItemsPresenter Grid.Row="2" />
                         <!--  Children  -->
-
                     </Grid>
                     <!--  End of Main grid  -->
                 </ControlTemplate>
@@ -133,7 +132,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
 
     <Style x:Key="LeftToRight_GraphStyle" TargetType="TreeViewItem">
         <Setter Property="Template">
@@ -244,7 +242,6 @@
 
                         <ItemsPresenter Grid.Column="2" />
                         <!--  Children  -->
-
                     </Grid>
                     <!--  End of Main grid  -->
                 </ControlTemplate>

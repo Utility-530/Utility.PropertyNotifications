@@ -1,7 +1,7 @@
-﻿using Dragablz;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Dragablz;
 using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Controls.Dragablz

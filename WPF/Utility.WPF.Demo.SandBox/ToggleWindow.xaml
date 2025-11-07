@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Utility.WPF.SandBox" 
+        xmlns:local="clr-namespace:Utility.WPF.SandBox"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:xt="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:conv="http://schemas.utility.com/converters"
@@ -12,12 +12,11 @@
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml"/>
+                <ResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Storyboard
-                    x:Key="StoryboardLeft"
-                   >
+                    x:Key="StoryboardLeft">
 
                 <hc:GeometryAnimationUsingKeyFrames Storyboard.TargetName="PathDemo" Storyboard.TargetProperty="Data">
                     <hc:DiscreteGeometryKeyFrame KeyTime="0:0:0.0" Value="{StaticResource UpGeometry}" />
@@ -27,14 +26,10 @@
                         </hc:EasingGeometryKeyFrame.EasingFunction>
                     </hc:EasingGeometryKeyFrame>
                 </hc:GeometryAnimationUsingKeyFrames>
-
-
             </Storyboard>
 
-
             <Storyboard
-                    x:Key="StoryboardDown"
-                   >
+                    x:Key="StoryboardDown">
 
                 <hc:GeometryAnimationUsingKeyFrames Storyboard.TargetName="PathDemo" Storyboard.TargetProperty="Data">
                     <hc:DiscreteGeometryKeyFrame KeyTime="0:0:0.0" Value="{StaticResource LeftGeometry}" />
@@ -44,12 +39,10 @@
                         </hc:EasingGeometryKeyFrame.EasingFunction>
                     </hc:EasingGeometryKeyFrame>
                 </hc:GeometryAnimationUsingKeyFrames>
-
             </Storyboard>
 
             <Storyboard
-                    x:Key="StoryboardRight"
-                   >
+                    x:Key="StoryboardRight">
 
                 <hc:GeometryAnimationUsingKeyFrames Storyboard.TargetName="PathDemo" Storyboard.TargetProperty="Data">
                     <hc:DiscreteGeometryKeyFrame KeyTime="0:0:0.0" Value="{StaticResource DownGeometry}" />
@@ -59,12 +52,10 @@
                         </hc:EasingGeometryKeyFrame.EasingFunction>
                     </hc:EasingGeometryKeyFrame>
                 </hc:GeometryAnimationUsingKeyFrames>
-
             </Storyboard>
 
             <Storyboard
-                    x:Key="StoryboardUp"
-                   >
+                    x:Key="StoryboardUp">
 
                 <hc:GeometryAnimationUsingKeyFrames Storyboard.TargetName="PathDemo" Storyboard.TargetProperty="Data">
                     <hc:DiscreteGeometryKeyFrame KeyTime="0:0:0.0" Value="{StaticResource RightGeometry}" />
@@ -74,44 +65,40 @@
                         </hc:EasingGeometryKeyFrame.EasingFunction>
                     </hc:EasingGeometryKeyFrame>
                 </hc:GeometryAnimationUsingKeyFrames>
-
             </Storyboard>
 
             <Style TargetType="{x:Type RepeatButton}" BasedOn="{StaticResource {x:Type RepeatButton}}" x:Key="DoubleSwitchToggleButton">
-                <Setter Property="BorderBrush" Value="Black"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Foreground" Value="Black"/>
-                <Setter Property="Width" Value="40"/>
-                <Setter Property="Height" Value="40"/>
+                <Setter Property="BorderBrush" Value="Black" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="Width" Value="40" />
+                <Setter Property="Height" Value="40" />
                 <Setter Property="local:Ex.TimedText" Value="0"></Setter>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type RepeatButton}">
                             <Grid>
-                                <Border x:Name="BackBorder" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}"/>
-                                <!--<TextBlock x:Name="Off" Margin="30,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center"><Run Text="OFF"/></TextBlock>
-                            <TextBlock x:Name="On" Margin="0,0,30,0" VerticalAlignment="Center"  HorizontalAlignment="Center"><Run Text="ON"/></TextBlock>-->
+                                <Border x:Name="BackBorder" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" />
+                                <!--<TextBlock x:Name="Off" Margin="30,0,0,0" VerticalAlignment="Center"  HorizontalAlignment="Center"><Run Text="OFF" /></TextBlock>
+                            <TextBlock x:Name="On" Margin="0,0,30,0" VerticalAlignment="Center"  HorizontalAlignment="Center"><Run Text="ON" /></TextBlock>-->
 
-
-                                <Border x:Name="Slider1" Margin="0,0,0,20"  Width="20" Height="20" >
+                                <Border x:Name="Slider1" Margin="0,0,0,20"  Width="20" Height="20">
                                     <Path Data="{StaticResource UpGeometry}" Stretch="Uniform" Fill="LightGray"></Path>
                                 </Border>
-                                <Border x:Name="Slider2" Margin="0,0,20,0" Width="20" Height="20" >
+                                <Border x:Name="Slider2" Margin="0,0,20,0" Width="20" Height="20">
                                     <Path Data="{StaticResource LeftGeometry}" Stretch="Uniform" Fill="LightGray"></Path>
                                 </Border>
-                                <Border x:Name="Slider3" Margin="0,20,0,0"  Width="20" Height="20" >
+                                <Border x:Name="Slider3" Margin="0,20,0,0"  Width="20" Height="20">
                                     <Path Data="{StaticResource DownGeometry}" Stretch="Uniform" Fill="LightGray"></Path>
                                 </Border>
-                                <Border x:Name="Slider4" Margin="20,0,0,0" Width="20" Height="20" >
+                                <Border x:Name="Slider4" Margin="20,0,0,0" Width="20" Height="20">
                                     <Path Data="{StaticResource RightGeometry}" Stretch="Uniform" Fill="LightGray"></Path>
-
                                 </Border>
-
 
                                 <Border x:Name="Border" Margin="0,0,0,20" Width="20" Height="20">
 
-                                    <hc:TransitioningContentControl x:Name="Slider"   >
+                                    <hc:TransitioningContentControl x:Name="Slider">
                                         <Path
                         Name="PathDemo"
                         Data="{StaticResource UpGeometry}"
@@ -123,7 +110,6 @@
                                         </Path>
                                     </hc:TransitioningContentControl>
                                 </Border>
-
                             </Grid>
                             <ControlTemplate.Triggers>
                                 <!--<EventTrigger RoutedEvent="Border.Loaded" SourceName="Slider">
@@ -136,13 +122,13 @@
                                     <DataTrigger.EnterActions>
                                         <BeginStoryboard x:Name="One">
                                             <Storyboard Storyboard.TargetProperty="Margin" Storyboard.TargetName="Border">
-                                                <ThicknessAnimation To="0,0,20,0" Duration="00:00:00.2"/>
+                                                <ThicknessAnimation To="0,0,20,0" Duration="00:00:00.2" />
                                             </Storyboard>
                                         </BeginStoryboard>
                                         <BeginStoryboard x:Name="K1" Storyboard="{StaticResource StoryboardLeft}"></BeginStoryboard>
                                         <!--<BeginStoryboard x:Name="checkedSB2">
                                         <Storyboard Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)">
-                                            <ColorAnimation To="LightSeaGreen" Duration="00:00:00.3"/>
+                                            <ColorAnimation To="LightSeaGreen" Duration="00:00:00.3" />
                                         </Storyboard>
                                     </BeginStoryboard>-->
                                     </DataTrigger.EnterActions>
@@ -153,61 +139,57 @@
                                     <!--<DataTrigger.ExitActions>
                                     <BeginStoryboard x:Name="uncheckedSB">
                                         <Storyboard Storyboard.TargetProperty="Margin" Storyboard.TargetName="Slider">
-                                            <ThicknessAnimation To="0" Duration="00:00:00.2"/>
+                                            <ThicknessAnimation To="0" Duration="00:00:00.2" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                     <BeginStoryboard x:Name="uncheckedSB2">
                                         <Storyboard Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)">
-                                            <ColorAnimation To="{x:Null}" Duration="00:00:00.3"/>
+                                            <ColorAnimation To="{x:Null}" Duration="00:00:00.3" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.ExitActions>-->
-
-
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding (local:Ex.TimedText), RelativeSource={RelativeSource Self}}" Value="2">
                                     <DataTrigger.EnterActions>
-                                        <BeginStoryboard x:Name="Two" >
+                                        <BeginStoryboard x:Name="Two">
                                             <Storyboard  Storyboard.TargetProperty="Margin" Storyboard.TargetName="Border">
-                                                <ThicknessAnimation To="0,20,0,0" Duration="00:00:00.2"/>
+                                                <ThicknessAnimation To="0,20,0,0" Duration="00:00:00.2" />
                                             </Storyboard>
                                         </BeginStoryboard>
                                         <BeginStoryboard x:Name="K2" Storyboard="{StaticResource StoryboardDown}"></BeginStoryboard>
                                     </DataTrigger.EnterActions>
                                     <DataTrigger.ExitActions>
-                                        <StopStoryboard BeginStoryboardName="Two"/>
-                                        <StopStoryboard BeginStoryboardName="K2"/>
+                                        <StopStoryboard BeginStoryboardName="Two" />
+                                        <StopStoryboard BeginStoryboardName="K2" />
                                     </DataTrigger.ExitActions>
-
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding (local:Ex.TimedText), RelativeSource={RelativeSource Self}}" Value="3">
                                     <DataTrigger.EnterActions>
                                         <BeginStoryboard x:Name="Three">
                                             <Storyboard Storyboard.TargetProperty="Margin" Storyboard.TargetName="Border">
-                                                <ThicknessAnimation To="20,0,0,0" Duration="00:00:00.2"/>
+                                                <ThicknessAnimation To="20,0,0,0" Duration="00:00:00.2" />
                                             </Storyboard>
                                         </BeginStoryboard>
 
                                         <BeginStoryboard x:Name="K3" Storyboard="{StaticResource StoryboardRight}"></BeginStoryboard>
                                     </DataTrigger.EnterActions>
                                     <DataTrigger.ExitActions>
-                                        <StopStoryboard BeginStoryboardName="Three"/>
-                                        <StopStoryboard BeginStoryboardName="K3"/>
+                                        <StopStoryboard BeginStoryboardName="Three" />
+                                        <StopStoryboard BeginStoryboardName="K3" />
                                     </DataTrigger.ExitActions>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding (local:Ex.TimedText), RelativeSource={RelativeSource Self}}" Value="0">
                                     <DataTrigger.EnterActions>
                                         <BeginStoryboard x:Name="Four">
                                             <Storyboard Storyboard.TargetProperty="Margin" Storyboard.TargetName="Border">
-                                                <ThicknessAnimation To="0,0,0,20" Duration="00:00:00.2"/>
+                                                <ThicknessAnimation To="0,0,0,20" Duration="00:00:00.2" />
                                             </Storyboard>
                                         </BeginStoryboard>
                                         <BeginStoryboard x:Name="K4" Storyboard="{StaticResource StoryboardUp}"></BeginStoryboard>
-
                                     </DataTrigger.EnterActions>
                                     <DataTrigger.ExitActions>
-                                        <StopStoryboard BeginStoryboardName="Four"/>
-                                        <StopStoryboard BeginStoryboardName="K4"/>
+                                        <StopStoryboard BeginStoryboardName="Four" />
+                                        <StopStoryboard BeginStoryboardName="K4" />
                                     </DataTrigger.ExitActions>
                                 </DataTrigger>
                             </ControlTemplate.Triggers>
@@ -218,12 +200,9 @@
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
-
     <DockPanel>
-
 
         <!--<xt:IntegerUpDown DockPanel.Dock="Top" x:Name="NumberBox" Value="0"></xt:IntegerUpDown>-->
         <RepeatButton Style="{StaticResource DoubleSwitchToggleButton}" >          </RepeatButton>
     </DockPanel>
-
 </Window>

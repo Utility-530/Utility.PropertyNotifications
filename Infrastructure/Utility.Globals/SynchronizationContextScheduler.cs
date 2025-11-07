@@ -38,6 +38,5 @@ namespace Utility
         }
 
         public static SynchronizationContextScheduler Instance => new(SynchronizationContext.Current);
-
     }
 }

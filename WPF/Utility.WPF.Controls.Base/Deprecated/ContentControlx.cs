@@ -1,8 +1,4 @@
-﻿using System;
-using System.Reactive.Linq;
-using System.Windows;
-using System.Windows.Controls;
-//using Utility.WPF.Mixins;
+﻿//using Utility.WPF.Mixins;
 //using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Base

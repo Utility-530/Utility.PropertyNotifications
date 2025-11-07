@@ -10,11 +10,11 @@
     xmlns:local="clr-namespace:Utility.WPF.Controls.Objects"
     xmlns:c="http://schemas.utility.com"
     xmlns:d="clr-namespace:NumericUpDownLib;assembly=NumericUpDownLib"
-    xmlns:res="http://schemas.utility.com/resourcedictionary" 
+    xmlns:res="http://schemas.utility.com/resourcedictionary"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:att="http://schemas.utility.com/attached" 
+    xmlns:att="http://schemas.utility.com/attached"
     xmlns:hex="http://hexinnovation.com/math"
-    xmlns:ad="http://schemas.utility.com/adorners" 
+    xmlns:ad="http://schemas.utility.com/adorners"
     xmlns:utl="http://schemas.utility.com/utilitywpf">
 
     <ResourceDictionary.MergedDictionaries>
@@ -25,14 +25,14 @@
     <sys:Boolean x:Key="True">True</sys:Boolean>
     <sys:Boolean x:Key="False">False</sys:Boolean>
 
-    <local:EnumConverter x:Key="EnumConverter"/>
-    <local:ToolTipTemplateSelector x:Key="ToolTipTemplateSelector"/>
-    <conv:TypeNameConverter x:Key="TypeNameConverter"/>
-    <local:ObjectVisibilityConverter x:Key="ObjectVisibilityConverter"/>
-    <controls:DoubleToNullConverter x:Key="DoubleToNullConverter" x:Shared="False"/>
-    <controls:StringToNullConverter x:Key="StringToNullConverter" x:Shared="False"/>
-    <controls:DateTimeToNullConverter x:Key="DateTimeToNullConverter" x:Shared="False"/>
-    <!--<controls:BooleanToNullConverter x:Key="BooleanToNullConverter" x:Shared="False"/>-->
+    <local:EnumConverter x:Key="EnumConverter" />
+    <local:ToolTipTemplateSelector x:Key="ToolTipTemplateSelector" />
+    <conv:TypeNameConverter x:Key="TypeNameConverter" />
+    <local:ObjectVisibilityConverter x:Key="ObjectVisibilityConverter" />
+    <controls:DoubleToNullConverter x:Key="DoubleToNullConverter" x:Shared="False" />
+    <controls:StringToNullConverter x:Key="StringToNullConverter" x:Shared="False" />
+    <controls:DateTimeToNullConverter x:Key="DateTimeToNullConverter" x:Shared="False" />
+    <!--<controls:BooleanToNullConverter x:Key="BooleanToNullConverter" x:Shared="False" />-->
     <local:LabelConverter x:Key="LabelConverter" />
     <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" Collapse="False"></conv:BooleanToVisibilityConverter>
@@ -75,9 +75,9 @@
     </ItemsControl>
 
     <Style x:Key="TokenToolTipStyle" TargetType="{x:Type ToolTip}">
-        <Setter Property="OverridesDefaultStyle" Value="true"/>
-        <Setter Property="HasDropShadow" Value="True"/>
-        <Setter Property="DataContext" Value="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}"/>
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="HasDropShadow" Value="True" />
+        <Setter Property="DataContext" Value="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToolTip">
@@ -115,7 +115,7 @@
                                 </Label.Triggers>
                             </Label>
                             <Popup x:Name="PopupOnHover"
-                                   Placement="Bottom"      
+                                   Placement="Bottom"
                                    AllowsTransparency="True"
                                    Focusable="False"
                                    PopupAnimation="Slide" Child="{StaticResource ItemsControlToolTip}">
@@ -127,11 +127,10 @@
         </Setter>
     </Style>
 
-
-    <ToolTip x:Key="TokenToolTip" Style="{StaticResource TokenToolTipStyle}"/>
+    <ToolTip x:Key="TokenToolTip" Style="{StaticResource TokenToolTipStyle}" />
 
     <Style x:Key="JsonTreeViewItem" TargetType="{x:Type TreeViewItem}">
-        <Setter Property="ToolTipService.InitialShowDelay" Value="2000"/>
+        <Setter Property="ToolTipService.InitialShowDelay" Value="2000" />
         <Setter Property="ToolTip">
             <Setter.Value>
                 <ContentControl Content="{Binding }" ContentTemplateSelector="{StaticResource ToolTipTemplateSelector}"></ContentControl>
@@ -153,7 +152,7 @@
 
     <controls:JsonObjectTypeTemplateSelector x:Key="JsonObjectTypeTemplateSelector" />
 
-    <local:JsonContainerStyleSelector x:Key="JsonContainerStyleSelector" >
+    <local:JsonContainerStyleSelector x:Key="JsonContainerStyleSelector">
         <local:JsonContainerStyleSelector.Resources>
             <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Objects;component/Themes/Dictionary1.xaml" />
         </local:JsonContainerStyleSelector.Resources>
@@ -164,7 +163,7 @@
         <!--<Setter Property="ItemTemplateSelector" Value="{x:Static controls:TemplateSelector.JPropertyDataTemplateSelector}" />-->
         <Setter Property="ItemTemplateSelector" Value="{StaticResource JsonObjectTypeTemplateSelector}" />
         <!--<Setter Property="ItemContainerStyle" Value="{StaticResource JsonTreeViewItem}" />-->
-        <Setter Property="ItemContainerStyleSelector" Value="{StaticResource JsonContainerStyleSelector}"/>
+        <Setter Property="ItemContainerStyleSelector" Value="{StaticResource JsonContainerStyleSelector}" />
         <Setter Property="Background" Value="#FFF9F9F9"></Setter>
         <Style.Resources>
 
@@ -202,7 +201,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="ContentControl">
-                            <ItemsControl Style="{StaticResource LabelValue}" >
+                            <ItemsControl Style="{StaticResource LabelValue}">
                                 <TextBlock Style="{StaticResource LabelStyle}" />
                                 <!--<TextBlock Text="{Binding Schema.Description}" Margin="0,0,0,4" Visibility="{Binding Schema.Description, Converter={StaticResource VisibilityConverter}}" />-->
                                 <ContentPresenter  Grid.Column="2">
@@ -214,7 +213,6 @@
                                 </ContentPresenter>
                             </ItemsControl>
                         </ControlTemplate>
-
                     </Setter.Value>
                 </Setter>
             </Style>
@@ -227,32 +225,31 @@
             </HierarchicalDataTemplate>
             -->
 
-            <HierarchicalDataTemplate DataType="{x:Type jlinq:JArray}" x:Key="ArrayPropertyTemplate" ItemsSource="{Binding .}" >
+            <HierarchicalDataTemplate DataType="{x:Type jlinq:JArray}" x:Key="ArrayPropertyTemplate" ItemsSource="{Binding .}">
                 <Grid>
                     <Button Style="{StaticResource BasicButtonStyle}" Command="{Binding Source={x:Static local:Commands.FooCommand}}">
-                        <Path  Stroke="Gray" StrokeThickness="2"   Stretch="UniformToFill" Data="{StaticResource Plus}"/>
+                        <Path  Stroke="Gray" StrokeThickness="2"   Stretch="UniformToFill" Data="{StaticResource Plus}" />
                     </Button>
                 </Grid>
             </HierarchicalDataTemplate>
 
             <HierarchicalDataTemplate DataType="{x:Type jlinq:JProperty}" x:Key="Array2PropertyTemplate" ItemsSource="{Binding .}" />
 
-
-            <HierarchicalDataTemplate DataType="{x:Type jlinq:JObject}" x:Key="ObjectPropertyTemplate" 
+            <HierarchicalDataTemplate DataType="{x:Type jlinq:JObject}" x:Key="ObjectPropertyTemplate"
                                       ItemsSource="{Binding ., Converter={x:Static controls:ComplexPropertyMethodValueConverter.Instance}, ConverterParameter='Children'}">
                 <WrapPanel>
                     <TextBlock Text="{Binding '[$type].Value', Converter={StaticResource TypeNameConverter}}" FontWeight="DemiBold" FontSize="14" Foreground="SeaGreen"></TextBlock>
-                    <Button Style="{StaticResource BasicButtonStyle}" 
-                                HorizontalAlignment="Right" 
-                                Command="{Binding Source={x:Static local:Commands.UnFooCommand}}" 
+                    <Button Style="{StaticResource BasicButtonStyle}"
+                                HorizontalAlignment="Right"
+                                Command="{Binding Source={x:Static local:Commands.UnFooCommand}}"
                                 Visibility="{Binding ., Converter={StaticResource ObjectVisibilityConverter}}">
-                        <Path Stroke="Gray" StrokeThickness="2"  Stretch="UniformToFill" Data="{StaticResource Cross}"/>
-                    </Button>                    
+                        <Path Stroke="Gray" StrokeThickness="2"  Stretch="UniformToFill" Data="{StaticResource Cross}" />
+                    </Button>
                 </WrapPanel>
             </HierarchicalDataTemplate>
 
             <HierarchicalDataTemplate DataType="{x:Type jlinq:JProperty}" x:Key="PropertyTemplate" ItemsSource="{Binding ., Converter={x:Static controls:ComplexPropertyMethodValueConverter.Instance}, ConverterParameter='Children'}">
-                <ContentControl Style="{StaticResource LabelValueContent}"/>
+                <ContentControl Style="{StaticResource LabelValueContent}" />
             </HierarchicalDataTemplate>
 
             <!--<VisibilityConverter x:Key="VisibilityConverter" />-->
@@ -273,7 +270,6 @@
             <controls:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
             <controls:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
 
-
             <controls:SchemaNullableToVisibilityConverter x:Key="SchemaNullableToVisibilityConverter" />
             <controls:SchemaNullableToBooleanConverter x:Key="SchemaNullableToBooleanConverter" />
             <controls:EventArgsConverter x:Key="EventArgsConverter" />
@@ -281,7 +277,7 @@
             <controls:SelectionEventArgsConverter x:Key="SelectionEventArgsConverter" />
 
             <DataTemplate x:Key="TypeTemplate">
-                <c:BreadCrumbs ItemsSource="{Binding Value.Value, Converter={x:Static conv:TypeHierarchyConverter.Instance}}"/>
+                <c:BreadCrumbs ItemsSource="{Binding Value.Value, Converter={x:Static conv:TypeHierarchyConverter.Instance}}" />
             </DataTemplate>
 
             <DataTemplate x:Key="StringTemplate">
@@ -294,8 +290,8 @@
                             BorderBrush="Black"
                             HorizontalAlignment="Stretch"
                             SnapsToDevicePixels="True">
-                        <TextBox    
-                            MinWidth="40"                       
+                        <TextBox
+                            MinWidth="40"
                             Visibility="{Binding IsChecked, ElementName=ToggleButton, Converter={StaticResource BooleanToVisibilityConverter}}"
                             x:Name="TextBox"
                             TextAlignment="Left"
@@ -304,14 +300,14 @@
                             TextWrapping="Wrap">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="LostFocus">
-                                    <beh:InvokeCommandAction PassEventArgsToCommand="True" 
-                                                             EventArgsConverter="{StaticResource EventArgsConverter}" 
-                                                             EventArgsConverterParameter="{Binding }" 
-                                                             Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
+                                    <beh:InvokeCommandAction PassEventArgsToCommand="True"
+                                                             EventArgsConverter="{StaticResource EventArgsConverter}"
+                                                             EventArgsConverterParameter="{Binding }"
+                                                             Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <i:Interaction.Behaviors>
-                                <local:FocusBehavior >
+                                <local:FocusBehavior>
                                     <local:FocusBehavior.Value>
                                         <MultiBinding Converter="{x:Static conv:IfConverter.Instance}">
                                             <Binding ElementName="ToggleButton" Path="IsFocused"></Binding>
@@ -323,22 +319,22 @@
                         </TextBox>
                     </Border>
 
-                    <ToggleButton x:Name="ToggleButton" Height="{Binding ElementName=TextBox, Path=ActualHeight}" 
+                    <ToggleButton x:Name="ToggleButton" Height="{Binding ElementName=TextBox, Path=ActualHeight}"
                                       Visibility="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" VerticalAlignment="Top">
                         <ToggleButton.Style>
                             <Style TargetType="{x:Type ToggleButton}">
                                 <Style.Triggers>
                                     <Trigger Property="IsChecked" Value="False">
-                                        <Setter Property="Content"  >
+                                        <Setter Property="Content">
                                             <Setter.Value>
-                                                <Path Stroke="Gray" StrokeThickness="2" Data="{StaticResource Null}"  Stretch="Uniform"/>
+                                                <Path Stroke="Gray" StrokeThickness="2" Data="{StaticResource Null}"  Stretch="Uniform" />
                                             </Setter.Value>
                                         </Setter>
                                     </Trigger>
                                     <Trigger Property="IsChecked" Value="True">
-                                        <Setter Property="Content"  >
+                                        <Setter Property="Content">
                                             <Setter.Value>
-                                                <Path Stroke="Gray" StrokeThickness="2" Data="{StaticResource NotNull}" Stretch="Uniform"/>
+                                                <Path Stroke="Gray" StrokeThickness="2" Data="{StaticResource NotNull}" Stretch="Uniform" />
                                             </Setter.Value>
                                         </Setter>
                                     </Trigger>
@@ -346,7 +342,7 @@
                             </Style>
                         </ToggleButton.Style>
                         <ToggleButton.IsChecked>
-                            <Binding Path="Value" Mode="TwoWay" >
+                            <Binding Path="Value" Mode="TwoWay">
                                 <Binding.Converter>
                                     <StaticResource ResourceKey="StringToNullConverter"></StaticResource>
                                 </Binding.Converter>
@@ -356,50 +352,46 @@
                 </Grid>
             </DataTemplate>
 
-            
             <DataTemplate x:Key="ReadOnlyTemplate">
                 <TextBlock Text="{Binding Value, Mode=OneWay}" IsEnabled="False"></TextBlock>
             </DataTemplate>
 
             <DataTemplate x:Key="DateTimeTemplate">
 
-                <xctk:DateTimePicker 
-                    x:Name="DateTimePicker" 
-                    Format="ShortDate" Margin="0,0,0,8" 
-                                     TextAlignment="Left" 
+                <xctk:DateTimePicker
+                    x:Name="DateTimePicker"
+                    Format="ShortDate" Margin="0,0,0,8"
+                                     TextAlignment="Left"
                                      AutoCloseCalendar="True"
-                                     Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DateTimeConverter}}" >
+                                     Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DateTimeConverter}}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="ValueChanged">
-                            <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource DateTimeEventArgsConverter}" 
-                                                           EventArgsConverterParameter="{Binding }" 
-                                                           Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
+                            <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource DateTimeEventArgsConverter}"
+                                                           EventArgsConverterParameter="{Binding }"
+                                                           Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </xctk:DateTimePicker>
-
             </DataTemplate>
 
-
             <sys:Double x:Key="fixedValue">100.0</sys:Double>
-
 
             <DataTemplate x:Key="DateTimeNullTemplate">
                 <WrapPanel>
                     <Grid>
                         <utl:Animator x:Name="One" IsExpanded="{Binding ElementName=ToggleButton, Path=IsChecked}" ></utl:Animator>
-                        <xctk:DateTimePicker 
-                            x:Name="DateTimePicker" 
-                            Format="ShortDate" 
-                            Margin="0,0,0,0" 
-                            TextAlignment="Left" 
+                        <xctk:DateTimePicker
+                            x:Name="DateTimePicker"
+                            Format="ShortDate"
+                            Margin="0,0,0,0"
+                            TextAlignment="Left"
                             AutoCloseCalendar="True"
-                            Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DateTimeConverter}}" >
+                            Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DateTimeConverter}}">
                             <i:Interaction.Triggers>
                                 <i:PropertyChangedTrigger Binding="{Binding Path=Value, Mode=OneWayToSource}">
-                                    <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource DateTimeEventArgsConverter}" 
-                                                           EventArgsConverterParameter="{Binding }" 
-                                                           Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
+                                    <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource DateTimeEventArgsConverter}"
+                                                           EventArgsConverterParameter="{Binding }"
+                                                           Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}" />
                                 </i:PropertyChangedTrigger>
                             </i:Interaction.Triggers>
                             <FrameworkElement.Width>
@@ -412,7 +404,7 @@
                     </Grid>
                     <utl:NullButton x:Name="ToggleButton" Height="{Binding ElementName=DateTimePicker, Path=ActualHeight}" VerticalAlignment="Top">
                         <utl:NullButton.IsChecked>
-                            <Binding Path="Value" Mode="TwoWay" >
+                            <Binding Path="Value" Mode="TwoWay">
                                 <Binding.Converter>
                                     <StaticResource ResourceKey="DateTimeToNullConverter"></StaticResource>
                                 </Binding.Converter>
@@ -422,9 +414,8 @@
                 </WrapPanel>
             </DataTemplate>
 
-
             <DataTemplate x:Key="TimeTemplate">
-                <xctk:TimePicker Margin="0,0,0,8" HorizontalAlignment="Stretch" 
+                <xctk:TimePicker Margin="0,0,0,8" HorizontalAlignment="Stretch"
                                 Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeConverter}}" />
             </DataTemplate>
 
@@ -432,15 +423,15 @@
                 <ContentControl>
                     <ContentControl.Style>
                         <Style TargetType="ContentControl">
-                            <Setter Property="ContentTemplate" >
+                            <Setter Property="ContentTemplate">
                                 <Setter.Value>
                                     <DataTemplate>
                                         <d:DoubleUpDown Margin="0,0,0,8" Value="{Binding Value, Mode=TwoWay}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="ValueChanged">
-                                                    <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource DoubleEventArgsConverter}" 
-                                                           EventArgsConverterParameter="{Binding }" 
-                                                           Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
+                                                    <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource DoubleEventArgsConverter}"
+                                                           EventArgsConverterParameter="{Binding }"
+                                                           Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}" />
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
                                         </d:DoubleUpDown>
@@ -449,15 +440,15 @@
                             </Setter>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Value, Converter={x:Static conv:TypeConverter.Instance}}" Value="{x:Type sys:Decimal}">
-                                    <Setter Property="ContentTemplate" >
+                                    <Setter Property="ContentTemplate">
                                         <Setter.Value>
                                             <DataTemplate>
                                                 <d:DecimalUpDown Margin="0,0,0,8" Value="{Binding Value, Mode=TwoWay}">
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="ValueChanged">
-                                                            <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource DecimalEventArgsConverter}" 
-                                                           EventArgsConverterParameter="{Binding }" 
-                                                           Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
+                                                            <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource DecimalEventArgsConverter}"
+                                                           EventArgsConverterParameter="{Binding }"
+                                                           Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}" />
                                                         </i:EventTrigger>
                                                     </i:Interaction.Triggers>
                                                 </d:DecimalUpDown>
@@ -478,10 +469,10 @@
                         FontFamily="Consolas">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
-                            <beh:InvokeCommandAction PassEventArgsToCommand="True" 
-                                                    EventArgsConverter="{StaticResource StringMoneyDecimalEventArgsConverter}" 
-                                                    EventArgsConverterParameter="{Binding }" 
-                                                    Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
+                            <beh:InvokeCommandAction PassEventArgsToCommand="True"
+                                                    EventArgsConverter="{StaticResource StringMoneyDecimalEventArgsConverter}"
+                                                    EventArgsConverterParameter="{Binding }"
+                                                    Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                     <TextBox.Style>
@@ -494,7 +485,7 @@
                         </Style>
                     </TextBox.Style>
                     <i:Interaction.Behaviors>
-                        <beh:StringFormatNumericBehavior FormatType="Money"  
+                        <beh:StringFormatNumericBehavior FormatType="Money"
                                                         Number="{Binding Value, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
                         </beh:StringFormatNumericBehavior>
                     </i:Interaction.Behaviors>
@@ -502,17 +493,17 @@
             </DataTemplate>
 
             <DataTemplate x:Key="PinTemplate">
-                <TextBox Name="PinTextBox"    
+                <TextBox Name="PinTextBox"
                         VerticalAlignment="Center"
                         VerticalContentAlignment="Center"
                         FontFamily="Consolas"
                         Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
-                            <beh:InvokeCommandAction PassEventArgsToCommand="True" 
-                                                    EventArgsConverter="{StaticResource EventArgsConverter}" 
-                                                    EventArgsConverterParameter="{Binding }" 
-                                                    Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
+                            <beh:InvokeCommandAction PassEventArgsToCommand="True"
+                                                    EventArgsConverter="{StaticResource EventArgsConverter}"
+                                                    EventArgsConverterParameter="{Binding }"
+                                                    Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                     <TextBox.Style>
@@ -525,22 +516,22 @@
                         </Style>
                     </TextBox.Style>
                     <i:Interaction.Behaviors>
-                        <beh:StringFormatPinBehavior/>
+                        <beh:StringFormatPinBehavior />
                     </i:Interaction.Behaviors>
                 </TextBox>
             </DataTemplate>
 
             <DataTemplate x:Key="PercentageTemplate">
-                <TextBox Name="myCurrencyTextBox2"   
+                <TextBox Name="myCurrencyTextBox2"
                          VerticalAlignment="Center"
                          VerticalContentAlignment="Center"
                          FontFamily="Consolas">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
-                            <beh:InvokeCommandAction PassEventArgsToCommand="True" 
-                                                    EventArgsConverter="{StaticResource StringPercentageDecimalEventArgsConverter}" 
-                                                    EventArgsConverterParameter="{Binding }" 
-                                                    Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
+                            <beh:InvokeCommandAction PassEventArgsToCommand="True"
+                                                    EventArgsConverter="{StaticResource StringPercentageDecimalEventArgsConverter}"
+                                                    EventArgsConverterParameter="{Binding }"
+                                                    Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                     <TextBox.Style>
@@ -563,8 +554,8 @@
             <DataTemplate x:Key="NumberNullTemplate">
                 <WrapPanel>
                     <Grid>
-                        <utl:Animator x:Name="One" IsExpanded="{Binding ElementName=ToggleButton, Path=IsChecked}"/>
-                        <d:DoubleUpDown x:Name="DoubleUpDown" Margin="0,0,0,0" Value="{Binding Value, Mode=TwoWay}"             >
+                        <utl:Animator x:Name="One" IsExpanded="{Binding ElementName=ToggleButton, Path=IsChecked}" />
+                        <d:DoubleUpDown x:Name="DoubleUpDown" Margin="0,0,0,0" Value="{Binding Value, Mode=TwoWay}">
                             <d:DoubleUpDown.Width>
                                 <MultiBinding Converter="{x:Static local:OneTimeConverter.Instance}" ConverterParameter="x*y">
                                     <Binding ElementName="DoubleUpDown" Path="ActualWidth"></Binding>
@@ -575,14 +566,14 @@
                                 <i:EventTrigger EventName="ValueChanged">
                                     <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource DoubleEventArgsConverter}"
                                                                 EventArgsConverterParameter="{Binding }"
-                                                                Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
+                                                                Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </d:DoubleUpDown>
                     </Grid>
                     <utl:NullButton x:Name="ToggleButton" Height="{Binding ElementName=DoubleUpDown, Path=ActualHeight}" VerticalAlignment="Top" IsThreeState="False">
                         <utl:NullButton.IsChecked>
-                            <Binding Path="Value" Mode="TwoWay" >
+                            <Binding Path="Value" Mode="TwoWay">
                                 <Binding.Converter>
                                     <StaticResource ResourceKey="DoubleToNullConverter"></StaticResource>
                                 </Binding.Converter>
@@ -594,13 +585,13 @@
 
             <DataTemplate x:Key="IntegerTemplate">
                 <WrapPanel>
-                    <xctk:IntegerUpDown Margin="0,0,0,8" TextAlignment="Left" HorizontalAlignment="Stretch"  x:Name="IntegerUpDown"               
+                    <xctk:IntegerUpDown Margin="0,0,0,8" TextAlignment="Left" HorizontalAlignment="Stretch"  x:Name="IntegerUpDown"
                                         Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <i:Interaction.Triggers>
                             <i:PropertyChangedTrigger Binding="{Binding ElementName=IntegerUpDown, Path=Value}">
-                                <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource EventArgsConverter}" 
-                                                        EventArgsConverterParameter="{Binding }" 
-                                                        Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
+                                <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource EventArgsConverter}"
+                                                        EventArgsConverterParameter="{Binding }"
+                                                        Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}" />
                             </i:PropertyChangedTrigger>
                         </i:Interaction.Triggers>
                     </xctk:IntegerUpDown>
@@ -611,7 +602,7 @@
                     <Trigger Property="Validation.HasError" Value="true">
                         <Setter Property="ToolTip"
                         Value="{Binding RelativeSource={x:Static RelativeSource.Self},
-                        Path=(Validation.Errors)[0].ErrorContent}"/>
+                        Path=(Validation.Errors)[0].ErrorContent}" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -621,27 +612,27 @@
                     <i:Interaction.Behaviors>
                         <beh:GuidEditBehavior />
                         <ad:HoverBehavior HorizontalAdornerPlacement="Outside" />
-                        <ad:ContextBehavior AdornerPlacement="Outside"/>
+                        <ad:ContextBehavior AdornerPlacement="Outside" />
                         <beh:GuidContextBehavior />
                     </i:Interaction.Behaviors>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="LostFocus">
-                            <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource EventArgsConverter}" 
-                                                    EventArgsConverterParameter="{Binding }" 
-                                                    Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
+                            <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource EventArgsConverter}"
+                                                    EventArgsConverterParameter="{Binding }"
+                                                    Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </TextBox>
             </DataTemplate>
 
             <DataTemplate x:Key="EnumTemplate">
-                <ComboBox >
+                <ComboBox>
                     <ComboBox.DataContext>
                         <MultiBinding Converter="{StaticResource EnumConverter}">
-                            <Binding Path="." Mode="OneWay"/>
-                            <Binding Path="Name" Mode="OneWay"/>
-                            <Binding Path="Value" Mode="OneWay"/>
-                            <!--<Binding Path="Schema" Mode="OneWay" RelativeSource="{RelativeSource AncestorType=TreeView}"/>-->
+                            <Binding Path="." Mode="OneWay" />
+                            <Binding Path="Name" Mode="OneWay" />
+                            <Binding Path="Value" Mode="OneWay" />
+                            <!--<Binding Path="Schema" Mode="OneWay" RelativeSource="{RelativeSource AncestorType=TreeView}" />-->
                         </MultiBinding>
                     </ComboBox.DataContext>
                     <i:Interaction.Behaviors>
@@ -650,16 +641,16 @@
                     </i:Interaction.Behaviors>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
-                            <beh:InvokeCommandAction PassEventArgsToCommand="True" 
-                                                    EventArgsConverter="{StaticResource SelectionEventArgsConverter}" 
-                                                    EventArgsConverterParameter="{Binding }" 
-                                                    Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
+                            <beh:InvokeCommandAction PassEventArgsToCommand="True"
+                                                    EventArgsConverter="{StaticResource SelectionEventArgsConverter}"
+                                                    EventArgsConverterParameter="{Binding }"
+                                                    Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ComboBox>
             </DataTemplate>
             <DataTemplate x:Key="NullTemplate">
-                <Path Stroke="Gray" StrokeThickness="2" Data="{StaticResource Null}"/>
+                <Path Stroke="Gray" StrokeThickness="2" Data="{StaticResource Null}" />
             </DataTemplate>
 
             <DataTemplate x:Key="InvisibleTemplate">
@@ -672,22 +663,21 @@
             </DataTemplate>
 
             <DataTemplate x:Key="BooleanTemplate">
-                <CheckBox IsChecked="{Binding Value, Mode=TwoWay, FallbackValue=false}" Margin="0,0,0,8" >
+                <CheckBox IsChecked="{Binding Value, Mode=TwoWay, FallbackValue=false}" Margin="0,0,0,8">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Checked">
-                            <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource BooleanEventArgsConverter}" 
-                                                           EventArgsConverterParameter="{Binding }" 
-                                                           Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
+                            <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource BooleanEventArgsConverter}"
+                                                           EventArgsConverterParameter="{Binding }"
+                                                           Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}" />
                         </i:EventTrigger>
                         <i:EventTrigger EventName="Unchecked">
-                            <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource BooleanEventArgsConverter}" 
-                                                           EventArgsConverterParameter="{Binding }" 
-                                                           Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
+                            <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource BooleanEventArgsConverter}"
+                                                           EventArgsConverterParameter="{Binding }"
+                                                           Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </CheckBox>
             </DataTemplate>
         </Style.Resources>
     </Style>
-
 </ResourceDictionary>

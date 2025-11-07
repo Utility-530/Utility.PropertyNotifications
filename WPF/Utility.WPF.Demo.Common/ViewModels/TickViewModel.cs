@@ -1,10 +1,10 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using ReactiveUI;
 
 namespace Utility.WPF.Demo.Common.ViewModels
 {

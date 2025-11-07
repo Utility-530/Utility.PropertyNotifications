@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:Utility.WPF.Controls"
-    xmlns:converter="http://schemas.utility.com/converters">
+    xmlns:converter="http://schemas.utility.com/converters"
+    xmlns:controls="clr-namespace:Utility.WPF.Controls">
 
     <Style TargetType="{x:Type controls:LabelledContent}">
         <Setter Property="FontSize" Value="16" />

@@ -1,25 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Utility.Commands;
-using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
-using Utility.Models;
 using Utility.Models.Trees;
-using Utility.Nodes;
 using Utility.Trees.Abstractions;
 using NodeVM = Utility.Nodes.NodeViewModel;
 
@@ -41,7 +29,6 @@ namespace Utility.WPF.Demo.Trees
         }
     }
 
-
     public class EditConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -55,9 +42,10 @@ namespace Utility.WPF.Demo.Trees
         }
     }
 
-    class SelectorMainViewModel
+    internal class SelectorMainViewModel
     {
-        NodeVM node = null;
+        private NodeVM node = null;
+
         public NodeVM[] Nodes
         {
             get
@@ -66,7 +54,7 @@ namespace Utility.WPF.Demo.Trees
 
                 static async Task<NodeVM> create()
                 {
-                    NodeVM root = new NodeVM(new StringRootModel { Name = "Big Daddy Root", Value="a"});
+                    NodeVM root = new NodeVM(new StringRootModel { Name = "Big Daddy Root", Value = "a" });
 
                     int branches = 0;
                     int subBranches = 0;
@@ -80,7 +68,7 @@ namespace Utility.WPF.Demo.Trees
                             ITree gchild = await _child.ToTree(new StringModel { Name = "Sub-Branch " + ++subBranches, Value = "aee" });
                             _child.Add(gchild);
                             for (int k = 0; k < 2; ++k)
-                                gchild.Add(await gchild.ToTree(new StringModel { Name = "Leaf" , Value = "ewa" }));
+                                gchild.Add(await gchild.ToTree(new StringModel { Name = "Leaf", Value = "ewa" }));
                         }
                     }
 
@@ -89,12 +77,9 @@ namespace Utility.WPF.Demo.Trees
             }
         }
 
-
         public ICommand FinishEditCommand { get; } = new Command(() =>
         {
-
         });
-
     }
 
     public class StringRootModel : StringModel, IRoot
@@ -111,7 +96,6 @@ namespace Utility.WPF.Demo.Trees
             if (item is INodeViewModel { Data: IRoot data })
             {
                 return RootStyle;
-
             }
             return DefaultStyle;
         }
@@ -119,6 +103,4 @@ namespace Utility.WPF.Demo.Trees
         public Style DefaultStyle { get; set; }
         public Style RootStyle { get; set; }
     }
-
-
 }

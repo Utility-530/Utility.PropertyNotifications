@@ -1,9 +1,9 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using Microsoft.Xaml.Behaviors;
 
 namespace CurrencyTextBox
 {
@@ -210,5 +210,4 @@ namespace CurrencyTextBox
             textBox.PreviewMouseUp -= TextBox_PreviewMouseUp;
         }
     }
-
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Utility.WPF.Helpers
@@ -36,6 +32,5 @@ namespace Utility.WPF.Helpers
         {
             return key == Key.Up || key == Key.Down || key == Key.Tab || key == Key.Enter;
         }
-
     }
 }

@@ -1,9 +1,9 @@
-﻿using LiteDB;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using LiteDB;
 using Utility.Enums;
 using Utility.Helpers.Reflection;
 using Utility.Interfaces.NonGeneric.Data;
@@ -168,10 +168,11 @@ namespace Utility.Persists
             {
                 switch (query)
                 {
-                    case AllQuery:   
-                        var ids = collection.FindAll().Select(a => a["_id"].RawValue).ToArray(); 
+                    case AllQuery:
+                        var ids = collection.FindAll().Select(a => a["_id"].RawValue).ToArray();
                         collection.DeleteAll();
                         return ids;
+
                     default:
                         throw new ArgumentOutOfRangeException("777fssd");
                 }

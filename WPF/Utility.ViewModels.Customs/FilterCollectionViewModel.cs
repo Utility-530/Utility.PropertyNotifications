@@ -1,6 +1,4 @@
-﻿using DynamicData;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +7,8 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Input;
-using Utility.Services;
+using DynamicData;
+using ReactiveUI;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Services.Deprecated;

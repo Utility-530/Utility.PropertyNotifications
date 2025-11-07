@@ -1,19 +1,14 @@
-﻿using Newtonsoft.Json;
-using Nito.Disposables.Internals;
-using SQLite;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using Newtonsoft.Json;
 using Utility.Attributes;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Helpers;
-using Utility.Interfaces.Generic.Data;
 using Utility.Models;
 using Utility.PropertyNotifications;
 using Utility.WPF.Controls.Objects;
-using Ignore = Utility.Attributes.IgnoreAttribute;
-
 
 namespace Utility.WPF.Demo.Objects
 {
@@ -31,7 +26,6 @@ namespace Utility.WPF.Demo.Objects
             this.Resources.Add("exceptions", new List<Exception> { new ExceptionOne(), new ExceptionTwo(), new Exception() });
             (this.Resources["AuctionItem"] as DemoItem).WithChangesTo(a => a.NullString).Subscribe(c =>
             {
-
             });
         }
 
@@ -43,7 +37,6 @@ namespace Utility.WPF.Demo.Objects
                 JsonControl.Json = clipboardText;
             }
         }
-
 
         public static JsonSerializerSettings Combined
         {
@@ -67,7 +60,6 @@ namespace Utility.WPF.Demo.Objects
                 IEnumerable<JsonConverter> converters()
                 {
                     yield return new DimensionConverter();
-
                 }
             }
         }
@@ -94,17 +86,14 @@ namespace Utility.WPF.Demo.Objects
         private string? title;
         private double? lengthInCentimetres;
 
-
         public DemoItem()
         {
-
         }
 
         [JsonIgnore]
         public int Ignored { get; set; }
 
         public Guid Guid { get; set; }
-
 
         public string? NullString { get => title; set => RaisePropertyChanged(ref title, value); }
         public double? NullDouble { get => lengthInCentimetres; set => RaisePropertyChanged(ref lengthInCentimetres, value); }
@@ -119,16 +108,14 @@ namespace Utility.WPF.Demo.Objects
         [DataType(Enums.DataType.PIN)]
         public string Pin { get; set; }
 
-        [DataType( Enums.DataType.Percentage)]
+        [DataType(Enums.DataType.Percentage)]
         public decimal Percentage { get; set; }
-      
     }
 
     public class JsonSerialiser : JsonSerializer
     {
         public JsonSerialiser() : base()
         {
-
             Converters.Add(new MetadataConverter());
         }
     }

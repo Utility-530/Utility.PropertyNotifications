@@ -17,6 +17,7 @@ namespace Utility.WPF.Reactives
 
             return obs;
         }
+
         public static IObservable<GeneratorStatus> ContainersGeneratedChanges(this ItemContainerGenerator generator)
         {
             var obs = generator.StatusChanges().Where(a => a.Equals(GeneratorStatus.ContainersGenerated));

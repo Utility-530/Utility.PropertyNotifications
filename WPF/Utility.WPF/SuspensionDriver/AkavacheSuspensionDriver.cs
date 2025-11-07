@@ -1,7 +1,7 @@
-﻿using Akavache;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Reactive;
+using Akavache;
+using ReactiveUI;
 
 namespace Utility.WPF.SuspensionDriver
 {

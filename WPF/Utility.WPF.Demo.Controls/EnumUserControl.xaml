@@ -42,32 +42,26 @@
                             IsMultiSelect="true"
                             Orientation="Vertical"
                             Enum="{x:Type test:AssemblyType}" />
-                <TextBlock Text="{Binding ElementName=ebdcs, Path=Value, Converter={x:Static conv:LambdaConverter.StringConverter}}" Margin="5" Background="NavajoWhite" Height="30"/>
+                <TextBlock Text="{Binding ElementName=ebdcs, Path=Value, Converter={x:Static conv:LambdaConverter.StringConverter}}" Margin="5" Background="NavajoWhite" Height="30" />
             </StackPanel>
             <view:EnumItemsControl Enum="{x:Type test:Emotion}" IsReadOnly="True" />
 
-            <view:EnumComboBox SelectedItem="{Binding Emotion}"  >
+            <view:EnumComboBox SelectedItem="{Binding Emotion}">
                 <FrameworkElement.DataContext>
-                    <local:EnumViewModel/>
+                    <local:EnumViewModel />
                 </FrameworkElement.DataContext>
             </view:EnumComboBox>
-
-
-
-
         </UniformGrid>
-        <UniformGrid Rows="1" >
-
+        <UniformGrid Rows="1">
 
             <ComboBox x:Name="Emotion_2_ComboBox" Height="30">
                 <FrameworkElement.DataContext>
-                    <local:EnumViewModel/>
+                    <local:EnumViewModel />
                 </FrameworkElement.DataContext>
                 <i:Interaction.Behaviors>
                     <beh:EnumComboBehavior Value="{Binding Emotion}"></beh:EnumComboBehavior>
                 </i:Interaction.Behaviors>
             </ComboBox>
-
 
             <ComboBox x:Name="ComboBox">
                 <i:Interaction.Behaviors>
@@ -82,7 +76,7 @@
                     </i:Interaction.Behaviors>
                 </ToggleButton>
                 <TextBlock Text="{Binding ElementName=Emotion_2_ComboBox,Path=SelectedValue}"></TextBlock>
-                <utl:LayOutListBox 
+                <utl:LayOutListBox
                         Orientation="{Binding ElementName=ToggleButton2, Path=Content}"
                         Visibility="{Binding ElementName=ComboBox, Path=SelectedValue}" Background="HotPink">
                     <i:Interaction.Behaviors>
@@ -92,5 +86,4 @@
             </StackPanel>
         </UniformGrid>
     </UniformGrid>
-
 </UserControl>

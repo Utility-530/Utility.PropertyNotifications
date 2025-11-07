@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Tiny.Toolkits;
@@ -31,14 +28,14 @@ namespace Utility.WPF.Demo.DataGrids
             return base.SelectTemplate(item, container);
         }
 
-        public static new MyDataTemplateSelector Instance { get; } = new();
+        public new static MyDataTemplateSelector Instance { get; } = new();
 
         public DataTemplate TypeTemplate { get; set; }
     }
 
-    class TypeFilter : IPredicate
+    internal class TypeFilter : IPredicate
     {
-        readonly string[] names = new[] { "Name", "FullName" };
+        private readonly string[] names = new[] { "Name", "FullName" };
 
         public bool Evaluate(object value)
         {
@@ -60,7 +57,7 @@ namespace Utility.WPF.Demo.DataGrids
 
         protected override DataGridColumn SelectColumn(DataGridAutoGeneratingColumnEventArgs e)
         {
-            if(e.PropertyName.Equals(nameof(Region.Left)))
+            if (e.PropertyName.Equals(nameof(Region.Left)))
             {
                 return new DataGridComboBoxColumn() { ItemsSource = Array.Empty<string>() };
             }

@@ -15,11 +15,10 @@
                 Filter="SVG | *.svg"
                 Label="Test">
         </browser1:FileBrowser>
-        
+
         <browser1:FileComboBrowser
                 x:Name="FileComboBrowser"
-                Filter="SVG | *.svg"
-                >
+                Filter="SVG | *.svg">
         </browser1:FileComboBrowser>
 
         <browser1:MultiFileBrowser Background="Red"

@@ -1,8 +1,8 @@
-﻿using Optional;
+﻿using System;
+using System.Reactive.Linq;
+using Optional;
 using Optional.Unsafe;
 using ReactiveUI;
-using System;
-using System.Reactive.Linq;
 
 namespace Utility.Helpers.Ex
 {

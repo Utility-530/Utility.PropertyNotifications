@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Utility.Structs
+﻿namespace Utility.Structs
 {
     public readonly struct Percent
     {
@@ -12,12 +10,10 @@ namespace Utility.Structs
         public Percent(double val) : this((decimal)val)
         { }
 
-
         public Percent(int percent)
         {
             Decimal = percent / 100m;
         }
-
 
         // User-defined conversion from Probability to decimal
         public static implicit operator decimal(Percent i)
@@ -29,6 +25,7 @@ namespace Utility.Structs
         {
             return (double)i.Decimal;
         }
+
         public static implicit operator int(Percent i)
         {
             return (int)(i * 100M);
@@ -38,7 +35,6 @@ namespace Utility.Structs
         {
             return new Percent(i);
         }
-
 
         public static implicit operator Percent(double i)
         {
@@ -51,6 +47,5 @@ namespace Utility.Structs
         }
 
         public decimal Decimal { get; }
-
     }
 }

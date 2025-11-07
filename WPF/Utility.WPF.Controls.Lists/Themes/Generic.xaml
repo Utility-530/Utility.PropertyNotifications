@@ -4,6 +4,4 @@
                             xmlns:res="http://schemas.utility.com/resourcedictionary"
                             xmlns:view="http://schemas.utility.com/buttons"
                             Type="{x:Type local:ButtonsControl}">
-
-   
 </res:AutoResourceDictionary>

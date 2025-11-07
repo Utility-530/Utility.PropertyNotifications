@@ -2,15 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace Utility.Reactives
 {
-
-
-
     public static class Statistic
     {
         public static IObservable<double> WeightedAverage<T>(this IObservable<T> records, Func<T, double> value, Func<T, double> weight)
@@ -21,7 +15,6 @@ namespace Utility.Reactives
                 return a;
             }).Select(_ => WeightedAverage(_, value, weight));
         }
-
 
         public static IObservable<double> Average<T>(this IObservable<T> records, Func<T, double> value)
         {
@@ -50,7 +43,6 @@ namespace Utility.Reactives
             }).Select(_ => new KeyValuePair<R, double>(KeySelector(_), WeightedAverage(_, value, weight)));
         }
 
-
         /// <summary>
         /// (every value minus the lastvalue) multiplied by weight (equivalent to profit if weights are quantities and values are prices)
         /// </summary>
@@ -70,10 +62,6 @@ namespace Utility.Reactives
             }).Select(_ => new KeyValuePair<R, double>(KeySelector(_), WeightedAverage(_, value, weight, value(_.Last()))));
         }
 
-
-
-
-
         public static double WeightedAverage<T>(IEnumerable<T> records, Func<T, double> value, Func<T, double> weight, double control = 0)
         {
             double weightedValueSum = records.Sum(x => (value(x) - control) * weight(x));
@@ -84,8 +72,5 @@ namespace Utility.Reactives
             else
                 throw new DivideByZeroException("Divide by zero exception calculating weighted average");
         }
-
-
     }
-
 }

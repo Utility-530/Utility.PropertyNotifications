@@ -4,10 +4,8 @@ using System.Globalization;
 using System.Linq;
 using Utility.Enums;
 
-
 namespace Utility.Structs
 {
-
     /// <summary>
     /// Holds the width or height of a <see cref="Grid"/>'s column and row definitions.
     /// </summary>
@@ -50,13 +48,13 @@ namespace Utility.Structs
         /// Gets an instance of <see cref="Dimension"/> that indicates that a row or column should
         /// auto-size to fit its content.
         /// </summary>
-        public static Dimension Auto => new (0, DimensionUnitType.Auto);
+        public static Dimension Auto => new(0, DimensionUnitType.Auto);
 
         /// <summary>
         /// Gets an instance of <see cref="Dimension"/> that indicates that a row or column should
         /// fill its content.
         /// </summary>
-        public static Dimension Star => new (1, DimensionUnitType.Star);
+        public static Dimension Star => new(1, DimensionUnitType.Star);
 
         /// <summary>
         /// Gets the unit of the <see cref="Dimension"/>.

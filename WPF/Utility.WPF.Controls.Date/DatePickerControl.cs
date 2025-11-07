@@ -7,6 +7,7 @@ namespace Utility.WPF.Controls.Date
     {
         public DateChangeEventArgs(RoutedEvent @event) : base(@event)
         { }
+
         public int Month { get; init; }
         public int Year { get; init; }
     }
@@ -15,7 +16,6 @@ namespace Utility.WPF.Controls.Date
 
     public class DatePickerControl : Control
     {
-
         public static readonly RoutedEvent DateChangeEvent =
             EventManager.RegisterRoutedEvent("DateChange", RoutingStrategy.Bubble, typeof(DateChangeEventHandler), typeof(DatePickerControl));
 
@@ -110,5 +110,4 @@ namespace Utility.WPF.Controls.Date
             }
         }
     }
-
 }

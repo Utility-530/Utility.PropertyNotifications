@@ -22,7 +22,6 @@ namespace Utility.WPF.Demo.Common.ViewModels
         }
 
         public ObservableCollection<Region> Regions => _regions;
-     
 
         public void AddRegion1()
         {
@@ -72,7 +71,8 @@ namespace Utility.WPF.Demo.Common.ViewModels
             Bottom = bottom;
         }
 
-        public Region() { }
+        public Region()
+        { }
 
         public string Text { get; set; }
 

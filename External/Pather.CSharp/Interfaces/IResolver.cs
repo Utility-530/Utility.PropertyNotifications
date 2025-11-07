@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Pather.CSharp.PathElements;
-
-namespace Pather.CSharp
+﻿namespace Pather.CSharp
 {
     public interface IResolver
     {
@@ -13,7 +10,5 @@ namespace Pather.CSharp
         /// <param name="path"></param>
         /// <returns></returns>
         object Get(object target, string path);
-
-
     }
 }

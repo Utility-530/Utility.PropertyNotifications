@@ -45,9 +45,7 @@ internal class ReferenceDescriptor(Descriptor Descriptor, object Instance) : Mem
         {
             int i = 0;
             yield return new CollectionDescriptor(Descriptor, elementType, _enumerable) { Parent = this, Input = [], Output = [] };
-
         }
-
     }
 
     public int Count => TypeDescriptor.GetProperties(Instance).Count;
@@ -70,6 +68,3 @@ internal class ReferenceDescriptor(Descriptor Descriptor, object Instance) : Mem
         }
     }
 }
-
-
-

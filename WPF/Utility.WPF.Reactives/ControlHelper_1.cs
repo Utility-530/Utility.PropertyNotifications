@@ -11,7 +11,7 @@ namespace Utility.WPF.Reactives
     public static partial class ControlHelper
     {
         public static IObservable<RoutedEventArgs> Clicks(this Button selector) => from x in Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(a => selector.Click += a, a => selector.Click -= a)
-                                                                                     select x.EventArgs;
+                                                                                   select x.EventArgs;
 
         public static IObservable<bool?> Changes(this ToggleButton toggleButton)
         {
@@ -23,16 +23,14 @@ namespace Utility.WPF.Reactives
                     .DistinctUntilChanged();
 
             IObservable<ToggleButton> Checks() => from es in Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(a => toggleButton.Checked += a, a => toggleButton.Checked -= a)
-                                                         select es.Sender as ToggleButton;
+                                                  select es.Sender as ToggleButton;
 
             IObservable<ToggleButton> Unchecks() => from es in Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(a => toggleButton.Unchecked += a, a => toggleButton.Unchecked -= a)
-                                                           select es.Sender as ToggleButton;
+                                                    select es.Sender as ToggleButton;
         }
 
         public static IObservable<(double h, double v)> Deltas(this Thumb thumb) => from es in Observable.FromEventPattern<DragDeltaEventHandler, DragDeltaEventArgs>(a => thumb.DragDelta += a, a => thumb.DragDelta -= a)
-                                                                                      select (es.EventArgs.HorizontalChange, es.EventArgs.VerticalChange);
-
-
+                                                                                    select (es.EventArgs.HorizontalChange, es.EventArgs.VerticalChange);
 
         public static IObservable<bool> Toggles(this ToggleButton toggleButton, bool defaultValue = false)
         {
@@ -41,7 +39,6 @@ namespace Utility.WPF.Reactives
                 .Unchecked.Select(a => false))
                 .StartWith(toggleButton.IsChecked ?? defaultValue);
         }
-
 
         //public static IObservable<ClickRoutedEventArgs<object>> SelectClicks(this CollectionView buttonsItemsControl)
         //{
@@ -66,7 +63,5 @@ namespace Utility.WPF.Reactives
                 .StartWith(toggleButton.IsChecked ?? false)
                 .DistinctUntilChanged();
         }
-
-
     }
 }

@@ -1,10 +1,10 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using Fasterflect;
 using KellermanSoftware.CompareNetObjects;
 using Splat;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Utility.Common.Meta
 {

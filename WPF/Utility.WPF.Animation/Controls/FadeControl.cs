@@ -91,7 +91,6 @@ namespace Utility.WPF.Animation
             base.OnApplyTemplate();
         }
 
-
         public void SwapElementsAndAnimate(UIElement? newElement)
         {
             //if (newElement != null)
@@ -107,14 +106,10 @@ namespace Utility.WPF.Animation
             completions.OnNext(null);
         }
 
-
-
-
         private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             (d as FadeControl).storyboard.Children.Clear();
         }
-
     }
 
     public static class AnimationHelper
@@ -132,7 +127,6 @@ namespace Utility.WPF.Animation
             storyboard.Children.Add(fadeOutAnimation);
         }
     }
-
 
     internal class FadeCommand : ICommand
     {

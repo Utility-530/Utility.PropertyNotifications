@@ -1,9 +1,4 @@
-﻿using Microsoft.Xaml.Behaviors;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Pather.CSharp;
-using Pather.CSharp.PathElements;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -12,6 +7,11 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text.RegularExpressions;
 using System.Windows;
+using Microsoft.Xaml.Behaviors;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Pather.CSharp;
+using Pather.CSharp.PathElements;
 
 namespace Utility.WPF.Controls.Objects
 {
@@ -42,7 +42,6 @@ namespace Utility.WPF.Controls.Objects
                             {
                                 @object._playSubject.OnNext(@object.AssociatedObject);
                             });
-
                         };
                     }
                 }
@@ -53,10 +52,10 @@ namespace Utility.WPF.Controls.Objects
         {
             if (e.Property.Name == nameof(Collections))
             {
-
             }
             base.OnPropertyChanged(e);
         }
+
         static ObjectBehavior()
         {
             serialiser = JsonSerializer.CreateDefault(new JsonSerializerSettings { Converters = Statics.converters, TypeNameHandling = TypeNameHandling.All });
@@ -78,7 +77,6 @@ namespace Utility.WPF.Controls.Objects
 
         private static void changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-
             if (d is ObjectBehavior b && e.NewValue is { } obj)
             {
                 b._playSubject.Subscribe(a =>
@@ -131,7 +129,6 @@ namespace Utility.WPF.Controls.Objects
             {
                 resolver.Set(Object, path, _value);
             }
-
 
             object value()
             {
@@ -194,6 +191,7 @@ namespace Utility.WPF.Controls.Objects
             {
                 return pathSplitter.Resolve(target, path);
             }
+
             public void Set(object target, string path, object value)
             {
                 pathSplitter.Modify(target, path, value);
@@ -225,7 +223,6 @@ namespace Utility.WPF.Controls.Objects
                     Utility.PropertyNotifications.PropertyChangedExtensions.RaisePropertyChanged(c, p.Name);
                 }
             }
-
         }
     }
 }

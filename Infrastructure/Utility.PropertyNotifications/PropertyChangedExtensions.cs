@@ -1,10 +1,9 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Utility.Helpers.Reflection;
 using Utility.Helpers;
+using Utility.Helpers.Reflection;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyNotifications
@@ -13,7 +12,7 @@ namespace Utility.PropertyNotifications
 
     public static class PropertyChangedExtensions
     {
-        static Dictionary<Type, Func<object, PropertyChangedEventHandler>> dictionary = new();
+        private static Dictionary<Type, Func<object, PropertyChangedEventHandler>> dictionary = new();
 
         public static void RaisePropertyChanged<T, P>(this T sender, Expression<Func<T, P>> propertyExpression) where T : INotifyPropertyChanged
         {
@@ -47,7 +46,6 @@ namespace Utility.PropertyNotifications
             }
         }
 
-
         private class PropertyObservable<TModel, T> : IObservable<T>, IPropertyInfo, IGetReference where TModel : INotifyPropertyChanged
         {
             private readonly TModel _target;
@@ -55,6 +53,7 @@ namespace Utility.PropertyNotifications
             private readonly bool _includeNulls;
             private readonly bool includeInitialValue;
             private const string constructor = ".ctor";
+
             public PropertyObservable(TModel target, PropertyInfo? info = null, bool includeNulls = false, bool includeInitialValue = true)
             {
                 _target = target;
@@ -171,7 +170,6 @@ namespace Utility.PropertyNotifications
                     value = getter?.Invoke(_target);
                     _observer = observer;
                     _target.PropertyChanged += OnPropertyChanged;
-
                 }
 
                 private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -231,6 +229,7 @@ namespace Utility.PropertyNotifications
         {
             return new PropertyObservable<TModel, TRes>(model, propertyInfo, includeNulls, includeInitialValue);
         }
+
         public static IObservable<object> WithChangesTo<TModel>(this TModel model,
             PropertyInfo? propertyInfo = null, bool includeNulls = false, bool includeInitialValue = true) where TModel : INotifyPropertyChanged
         {
@@ -284,7 +283,6 @@ namespace Utility.PropertyNotifications
             public void OnNext(T value)
             {
                 setter.Invoke(instance, value);
-
             }
         }
 

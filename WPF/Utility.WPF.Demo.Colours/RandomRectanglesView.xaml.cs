@@ -12,12 +12,9 @@ namespace Utility.WPF.Demo.Colours
     /// </summary>
     public partial class RandomRectanglesView : UserControl
     {
-
-
-
-        Random rand = new Random();
-        ulong count = 0;
-        WriteableBitmap bitmap;
+        private Random rand = new Random();
+        private ulong count = 0;
+        private WriteableBitmap bitmap;
         private FieldInfo[] fields;
 
         public RandomRectanglesView()
@@ -34,15 +31,13 @@ namespace Utility.WPF.Demo.Colours
             img.Source = bitmap;
         }
 
-        void OnRendering(object sender, EventArgs args)
+        private void OnRendering(object sender, EventArgs args)
         {
             //Button_Click();
             sdf();
         }
 
-
-
-        void sdf()
+        private void sdf()
         {
             if (bitmap == null)
                 return;
@@ -56,21 +51,16 @@ namespace Utility.WPF.Demo.Colours
             int y2 = rand.Next(height);
             var clr = (Color)fields[rand.Next(1, fields.Length - 1)].GetValue(default);
 
-
             using (bitmap.GetBitmapContext())
             {
-
                 DrawRectangleFilled(x1, x2, y1, y2, clr);
             }
         }
 
-
-        void DrawRectangleFilled(int x1, int y1, int x2, int y2, Color clr)
+        private void DrawRectangleFilled(int x1, int y1, int x2, int y2, Color clr)
         {
-
             if (x2 > x1)
             {
-
                 for (int i = x1; i < x2 - x1; i++)
                 {
                     bitmap.DrawLine(i, y1, i, y2, clr);
@@ -84,8 +74,5 @@ namespace Utility.WPF.Demo.Colours
                 }
             }
         }
-
-
     }
 }
-

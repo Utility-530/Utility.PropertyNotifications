@@ -1,22 +1,14 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net;
 using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 
 namespace Utility.Reactives
 {
-
-
-
-
     public class FileDownloadService : IFileDownloadService<int, Tuple<Uri, string, bool>>
     {
-
-
         public IObservable<int> Progress { get; }
         public IObservable<Tuple<Uri, string, bool>> Completed { get; }
 
@@ -35,14 +27,11 @@ namespace Utility.Reactives
                  .Subscribe(_ => Task.Run(() => FileHelper.CheckFile(_.b.Item2)).ToObservable()
                                                  .Subscribe(__ => observer.OnNext(Tuple.Create(_.b.Item1, _.b.Item2, __)))));
 
-
-
                 Progress = Observable.FromEventPattern<DownloadProgressChangedEventHandler, DownloadProgressChangedEventArgs>(
          h => client.DownloadProgressChanged += h,
          h => client.DownloadProgressChanged -= h)
          .Select(e => e.EventArgs.ProgressPercentage)
          .Merge(ddd.Select(_ => 0));
-
 
                 files.Subscribe(_ =>
                 {
@@ -63,21 +52,14 @@ namespace Utility.Reactives
                         }
                     }
                 });
-
-
             }
         }
     }
 
-
-
     public class FileDownloadServiceDefault : IFileDownloadService<DownloadProgressChangedEventArgs, AsyncCompletedEventArgs>
     {
-
-
         public IObservable<DownloadProgressChangedEventArgs> Progress { get; }
         public IObservable<AsyncCompletedEventArgs> Completed { get; }
-
 
         public FileDownloadServiceDefault(IObservable<Tuple<Uri, string>> files)
         {
@@ -87,12 +69,10 @@ namespace Utility.Reactives
                 h => client.DownloadFileCompleted += h,
                 h => client.DownloadFileCompleted -= h).Select(_ => _.EventArgs);
 
-
                 Progress = Observable.FromEventPattern<DownloadProgressChangedEventHandler, DownloadProgressChangedEventArgs>(
          h => client.DownloadProgressChanged += h,
          h => client.DownloadProgressChanged -= h)
          .Select(e => e.EventArgs);
-
 
                 files.Subscribe(_ =>
                 {
@@ -102,22 +82,16 @@ namespace Utility.Reactives
         }
     }
 
-
     public interface IFileDownloadService<R, T>
     {
-
         IObservable<R> Progress { get; }
         IObservable<T> Completed { get; }
     }
 
-
-
     public static class FileHelper
     {
-
         public static bool CheckFile(string sink)
         {
-
             System.IO.FileInfo info = new System.IO.FileInfo(sink);
             if (info.Length > 0)
             {
@@ -129,7 +103,6 @@ namespace Utility.Reactives
                 System.IO.File.Delete(sink);
                 return false;
             }
-
         }
     }
 }

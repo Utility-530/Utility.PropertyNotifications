@@ -12,7 +12,8 @@ namespace Utility.WPF.Demo.Adorners
     /// </summary>
     public partial class GraphUserControl : UserControl
     {
-        VerticalAxisAdorner adorner;
+        private VerticalAxisAdorner adorner;
+
         public GraphUserControl()
         {
             InitializeComponent();
@@ -24,6 +25,7 @@ namespace Utility.WPF.Demo.Adorners
             AdornerLayer layer = AdornerLayer.GetAdornerLayer(Grid);
             layer.AddIfMissingAdorner(adorner);
         }
+
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
             foreach (UIElement ui in Grid.Children)

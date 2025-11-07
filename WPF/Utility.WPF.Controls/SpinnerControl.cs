@@ -40,8 +40,6 @@ namespace Utility.WPF.Controls
         public static readonly DependencyProperty StringFormatProperty = DependencyProperty.Register("StringFormat", typeof(string), typeof(SpinnerControl), new PropertyMetadata("f"));
         public static readonly DependencyProperty RatioProperty = DependencyHelper.Register<double>(new PropertyMetadata(2d));
 
-
-
         public static RoutedCommand IncreaseCommand { get; set; } = new RoutedCommand("IncreaseCommand", typeof(SpinnerControl));
         public static RoutedCommand DecreaseCommand { get; set; } = new RoutedCommand("DecreaseCommand", typeof(SpinnerControl));
 
@@ -75,16 +73,13 @@ namespace Utility.WPF.Controls
 
             if (decimal.TryParse((sender as TextBox).Text, numberFormatInfo, out var dec))
                 this.SetValue(ValueProperty, dec);
-
         }
 
         public override void OnApplyTemplate()
         {
-
         }
 
         #region properties
-
 
         public double Ratio
         {

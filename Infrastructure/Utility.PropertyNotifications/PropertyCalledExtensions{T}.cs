@@ -1,13 +1,11 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
-using Utility.Interfaces;
 using Utility.Helpers.Reflection;
+using Utility.Interfaces;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyNotifications
 {
-
     public static partial class PropertyCalledExtensions
     {
         private class PropertyObservable<T> : IObservable<T>, IGetReference
@@ -29,7 +27,6 @@ namespace Utility.PropertyNotifications
                 private readonly PropertyInfo _info;
                 private readonly Func<object, T> _getter;
                 private readonly IObserver<T> _observer;
-
 
                 public Subscription(INotifyPropertyCalled target, PropertyInfo info, IObserver<T> observer)
                 {
@@ -63,7 +60,7 @@ namespace Utility.PropertyNotifications
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="TModel"></typeparam>
         /// <typeparam name="TRes"></typeparam>
@@ -79,6 +76,5 @@ namespace Utility.PropertyNotifications
             var prop = (PropertyInfo)ma.Member;
             return new PropertyObservable<TRes>(model, prop, includeNonInitial);
         }
-
     }
 }

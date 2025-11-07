@@ -1,12 +1,10 @@
 ﻿using System;
-using DateWork.Models;
 using System.Collections;
-using System.Diagnostics.Eventing.Reader;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.WPF.Controls.Date.Model;
 using Utility.WPF.Controls.Buttons;
+using Utility.WPF.Controls.Date.Model;
 
 namespace Utility.WPF.Controls.Date
 {
@@ -36,7 +34,6 @@ namespace Utility.WPF.Controls.Date
         private DualButtonControl dualButtonControl;
         private DatePickerControl datePickerControl;
 
-
         public override void OnApplyTemplate()
         {
             monthControl = this.GetTemplateChild("MonthControl") as MonthControl;
@@ -44,8 +41,6 @@ namespace Utility.WPF.Controls.Date
             datePickerControl = this.GetTemplateChild("DatePickerControl") as DatePickerControl;
             dualButtonControl = this.GetTemplateChild("DualButtonControl") as DualButtonControl;
             monthGrid = this.GetTemplateChild("MonthGrid") as Grid;
-
-
 
             SetGridType((GridType)dualButtonControl.ValueToKey());
             datePickerControl.Month = dateModel.Month;
@@ -65,7 +60,6 @@ namespace Utility.WPF.Controls.Date
             this.SelectedItem = monthControl.SelectedItem;
             datePickerControl.DateChange += DatePickerControl_DateChange;
 
-
             void sdg()
             {
                 SetGridType((GridType)dualButtonControl.ValueToKey());
@@ -80,7 +74,6 @@ namespace Utility.WPF.Controls.Date
 
             base.OnApplyTemplate();
 
-
             void DatePickerControl_DateChange(object sender, DateChangeEventArgs e)
             {
                 dateModel.Month = e.Month;
@@ -89,9 +82,6 @@ namespace Utility.WPF.Controls.Date
                 monthControl.SelectedItem = dateModel.Current;
             }
         }
-
-
-
 
         private void DualButtonControl_ButtonToggle(object sender, SwitchControl.ToggleEventArgs size)
         {
@@ -104,7 +94,6 @@ namespace Utility.WPF.Controls.Date
             {
                 case GridType.Grid:
                     {
-
                         if (monthControl is not MonthGridControl)
                         {
                             dateModel = new DateMonthModel();
@@ -116,7 +105,6 @@ namespace Utility.WPF.Controls.Date
                     }
                 case GridType.List:
                     {
-
                         if (monthControl is not MonthListControl)
                         {
                             dateModel = new DateRangeModel();
@@ -130,16 +118,14 @@ namespace Utility.WPF.Controls.Date
                     throw new Exception("DF££ GGGDc");
             }
 
-
-
             void SetUIContent()
             {
                 monthGrid.Children.Clear();
                 monthGrid.Children.Add(monthControl);
-
             }
         }
-        void SetMonthControl(MonthControl _monthControl)
+
+        private void SetMonthControl(MonthControl _monthControl)
         {
             if (monthControl != null)
                 monthControl.SelectionChanged -= MonthGridControl_SelectionChanged;
@@ -162,7 +148,9 @@ namespace Utility.WPF.Controls.Date
                 }
             }
         }
+
         #region properties
+
         public IValueConverter ValueConverter
         {
             get => (IValueConverter)GetValue(ValueConverterProperty);
@@ -186,9 +174,9 @@ namespace Utility.WPF.Controls.Date
             add => AddHandler(SelectionChangedEvent, value);
             remove => RemoveHandler(SelectionChangedEvent, value);
         }
+
         #endregion properties
     }
-
 
     public enum GridType
     {

@@ -43,7 +43,7 @@
                         Stroke="{TemplateBinding Foreground}"
                         StrokeThickness="1">
                 <i:Interaction.Behaviors>
-                    <b:MouseBehavior x:Name="MouseBehavior2"  />
+                    <b:MouseBehavior x:Name="MouseBehavior2" />
                 </i:Interaction.Behaviors>
 
                 <Path.InputBindings>

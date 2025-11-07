@@ -1,7 +1,4 @@
 ﻿//using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -24,7 +21,7 @@ public class AutoMoqer
         //if (constructors.Length > 1)
         //    throw new ArgumentException("Multiple public constructors found");
 
-        var primaryConstructor = constructors.MinBy(a=>a.GetParameters().Count());
+        var primaryConstructor = constructors.MinBy(a => a.GetParameters().Count());
         if (primaryConstructor == null)
             throw new ArgumentException("Could not find a public constructor");
 
@@ -201,8 +198,8 @@ public class AutoMoqer
                     //}
                     //else
                     //{
-                        parameterInstance = Activator.CreateInstance(parameter.ParameterType);
-                        parameterMockInstance = parameterInstance;
+                    parameterInstance = Activator.CreateInstance(parameter.ParameterType);
+                    parameterMockInstance = parameterInstance;
                     //}
                     //  _moqInstancesParameters.Add(parameterInstance);
                     serviceConstructionParameters.Add(parameterMockInstance);
@@ -322,7 +319,7 @@ public class AutoMoqer
                     //}
                     //else if (parameter.ParameterType.IsSealed)
                     //{
-                        parameterMockInstance = Activator.CreateInstance(parameter.ParameterType);
+                    parameterMockInstance = Activator.CreateInstance(parameter.ParameterType);
                     //}
                     //else
                     //{

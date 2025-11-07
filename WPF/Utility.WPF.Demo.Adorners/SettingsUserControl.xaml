@@ -1,11 +1,11 @@
 ﻿<UserControl x:Class="Utility.WPF.Demo.Adorners.SettingsUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"     
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:ab="http://schemas.utility.com/adorners"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="1200">
     <DockPanel>
         <WrapPanel DockPanel.Dock="Top">
@@ -17,7 +17,7 @@
 
         <UniformGrid Rows="1">
             <AdornerDecorator>
-                <Canvas Background="IndianRed" Opacity="0.1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                <Canvas Background="IndianRed" Opacity="0.1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                             Margin="10"
                             x:Name="MainCanvas"
                             ab:AdornerEx.IsEnabled="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}">
@@ -50,21 +50,21 @@
                 </Canvas>
             </AdornerDecorator>
 
-            <Grid 
+            <Grid
                       x:Name="GearGrid"
-                      ab:AdornerEx.IsEnabled="{Binding ElementName=CheckBox, Path=IsChecked}" >
+                      ab:AdornerEx.IsEnabled="{Binding ElementName=CheckBox, Path=IsChecked}">
                 <Grid.Background>
                     <SolidColorBrush Opacity="0.1" Color="CadetBlue"></SolidColorBrush>
                 </Grid.Background>
                 <ab:AdornerEx.Adorners>
-                    <Button 
+                    <Button
                                    Margin="4"
                                    Background="Transparent"
                                    BorderBrush="Transparent"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Bottom">
                         <materialDesign:PackIcon Width="124"
-                                                  
+
                              Height="124"
                              Kind="Gear">
                         </materialDesign:PackIcon>
@@ -75,9 +75,9 @@
             </Grid>
 
             <AdornerDecorator>
-                <Canvas x:Name="Square3Grid"  >
+                <Canvas x:Name="Square3Grid">
                     <Canvas.Background>
-                        <SolidColorBrush Opacity="0.1" Color="DarkGoldenrod"/>
+                        <SolidColorBrush Opacity="0.1" Color="DarkGoldenrod" />
                     </Canvas.Background>
                     <Ellipse Fill="Blue" Height="80" Width="80" Canvas.Left="56" Canvas.Top="234"></Ellipse>
                     <Ellipse Fill="Red" Height="36" Width="36" Canvas.Left="16" Canvas.Top="134"></Ellipse>
@@ -85,6 +85,5 @@
                 </Canvas>
             </AdornerDecorator>
         </UniformGrid>
-
     </DockPanel>
 </UserControl>

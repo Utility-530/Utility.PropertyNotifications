@@ -1,8 +1,6 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:Utility.WPF.Controls.Master"
-    xmlns:utility="clr-namespace:Utility.WPF.Converters;assembly=Utility.WPF">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--<ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Utility.WPF.Controls;component/DataTemplate/PropertyDataTemplateSelector.xaml" />
     </ResourceDictionary.MergedDictionaries>-->
@@ -55,13 +53,14 @@
                                     <StackPanel Orientation="Vertical" />
                                 </ItemsPanelTemplate>
                             </ListBox.ItemsPanel>
-                            --><!--<ListBox.GroupStyle>
+                            -->
+    <!--<ListBox.GroupStyle>
                                 <GroupStyle>
                                     <GroupStyle.HeaderTemplate>
                                         <DataTemplate>
                                             -->
-                            <!--<TextBlock FontWeight="Bold" FontSize="14" Text="{Binding .,Converter={StaticResource Converter}}" />-->
-                            <!--
+    <!--<TextBlock FontWeight="Bold" FontSize="14" Text="{Binding .,Converter={StaticResource Converter}}" />-->
+    <!--
                                             <Button
                                                 HorizontalContentAlignment="Left"
                                                 Background="Transparent"
@@ -74,7 +73,8 @@
                                         </DataTemplate>
                                     </GroupStyle.HeaderTemplate>
                                 </GroupStyle>
-                            </ListBox.GroupStyle>--><!--
+                            </ListBox.GroupStyle>-->
+    <!--
                         </ListBox>
                         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
                         <TextBlock

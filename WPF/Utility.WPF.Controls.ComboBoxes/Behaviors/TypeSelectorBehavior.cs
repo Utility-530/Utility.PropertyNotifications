@@ -1,7 +1,4 @@
-﻿using MoreLinq;
-using ReactiveUI;
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
@@ -9,13 +6,14 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using Utility.Trees.Extensions;
-using Utility.Trees.Abstractions;
-using Utility.WPF.Factorys;
+using ReactiveUI;
+using Utility.Interfaces;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes.Ex;
+using Utility.Trees.Abstractions;
+using Utility.Trees.Extensions;
+using Utility.WPF.Factorys;
 using Utility.WPF.Reactives;
-using Utility.Interfaces;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
@@ -85,7 +83,7 @@ namespace Utility.WPF.Controls.ComboBoxes
             base.OnAttached();
         }
 
-        void ChangeType(IReadOnlyTree tree, Type _type)
+        private void ChangeType(IReadOnlyTree tree, Type _type)
         {
             if (tree.Descendant(a => (a.tree.Value() is Type type && type == _type) || (a.tree.Value() is IType itype && itype.Type == _type)) is IReadOnlyTree { } innerTree)
             {
@@ -101,7 +99,7 @@ namespace Utility.WPF.Controls.ComboBoxes
             }
         }
 
-        static void Set(TypeSelectorBehavior typeSelector, IEnumerable enumerable)
+        private static void Set(TypeSelectorBehavior typeSelector, IEnumerable enumerable)
         {
             var assemblyTree = enumerable.Cast<Assembly>().ToArray().ToViewModelTree();
             typeSelector.AssociatedObject.ItemsSource = assemblyTree;
@@ -112,7 +110,6 @@ namespace Utility.WPF.Controls.ComboBoxes
             get { return (Type)GetValue(TypeProperty); }
             set { SetValue(TypeProperty, value); }
         }
-
 
         public IEnumerable Assemblies
         {
@@ -126,7 +123,7 @@ namespace Utility.WPF.Controls.ComboBoxes
             set { SetValue(UseEntryAssemblyProperty, value); }
         }
 
-        class CustomItemTemplateSelector : DataTemplateSelector
+        private class CustomItemTemplateSelector : DataTemplateSelector
         {
             public override DataTemplate SelectTemplate(object item, DependencyObject container)
             {
@@ -143,7 +140,8 @@ namespace Utility.WPF.Controls.ComboBoxes
                             return textBlock;
                         });
                     else if (value is Assembly assembly)
-                        return TemplateGenerator.CreateDataTemplate(() =>                        {
+                        return TemplateGenerator.CreateDataTemplate(() =>
+                        {
                             var textBlock = new TextBlock { Text = assembly.GetName().Name };
                             return textBlock;
                         });

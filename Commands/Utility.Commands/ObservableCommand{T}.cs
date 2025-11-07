@@ -23,7 +23,6 @@ namespace Utility.Commands
             this.methodToExecute = methodToExecute;
         }
 
-
         public event EventHandler? CanExecuteChanged
         {
             add

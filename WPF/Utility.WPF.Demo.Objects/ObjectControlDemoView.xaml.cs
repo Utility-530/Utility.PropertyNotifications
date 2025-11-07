@@ -1,12 +1,12 @@
 ﻿#nullable enable
 
-using Bogus;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Bogus;
 
 namespace Utility.WPF.Demo.Objects
 {

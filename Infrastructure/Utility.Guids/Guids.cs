@@ -1,6 +1,5 @@
 ﻿namespace Utility
 {
-
     public class Guids
     {
         public static readonly Guid History = Guid.Parse("58a13c8e-d9f4-4117-ab37-dacd58c45340");
@@ -14,7 +13,6 @@
         public static readonly Guid MethodParameterActivator = Guid.Parse("ffabb47f-acad-45b3-a670-ab609d761fca");
         public static readonly Guid MethodsExplorer = Guid.Parse("ffabb47f-acad-45b3-a670-ab609d761fca");
 
-
         public static readonly Guid UdpServer = Guid.Parse("2978ac5e-368f-42b3-891e-d85c21c14499");
         public static readonly Guid Property = Guid.Parse("e15c2e55-bf33-480c-a4e7-b4b7804d1735");
         public static readonly Guid Interface = Guid.Parse("8eeb7df3-9ae7-49d6-aabc-a492c6254718");
@@ -25,11 +23,9 @@
         public static readonly Guid ViewController = Guid.Parse("ab289f2b-2fab-4c87-9b85-0946bad7b1fd");
         public static readonly Guid RepositorySwitch = Guid.Parse("fca6811e-8d33-4863-a2cd-c200ac10189d");
 
-
         public static readonly Guid ViewBuilder = Guid.Parse("26bb7df3-9ae7-49d6-aabc-a492c6254718");
         public static readonly Guid MethodBuilder = Guid.Parse("06b8fedd-8188-47b3-b93c-76137033bb4b");
         public static readonly Guid VisibilityController = Guid.Parse("bcbd8fe7-cbc3-442f-ae62-13c9845393a3");
-
 
         public static readonly Guid Http = Guid.Parse("e5383010-93e4-4a20-be00-91261cbb7400");
         public static readonly Guid LiteDB = Guid.Parse("5a704101-a493-44e1-b2fa-01834228f1fe");

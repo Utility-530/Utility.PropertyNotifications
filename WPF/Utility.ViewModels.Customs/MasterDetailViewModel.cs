@@ -1,10 +1,10 @@
-﻿using ReactiveUI;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using ReactiveUI;
 using Utility.Common.Contract;
-using Utility.EventArguments;
 using Utility.Enums;
+using Utility.EventArguments;
 using Utility.Interfaces.NonGeneric.Data;
 
 namespace Utility.ViewModels

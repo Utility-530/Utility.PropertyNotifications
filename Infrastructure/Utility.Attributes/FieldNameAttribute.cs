@@ -2,7 +2,6 @@
 
 namespace Utility.Attributes
 {
-
     [AttributeUsage(AttributeTargets.Property)]
     public class FieldNameAttribute(string fieldName) : Attribute
     {

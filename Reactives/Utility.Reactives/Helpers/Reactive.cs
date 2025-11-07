@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Reactive.Disposables;
-using System.Reactive;
-using System.Reactive.Subjects;
-using System.Reactive.Concurrency;
 using System.Collections.Immutable;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Utility.Reactives;
 
 namespace Utility.Reactives
 {
-
     public static partial class ObservableHelper
     {
         public static IObservable<IEnumerable<T>> Limit<T>(this IObservable<IEnumerable<T>> ss, IObservable<int> bs)
         {
             return ss.CombineLatest(bs, (a, b) => a.Take(b));
-
         }
 
         public static IObservable<R> SelectNotNull<T, R>(this IObservable<T> obs, Func<T, R> f)
@@ -45,12 +43,9 @@ namespace Utility.Reactives
                 compositeDisposable.Add(source.Subscribe(subject));
                 compositeDisposable.Add(right.Subscribe(subject));
 
-
                 return compositeDisposable;
-
             });
         }
-
 
         //Takes source until right stops emitting values
         public static IObservable<T> TakeUntilEnd<T, R>(this IObservable<T> source, IObservable<R> right)
@@ -71,9 +66,7 @@ namespace Utility.Reactives
         public static IObservable<T> BufferUntilInactive<T>(this IObservable<T> t)
         {
             return t.BufferUntilInactive(TimeSpan.FromMilliseconds(300));
-
         }
-
 
         public static IObservable<T> WaitFor<T>(this IObservable<T> source, Func<T, bool> pred)
         {
@@ -99,12 +92,10 @@ namespace Utility.Reactives
                        return new KeyValuePair<int, T>(i, func(i));
                    },
                    i => TimeSpan.FromSeconds(r.Next(0, size))));
-
               }));
 
             return obs;
         }
-
 
         // Thursday, August 28, 2014 9:59 AM  Dave Sexton
         //https://social.msdn.microsoft.com/Forums/en-US/cb1f83b0-5fc5-47b3-ad28-465ba4a5d140/how-to-combine-n-observables-dynamically-with-combinelatest-semantics?forum=rx
@@ -207,7 +198,6 @@ namespace Utility.Reactives
                 });
         }
 
-
         // Thursday, August 28, 2014 9:59 AM  Dave Sexton
         //https://social.msdn.microsoft.com/Forums/en-US/cb1f83b0-5fc5-47b3-ad28-465ba4a5d140/how-to-combine-n-observables-dynamically-with-combinelatest-semantics?forum=rx
         // Merges multiple observable sequences
@@ -308,6 +298,7 @@ namespace Utility.Reactives
                     return disposables;
                 });
         }
+
         public static IObservable<TResult> Zip<TSource, TResult>(this IEnumerable<IObservable<TSource>> sources, Func<IList<TSource>, TResult> selector)
         {
             return Observable.Defer(() =>
@@ -330,7 +321,6 @@ namespace Utility.Reactives
                 return intermediate?.Select(values => selector(values.AsReadOnly()))!;
             });
         }
-
 
         /// <summary>
         /// https://stackoverflow.com/questions/53152134/buffer-by-time-or-running-sum-for-reactive-extensions/53193641#53193641
@@ -417,6 +407,7 @@ namespace Utility.Reactives
                 .Where(t => t.emitValue != null)
                 .Select(t => t.emitValue?.ToArray());
         }
+
         /// <summary>
         /// <a href="https://stackoverflow.com/questions/7597773/does-reactive-extensions-support-rolling-buffers?noredirect=1"></a>
         /// answered Sep 30 '11 at 0:32
@@ -512,7 +503,6 @@ namespace Utility.Reactives
             });
         }
     }
-
 
     public static class DUnionExtensions
     {
@@ -611,6 +601,7 @@ namespace Utility.Reactives
             );
         }
     }
+
     public static class DUnionRefExtensions2
     {
         public class DUnion<T1, T2>
@@ -660,6 +651,3 @@ namespace Utility.Reactives
         }
     }
 }
-
-
-

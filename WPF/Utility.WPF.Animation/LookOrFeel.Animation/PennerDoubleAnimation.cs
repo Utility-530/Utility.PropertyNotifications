@@ -1,38 +1,34 @@
 ﻿/**
  * PennerDoubleAnimation
- * Animates the value of a double property between two target values using 
+ * Animates the value of a double property between two target values using
  * Robert Penner's easing equations for interpolation over a specified Duration.
  *
  * @author		Darren David darren-code@lookorfeel.com
  * @version		1.0
  *
  * Credit/Thanks:
- * Robert Penner - The easing equations we all know and love 
+ * Robert Penner - The easing equations we all know and love
  *   (http://robertpenner.com/easing/) [See License.txt for license info]
- * 
- * Lee Brimelow - initial port of Penner's equations to WPF 
+ *
+ * Lee Brimelow - initial port of Penner's equations to WPF
  *   (http://thewpfblog.com/?p=12)
- * 
- * Zeh Fernando - additional equations (out/in) from 
+ *
+ * Zeh Fernando - additional equations (out/in) from
  *   caurina.transitions.Tweener (http://code.google.com/p/tweener/)
  *   [See License.txt for license info]
  */
 
-
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Reflection;
-using System.Text;
-using System.Windows;
-using System.Windows.Media.Animation;
 using System.ComponentModel;
 using System.Globalization;
+using System.Reflection;
+using System.Windows;
+using System.Windows.Media.Animation;
 
 namespace LookOrFeel.Animation
 {
     /// <summary>
-    /// Animates the value of a double property between two target values using 
+    /// Animates the value of a double property between two target values using
     /// Robert Penner's easing equations for interpolation over a specified Duration.
     /// </summary>
     /// <example>
@@ -43,18 +39,18 @@ namespace LookOrFeel.Animation
     /// anim.From = 1;
     /// anim.To = 0;
     /// myControl.BeginAnimation( OpacityProperty, anim );
-    /// 
+    ///
     /// // XAML
     /// <Storyboard x:Key="AnimateXamlRect">
-    ///  <animation:PennerDoubleAnimation 
-    ///    Storyboard.TargetName="myControl" 
+    ///  <animation:PennerDoubleAnimation
+    ///    Storyboard.TargetName="myControl"
     ///    Storyboard.TargetProperty="(Canvas.Left)"
-    ///    From="0" 
-    ///    To="600" 
-    ///    Equation="BackEaseOut" 
+    ///    From="0"
+    ///    To="600"
+    ///    Equation="BackEaseOut"
     ///    Duration="00:00:05" />
     /// </Storyboard>
-    /// 
+    ///
     /// <Control.Triggers>
     ///   <EventTrigger RoutedEvent="FrameworkElement.Loaded">
     ///     <BeginStoryboard Storyboard="{StaticResource AnimateXamlRect}"/>
@@ -86,7 +82,7 @@ namespace LookOrFeel.Animation
 
         private MethodInfo _EasingMethod;
 
-        #endregion
+        #endregion Fields
 
         #region Dependency Properties
 
@@ -103,7 +99,7 @@ namespace LookOrFeel.Animation
             DependencyProperty.Register(
                 "To", typeof(double), typeof(PennerDoubleAnimation), new PropertyMetadata(0.0));
 
-        #endregion
+        #endregion Dependency Properties
 
         #region Constructors
 
@@ -126,7 +122,7 @@ namespace LookOrFeel.Animation
             Duration = duration;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Abstract Member Implementations
 
@@ -150,7 +146,7 @@ namespace LookOrFeel.Animation
             return new PennerDoubleAnimation();
         }
 
-        #endregion
+        #endregion Abstract Member Implementations
 
         #region Equations
 
@@ -171,12 +167,12 @@ namespace LookOrFeel.Animation
             return c * t / d + b;
         }
 
-        #endregion
+        #endregion Linear
 
         #region Expo
 
         /// <summary>
-        /// Easing equation function for an exponential (2^t) easing out: 
+        /// Easing equation function for an exponential (2^t) easing out:
         /// decelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -190,7 +186,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for an exponential (2^t) easing in: 
+        /// Easing equation function for an exponential (2^t) easing in:
         /// accelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -204,7 +200,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for an exponential (2^t) easing in/out: 
+        /// Easing equation function for an exponential (2^t) easing in/out:
         /// acceleration until halfway, then deceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -227,7 +223,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for an exponential (2^t) easing out/in: 
+        /// Easing equation function for an exponential (2^t) easing out/in:
         /// deceleration until halfway, then acceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -243,12 +239,12 @@ namespace LookOrFeel.Animation
             return ExpoEaseIn((t * 2) - d, b + c / 2, c / 2, d);
         }
 
-        #endregion
+        #endregion Expo
 
         #region Circular
 
         /// <summary>
-        /// Easing equation function for a circular (sqrt(1-t^2)) easing out: 
+        /// Easing equation function for a circular (sqrt(1-t^2)) easing out:
         /// decelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -262,7 +258,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a circular (sqrt(1-t^2)) easing in: 
+        /// Easing equation function for a circular (sqrt(1-t^2)) easing in:
         /// accelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -276,7 +272,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a circular (sqrt(1-t^2)) easing in/out: 
+        /// Easing equation function for a circular (sqrt(1-t^2)) easing in/out:
         /// acceleration until halfway, then deceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -293,7 +289,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a circular (sqrt(1-t^2)) easing in/out: 
+        /// Easing equation function for a circular (sqrt(1-t^2)) easing in/out:
         /// acceleration until halfway, then deceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -309,12 +305,12 @@ namespace LookOrFeel.Animation
             return CircEaseIn((t * 2) - d, b + c / 2, c / 2, d);
         }
 
-        #endregion
+        #endregion Circular
 
         #region Quad
 
         /// <summary>
-        /// Easing equation function for a quadratic (t^2) easing out: 
+        /// Easing equation function for a quadratic (t^2) easing out:
         /// decelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -328,7 +324,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a quadratic (t^2) easing in: 
+        /// Easing equation function for a quadratic (t^2) easing in:
         /// accelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -342,7 +338,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a quadratic (t^2) easing in/out: 
+        /// Easing equation function for a quadratic (t^2) easing in/out:
         /// acceleration until halfway, then deceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -359,7 +355,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a quadratic (t^2) easing out/in: 
+        /// Easing equation function for a quadratic (t^2) easing out/in:
         /// deceleration until halfway, then acceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -375,12 +371,12 @@ namespace LookOrFeel.Animation
             return QuadEaseIn((t * 2) - d, b + c / 2, c / 2, d);
         }
 
-        #endregion
+        #endregion Quad
 
         #region Sine
 
         /// <summary>
-        /// Easing equation function for a sinusoidal (sin(t)) easing out: 
+        /// Easing equation function for a sinusoidal (sin(t)) easing out:
         /// decelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -394,7 +390,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a sinusoidal (sin(t)) easing in: 
+        /// Easing equation function for a sinusoidal (sin(t)) easing in:
         /// accelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -408,7 +404,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a sinusoidal (sin(t)) easing in/out: 
+        /// Easing equation function for a sinusoidal (sin(t)) easing in/out:
         /// acceleration until halfway, then deceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -425,7 +421,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a sinusoidal (sin(t)) easing in/out: 
+        /// Easing equation function for a sinusoidal (sin(t)) easing in/out:
         /// deceleration until halfway, then acceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -441,12 +437,12 @@ namespace LookOrFeel.Animation
             return SineEaseIn((t * 2) - d, b + c / 2, c / 2, d);
         }
 
-        #endregion
+        #endregion Sine
 
         #region Cubic
 
         /// <summary>
-        /// Easing equation function for a cubic (t^3) easing out: 
+        /// Easing equation function for a cubic (t^3) easing out:
         /// decelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -460,7 +456,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a cubic (t^3) easing in: 
+        /// Easing equation function for a cubic (t^3) easing in:
         /// accelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -474,7 +470,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a cubic (t^3) easing in/out: 
+        /// Easing equation function for a cubic (t^3) easing in/out:
         /// acceleration until halfway, then deceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -491,7 +487,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a cubic (t^3) easing out/in: 
+        /// Easing equation function for a cubic (t^3) easing out/in:
         /// deceleration until halfway, then acceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -507,12 +503,12 @@ namespace LookOrFeel.Animation
             return CubicEaseIn((t * 2) - d, b + c / 2, c / 2, d);
         }
 
-        #endregion
+        #endregion Cubic
 
         #region Quartic
 
         /// <summary>
-        /// Easing equation function for a quartic (t^4) easing out: 
+        /// Easing equation function for a quartic (t^4) easing out:
         /// decelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -526,7 +522,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a quartic (t^4) easing in: 
+        /// Easing equation function for a quartic (t^4) easing in:
         /// accelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -540,7 +536,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a quartic (t^4) easing in/out: 
+        /// Easing equation function for a quartic (t^4) easing in/out:
         /// acceleration until halfway, then deceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -557,7 +553,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a quartic (t^4) easing out/in: 
+        /// Easing equation function for a quartic (t^4) easing out/in:
         /// deceleration until halfway, then acceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -573,12 +569,12 @@ namespace LookOrFeel.Animation
             return QuartEaseIn((t * 2) - d, b + c / 2, c / 2, d);
         }
 
-        #endregion
+        #endregion Quartic
 
         #region Quintic
 
         /// <summary>
-        /// Easing equation function for a quintic (t^5) easing out: 
+        /// Easing equation function for a quintic (t^5) easing out:
         /// decelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -592,7 +588,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a quintic (t^5) easing in: 
+        /// Easing equation function for a quintic (t^5) easing in:
         /// accelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -606,7 +602,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a quintic (t^5) easing in/out: 
+        /// Easing equation function for a quintic (t^5) easing in/out:
         /// acceleration until halfway, then deceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -622,7 +618,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a quintic (t^5) easing in/out: 
+        /// Easing equation function for a quintic (t^5) easing in/out:
         /// acceleration until halfway, then deceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -637,12 +633,12 @@ namespace LookOrFeel.Animation
             return QuintEaseIn((t * 2) - d, b + c / 2, c / 2, d);
         }
 
-        #endregion
+        #endregion Quintic
 
         #region Elastic
 
         /// <summary>
-        /// Easing equation function for an elastic (exponentially decaying sine wave) easing out: 
+        /// Easing equation function for an elastic (exponentially decaying sine wave) easing out:
         /// decelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -662,7 +658,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for an elastic (exponentially decaying sine wave) easing in: 
+        /// Easing equation function for an elastic (exponentially decaying sine wave) easing in:
         /// accelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -682,7 +678,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for an elastic (exponentially decaying sine wave) easing in/out: 
+        /// Easing equation function for an elastic (exponentially decaying sine wave) easing in/out:
         /// acceleration until halfway, then deceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -704,7 +700,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for an elastic (exponentially decaying sine wave) easing out/in: 
+        /// Easing equation function for an elastic (exponentially decaying sine wave) easing out/in:
         /// deceleration until halfway, then acceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -719,12 +715,12 @@ namespace LookOrFeel.Animation
             return ElasticEaseIn((t * 2) - d, b + c / 2, c / 2, d);
         }
 
-        #endregion
+        #endregion Elastic
 
         #region Bounce
 
         /// <summary>
-        /// Easing equation function for a bounce (exponentially decaying parabolic bounce) easing out: 
+        /// Easing equation function for a bounce (exponentially decaying parabolic bounce) easing out:
         /// decelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -745,7 +741,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a bounce (exponentially decaying parabolic bounce) easing in: 
+        /// Easing equation function for a bounce (exponentially decaying parabolic bounce) easing in:
         /// accelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -759,7 +755,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a bounce (exponentially decaying parabolic bounce) easing in/out: 
+        /// Easing equation function for a bounce (exponentially decaying parabolic bounce) easing in/out:
         /// acceleration until halfway, then deceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -776,7 +772,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a bounce (exponentially decaying parabolic bounce) easing out/in: 
+        /// Easing equation function for a bounce (exponentially decaying parabolic bounce) easing out/in:
         /// deceleration until halfway, then acceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -791,12 +787,12 @@ namespace LookOrFeel.Animation
             return BounceEaseIn((t * 2) - d, b + c / 2, c / 2, d);
         }
 
-        #endregion
+        #endregion Bounce
 
         #region Back
 
         /// <summary>
-        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing out: 
+        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing out:
         /// decelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -810,7 +806,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing in: 
+        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing in:
         /// accelerating from zero velocity.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -824,7 +820,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing in/out: 
+        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing in/out:
         /// acceleration until halfway, then deceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -841,7 +837,7 @@ namespace LookOrFeel.Animation
         }
 
         /// <summary>
-        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing out/in: 
+        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing out/in:
         /// deceleration until halfway, then acceleration.
         /// </summary>
         /// <param name="t">Current time in seconds.</param>
@@ -856,9 +852,9 @@ namespace LookOrFeel.Animation
             return BackEaseIn((t * 2) - d, b + c / 2, c / 2, d);
         }
 
-        #endregion
+        #endregion Back
 
-        #endregion
+        #endregion Equations
 
         #region Event Handlers
 
@@ -870,7 +866,7 @@ namespace LookOrFeel.Animation
             pda._EasingMethod = typeof(PennerDoubleAnimation).GetMethod(e.NewValue.ToString());
         }
 
-        #endregion
+        #endregion Event Handlers
 
         #region Properties
 
@@ -908,7 +904,7 @@ namespace LookOrFeel.Animation
             set { SetValue(ToProperty, value); }
         }
 
-        #endregion
+        #endregion Properties
     }
 
     public class PennerDoubleAnimationTypeConverter : TypeConverter

@@ -12,7 +12,6 @@ public interface ICollectionDetailsDescriptor
     bool IsCollectionItemValueType { get; }
 }
 
-
 public abstract class MemberDescriptor : NodeViewModel, IDescriptor, IIsReadOnly, ICollectionDetailsDescriptor, IAsyncClone, IHasChildren //, IModel
 {
     public MemberDescriptor(Descriptor descriptor)
@@ -21,6 +20,7 @@ public abstract class MemberDescriptor : NodeViewModel, IDescriptor, IIsReadOnly
         Input = new ObservableCollection<IConnectorViewModel>();
         Output = new ObservableCollection<IConnectorViewModel>();
     }
+
     public virtual string Name => Descriptor.Name;
     public virtual Type ParentType => Descriptor.ComponentType;
     public virtual Type Type => Descriptor.PropertyType;
@@ -37,9 +37,7 @@ public abstract class MemberDescriptor : NodeViewModel, IDescriptor, IIsReadOnly
 
     public bool IsValueType => Type?.IsValueType == true;
 
-
     public override bool IsReadOnly => Descriptor.IsReadOnly;
-
 
     public virtual bool Equals(MemberDescriptor? other) => this.Name.Equals(other?.Name) && this.Type == other.ParentType;
 
@@ -51,16 +49,14 @@ public abstract class MemberDescriptor : NodeViewModel, IDescriptor, IIsReadOnly
     public override object Data { get => Descriptor; set => throw new Exception("sdf2g3r"); }
 
     public virtual void Initialise(object? item = null)
-    { 
+    {
     }
 
     public abstract IEnumerable Items();
 
     public virtual void Finalise(object? item = null)
     {
-  
     }
- 
 
     public Task<object> AsyncClone()
     {
@@ -68,7 +64,7 @@ public abstract class MemberDescriptor : NodeViewModel, IDescriptor, IIsReadOnly
         throw new NotImplementedException();
     }
 
-    public sealed override string ToString()
+    public override sealed string ToString()
     {
         return Name;
     }
@@ -76,11 +72,9 @@ public abstract class MemberDescriptor : NodeViewModel, IDescriptor, IIsReadOnly
 
 public abstract class ValueMemberDescriptor(Descriptor Descriptor) : MemberDescriptor(Descriptor), IValueDescriptor
 {
-
     public abstract object? Get();
 
     public abstract void Set(object? value);
-
 }
 
 public abstract class ChildlessMemberDescriptor(Descriptor Descriptor) : MemberDescriptor(Descriptor)

@@ -1,8 +1,4 @@
-﻿using ReactiveUI;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-namespace Utility.ViewModels.Base
+﻿namespace Utility.ViewModels.Base
 {
     //public abstract class HeaderedReactiveObject : ReactiveObject
     //{

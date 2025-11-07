@@ -2,10 +2,10 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using Utility.Helpers;
 using Utility.WPF.Adorners;
 using Utility.WPF.Adorners.Infrastructure;
 using Utility.WPF.Helpers;
-using Utility.Helpers;
 
 namespace Utility.WPF.Demo.Adorners
 {
@@ -14,7 +14,8 @@ namespace Utility.WPF.Demo.Adorners
     /// </summary>
     public partial class DragUserControl : UserControl
     {
-        Dictionary<UIElement, ResizeAdorner> resizeAdorners = new();
+        private Dictionary<UIElement, ResizeAdorner> resizeAdorners = new();
+
         public DragUserControl()
         {
             InitializeComponent();
@@ -28,6 +29,7 @@ namespace Utility.WPF.Demo.Adorners
                 layer.AddIfMissingAdorner(resizeAdorners.Get(ui, () => new ResizeAdorner(ui)));
             }
         }
+
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
             foreach (UIElement ui in canvas.Children)

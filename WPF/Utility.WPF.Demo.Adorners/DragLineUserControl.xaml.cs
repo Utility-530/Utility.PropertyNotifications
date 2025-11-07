@@ -24,21 +24,22 @@ namespace Utility.WPF.Demo.Adorners
             AdornerLayer layer = AdornerLayer.GetAdornerLayer(Grid);
 
             layer.AddIfMissingAdorner(new LineAdorner(Blue));
-
         }
+
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
             Blue.RemoveAdorners();
         }
     }
 
-
     public class LineAdorner : Adorner
     {
         private Point start;
         private Point end;
+
         //private Thumb startThumb;
         private Thumb endThumb;
+
         private Line selectedLine;
         private Ellipse ellipse;
         private VisualCollection visualChildren;
@@ -69,7 +70,7 @@ namespace Utility.WPF.Demo.Adorners
             };
 
             //endThumb = new Thumb { Cursor = Cursors.Hand, Width = 10, Height = 10, Background = Brushes.BlueViolet };
-            ellipse = new Ellipse { Fill=Brushes.Purple, Width = 10, Height = 10, };
+            ellipse = new Ellipse { Fill = Brushes.Purple, Width = 10, Height = 10, };
 
             //startThumb.DragDelta += StartDragDelta;
             //endThumb.DragDelta += EndDragDelta;
@@ -93,20 +94,17 @@ namespace Utility.WPF.Demo.Adorners
             {
                 _adornerLayer.Update(AdornedElement);
             }
-            catch(System.Exception ex)
+            catch (System.Exception ex)
             {
                 grid.PreviewMouseMove -= Grid_PreviewMouseMove;
                 MessageBox.Show(ex.Message);
             }
         }
 
-
-
         private void LineAdorner_PreviewDragOver(object sender, DragEventArgs e)
         {
             //position = e.GetPosition(grid);
             //_adornerLayer.Update(AdornedElement);
-
         }
 
         public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
@@ -137,8 +135,11 @@ namespace Utility.WPF.Demo.Adorners
         //    selectedLine.Y2 = selectedLine.Y2 + e.VerticalChange;
         //}
 
-        protected override int VisualChildrenCount { get { return visualChildren.Count; } }
-        protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
+        protected override int VisualChildrenCount
+        { get { return visualChildren.Count; } }
+
+        protected override Visual GetVisualChild(int index)
+        { return visualChildren[index]; }
 
         //protected override void OnRender(DrawingContext drawingContext)
         //{
@@ -172,9 +173,5 @@ namespace Utility.WPF.Demo.Adorners
         /// A transform to apply to the adorner.
         /// </returns>
         /// <param name="transform">The transform that is currently applied to the adorned element.</param>
-     
-
-
-
     }
 }

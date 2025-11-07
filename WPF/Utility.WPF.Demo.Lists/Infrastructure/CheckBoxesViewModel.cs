@@ -1,18 +1,13 @@
-﻿using ReactiveUI;
-using System.Collections.Generic;
-using System;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
-using Utility.Services;
-using Utility.ViewModels;
-using Utility.WPF.Demo.Data.Factory;
-using Utility.WPF.Demo.Data.Model;
-using System.Reactive.Linq;
-using DynamicData;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Windows.Input;
+using DynamicData;
+using ReactiveUI;
 using Utility.Models.Filters;
 using Utility.Services.Deprecated;
+using Utility.ViewModels;
 
 namespace Utility.WPF.Demo.Lists.Infrastructure
 {
@@ -41,9 +36,9 @@ namespace Utility.WPF.Demo.Lists.Infrastructure
             foreach (var filter in filters)
             {
                 if (filter is ObserverFilter<CheckViewModel> oFilter)
-                     composite.Add(dataChangeSet.Subscribe(oFilter));
-                 if (filter is IRefreshObservable refresh)
-                     composite.Add(refresh.Subscribe(filterService));
+                    composite.Add(dataChangeSet.Subscribe(oFilter));
+                if (filter is IRefreshObservable refresh)
+                    composite.Add(refresh.Subscribe(filterService));
             }
 
             var changeSet = filters.Select(a => (ViewModel<Filter>)new CheckContentViewModel(a, a.Header, false)).ToObservable().ToObservableChangeSet();

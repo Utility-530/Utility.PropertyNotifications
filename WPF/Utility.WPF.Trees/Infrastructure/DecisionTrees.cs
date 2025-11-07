@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Decisions;
@@ -17,7 +12,6 @@ namespace Utility.Nodes.WPF
             Data = decision;
         }
     }
-
 
     public class DataTemplateDecisionTree<T> : DecisionTree<T, DataTemplate>
     {
@@ -39,6 +33,4 @@ namespace Utility.Nodes.WPF
             return (backputs.FirstOrDefault(a => a is Func<DataTemplate>) as Func<DataTemplate>)?.Invoke();
         }
     }
-
-
 }

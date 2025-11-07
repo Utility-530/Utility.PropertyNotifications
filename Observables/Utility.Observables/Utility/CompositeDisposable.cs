@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Utility.Observables
+﻿namespace Utility.Observables
 {
     using global::System.Collections;
+
     // Licensed to the .NET Foundation under one or more agreements.
     // The .NET Foundation licenses this file to you under the MIT License.
-    // See the LICENSE file in the project root for more information. 
+    // See the LICENSE file in the project root for more information.
 
     //using System.Collections;
     //using System.Collections.Generic;
@@ -24,13 +19,14 @@ namespace Utility.Observables
         /// </summary>
         bool IsDisposed { get; }
     }
+
     //namespace System.Reactive.Disposables
     //{
     /// <summary>
     /// Represents a group of disposable resources that are disposed together.
     /// </summary>
     // [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Backward compat + ideally want to get rid of the ICollection nature of the type.")]
-    public sealed class CompositeDisposable : ICollection<IDisposable> , ICancelable
+    public sealed class CompositeDisposable : ICollection<IDisposable>, ICancelable
     {
         private readonly object _gate = new();
         private bool _disposed;
@@ -373,7 +369,7 @@ namespace Utility.Observables
 
                 if (arrayIndex + _count > array.Length)
                 {
-                    // there is not enough space beyond arrayIndex 
+                    // there is not enough space beyond arrayIndex
                     // to accommodate all _count disposables in this composite
                     throw new ArgumentOutOfRangeException(nameof(arrayIndex));
                 }
@@ -488,4 +484,3 @@ namespace Utility.Observables
         }
     }
 }
-

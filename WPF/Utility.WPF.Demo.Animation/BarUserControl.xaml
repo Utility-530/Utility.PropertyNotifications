@@ -33,10 +33,10 @@
                     <Style.Resources>
                         <Storyboard x:Key="Storyboard1">
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(FrameworkElement.Width)">
-                                <EasingDoubleKeyFrame KeyTime="00:00:05" Value="800"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:05" Value="800" />
                             </DoubleAnimationUsingKeyFrames>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="00:00:01" Value="#FFBB2F2F"/>
+                                <EasingColorKeyFrame KeyTime="00:00:01" Value="#FFBB2F2F" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </Style.Resources>
@@ -45,7 +45,6 @@
                             <ControlTemplate TargetType="{x:Type ToggleButton}">
 
                                 <Grid x:Name="grid"  HorizontalAlignment="Left" Width="400" Background="Green" Height="30">
-
                                 </Grid>
                                 <ControlTemplate.Triggers>
                                     <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}}" Value="True">

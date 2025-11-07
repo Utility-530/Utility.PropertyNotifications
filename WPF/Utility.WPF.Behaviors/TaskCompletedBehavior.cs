@@ -1,15 +1,11 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Xaml.Behaviors;
 using Utility.Helpers.Reflection;
 
 namespace Utility.WPF.Behaviors
 {
-
     public class TaskCompletionBehavior : Behavior<FrameworkElement>
     {
         protected override void OnAttached()
@@ -25,14 +21,12 @@ namespace Utility.WPF.Behaviors
         public static readonly DependencyProperty ResultProperty =
     DependencyProperty.Register("Result", typeof(object), typeof(TaskCompletionBehavior), new PropertyMetadata());
 
-
         public static readonly DependencyProperty IsCompletedProperty =
             DependencyProperty.Register(
                 nameof(IsCompleted),
                 typeof(bool),
                 typeof(TaskCompletionBehavior),
                 new PropertyMetadata(false));
-
 
         public static readonly DependencyProperty TaskProperty =
             DependencyProperty.Register(

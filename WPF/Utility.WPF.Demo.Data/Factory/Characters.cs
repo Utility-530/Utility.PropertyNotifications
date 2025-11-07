@@ -7,7 +7,6 @@ namespace Utility.WPF.Demo.Data.Factory
 {
     public class Characters
     {
-
         public static IEnumerable Value => (Application.Current.FindResource("Characters") as IEnumerable).Cast<Character>();
     }
 }

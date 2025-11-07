@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Behaviors
 {
     public class MouseWheelScrollBehavior : Behavior<UIElement>
     {
-
-
         public double Rate
         {
             get => (double)GetValue(RateProperty);
@@ -22,7 +14,6 @@ namespace Utility.WPF.Behaviors
         }
 
         public static readonly DependencyProperty RateProperty = DependencyProperty.Register("Rate", typeof(double), typeof(MouseWheelScrollBehavior), new PropertyMetadata(1d));
-
 
         protected override void OnAttached()
         {

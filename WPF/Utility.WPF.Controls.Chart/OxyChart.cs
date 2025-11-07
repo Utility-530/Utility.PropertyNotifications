@@ -7,7 +7,6 @@ using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using static Evan.Wpf.DependencyHelper;
 using OxyPlot;
 using OxyPlot.Wpf;
 using Utility.Helpers.Ex;
@@ -15,12 +14,10 @@ using Utility.WPF.Abstract;
 
 namespace Utility.WPF.Controls.Chart
 {
+    using System.Windows.Controls;
     using Evan.Wpf;
     using ReactiveUI;
-    using System.Windows.Controls;
-    using Utility.WPF.Controls.Base;
     using Utility.WPF.Controls.Chart.ViewModels;
-
     using static Utility.WPF.Controls.Chart.ViewModels.MultiTimeModel;
 
     public class OxyChart : Control, IItemsSource
@@ -78,13 +75,13 @@ namespace Utility.WPF.Controls.Chart
                 if (items == default(IObservable<string>))
                     model.Filter(null);
                 else
-          
-                        {
-                            HashSet<string> ids = GetIds(model, dataKey, converter, idKey, items);
 
-                            model.Filter(ids);
-                            var colors = model.SelectColors();
-                        }
+                {
+                    HashSet<string> ids = GetIds(model, dataKey, converter, idKey, items);
+
+                    model.Filter(ids);
+                    var colors = model.SelectColors();
+                }
 
                 static HashSet<string> GetIds(MultiTimeModel model, string key, IValueConverter converter, string idKey, IEnumerable collection)
                 {

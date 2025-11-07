@@ -8,6 +8,6 @@ namespace Utility.WPF.Templates
         {
         }
 
-        public static Templates Instance { get; } = new(); 
+        public static Templates Instance { get; } = new();
     }
 }

@@ -13,8 +13,6 @@ namespace Utility.WPF.Controls.Breadcrumbs
         protected override DependencyObject GetContainerForItemOverride()
         {
             return new SelectedTreeViewItem();
-
         }
     }
-
 }

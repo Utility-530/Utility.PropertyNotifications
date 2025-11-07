@@ -1,15 +1,13 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Windows;
-using System.Windows.Media.Animation;
+using Microsoft.Xaml.Behaviors;
 using Utility.WPF.Animations.Helpers;
 
 namespace Utility.WPF.Behaviors
 {
     public class FadeBehavior : Behavior<FrameworkElement>
     {
-
-        public static readonly DependencyProperty FadeInTimeProperty = 
+        public static readonly DependencyProperty FadeInTimeProperty =
             DependencyProperty.Register("FadeInTime", typeof(double), typeof(FadeBehavior), new FrameworkPropertyMetadata(0.25));
 
         public static readonly DependencyProperty FadeOutTimeProperty =
@@ -18,8 +16,6 @@ namespace Utility.WPF.Behaviors
         public static readonly DependencyProperty IsVisibleProperty =
             DependencyProperty.Register("IsVisible", typeof(bool), typeof(FadeBehavior), new PropertyMetadata(true, FadeChanged));
 
-
-        
         private static void FadeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is FadeBehavior fadeBehavior && e.NewValue is bool b)

@@ -15,11 +15,10 @@ namespace Utility.WPF.Converters
 
     public sealed class InvertedBooleanToVisibilityConverter : BooleanConverter<Visibility>
     {
-
         public InvertedBooleanToVisibilityConverter() : base(Visibility.Collapsed, Visibility.Visible)
         { }
 
-        public static InvertedBooleanToVisibilityConverter Instance => new ();
+        public static InvertedBooleanToVisibilityConverter Instance => new();
     }
 
     public sealed class InvertedBooleanHiddenToVisibilityConverter : BooleanConverter<Visibility>
@@ -76,6 +75,7 @@ namespace Utility.WPF.Converters
         {
             throw new NotImplementedException();
         }
+
         public static HasDataTemplateToVisibilityConverter Instance => new();
     }
 }

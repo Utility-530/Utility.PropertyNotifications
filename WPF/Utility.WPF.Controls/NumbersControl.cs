@@ -2,8 +2,8 @@
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using Utility.WPF.Helpers;
 using Utility.WPF.Controls.Base;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Controls
 {

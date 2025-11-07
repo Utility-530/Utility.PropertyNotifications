@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Utility.Interfaces.Generic;
@@ -10,7 +9,7 @@ namespace Utility.Trees
 {
     public class Branch : IClone
     {
-        static int number = 0;
+        private static int number = 0;
 
         public object Clone()
         {
@@ -24,6 +23,7 @@ namespace Utility.Trees
             return nameof(Branch) + " " + Number;
         }
     }
+
     public class Root : Branch
     {
         public override string ToString()
@@ -48,7 +48,7 @@ namespace Utility.Trees
             items = new(new[] { root });
         }
 
-        public DynamicTree() 
+        public DynamicTree()
         {
             items = new(Array.Empty<ITree>());
         }
@@ -71,8 +71,6 @@ namespace Utility.Trees
         //Task<ITree> Add => Current.Add();
 
         //Task<ITree> Remove => Current.Remove();
-
-
 
         public ITree Current
         {
@@ -127,7 +125,7 @@ namespace Utility.Trees
             set
             {
                 //Reset();
-                //state = value;                
+                //state = value;
                 SetCurrent(value);
                 //Update();
                 Broadcast();
@@ -181,7 +179,6 @@ namespace Utility.Trees
 
                         case State.Current:
                             break;
-
                     }
                 }
 
@@ -241,11 +238,8 @@ namespace Utility.Trees
 
         public IDisposable Subscribe(System.IObserver<ITree> observer)
         {
-
             return new Utility.Observables.Disposer<ITree>(observers, observer);
         }
-
-
 
         //public ITree Last()
         //{

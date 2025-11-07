@@ -1,11 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
 
 namespace Utility.WPF.Controls.Trees
 {
-
     public partial class CustomTreeViewItem
     {
         public static readonly DependencyProperty IsCheckedProperty = DependencyProperty.Register("IsChecked", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata(false));
@@ -20,7 +17,7 @@ namespace Utility.WPF.Controls.Trees
             }
         }
 
-        void OnMouseLeftButtonUp(object sender)
+        private void OnMouseLeftButtonUp(object sender)
         {
             RaiseEvent(new HierarchyMouseUpEventArgs(HierarchyMouseUpEvent, sender));
         }
@@ -34,12 +31,12 @@ namespace Utility.WPF.Controls.Trees
         {
             RaiseEvent(new CheckedEventArgs(true, CheckedEvent, sender));
         }
+
         private void ChildItem_IsCheckedHandler(object sender, CheckedEventArgs e)
         {
             RaiseEvent(e);
             e.Handled = true;
         }
-
 
         public bool IsChecked
         {
@@ -47,22 +44,17 @@ namespace Utility.WPF.Controls.Trees
             set { SetValue(IsCheckedProperty, value); }
         }
 
-
-
         public static readonly RoutedEvent CheckedEvent = EventManager.RegisterRoutedEvent(
             name: "Checked",
             routingStrategy: RoutingStrategy.Bubble,
             handlerType: typeof(CheckedRoutedEventHandler),
             ownerType: typeof(CustomTreeViewItem));
 
-
         public static readonly RoutedEvent HierarchyMouseUpEvent = EventManager.RegisterRoutedEvent(
             name: "HierarchyMouseUp",
             routingStrategy: RoutingStrategy.Bubble,
             handlerType: typeof(HierarchyMouseUpEventHandler),
             ownerType: typeof(CustomTreeViewItem));
-
-
 
         public event CheckedRoutedEventHandler Checked
         {

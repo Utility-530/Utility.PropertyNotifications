@@ -1,24 +1,24 @@
 ﻿<UserControl x:Class="Utility.WPF.Demo.Trees.StylesUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:trees="http://schemas.utility.com/trees"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Utility.WPF.Demo.Trees" 
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Utility.WPF.Demo.Trees"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:b="http://schemas.utility.com/behaviors"
-             xmlns:enms="clr-namespace:Utility.Enums;assembly=Utility.Enums" 
-             xmlns:controls="http://schemas.utility.com" 
+             xmlns:enms="clr-namespace:Utility.Enums;assembly=Utility.Enums"
+             xmlns:controls="http://schemas.utility.com"
              xmlns:beh="http://schemas.utility.com/behaviors"
              xmlns:obj="http://schemas.utility.com/objects"
              xmlns:att="http://schemas.utility.com/attached"
              xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes" xmlns:utl="http://schemas.utility.com/utilitywpf"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Generic.xaml"/>
+                <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <HierarchicalDataTemplate DataType="{x:Type nodes:NodeViewModel}" ItemsSource="{Binding Children}">
@@ -28,7 +28,7 @@
                 </StackPanel>
             </HierarchicalDataTemplate>
 
-            <RelativeSource x:Key="Source" AncestorType="{x:Type local:StylesUserControl}"/>
+            <RelativeSource x:Key="Source" AncestorType="{x:Type local:StylesUserControl}" />
 
             <Style TargetType="{x:Type trees:CustomTreeViewItem}">
                 <Setter Property="Header" Value="{Binding }"></Setter>
@@ -37,7 +37,6 @@
                 <Setter Property="Rows" Value="{Binding Settings.Rows, RelativeSource={RelativeSource AncestorType={x:Type local:StylesUserControl}}}"></Setter>
                 <Setter Property="Columns" Value="{Binding Settings.Columns, RelativeSource={RelativeSource AncestorType={x:Type local:StylesUserControl}}}"></Setter>-->
             </Style>
-
 
             <DataTemplate DataType="{x:Type local:SettingsViewModel}">
                 <StackPanel DataContext="{Binding Settings, RelativeSource={RelativeSource AncestorType={x:Type local:StylesUserControl}}}">
@@ -48,12 +47,12 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                    <ComboBox >
+                    <ComboBox>
                         <i:Interaction.Behaviors>
                             <b:EnumSelectorBehavior EnumType="{x:Type Orientation }" SelectedEnum="{Binding Orientation}"></b:EnumSelectorBehavior>
                         </i:Interaction.Behaviors>
                     </ComboBox>
-                    <ComboBox >
+                    <ComboBox>
                         <i:Interaction.Behaviors>
                             <b:EnumSelectorBehavior EnumType="{x:Type enms:Arrangement }" SelectedEnum="{Binding Arrangement}"></b:EnumSelectorBehavior>
                         </i:Interaction.Behaviors>
@@ -71,17 +70,16 @@
         <HeaderedContentControl.Header>
             <obj:JsonControl>
                 <i:Interaction.Behaviors>
-                    <obj:ObjectBehavior  Object="{Binding ElementName=behavior, Path=SelectedItem}"/>
+                    <obj:ObjectBehavior  Object="{Binding ElementName=behavior, Path=SelectedItem}" />
                 </i:Interaction.Behaviors>
             </obj:JsonControl>
         </HeaderedContentControl.Header>
-        <trees:CustomTreeView x:Name="MyTreeView" 
-                            AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}"            
+        <trees:CustomTreeView x:Name="MyTreeView"
+                            AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}"
                             ItemsSource="{Binding Items, RelativeSource={RelativeSource  AncestorType={x:Type local:StylesUserControl}}}">
             <i:Interaction.Behaviors>
-                <b:BindableSelectedItemBehavior x:Name="behavior"/>
+                <b:BindableSelectedItemBehavior x:Name="behavior" />
             </i:Interaction.Behaviors>
         </trees:CustomTreeView>
     </utl:SplitControl>
-
 </UserControl>

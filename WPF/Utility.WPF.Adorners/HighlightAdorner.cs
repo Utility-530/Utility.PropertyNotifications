@@ -1,8 +1,5 @@
-﻿
-
-namespace WpfHighlighter
+﻿namespace WpfHighlighter
 {
-
     using System;
     using System.Windows;
     using System.Windows.Documents;
@@ -24,9 +21,7 @@ namespace WpfHighlighter
         public static HighlightCommand Instance
         {
             get;
-
         } = new HighlightCommand();
-
 
         /// <summary>
         /// This function is the callback used to execute the command when the menu item is clicked.
@@ -95,13 +90,10 @@ namespace WpfHighlighter
 
             Size s = this.AdornedElement.RenderSize;
 
-
-
             var t = this.highlightElement.TransformToVisual(this.AdornedElement);
             var innerRect = new Rect(new Point(0, 0), this.highlightElement.RenderSize);
             innerRect = t.TransformBounds(innerRect);
             // scale up to allow a thickness/2 border
-
 
             var r1 = new RectangleGeometry(new Rect(0, 0, s.Width, s.Height));
             var r2 = new RectangleGeometry(innerRect);

@@ -1,12 +1,10 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-
 
 namespace miRobotEditor.Controls
 {
@@ -147,6 +145,7 @@ namespace miRobotEditor.Controls
         }
 
         public event EventHandler<EventArgs> Collapsed;
+
         public event EventHandler<EventArgs> Expanded;
 
         private static void OnIsCollapsedPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -212,6 +211,7 @@ namespace miRobotEditor.Controls
                     {
                     }
                     break;
+
                 case GridSplitterCollapseMode.Previous:
                     if (_elementVerticalGridSplitterButton != null)
                     {
@@ -407,6 +407,5 @@ namespace miRobotEditor.Controls
         None,
         Previous,
         Next,
-   
     }
 }

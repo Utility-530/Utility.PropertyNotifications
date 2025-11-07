@@ -3,7 +3,5 @@
     public interface ISort<T>
     {
         bool Sort(T o);
-
     }
-
 }

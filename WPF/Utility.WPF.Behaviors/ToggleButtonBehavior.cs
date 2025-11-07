@@ -1,8 +1,8 @@
-﻿using Microsoft.Xaml.Behaviors;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using Microsoft.Xaml.Behaviors;
+using ReactiveUI;
 
 namespace Utility.WPF.Behaviors
 {

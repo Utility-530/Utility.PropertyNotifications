@@ -1,10 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.ObjectModel;
 using Utility.Changes;
-using Utility.Interfaces.Generic.Data;
-using Utility.Models;
-using Utility.Services.Meta;
 using Utility.Collections;
+using Utility.Interfaces.Generic.Data;
+using Utility.Services.Meta;
 
 namespace Utility.Services
 {
@@ -14,11 +12,8 @@ namespace Utility.Services
     public record ChangeParam() : Param<CollectionCreationService>(nameof(CollectionCreationService.Change), "change");
     public record ListParam() : Param<CollectionCreationService>(nameof(CollectionCreationService.Change), "list");
 
-
-
     public class CollectionCreationService
     {
-
         public static IList Instance(System.Type type)
         {
             var instance = createCollectionInstance(type);
@@ -48,6 +43,7 @@ namespace Utility.Services
                 case Changes.Type.Add:
                     list.Add(change.Value);
                     break;
+
                 case Changes.Type.Remove:
                     list.Remove(change.Value);
                     break;

@@ -47,7 +47,6 @@ namespace Utility.Infrastructure
             return true;
         }
 
-
         /// <summary>
         /// Gets a property value.
         /// </summary>
@@ -73,7 +72,6 @@ namespace Utility.Infrastructure
             autoObject.SetProperty(new Key(autoObject.Guid, name, typeof(T)), value);
             return true;
         }
-
 
         /// <summary>
         /// Gets a property value.

@@ -1,5 +1,5 @@
-﻿using ReactiveUI;
-using System.Windows;
+﻿using System.Windows;
+using ReactiveUI;
 using Utility.WPF.Behaviors;
 
 namespace Utility.WPF.Controls.Buttons

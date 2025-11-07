@@ -1,9 +1,6 @@
-﻿using ActivateAnything;
+﻿using System.Reactive.Disposables;
 using SQLite;
-using System;
-using System.Reactive.Disposables;
 using Utility.Interfaces.Exs;
-using Utility.Interfaces.NonGeneric;
 using Utility.Reactives;
 using Utility.Structs.Repos;
 using static System.Environment;
@@ -11,11 +8,11 @@ using Guid = System.Guid;
 
 namespace Utility.Repos
 {
-
     public static class SqlQueries
     {
         // Generic
         public const string SelectAllFromTable = "SELECT * FROM {0}";
+
         public const string SelectByGuid = "SELECT * FROM {0} WHERE Guid = ?";
         public const string SelectByParent = "SELECT * FROM {0} WHERE Parent = ?";
         public const string SelectByParentAndName = "SELECT * FROM {0} WHERE Parent = ? AND Name = ? ORDER BY _Index";
@@ -79,9 +76,9 @@ namespace Utility.Repos
 
     public class TreeRepository : ITreeRepository
     {
-        Dictionary<Guid, Dictionary<string, DateValue>> values = new();
-        Dictionary<int, System.Type> types = new();
-        Dictionary<Guid, string> tablelookup = new();
+        private Dictionary<Guid, Dictionary<string, DateValue>> values = new();
+        private Dictionary<int, System.Type> types = new();
+        private Dictionary<Guid, string> tablelookup = new();
 
         public const string No_Existing_Table_No_Name_To_Create_New_One = "ioioi* 22144 fd3323";
 
@@ -131,7 +128,6 @@ namespace Utility.Repos
                 connection = new SQLiteConnection("data.sqlite", false);
             else
             {
-
                 //if file name
                 if (string.IsNullOrEmpty(System.IO.Path.GetExtension(dbDirectory)) == false)
                 {
@@ -387,7 +383,6 @@ namespace Utility.Repos
 
                     if (parentGuid == Guid.Empty)
                     {
-
                     }
                     string query = $"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' {includeClause($"AND Guid {ToComparisonAndValue(guid)}", guid)} {includeClause($"AND Name {ToComparisonAndValue(name)}", name)}  {includeClause($"AND _Index {ToComparisonAndValue(index)}", index)}  {includeClause($"AND TypeId {ToComparisonAndValue(typeId)}", type)}";
                     var tables = connection.Query<Relationships>(query);
@@ -523,7 +518,6 @@ namespace Utility.Repos
                         throw new Exception("dsf 33p[p[");
                     else if (tables.Count == 0)
                     {
-
                         // create table if not exists
                         if (connection.Query<String>($"SELECT sql as Name FROM sqlite_schema WHERE type ='table' AND name LIKE '{name_index}'").Any() == false)
                         {
@@ -539,7 +533,6 @@ namespace Utility.Repos
                     }
                     else
                     {
-
                         var all = connection.Query<Relationships>($"SELECT * FROM '{name_index}'");
                         foreach (var item in all)
                         {
@@ -610,7 +603,6 @@ namespace Utility.Repos
 
         public System.Type? GetType(Guid guid, string tableName)
         {
-
             var tables = connection.Query<Relationships>($"SELECT * FROM '{tableName}' WHERE Guid = '{guid}'");
 
             var single = tables.SingleOrDefault()?.TypeId;
@@ -635,7 +627,6 @@ namespace Utility.Repos
                 {
                     observer.OnNext(new DateValue(guid, name, default, null));
                     observer.OnCompleted();
-
                 }
                 return Disposable.Empty;
             });
@@ -667,9 +658,8 @@ namespace Utility.Repos
             return systemType;
         }
 
-        System.Type convert(Type type)
+        private System.Type convert(Type type)
         {
-
             try
             {
                 var ass = Assembly.Load(type.Assembly);
@@ -704,7 +694,6 @@ namespace Utility.Repos
                 return key;
             if (type.GenericTypeArguments.Any())
             {
-
             }
             int typeId = 0;
             var str = type.GenericTypeArguments.Any() ? string.Join('|', type.GenericTypeArguments.Select(a => TypeSerialization.TypeSerializer.Serialize(a))) : null;
@@ -745,7 +734,6 @@ namespace Utility.Repos
 
         public void Reset()
         {
-
         }
 
         public void UpdateName(Guid parentGuid, Guid guid, string name, string newName)
@@ -765,7 +753,7 @@ namespace Utility.Repos
 
         public static TreeRepository Instance { get; } = new("../../../Data");
 
-        static readonly Dictionary<string, TreeRepository> dictionary = new();
+        private static readonly Dictionary<string, TreeRepository> dictionary = new();
         //public static TreeRepository Create(string name) => dictionary.GetValueOrCreate(name, () => new TreeRepository(Path.Combine(ProgramData, name)));
     }
 }

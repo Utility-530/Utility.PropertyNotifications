@@ -1,11 +1,11 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Utility.Commands;
-using Utility.WPF.Demo.Data.Model;
 using Utility.Persists;
-using System.Windows;
+using Utility.WPF.Demo.Data.Model;
 
 namespace Utility.WPF.Demo.Lists
 {
@@ -45,6 +45,7 @@ namespace Utility.WPF.Demo.Lists
         public ICommand FinishEdit { get; }
 
         public ObservableCollection<Character> Items { get; }
+
         public Character Edit
         {
             get => newObject; set

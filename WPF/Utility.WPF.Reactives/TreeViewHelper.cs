@@ -1,5 +1,4 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections.Specialized;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -7,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ReactiveUI;
 using Utility.Changes;
 using Utility.WPF.Helpers;
 
@@ -62,7 +62,6 @@ namespace Utility.WPF.Reactives
 
         public static IObservable<T> FindRecursiveAsync<T>(this ItemsControl treeView, object instance) where T : Control
         {
-
             return Observable.Create<T>(observer =>
             {
                 CompositeDisposable disposables = [];
@@ -92,7 +91,6 @@ namespace Utility.WPF.Reactives
                         {
                             observer.OnNext(a);
                         }).DisposeWith(disposables);
-
                     }
                 }
                 else if (item == instance)
@@ -116,17 +114,15 @@ namespace Utility.WPF.Reactives
                 }
             }
 
-
             void update(NotifyCollectionChangedEventArgs e, IObserver<T> observer, CompositeDisposable disposables)
             {
                 foreach (var item in treeView.Items)
                 {
-                    if(item is TreeViewItem treeViewItem)
+                    if (item is TreeViewItem treeViewItem)
                     {
-                        if(treeViewItem.IsLoaded)
+                        if (treeViewItem.IsLoaded)
                         {
                             match<T>(treeView, instance, observer, disposables, item);
-
                         }
                         else
                         {
@@ -140,14 +136,7 @@ namespace Utility.WPF.Reactives
                     match<T>(treeView, instance, observer, disposables, sender);
                 }
             }
-
         }
-
-
-
-
-
-
 
         /// <summary>
         /// Recursively search for an item in this subtree.
@@ -163,12 +152,9 @@ namespace Utility.WPF.Reactives
         /// </returns>
         public static IObservable<Change<TreeViewItem>> VisibleItems(ItemsControl container)
         {
-
             return Observable.Create<Change<TreeViewItem>>(observer =>
             {
-
                 CompositeDisposable composite = new();
-
 
                 if (container == null)
                 {
@@ -288,14 +274,10 @@ namespace Utility.WPF.Reactives
                 }
                 return composite;
             });
-
         }
 
         private static void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
         {
-
         }
     }
-
 }
-

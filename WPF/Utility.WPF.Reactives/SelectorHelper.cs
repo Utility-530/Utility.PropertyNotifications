@@ -1,11 +1,11 @@
-﻿using deniszykov.TypeConversion;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using deniszykov.TypeConversion;
+using ReactiveUI;
 using Utility.WPF.Abstract;
 
 namespace Utility.WPF.Reactives
@@ -27,6 +27,7 @@ namespace Utility.WPF.Reactives
             select change;
 
         public static IObservable<T> Changes<T>(this Selector selector, bool includeNulls = false) => selector.Changes(includeNulls).Cast<T>();
+
         public static IObservable<T> Changes<T>(this ISelector selector, bool includeNulls = false) => selector.Changes(includeNulls).Cast<T>();
 
         public static IObservable<ListBoxItem[]> MultiAdditions(this Selector selector) =>
@@ -37,6 +38,7 @@ namespace Utility.WPF.Reactives
                                                             .Cast<ListBoxItem>()
                                                             .Where(a => a.IsSelected)
                                                             .ToArray());
+
         public static IObservable<IList> Additions(this Selector selector) =>
 
             Observable
@@ -44,8 +46,8 @@ namespace Utility.WPF.Reactives
             (a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
             .Select(a => a.EventArgs.AddedItems)
             .StartWith(selector.SelectedItem != null ? new[] { selector.SelectedItem } : Array.Empty<object>() as IList)
-            .Where(a => a.Count > 0);     
-        
+            .Where(a => a.Count > 0);
+
         public static IObservable<IList> Additions(this ISelector selector) =>
 
             Observable
@@ -95,9 +97,9 @@ namespace Utility.WPF.Reactives
                     (a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
                 .Select(a => selector.SelectedValue).StartWith(selector.SelectedValue)
                 .WhereNotNull();
+
         public static IObservable<T> ToSelectedValueChanges<T>(this Selector selector) =>
             selector.ValueChanges().Cast<T>();
-
 
         public static IObservable<T?> ItemChanges<T>(this Selector selector)
         {

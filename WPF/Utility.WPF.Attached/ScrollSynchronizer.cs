@@ -145,7 +145,7 @@ namespace SoftwareArchitects.Windows.Controls
                 if (Math.Abs(scrollViewer.Key.HorizontalOffset - changedScrollViewer.HorizontalOffset) > 0.001)
                 {
                     //scrollViewer.Key.Width = e.ViewportWidth;
-                   scrollViewer.Key.ScrollToHorizontalOffset(changedScrollViewer.HorizontalOffset);
+                    scrollViewer.Key.ScrollToHorizontalOffset(changedScrollViewer.HorizontalOffset);
                 }
             }
         }

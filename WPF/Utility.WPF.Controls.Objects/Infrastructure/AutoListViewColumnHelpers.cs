@@ -1,9 +1,4 @@
-﻿using AutoGenListView.Attributes;
-using Humanizer;
-using Itenso.Windows.Controls.ListViewLayout;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -14,10 +9,12 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using AutoGenListView.Attributes;
+using Humanizer;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Utility.Helpers.Reflection;
-using Utility.Structs;
 using ColumnAttribute = Utility.Attributes.ColumnAttribute;
-
 
 namespace Utility.WPF.Controls.Objects
 {
@@ -35,7 +32,7 @@ namespace Utility.WPF.Controls.Objects
             //dataType.GetProperties()
             //            .Where(x => x.GetCustomAttributes(true).FirstOrDefault(y => y is ColVisibleAttribute) != null)
             //            .ToArray();
-            // For each appropriately decorated property in the item "type", makea column and bind 
+            // For each appropriately decorated property in the item "type", makea column and bind
             // the propertty to it
             foreach (PropertyInfo info in properties)
             {
@@ -44,7 +41,7 @@ namespace Utility.WPF.Controls.Objects
                 {
                     continue;
                 }
-      
+
                 (bool success, ColumnAttribute? dna) = info.GetAttributeSafe<ColumnAttribute>();
 
                 if (success && dna.Ignore == true)
@@ -52,9 +49,8 @@ namespace Utility.WPF.Controls.Objects
 
                 string displayName = dna?.DisplayName ?? info.Name.Humanize(LetterCasing.Title);
 
-
                 double width = GetWidthFromAttribute(lv, info, displayName, dna?.Width);
-                // If the property is being renamed with the DisplayName attribute, use the new name. 
+                // If the property is being renamed with the DisplayName attribute, use the new name.
                 // Otherwise use the property's actual name
                 //string displayName = info.TryGetAttribute<DisplayNameAttribute>(out var dna) ? dna!.DisplayName : info.Name.Humanize(LetterCasing.Title);
 
@@ -72,7 +68,7 @@ namespace Utility.WPF.Controls.Objects
 
                 //double width = GetWidthFromAttribute(lv, info, displayName);
 
-                // if the cellTemplate is null, create a typical binding object for display 
+                // if the cellTemplate is null, create a typical binding object for display
                 // member binding
                 Binding binding = (cellTemplate != null) ? null : new Binding() { Path = new PropertyPath(info.Name), Mode = BindingMode.OneWay };
 
@@ -109,15 +105,13 @@ namespace Utility.WPF.Controls.Objects
                 //                FixedColumn.SetWidth(column, GetWidthFromAttribute(lv, info, displayName));
                 //                break;
 
-
                 //        }
                 //}
 
                 yield return column;
             }
-
-
         }
+
         /// <summary>
         /// Creates the columns for all of the properties decorated with the ColVisibleAttribute attribute.
         /// </summary>
@@ -135,15 +129,14 @@ namespace Utility.WPF.Controls.Objects
 
             var elementType = TypeHelper.GetElementType(dataType);
 
-
             var columns = new List<GridViewColumn>();
             PropertyInfo[] properties = elementType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy).ToArray();
 
-            // For each appropriately decorated property in the item "type", makea column and bind 
+            // For each appropriately decorated property in the item "type", makea column and bind
             // the propertty to it
             foreach (PropertyInfo info in properties)
             {
-                // If the property is being renamed with the DisplayName attribute, use the new name. 
+                // If the property is being renamed with the DisplayName attribute, use the new name.
                 // Otherwise use the property's actual name
                 (bool success, ColumnAttribute? dna) = info.GetAttributeSafe<ColumnAttribute>();
 
@@ -155,7 +148,7 @@ namespace Utility.WPF.Controls.Objects
                 //DataTemplate cellTemplate = BuildCellTemplateFromAttribute(info);
                 double width = GetWidthFromAttribute(lv, info, displayName, dna?.Width);
 
-                // if the cellTemplate is null, create a typical binding object for display 
+                // if the cellTemplate is null, create a typical binding object for display
                 // member binding
                 Binding binding = new()
                 {
@@ -182,7 +175,7 @@ namespace Utility.WPF.Controls.Objects
         }
 
         /// <summary>
-        /// Determine the width of the column, using the largest of either the calculated width, 
+        /// Determine the width of the column, using the largest of either the calculated width,
         /// or the decorated width (using ColWidth attribute).
         /// </summary>
         /// <param name="property"></param>
@@ -205,7 +198,7 @@ namespace Utility.WPF.Controls.Objects
         /// <returns></returns>
         private static DataTemplate BuildCellTemplateFromAttribute(PropertyInfo property)
         {
-            // the attriubte is validated when it's defined, so we don't have to worry about it 
+            // the attriubte is validated when it's defined, so we don't have to worry about it
             // by the time we get here. Or do we?
             DataTemplate? cellTemplate = null;
             ColCellTemplateAttribute cell = (ColCellTemplateAttribute)(property.GetCustomAttributes(true).FirstOrDefault(x => x is ColCellTemplateAttribute));
@@ -221,7 +214,6 @@ namespace Utility.WPF.Controls.Objects
                 {
                     var grid = new Grid
                     {
-
                     };
                     var rect = new Rectangle() { Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString(cell.Background)) };
 
@@ -239,7 +231,6 @@ namespace Utility.WPF.Controls.Objects
                     grid.Children.Add(rect);
                     grid.Children.Add(textBlock);
                     return grid;
-
                 });
             }
             return cellTemplate;
@@ -250,7 +241,6 @@ namespace Utility.WPF.Controls.Objects
             var template = new DataTemplate();
 
             var borderFactory = new FrameworkElementFactory(typeof(Border));
-    
 
             // Define the style for hover effect
             var borderStyle = new Style(typeof(Border));
@@ -288,7 +278,7 @@ namespace Utility.WPF.Controls.Objects
         }
 
         /// <summary>
-        ///  Calculates the width of the specified text base on the framework element and the 
+        ///  Calculates the width of the specified text base on the framework element and the
         ///  specified font family/size.
         /// </summary>
         /// <param name="fe"></param>
@@ -310,5 +300,3 @@ namespace Utility.WPF.Controls.Objects
         }
     }
 }
-
-

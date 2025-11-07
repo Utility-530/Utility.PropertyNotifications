@@ -1,25 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Controls;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Collections;
-using System.Windows.Threading;
 using System.Windows.Media.Animation;
-using System.Diagnostics;
+using System.Windows.Threading;
 using Microsoft.Xaml.Behaviors;
-using System.ComponentModel;
 using Utility.WPF.Adorners.Infrastructure;
 
 namespace Utility.WPF.Adorners
 {
     public class AdornerWrapper
     {
-        List<Adorner> adorners = new List<Adorner>();
+        private List<Adorner> adorners = new List<Adorner>();
+
         public double Opacity
         {
             get
@@ -53,10 +49,9 @@ namespace Utility.WPF.Adorners
 
         public void Add(Adorner adorner)
         {
-
             adorners.Add(adorner);
-
         }
+
         public void Add(AdornerLayer adornerLayer)
         {
             foreach (var adorner in adorners)
@@ -67,12 +62,9 @@ namespace Utility.WPF.Adorners
                 }
                 catch (Exception ex)
                 {
-
                 }
             }
         }
-
-
 
         public void RemoveFrom(AdornerLayer adornerLayer)
         {
@@ -146,7 +138,7 @@ namespace Utility.WPF.Adorners
         /// </summary>
         private DispatcherTimer closeAdornerTimer = new DispatcherTimer();
 
-        #endregion
+        #endregion Private Data Members
 
         #region Private/Internal Functions
 
@@ -173,6 +165,7 @@ namespace Utility.WPF.Adorners
 
         public static readonly DependencyProperty AdornerOffsetXProperty =
             DependencyProperty.Register("AdornerOffsetX", typeof(double), typeof(HoverBehavior));
+
         public static readonly DependencyProperty AdornerOffsetYProperty =
             DependencyProperty.Register("AdornerOffsetY", typeof(double), typeof(HoverBehavior));
 
@@ -212,9 +205,7 @@ namespace Utility.WPF.Adorners
 
         public HoverBehavior()
         {
-
         }
-
 
         protected override void OnAttached()
         {
@@ -247,8 +238,6 @@ namespace Utility.WPF.Adorners
         {
             MouseEnterLogic();
         }
-
-
 
         /// <summary>
         /// Show the adorner.
@@ -465,7 +454,7 @@ namespace Utility.WPF.Adorners
         }
 
         /// <summary>
-        /// Specifies the time (in seconds) after the mouse cursor moves away from the 
+        /// Specifies the time (in seconds) after the mouse cursor moves away from the
         /// adorned control (or the adorner) when the adorner begins to fade out.
         /// </summary>
         public double CloseAdornerTimeOut
@@ -487,7 +476,7 @@ namespace Utility.WPF.Adorners
         /// When this property is null it is the AdornerControl content that is adorned,
         /// however when it is set the visual-tree is searched for a UI element that has the
         /// specified part name, if the part is found then that UI element is adorned, otherwise
-        /// an exception "Failed to find part ..." is thrown.        /// 
+        /// an exception "Failed to find part ..." is thrown.        ///
         /// </summary>
         public string AdornedTemplatePartName
         {
@@ -500,8 +489,6 @@ namespace Utility.WPF.Adorners
                 SetValue(AdornedTemplatePartNameProperty, value);
             }
         }
-
-
 
         /// <summary>
         /// Static constructor to register command bindings.
@@ -677,7 +664,6 @@ namespace Utility.WPF.Adorners
             return null;
         }
 
-
         /// <summary>
         /// Internal method to show the adorner.
         /// </summary>
@@ -706,13 +692,11 @@ namespace Utility.WPF.Adorners
         /// </summary>
         private void HideAdornerInternal()
         {
-
-
             if (adornerLayer == null || adornerColllection == null)
             {
                 // Not already adorned.
                 Initialise();
-  
+
                 return;
             }
 
@@ -734,7 +718,7 @@ namespace Utility.WPF.Adorners
             adornerShowState = AdornerShowState.Hidden;
         }
 
-        void Initialise()
+        private void Initialise()
         {
             if (adornerColllection == null)
             {
@@ -747,24 +731,21 @@ namespace Utility.WPF.Adorners
                             this.adornerColllection.Add(adorner);
                         else if (adorner is FrameworkElementAdorner)
                         {
-                            this.adornerColllection.Add(adorner);               
+                            this.adornerColllection.Add(adorner);
                         }
                         adorner.MouseEnter += Adorner_MouseEnter;
                         adorner.MouseLeave += Adorner_MouseLeave;
                     }
                     adornerColllection.Opacity = 0;
-              
-                } 
+                }
             }
         }
 
-
-        bool mouseEnter = false;
+        private bool mouseEnter = false;
 
         private void Adorner_MouseLeave(object sender, MouseEventArgs e)
         {
             mouseEnter = false;
-       
         }
 
         private void Adorner_MouseEnter(object sender, MouseEventArgs e)
@@ -798,7 +779,6 @@ namespace Utility.WPF.Adorners
             }
 
             closeAdornerTimer.Start();
-
         }
 
         /// <summary>
@@ -835,6 +815,6 @@ namespace Utility.WPF.Adorners
             }
         }
 
-        #endregion
+        #endregion Private/Internal Functions
     }
 }

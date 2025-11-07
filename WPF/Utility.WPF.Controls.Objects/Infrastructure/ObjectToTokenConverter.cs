@@ -1,19 +1,17 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Omu.ValueInjecter;
 
 namespace Utility.WPF.Controls.Objects
 {
     public class ObjectToTokenConverter : IValueConverter
     {
-
-
-        Dictionary<object, object> properties = new();
+        private Dictionary<object, object> properties = new();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -21,7 +19,7 @@ namespace Utility.WPF.Controls.Objects
                 return DependencyProperty.UnsetValue;
 
             var serialiser = JsonSerializer.CreateDefault(new JsonSerializerSettings { Converters = Statics.converters, TypeNameHandling = TypeNameHandling.All });
-            if(parameter is not null)
+            if (parameter is not null)
             {
                 properties[value.GetType().GetProperty(parameter.ToString()).GetValue(value).ToString()] = value;
             }

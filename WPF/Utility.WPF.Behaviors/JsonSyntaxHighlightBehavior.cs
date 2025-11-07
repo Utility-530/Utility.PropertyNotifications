@@ -1,7 +1,4 @@
-﻿using DynamicData;
-using Evan.Wpf;
-using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -10,6 +7,9 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
+using DynamicData;
+using Evan.Wpf;
+using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Behaviors
 {

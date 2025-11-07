@@ -6,14 +6,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows;
-using System.Windows.Media;
-using System.Linq;
 using Utility.WPF.Helpers;
-using UnitsNet;
 
 namespace Utility.WPF.Controls.DataGrids
 {
@@ -40,11 +36,12 @@ namespace Utility.WPF.Controls.DataGrids
         //    return null;
         //}
 
-        static Dictionary<DataGrid, double>? difference = new();
+        private static Dictionary<DataGrid, double>? difference = new();
 
         /*
          * Ensure that columns are the right width and no wider
          */
+
         public static void ShrinkColumnsToFit(this DataGrid dataGrid)
         {
             for (int column = 0; column < dataGrid.Columns.Count; ++column)
@@ -59,8 +56,6 @@ namespace Utility.WPF.Controls.DataGrids
             }
             dataGrid.UpdateLayout();
         }
-
-
 
         public static void AdjustColumnWidths(this DataGrid dataGrid, FrameworkElement parent, double margin)
         {
@@ -138,29 +133,25 @@ namespace Utility.WPF.Controls.DataGrids
             }
             else
             {
-
                 var windowActualWidth = parent.FindParent<Window>().ActualWidth;
 
                 var x = parent.DesiredSize.Width;
                 if (parent.ActualWidth == 0)
                     return;
 
-
-                if (difference.TryGetValue(dataGrid, out var diff) == false && windowActualWidth > parent.ActualWidth )
+                if (difference.TryGetValue(dataGrid, out var diff) == false && windowActualWidth > parent.ActualWidth)
                 {
                     difference[dataGrid] = diff = windowActualWidth - parent.ActualWidth;
                 }
 
-     
-                    var totalWidth =  Math.Min(windowActualWidth - diff, parent.ActualWidth) - (dataGrid.Margin.Left + dataGrid.Margin.Right) - margin;
+                var totalWidth = Math.Min(windowActualWidth - diff, parent.ActualWidth) - (dataGrid.Margin.Left + dataGrid.Margin.Right) - margin;
 
-                    var sharedWidth = (totalWidth / dataGrid.Columns.Count);
+                var sharedWidth = (totalWidth / dataGrid.Columns.Count);
 
-                    for (int column = 0; column < dataGrid.Columns.Count; ++column)
-                    {
-                        dataGrid.Columns[column].Width = sharedWidth;
-                    }
-                
+                for (int column = 0; column < dataGrid.Columns.Count; ++column)
+                {
+                    dataGrid.Columns[column].Width = sharedWidth;
+                }
             }
         }
     }

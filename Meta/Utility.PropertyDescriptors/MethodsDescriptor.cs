@@ -6,7 +6,6 @@ internal class MethodsDescriptor(Descriptor Descriptor, object Instance) : Refer
 
     public override string? Name => _Name;
 
-
     public override IEnumerable Items()
     {
         var children = MethodExplorer.MethodInfos(Descriptor.PropertyType).ToArray();
@@ -39,8 +38,4 @@ public static class MethodExplorer
         else
             yield break;
     }
-
-
 }
-
-

@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using TheArtOfDev.HtmlRenderer.WPF;
 using TinyHtml.Wpf;
 using Utility.WPF.Controls.Base;
-using static AvalonEditB.Document.TextDocumentWeakEventManager;
 
 namespace Utility.WPF.Controls.Html
 {
-
     public class TinyHtmlControl : SplitControl, IHtmlControl
     {
         private bool _updateLock;
@@ -23,19 +15,16 @@ namespace Utility.WPF.Controls.Html
 
         public static readonly DependencyProperty HtmlProperty = DependencyProperty.Register("Html", typeof(string), typeof(TinyHtmlControl), new PropertyMetadata(changed));
 
-
         static TinyHtmlControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(TinyHtmlControl), new FrameworkPropertyMetadata(typeof(TinyHtmlControl)));
         }
-
 
         public string Html
         {
             get { return (string)GetValue(HtmlProperty); }
             set { SetValue(HtmlProperty, value); }
         }
-
 
         private static void changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -77,11 +66,8 @@ namespace Utility.WPF.Controls.Html
             Cursor = Cursors.Arrow;
             _updateLock = false;
 
-
             UpdateWebBrowserHtml();
-
         }
-
 
         public void UpdateWebBrowserHtml()
         {
@@ -95,12 +81,9 @@ namespace Utility.WPF.Controls.Html
             /// Fix the raw html by replacing bridge object properties calls with path to file with the data returned from the property.
             /// </summary>
             /// <returns>fixed html</returns>
-
-
         }
 
-
-        void combine()
+        private void combine()
         {
             string cssFile = "sakura.css";
             //string cssFile = "pico.min.css";
@@ -112,7 +95,7 @@ namespace Utility.WPF.Controls.Html
             using (var s = typeof(TinyHtmlControl).Assembly.GetManifestResourceStream(name))
             {
                 WpfHtmlControlBase.SetMasterStylesheet(new StreamReader(s).ReadToEnd());
-            }         
+            }
         }
     }
 }

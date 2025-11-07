@@ -1,10 +1,8 @@
 ﻿using System.Collections.ObjectModel;
-using Utility.Interfaces.Exs;
 using Utility.PropertyNotifications;
 
 namespace Utility.Simulation
-{ 
-
+{
     public class HistoryViewModel : NotifyPropertyClass
     {
         private int index = -1;
@@ -15,6 +13,5 @@ namespace Utility.Simulation
         public object CurrentItem => Collection[Index];
 
         public ObservableCollection<object> Collection { get; } = [];
-
     }
 }

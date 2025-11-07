@@ -1,12 +1,12 @@
-﻿using Microsoft.Win32;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
+using Microsoft.Win32;
+using ReactiveUI;
 
 namespace Utility.WPF.Controls.FileSystem
 {

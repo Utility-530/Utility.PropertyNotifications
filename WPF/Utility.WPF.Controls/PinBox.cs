@@ -95,6 +95,7 @@ namespace Utility.WPF.Controls
         }
 
         private TextBox pinDigit1;
+
         private TextBox PinDigit1
         {
             get { return pinDigit1; }
@@ -115,6 +116,7 @@ namespace Utility.WPF.Controls
         }
 
         private TextBox pinDigit2;
+
         private TextBox PinDigit2
         {
             get { return pinDigit2; }
@@ -135,6 +137,7 @@ namespace Utility.WPF.Controls
         }
 
         private TextBox pinDigit3;
+
         private TextBox PinDigit3
         {
             get { return pinDigit3; }
@@ -155,6 +158,7 @@ namespace Utility.WPF.Controls
         }
 
         private TextBox pinDigit4;
+
         private TextBox PinDigit4
         {
             get { return pinDigit4; }

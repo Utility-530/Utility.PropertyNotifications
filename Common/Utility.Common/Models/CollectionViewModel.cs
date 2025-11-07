@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using ReactiveUI;
-
-namespace Utility.Common.Models;
+﻿namespace Utility.Common.Models;
 
 //public class CollectionViewModel<T> : ViewModel
 //{
 //    private readonly ObservableCollection<T> notes = new();
 //    private T? selectedNote;
 //    private int selectedIndex;
-
 
 //    public T? SelectedNote
 //    {
@@ -26,7 +19,6 @@ namespace Utility.Common.Models;
 //    }
 
 //    public ICollection Notes => notes;
-
 
 //    public void Replace(IList<T> notes, T selectedNote)
 //    {
@@ -90,6 +82,5 @@ namespace Utility.Common.Models;
 //                //}
 //            });
 //    }
-
 
 //}

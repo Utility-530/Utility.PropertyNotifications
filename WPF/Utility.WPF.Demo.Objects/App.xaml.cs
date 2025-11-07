@@ -2,7 +2,6 @@
 using System.Windows;
 using Utility.WPF.Controls.Meta;
 
-
 namespace Utility.WPF.Demo.Objects
 {
     /// <summary>
@@ -10,7 +9,6 @@ namespace Utility.WPF.Demo.Objects
     /// </summary>
     public partial class App : Application
     {
-
         protected override void OnStartup(StartupEventArgs e)
         {
             new Window
@@ -28,6 +26,7 @@ namespace Utility.WPF.Demo.Objects
         {
             Data.Add("One", "1");
         }
+
         public int One { get; set; }
     }
 
@@ -37,6 +36,7 @@ namespace Utility.WPF.Demo.Objects
         {
             Data.Add("Two", "2");
         }
+
         public int Two { get; set; }
     }
 }

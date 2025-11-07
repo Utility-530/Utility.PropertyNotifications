@@ -1,12 +1,12 @@
-﻿using BFF.DataVirtualizingCollection.DataVirtualizingCollection;
-using DynamicData;
-using Endless;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
+using BFF.DataVirtualizingCollection.DataVirtualizingCollection;
+using DynamicData;
+using Endless;
+using ReactiveUI;
 using Utility.WPF.Demo.Data.Factory;
 using Utility.WPF.Demo.Data.Model;
 using VirtualisationHelper = Utility.Helpers.Ex.VirtualisationHelper;

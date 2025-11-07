@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Pather.CSharp.PathElements
 {
@@ -41,7 +39,6 @@ namespace Pather.CSharp.PathElements
 
         public override void Apply(object target, object value)
         {
-
             if (target is IDictionary dict)
             {
                 dict[key] = value;

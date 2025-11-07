@@ -1,9 +1,9 @@
-﻿using Fasterflect;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Fasterflect;
+using ReactiveUI;
 using Utility.WPF.Controls.Base;
 using Utility.WPF.Helpers;
 

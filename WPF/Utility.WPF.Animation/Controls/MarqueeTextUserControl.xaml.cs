@@ -15,8 +15,6 @@ namespace Utility.WPF.Animations
         public static readonly DependencyProperty MovementProperty = DependencyProperty.Register("Movement", typeof(XYTraversal), typeof(MarqueeTextUserControl), new PropertyMetadata(XYTraversal.RightToLeft, Changed));
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(MarqueeTextUserControl), new PropertyMetadata(Changed2));
 
-
-
         public RepeatBehavior Repeat
         {
             get { return (RepeatBehavior)GetValue(RepeatProperty); }
@@ -27,8 +25,6 @@ namespace Utility.WPF.Animations
         public static readonly DependencyProperty RepeatProperty =
             DependencyProperty.Register("Repeat", typeof(RepeatBehavior), typeof(MarqueeTextUserControl), new PropertyMetadata(RepeatBehavior.Forever));
 
-
-
         private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is MarqueeTextUserControl cntrl && e.NewValue is XYTraversal movement)
@@ -38,19 +34,22 @@ namespace Utility.WPF.Animations
                     case XYTraversal.LeftToRight:
                         cntrl.LeftToRightMarquee();
                         break;
+
                     case XYTraversal.RightToLeft:
                         cntrl.RightToLeftMarquee();
                         break;
+
                     case XYTraversal.BottomToTop:
                         cntrl.BottomToTopMarquee();
                         break;
+
                     case XYTraversal.TopToBottom:
                         cntrl.TopToBottomMarquee();
                         break;
                 }
             }
         }
-        
+
         private static void Changed2(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is MarqueeTextUserControl cntrl && e.NewValue is string)
@@ -60,12 +59,15 @@ namespace Utility.WPF.Animations
                     case XYTraversal.LeftToRight:
                         cntrl.LeftToRightMarquee();
                         break;
+
                     case XYTraversal.RightToLeft:
                         cntrl.RightToLeftMarquee();
                         break;
+
                     case XYTraversal.BottomToTop:
                         cntrl.BottomToTopMarquee();
                         break;
+
                     case XYTraversal.TopToBottom:
                         cntrl.TopToBottomMarquee();
                         break;
@@ -86,12 +88,15 @@ namespace Utility.WPF.Animations
                 case XYTraversal.LeftToRight:
                     LeftToRightMarquee();
                     break;
+
                 case XYTraversal.RightToLeft:
                     RightToLeftMarquee();
                     break;
+
                 case XYTraversal.BottomToTop:
                     BottomToTopMarquee();
                     break;
+
                 case XYTraversal.TopToBottom:
                     TopToBottomMarquee();
                     break;
@@ -123,7 +128,6 @@ namespace Utility.WPF.Animations
 
         private void RightToLeftMarquee()
         {
-
             tbmarquee.BeginAnimation(Canvas.RightProperty, Horizontal());
         }
 
@@ -134,7 +138,6 @@ namespace Utility.WPF.Animations
 
         private void BottomToTopMarquee()
         {
-
             tbmarquee.BeginAnimation(Canvas.BottomProperty, Vertical());
         }
 
@@ -149,8 +152,8 @@ namespace Utility.WPF.Animations
                 RepeatBehavior = Repeat,
                 Duration = Duration
             };
-
         }
+
         private DoubleAnimation Horizontal()
         {
             double height = canMain.ActualHeight - tbmarquee.ActualHeight;

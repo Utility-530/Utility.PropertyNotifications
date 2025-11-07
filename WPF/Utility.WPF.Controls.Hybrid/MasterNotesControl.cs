@@ -1,8 +1,7 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Controls;
+using ReactiveUI;
 using Utility.WPF.Controls.Dragablz;
 
 namespace Utility.WPF.Controls.Hybrid
@@ -43,10 +42,12 @@ namespace Utility.WPF.Controls.Hybrid
                                     ItemsSource = ItemsSource
                                 };
                                 break;
+
                             case NotesControl msn:
                                 msn.ItemsSource = ItemsSource;
                                 msn.DisplayMemberPath = DisplayMemberPath;
                                 break;
+
                             default:
                                 throw new ApplicationException("Expected Content to be MasterNotesItemsControl");
                         }

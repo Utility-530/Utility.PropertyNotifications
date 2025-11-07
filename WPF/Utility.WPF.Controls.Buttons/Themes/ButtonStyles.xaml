@@ -55,7 +55,6 @@
         </Setter>
     </Style>
 
-
     <Style x:Key="HollowButton"
            TargetType="{x:Type Button}"
            BasedOn="{StaticResource {x:Type Button}}">

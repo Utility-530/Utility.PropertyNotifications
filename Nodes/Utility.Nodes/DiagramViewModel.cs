@@ -1,24 +1,19 @@
-﻿using DryIoc;
-using System.Linq;
-using System;
-using System.Collections.ObjectModel;
-using Utility.Nodify.Operations.Infrastructure;
+﻿using System.Collections.ObjectModel;
 using System.Drawing;
-using Utility.Enums;
-using Splat;
-using Utility.Interfaces.NonGeneric;
-using Utility.Trees;
-using Utility.Reactives;
 using System.Reactive.Linq;
 using System.Reflection;
-using Utility.Nodify.Base.Abstractions;
-using MoreLinq;
-using System.Collections.Generic;
 using System.Windows.Input;
+using DryIoc;
+using MoreLinq;
 using Utility.Collections;
 using Utility.Commands;
-using Utility.PropertyNotifications;
+using Utility.Enums;
 using Utility.Interfaces.Exs.Diagrams;
+using Utility.Interfaces.NonGeneric;
+using Utility.Nodify.Base.Abstractions;
+using Utility.Nodify.Operations.Infrastructure;
+using Utility.PropertyNotifications;
+using Utility.Reactives;
 
 namespace Utility.Nodes
 {

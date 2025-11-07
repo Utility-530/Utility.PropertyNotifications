@@ -17,14 +17,9 @@ namespace Utility.WPF.Demo.Trees
             beijing.GetType().GetProperties(System.Reflection.BindingFlags.Public);
         }
 
-
         private void singleTree_Initialized(object sender, EventArgs e)
-        { 
- 
-              
-   
+        {
             var trv = sender as TreeView;
-    
         }
 
         private void singleTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -46,30 +41,26 @@ namespace Utility.WPF.Demo.Trees
         }
     }
 
-    public class AdministrationViewModel 
+    public class AdministrationViewModel
     {
         public AdministrationViewModel()
         {
-       
         }
 
         private string id;
+
         public string Id
         {
-
             get => id;
             set => id = value;
         }
 
-
         private string name;
+
         public string Name
         {
-
             get => name;
             set => name = value;
         }
-
-
     }
 }

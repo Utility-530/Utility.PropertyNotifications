@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
-using Utility.WPF.Helpers;
 using Utility.Helpers;
 using Utility.Reactives;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Reactives;
 
 public static class ChildControls
 {
-    static Dictionary<FrameworkElement, IObservable<FrameworkElement>> Lazy { get; } = new();
+    private static Dictionary<FrameworkElement, IObservable<FrameworkElement>> Lazy { get; } = new();
 
     public static IObservable<T> Observable<T>(this FrameworkElement dependencyObject, string? name = null) where T : FrameworkElement
     {
@@ -32,7 +32,7 @@ public static class ChildControls
         .SubscribeOnDispatcher();
     }
 
-    static IObservable<IEnumerable<FrameworkElement>> ControlsOnLoad(this FrameworkElement dependencyObject)
+    private static IObservable<IEnumerable<FrameworkElement>> ControlsOnLoad(this FrameworkElement dependencyObject)
     {
         if (dependencyObject is FrameworkElement control)
         {

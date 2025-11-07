@@ -7,8 +7,8 @@ namespace Utility.WPF.Controls.Lists
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            var dataTemplate = Application.Current.TryFindResource(new DataTemplateKey(item.GetType())) as DataTemplate; 
-            if(dataTemplate is DataTemplate dte)
+            var dataTemplate = Application.Current.TryFindResource(new DataTemplateKey(item.GetType())) as DataTemplate;
+            if (dataTemplate is DataTemplate dte)
             {
                 return dte;
             }
@@ -17,7 +17,6 @@ namespace Utility.WPF.Controls.Lists
                 return dt;
             }
             return DefaultTemplate;
-
         }
 
         public DataTemplate DefaultTemplate { get; set; }

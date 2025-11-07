@@ -1,11 +1,11 @@
-﻿using DynamicData;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using DynamicData;
+using ReactiveUI;
 using Utility.Reactives;
 
 namespace Utility.Models.Filters
@@ -35,6 +35,7 @@ namespace Utility.Models.Filters
         {
             subjects.OnNext(value);
         }
+
         public override IDisposable Subscribe(IObserver<Unit> observer)
         {
             return Value.Select(a => Unit.Default).Subscribe(observer);

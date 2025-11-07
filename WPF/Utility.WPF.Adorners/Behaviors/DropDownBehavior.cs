@@ -1,13 +1,10 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using Microsoft.Xaml.Behaviors;
 using Utility.Helpers.NonGeneric;
 using Utility.Structs;
 using Utility.WPF.Adorners.Infrastructure;
@@ -16,7 +13,6 @@ using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Adorners.Behaviors
 {
-
     public class DropDownBehavior : Behavior<FrameworkElement>
     {
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(IEnumerable), typeof(DropDownBehavior), new PropertyMetadata());
@@ -45,7 +41,7 @@ namespace Utility.WPF.Adorners.Behaviors
             base.OnAttached();
         }
 
-        void Show(FrameworkElement treeViewItem)
+        private void Show(FrameworkElement treeViewItem)
         {
             //bool b = false;
             if (treeViewItem.Adorners() == null)
@@ -70,10 +66,9 @@ namespace Utility.WPF.Adorners.Behaviors
             }
             //if (b)
             //    Add(treeViewItem);
-
         }
 
-        void Hide(FrameworkElement frameworkElement)
+        private void Hide(FrameworkElement frameworkElement)
         {
             IsShown = false;
             //myList.RemoveLast();
@@ -92,7 +87,7 @@ namespace Utility.WPF.Adorners.Behaviors
             set { SetValue(ItemsSourceProperty, value); }
         }
 
-        static System.Windows.Controls.ScrollViewer Make(IEnumerable itemsSource)
+        private static System.Windows.Controls.ScrollViewer Make(IEnumerable itemsSource)
         {
             var itemsControl = new ListBox()
             {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Reflection;
 using Pather.CSharp.PathElements;
 
@@ -46,7 +45,7 @@ namespace Pather.CSharp
         public static void Modify(this IPathElementSplitter pathSplitter, object target, string path, object value)
         {
             resolve(pathSplitter.ToPathElements(path));
-      
+
             void resolve(IList<IPathElement> pathElements)
             {
                 var tempResult = target;
@@ -54,25 +53,20 @@ namespace Pather.CSharp
                 tempResults.Add(tempResult);
                 for (int i = 0; i < pathElements.Count - 1; i++)
                 {
-
                     var pathElement = pathElements[i];
                     if (tempResult is Selection s)
                         tempResult = pathElement.Apply(s);
                     else
                         tempResult = pathElement.Apply(tempResult);
                     tempResults.Add(tempResult);
-
                 }
 
                 pathElements.LastOrDefault()?.Apply(tempResult, value);
-                if(tempResult.GetType().GetTypeInfo().IsValueType)
+                if (tempResult.GetType().GetTypeInfo().IsValueType)
                 {
-                    pathElements[pathElements.Count - 2].Apply(tempResults[tempResults.Count-2], tempResult);
+                    pathElements[pathElements.Count - 2].Apply(tempResults[tempResults.Count - 2], tempResult);
                 }
-                
             }
         }
     }
-
-
 }

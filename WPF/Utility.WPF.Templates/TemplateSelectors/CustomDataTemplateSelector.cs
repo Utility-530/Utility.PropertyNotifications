@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using Utility.Interfaces.NonGeneric;
@@ -38,7 +37,6 @@ namespace Utility.WPF.Templates
                 return template;
 
             return (Templates["Missing"] as DataTemplate) ?? throw new Exception("dfs 33091111111");
-
         }
 
         public ResourceDictionary Templates
@@ -68,7 +66,6 @@ namespace Utility.WPF.Templates
         //}
 
         public static CustomDataTemplateSelector Instance => new();
-
 
         public DataTemplate FromType(Type type)
         {

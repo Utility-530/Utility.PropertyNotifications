@@ -15,7 +15,6 @@ namespace Utility.WPF.Controls.ComboBoxes
             return ToTree(assemblies, new Predicate<DictionaryEntry>(a =>
             {
                 return a.Value.GetType().ToString().Contains(filterType);
-
             }));
         }
 
@@ -34,9 +33,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                     {
                         if (predicate?.Invoke(dicKeyValue) != false)
                         {
-
                             _tree.Add(new Tree(dicKeyValue) { Parent = _tree, Key = dicKeyValue.Key.ToString() });
-
                         }
                     }
                     if (_tree.HasChildren)
@@ -50,5 +47,4 @@ namespace Utility.WPF.Controls.ComboBoxes
             return t_tree;
         }
     }
-
 }

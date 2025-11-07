@@ -1,13 +1,13 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Behaviors
 {
+    using System.Windows.Media;
     using ColorCode;
     using Evan.Wpf;
     using SourceChord.FluentWPF;
-    using System.Windows.Media;
 
     public class SyntaxHighlightBehavior : Behavior<RichTextBox>
     {

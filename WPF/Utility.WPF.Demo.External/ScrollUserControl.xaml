@@ -24,7 +24,6 @@
         <Image Source="pack://application:,,,/Utility.WPF.Demo.Data;component/Images/Play.png" x:Key="Play21" />
         <Image Source="pack://application:,,,/Utility.WPF.Demo.Data;component/Images/Play.png" x:Key="Play22" />
         <Image Source="pack://application:,,,/Utility.WPF.Demo.Data;component/Images/Play.png" x:Key="Play32" />
-
     </FrameworkElement.Resources>
 
     <Grid>
@@ -36,9 +35,8 @@
                         <DataTemplate>
                             <Grid Background="White">
 
-
-                                <TextBlock  Text="{Binding StringFormat='{}{0:dd MMM}' }" 
-                                           FontSize="26" 
+                                <TextBlock  Text="{Binding StringFormat='{}{0:dd MMM}' }"
+                                           FontSize="26"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"></TextBlock>
                             </Grid>
@@ -57,13 +55,13 @@
                     </ListBox.ItemContainerStyle>
                 </ListBox>
                 <i:Interaction.Behaviors>
-                    <b:ScrollAnimationBehavior/>
-                    <b:MouseWheelScrollBehavior/>
+                    <b:ScrollAnimationBehavior />
+                    <b:MouseWheelScrollBehavior />
                 </i:Interaction.Behaviors>
             </ScrollViewer>
 
             <!--<via:AnimatedScrollViewer x:Name="Dates2ScrollViewer"
-                             
+
                                       IsTabStop="False"
                                       Focusable="False">
                 <ListBox x:Name="Dates2ListBox">
@@ -74,8 +72,8 @@
                     </ItemsControl.ItemsPanel>
                 </ListBox>
                 <b:Interaction.Behaviors>
-                    <utl:ScrollAnimationBehavior/>
-                    <utl:MouseWheelScrollBehavior/>
+                    <utl:ScrollAnimationBehavior />
+                    <utl:MouseWheelScrollBehavior />
                 </b:Interaction.Behaviors>
             </via:AnimatedScrollViewer>-->
             <DockPanel x:Name="Panel">
@@ -104,10 +102,9 @@
                         Focusable="False"
                         WheelOrientation="Horizontal">
                     <i:Interaction.Behaviors>
-                        <b:ScrollAnimationBehavior/>
-                        <b:MouseWheelScrollBehavior/>
+                        <b:ScrollAnimationBehavior />
+                        <b:MouseWheelScrollBehavior />
                     </i:Interaction.Behaviors>
-
 
                     <StackPanel x:Name="stackPanel" Orientation="Vertical">
                         <StackPanel.Resources>
@@ -137,10 +134,9 @@
                               Focusable="False"
                               WheelOrientation="Horizontal">
                 <b:Interaction.Behaviors>
-                    <utl:ScrollAnimationBehavior/>
-                    <utl:MouseWheelScrollBehavior/>
+                    <utl:ScrollAnimationBehavior />
+                    <utl:MouseWheelScrollBehavior />
                 </b:Interaction.Behaviors>
-
 
                 <StackPanel x:Name="StackPanel2" Orientation="Vertical">
                     <StackPanel.Resources>
@@ -159,6 +155,5 @@
                 </StackPanel>
             </via:ScrollViewer>-->
         </UniformGrid>
-
     </Grid>
 </UserControl>

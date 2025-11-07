@@ -12,14 +12,13 @@ namespace System.Windows.Controls
     /// </summary>
     public class CustomGridSplitter : Thumb
     {
-        static readonly FrameworkElement targetNullObject = new FrameworkElement();
-        bool isHorizontal;
-        bool isBottomOrRight;
-        FrameworkElement target = targetNullObject;
+        private static readonly FrameworkElement targetNullObject = new FrameworkElement();
+        private bool isHorizontal;
+        private bool isBottomOrRight;
+        private FrameworkElement target = targetNullObject;
         private FrameworkElement source;
-        double? initialLength, initialSourceLength;
-        double availableSpace;
-
+        private double? initialLength, initialSourceLength;
+        private double availableSpace;
 
         static CustomGridSplitter()
         {
@@ -35,29 +34,26 @@ namespace System.Windows.Controls
             DragDelta += OnDragDelta;
         }
 
+        private Grid Panel => Parent as Grid ?? this.FindParent<Grid>();
 
-        Grid Panel => Parent as Grid ?? this.FindParent<Grid>();
-
-
-        void OnLoaded(object sender, RoutedEventArgs e)
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
             if (!(Panel is Grid))
             {
                 throw new InvalidOperationException($"{nameof(CustomGridSplitter)} must be directly in a Grid.");
             }
 
-
             if (GetTargetOrDefault() == default)
                 throw new InvalidOperationException($"{nameof(CustomGridSplitter)} must be directly after a FrameworkElement");
         }
 
-        void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (initialLength != null)
                 SetTargetLength(initialLength.Value);
         }
 
-        void OnDragStarted(object sender, DragStartedEventArgs e)
+        private void OnDragStarted(object sender, DragStartedEventArgs e)
         {
             isHorizontal = GetIsHorizontal(this);
             isBottomOrRight = GetIsBottomOrRight();
@@ -68,7 +64,7 @@ namespace System.Windows.Controls
             availableSpace = GetAvailableSpace();
         }
 
-        void OnDragDelta(object sender, DragDeltaEventArgs e)
+        private void OnDragDelta(object sender, DragDeltaEventArgs e)
         {
             var change = isHorizontal ? e.VerticalChange : e.HorizontalChange;
             change = -change; // *(Math.Sign(e.HorizontalChange));
@@ -78,34 +74,32 @@ namespace System.Windows.Controls
             newTargetLength = Clamp(newTargetLength, 0, availableSpace);
             newTargetLength = Math.Round(newTargetLength);
 
-
             //SetTargetLength(GetTargetLength()- newTargetLength+ targetLength);
             SetSourceLength(newTargetLength);
         }
 
-        FrameworkElement? GetTargetOrDefault()
+        private FrameworkElement? GetTargetOrDefault()
         {
             var children = Panel.Children.OfType<object>();
             var splitterIndex = Panel.Children.IndexOf(this);
             return children.ElementAtOrDefault(splitterIndex - 1) as FrameworkElement;
         }
 
-        FrameworkElement? GetSourceOrDefault()
+        private FrameworkElement? GetSourceOrDefault()
         {
             var children = Panel.Children.OfType<object>();
             var splitterIndex = Panel.Children.IndexOf(this);
             return children.ElementAtOrDefault(splitterIndex + 1) as FrameworkElement;
         }
 
-
-        bool GetIsBottomOrRight()
+        private bool GetIsBottomOrRight()
         {
             return false;
             //var position = Grid.GetDock(this);
             //return position == Dock.Bottom || position == Dock.Right;
         }
 
-        double GetAvailableSpace()
+        private double GetAvailableSpace()
         {
             var lastChild =
                 //Panel.LastChildFill ?
@@ -124,41 +118,41 @@ namespace System.Windows.Controls
             return panelLength - unavailableSpace;
         }
 
-        void SetTargetLength(double length)
+        private void SetTargetLength(double length)
         {
             if (isHorizontal) target.Height = length;
             else target.Width = length;
         }
 
-        void SetSourceLength(double length)
+        private void SetSourceLength(double length)
         {
             if (isHorizontal) source.Height = length;
             else source.Width = length;
         }
 
-        double GetTargetLength() => GetLength(target);
-        double GetSourceLength() => GetLength(source);
+        private double GetTargetLength() => GetLength(target);
 
-        static bool GetIsHorizontal(FrameworkElement element)
+        private double GetSourceLength() => GetLength(source);
+
+        private static bool GetIsHorizontal(FrameworkElement element)
         {
             return false;
             //var position = Grid.GetDock(element);
             //return GetIsHorizontal(position);
         }
 
-        static bool GetIsHorizontal(Dock position)
+        private static bool GetIsHorizontal(Dock position)
             => position == Dock.Top || position == Dock.Bottom;
 
-        static double Clamp(double value, double min, double max)
+        private static double Clamp(double value, double min, double max)
             => value < min ? min :
                value > max ? max :
                value;
 
-        double GetLength(FrameworkElement element)
+        private double GetLength(FrameworkElement element)
             => isHorizontal ?
                element.ActualHeight :
                element.ActualWidth;
-
 
         internal class CursorConverter : IValueConverter
         {

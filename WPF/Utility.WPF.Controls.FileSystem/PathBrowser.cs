@@ -1,11 +1,11 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ReactiveUI;
 using Utility.WPF.Controls.FileSystem.Infrastructure;
 using Button = System.Windows.Controls.Button;
 using Control = System.Windows.Controls.Control;
@@ -35,7 +35,6 @@ namespace Utility.WPF.Controls.FileSystem
 
             SetPath = ReactiveCommand.Create<string>(pathChanges.OnNext);
 
-
             pathChanges
                 .WhereNotNull()
                 .DistinctUntilChanged()
@@ -57,7 +56,6 @@ namespace Utility.WPF.Controls.FileSystem
             RaiseTextChangeEvent(path);
             Path = path;
         }
-
 
         public override void OnApplyTemplate()
         {
@@ -95,9 +93,6 @@ namespace Utility.WPF.Controls.FileSystem
         protected Label LabelOne;
         protected TextBox TextBoxOne;
 
-
-
-
         // Using a DependencyProperty as the backing store for Path.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PathProperty =
             DependencyProperty.Register("Path", typeof(string), typeof(PathBrowser), new PropertyMetadata(onPathChanged));
@@ -123,7 +118,7 @@ namespace Utility.WPF.Controls.FileSystem
 
         public PathBrowser()
         {
-            SetPath = ReactiveCommand.Create<string>(pathChanges.OnNext);            
+            SetPath = ReactiveCommand.Create<string>(pathChanges.OnNext);
             Command.TextChanged += Command_TextChanged;
         }
 
@@ -145,6 +140,7 @@ namespace Utility.WPF.Controls.FileSystem
         }
 
         #region properties
+
         public string Path
         {
             get { return (string)GetValue(PathProperty); }

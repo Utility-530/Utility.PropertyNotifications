@@ -3,6 +3,5 @@
     public interface IGetBalance
     {
         int Balance { get; }
-
     }
 }

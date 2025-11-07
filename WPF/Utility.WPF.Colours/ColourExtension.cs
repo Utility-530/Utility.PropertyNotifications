@@ -1,11 +1,10 @@
 using System;
-using System.Windows.Data;
-using System.Windows.Markup;
-using Leepfrog.WpfFramework;
-using MaterialDesignColors.Recommended;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Markup;
 using System.Windows.Media;
+using Leepfrog.WpfFramework;
+using MaterialDesignColors.Recommended;
 using Colour = Utility.Enums.Colour;
 
 namespace Utility.WPF.Colours
@@ -39,6 +38,7 @@ namespace Utility.WPF.Colours
         {
         }
     }
+
     public class PurpleExtension : ColourExtension
     {
         public PurpleExtension() : this(ColourIntensity.Default, null)
@@ -53,6 +53,7 @@ namespace Utility.WPF.Colours
         {
         }
     }
+
     public class DeepPurpleExtension : ColourExtension
     {
         public DeepPurpleExtension() : this(ColourIntensity.Default, null)
@@ -67,6 +68,7 @@ namespace Utility.WPF.Colours
         {
         }
     }
+
     public class IndigoExtension : ColourExtension
     {
         public IndigoExtension() : this(ColourIntensity.Default, null)
@@ -81,6 +83,7 @@ namespace Utility.WPF.Colours
         {
         }
     }
+
     public class BlueExtension : ColourExtension
     {
         public BlueExtension() : this(ColourIntensity.Default, null)
@@ -95,6 +98,7 @@ namespace Utility.WPF.Colours
         {
         }
     }
+
     public class TealExtension : ColourExtension
     {
         public TealExtension() : this(ColourIntensity.Default, null)
@@ -109,6 +113,7 @@ namespace Utility.WPF.Colours
         {
         }
     }
+
     public class CyanExtension : ColourExtension
     {
         public CyanExtension() : this(ColourIntensity.Default, null)
@@ -123,6 +128,7 @@ namespace Utility.WPF.Colours
         {
         }
     }
+
     public class GreenExtension : ColourExtension
     {
         public GreenExtension() : this(ColourIntensity.Default, null)
@@ -137,6 +143,7 @@ namespace Utility.WPF.Colours
         {
         }
     }
+
     public class LightGreenExtension : ColourExtension
     {
         public LightGreenExtension() : this(ColourIntensity.Default, null)
@@ -151,6 +158,7 @@ namespace Utility.WPF.Colours
         {
         }
     }
+
     public class LimeExtension : ColourExtension
     {
         public LimeExtension() : this(ColourIntensity.Default, null)
@@ -226,7 +234,6 @@ namespace Utility.WPF.Colours
         }
     }
 
-
     public class BrownExtension : ColourExtension
     {
         public BrownExtension() : this(ColourIntensity.Default, null)
@@ -241,7 +248,6 @@ namespace Utility.WPF.Colours
         {
         }
     }
-
 
     public class GreyExtension : ColourExtension
     {
@@ -258,7 +264,6 @@ namespace Utility.WPF.Colours
         }
     }
 
-
     public class BlueGreyExtension : ColourExtension
     {
         public BlueGreyExtension() : this(ColourIntensity.Default, null)
@@ -274,16 +279,12 @@ namespace Utility.WPF.Colours
         }
     }
 
-
     public class ColourExtension : MarkupExtension
     {
-
-
         public enum ColourIntensity
         {
             Fifty, OneHundred, TwoHundred, ThreeHundred, FourHundred, FiveHundred, SixHundred, SevenHundred, EightHundred, NineHundred, AlphaOneHundred, AlphaTwoHundred, AlphaFourHundred, AlphaSevenHundred, Default = TwoHundred
         }
-
 
         [ConstructorArgument("value")]
         public ColourIntensity Value { get; set; }
@@ -619,6 +620,3 @@ namespace Utility.WPF.Colours
         }
     }
 }
-
-
-

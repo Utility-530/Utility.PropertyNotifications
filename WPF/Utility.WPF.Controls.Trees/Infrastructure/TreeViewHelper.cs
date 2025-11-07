@@ -43,6 +43,5 @@ namespace Utility.WPF.Controls.Trees
             return control
                     .MouseMoveSelections<TreeViewItem>();
         }
-
     }
 }

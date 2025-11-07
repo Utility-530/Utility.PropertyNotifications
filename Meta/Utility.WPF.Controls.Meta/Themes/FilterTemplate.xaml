@@ -1,11 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:local="clr-namespace:Utility.WPF.Controls.Meta.ViewModels"
-                    xmlns:uvm="clr-namespace:Utility.ViewModels;assembly=Utility.ViewModels.Customs"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:temp="http://schemas.utility.com/templates"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:uvm="clr-namespace:Utility.ViewModels;assembly=Utility.ViewModels.Customs">
 
     <!--<DataTemplate DataType="{x:Type local:StringMatchFilter}">
-        --><!--<TextBox MinWidth="200" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>--><!--
+        -->
+    <!--<TextBox MinWidth="200" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>-->
+    <!--
     </DataTemplate>-->
 
     <DataTemplate DataType="{x:Type uvm:CheckViewModel}">
@@ -14,9 +15,9 @@
                 <ColumnDefinition Width="100"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            
-    <TextBlock Text="{Binding Header}" />
-    
+
+            <TextBlock Text="{Binding Header}" />
+
             <ContentControl Content="{Binding Content}"
                                         Grid.Column="1"
                                         ContentTemplateSelector="{x:Static temp:CustomDataTemplateSelector.Instance}">

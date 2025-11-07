@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,7 +21,7 @@ namespace Utility.WPF.Demo.Trees
                 Width = 200,
                 Height = 30,
                 ItemTemplate = this.Resources[new DataTemplateKey(typeof(Character))] as DataTemplate,
-                //Style= this.Resources["Demo"] as Style, 
+                //Style= this.Resources["Demo"] as Style,
                 EditTemplate = this.Resources["EditTemplate"] as DataTemplate,
                 ItemContainerStyle = this.Resources["CustomTreeViewItem"] as Style,
                 TreeView = treeView,
@@ -31,7 +30,6 @@ namespace Utility.WPF.Demo.Trees
             };
             parent.FinishEdit += Parent_Add;
 
-
             treeView.AddHandler(CustomTreeViewItem.ChangeEvent, new RoutedEventHandler(change));
             treeView.Items.Add(parent);
             this.Content = treeView;
@@ -39,7 +37,6 @@ namespace Utility.WPF.Demo.Trees
 
         private void change(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void Parent_Add(object sender, EditRoutedEventArgs e)
@@ -53,7 +50,7 @@ namespace Utility.WPF.Demo.Trees
             parent.Items.Add(child);
         }
 
-        TreeViewItem Make(string header)
+        private TreeViewItem Make(string header)
         {
             return new TreeViewItem
             {
@@ -61,7 +58,6 @@ namespace Utility.WPF.Demo.Trees
                 HeaderTemplate = this.Resources["ItemTemplate"] as DataTemplate,
                 Style = this.Resources["GenericTreeViewItem"] as Style
             };
-
         }
     }
 }

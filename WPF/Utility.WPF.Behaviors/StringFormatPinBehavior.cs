@@ -1,9 +1,8 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Behaviors
 {

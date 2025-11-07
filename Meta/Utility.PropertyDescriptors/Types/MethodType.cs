@@ -1,5 +1,4 @@
-﻿
-namespace Utility.PropertyDescriptors.Types
+﻿namespace Utility.PropertyDescriptors.Types
 {
     public class MethodType : CustomType
     {
@@ -15,13 +14,8 @@ namespace Utility.PropertyDescriptors.Types
         public override Kind Kind => Kind.Method;
         public override Assembly Assembly => this.parentType.Assembly;
 
-
         public override string? Namespace => this.parentType.Namespace;
 
-
-
         public override string Name => name;
-
-
     }
 }

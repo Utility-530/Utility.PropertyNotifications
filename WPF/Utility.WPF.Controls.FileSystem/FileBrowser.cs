@@ -1,37 +1,35 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.IO;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
+using ReactiveUI;
 using Utility.Interfaces.NonGeneric;
-using Utility.Trees.Abstractions;
 using Utility.WPF.Controls.ComboBoxes;
 using Utility.WPF.Helpers;
 using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.FileSystem
 {
-
     public class FileComboBrowser : FileBrowser<ComboBoxTreeView>
     {
-        FileSelectorBehavior behavior = new();
+        private FileSelectorBehavior behavior = new();
         protected readonly FileBrowserCommand fileBrowserCommand = new();
+
         public FileComboBrowser()
         {
             //contentChanges
             //.OfType<ComboBoxes.ComboBoxTreeView>()
             //.Subscribe(a =>
-            //{   
+            //{
             //});
         }
 
         private void A_SelectedNodeChanged(object sender, ComboBoxTreeView.SelectedNodeEventArgs e)
         {
             //pathChanges.OnNext();
-            if(e.Value is IGetData { Data: IFileSystemInfo { FileSystemInfo: { } info  } })
+            if (e.Value is IGetData { Data: IFileSystemInfo { FileSystemInfo: { } info } })
             {
                 pathChanges.OnNext(info.FullName);
             }
@@ -44,8 +42,7 @@ namespace Utility.WPF.Controls.FileSystem
             var treeView = new ComboBoxTreeView();
             treeView.MinWidth = 100;
             treeView.SelectedNodeChanged += A_SelectedNodeChanged;
-         
-     
+
             //behavior.SetBinding(XamComboEditorSelectedItemsBehavior.SelectedItemsProperty, new Binding()
             //{
             //    ElementName = "_uc",
@@ -60,7 +57,7 @@ namespace Utility.WPF.Controls.FileSystem
 
         protected override void OnPathChange(string path, ComboBoxTreeView sender)
         {
-            if(path!= behavior.FileSystemInfo?.FullName)
+            if (path != behavior.FileSystemInfo?.FullName)
             {
                 behavior.FileSystemInfo = System.IO.Path.GetExtension(path) is string ex ? new FileInfo(path) : new DirectoryInfo(path);
             }

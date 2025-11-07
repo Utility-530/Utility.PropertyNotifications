@@ -1,6 +1,6 @@
-﻿using Autofac;
+﻿using System.Windows;
+using Autofac;
 using Splat.Autofac;
-using System.Windows;
 using Utility.WPF.Meta;
 
 namespace Utility.WPF.Demo.Animation

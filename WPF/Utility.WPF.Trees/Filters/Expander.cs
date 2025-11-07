@@ -20,7 +20,6 @@ namespace Utility.Nodes.WPF
 
         public DecisionTree Predicate { get; set; }
 
-
         public bool Expand(object item)
         {
             Predicate.Reset();

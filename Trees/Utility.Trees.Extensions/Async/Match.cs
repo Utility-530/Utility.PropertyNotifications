@@ -1,11 +1,11 @@
 ﻿using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Utility.Changes;
-using Utility.Trees.Abstractions;
-using Utility.Reactives;
-using Type = Utility.Changes.Type;
-using Utility.PropertyNotifications;
 using Utility.Interfaces.Generic;
+using Utility.PropertyNotifications;
+using Utility.Reactives;
+using Utility.Trees.Abstractions;
+using Type = Utility.Changes.Type;
 
 namespace Utility.Trees.Extensions.Async
 {
@@ -23,7 +23,6 @@ namespace Utility.Trees.Extensions.Async
                 }
                 else
                 {
-
                 }
                 level++;
 
@@ -35,16 +34,13 @@ namespace Utility.Trees.Extensions.Async
                     {
                         observer.OnNext(x);
                     }).DisposeWith(disposables);
-
                 }).DisposeWith(disposables);
-
 
                 tree.Children.Subtractions<ITree>()
                 .Subscribe(item =>
                 {
                     observer.OnNext(new(item, null, Type.Remove, level));
                 }).DisposeWith(disposables);
-
 
                 return disposables;
             });
@@ -139,4 +135,3 @@ namespace Utility.Trees.Extensions.Async
         }
     }
 }
-

@@ -42,15 +42,15 @@ namespace Utility.Interfaces.NonGeneric
         string Value { get; }
     }
 
-    public interface IValue: IGetValue, ISetValue
+    public interface IValue : IGetValue, ISetValue
     {
-
     }
 
     public interface IGetValue
     {
         object Value { get; }
     }
+
     public interface ISetValue
     {
         object Value { set; }

@@ -36,7 +36,6 @@ internal class ValueDescriptor<T>(Descriptor Descriptor, object Instance) : Valu
 internal abstract class NullableValueDescriptor<T>(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IGetValue<T?>
 {
     T? IGetValue<T?>.Value => Get() is T t ? t : default;
-
 }
 
 internal class ValueDescriptor(Descriptor Descriptor, object Instance) : ValueMemberDescriptor(Descriptor), IRaisePropertyChanged, IInstance
@@ -67,4 +66,3 @@ internal class ValueDescriptor(Descriptor Descriptor, object Instance) : ValueMe
         return base.RaisePropertyChanged();
     }
 }
-

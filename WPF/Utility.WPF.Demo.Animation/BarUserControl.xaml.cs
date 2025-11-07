@@ -16,7 +16,6 @@ namespace Utility.WPF.Demo.Animation
         private void BarUserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             toggleButton1.IsChecked = true;
-
         }
     }
 }

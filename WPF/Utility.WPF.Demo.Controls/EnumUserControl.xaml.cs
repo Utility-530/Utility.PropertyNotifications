@@ -15,12 +15,11 @@ namespace Utility.WPF.Demo.View
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-
         }
     }
 
     public class EnumViewModel
     {
-        public Emotion Emotion { get; set; } = Emotion.Confusion; 
+        public Emotion Emotion { get; set; } = Emotion.Confusion;
     }
 }

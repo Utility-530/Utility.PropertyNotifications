@@ -24,7 +24,8 @@ namespace Utility.WPF.Controls.Texts
         public static readonly DependencyProperty MaxLinesProperty = TextBox.MaxLinesProperty.AddOwner(typeof(EditableTextBlock));
         public static readonly DependencyProperty MaxLengthProperty = TextBox.MaxLengthProperty.AddOwner(typeof(EditableTextBlock));
 
-        private static void OnIsEditingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+        private static void OnIsEditingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        { }
 
         private static object CoerceIsEditing(DependencyObject d, object value)
         {

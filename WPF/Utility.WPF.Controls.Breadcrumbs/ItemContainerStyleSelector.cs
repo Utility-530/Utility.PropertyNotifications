@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using Utility.Interfaces.NonGeneric;
 using Utility.WPF.Helpers;
@@ -11,7 +7,6 @@ namespace Utility.WPF.Controls.Breadcrumbs
 {
     public class ItemContainerStyleSelector : StyleSelector
     {
-
         public override Style SelectStyle(object item, DependencyObject container)
         {
             var parent = (container as TreeViewItem).FindParent<TreeViewItem>();
@@ -31,4 +26,3 @@ namespace Utility.WPF.Controls.Breadcrumbs
         public Style BreadcrumbRootStyle { get; set; }
     }
 }
-

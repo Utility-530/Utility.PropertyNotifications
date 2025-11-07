@@ -6,7 +6,7 @@ namespace Utility.Structs
     {
         public Age(int i)
         {
-            if(i<0)
+            if (i < 0)
             {
                 throw new ArgumentException("value must be greate than 0");
             }
@@ -19,7 +19,6 @@ namespace Utility.Structs
         {
             return (int)d.Value;
         }
-
 
         public static implicit operator double(Age d)
         {
@@ -41,9 +40,7 @@ namespace Utility.Structs
         public Age(double value)
         {
             Value = value;
-
         }
-
     }
 
     public static class TimeSpanExtensions
@@ -52,13 +49,12 @@ namespace Utility.Structs
         {
             return (int)(timespan.Days / 365.2425);
         }
+
         public static int GetMonths(this TimeSpan timespan)
         {
-            return  (int)(timespan.Days / 30.436875);
+            return (int)(timespan.Days / 30.436875);
         }
     }
-
-
 
     ////http://csharphelper.com/blog/2015/02/find-elapsed-time-in-years-months-days-hours-minutes-and-seconds-in-c/
     //// Return the number of years, months, days, hours,

@@ -5,24 +5,11 @@
 
     <Style TargetType="{x:Type controls:DoubleClickCheckBox}">
         <Style.Resources>
-            <VisualBrush 
-      x:Key="HatchBrush" 
+            <VisualBrush
+      x:Key="HatchBrush"
                  Opacity="0.3"
-      TileMode="Tile" Viewport="0,0,10,10" 
-      ViewportUnits="Absolute" Viewbox="0,0,10,10"    
-      ViewboxUnits="Absolute">
-                <VisualBrush.Visual>
-                    <Canvas>
-                        <Path Stroke="{c:Pink}" Data="M 0 10 l 10 -10"  />
-                    </Canvas>
-                </VisualBrush.Visual>
-            </VisualBrush>
-
-            <VisualBrush 
-      x:Key="FadedHatchBrush" 
-             Opacity="0.5"
-      TileMode="Tile" Viewport="0,0,10,10" 
-      ViewportUnits="Absolute" Viewbox="0,0,10,10"    
+      TileMode="Tile" Viewport="0,0,10,10"
+      ViewportUnits="Absolute" Viewbox="0,0,10,10"
       ViewboxUnits="Absolute">
                 <VisualBrush.Visual>
                     <Canvas>
@@ -31,47 +18,59 @@
                 </VisualBrush.Visual>
             </VisualBrush>
 
-            <VisualBrush 
-      x:Key="FadedHatchBrush2" 
+            <VisualBrush
+      x:Key="FadedHatchBrush"
+             Opacity="0.5"
+      TileMode="Tile" Viewport="0,0,10,10"
+      ViewportUnits="Absolute" Viewbox="0,0,10,10"
+      ViewboxUnits="Absolute">
+                <VisualBrush.Visual>
+                    <Canvas>
+                        <Path Stroke="{c:Pink}" Data="M 0 10 l 10 -10" />
+                    </Canvas>
+                </VisualBrush.Visual>
+            </VisualBrush>
+
+            <VisualBrush
+      x:Key="FadedHatchBrush2"
              Opacity="0.2"
-      TileMode="Tile" Viewport="0,0,10,10" 
-      ViewportUnits="Absolute" Viewbox="0,0,10,10"    
+      TileMode="Tile" Viewport="0,0,10,10"
+      ViewportUnits="Absolute" Viewbox="0,0,10,10"
       ViewboxUnits="Absolute">
                 <VisualBrush.Visual>
                     <Canvas>
                         <Path Stroke="{c:Pink}" Data="M 0 0 l 10 10" />
-
                     </Canvas>
                 </VisualBrush.Visual>
             </VisualBrush>
         </Style.Resources>
 
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:DoubleClickCheckBox}">
-                    <Border CornerRadius="0" 
+                    <Border CornerRadius="0"
                                     Background="{TemplateBinding Background}"
                       BorderBrush="{TemplateBinding BorderBrush}"
                       BorderThickness="{TemplateBinding BorderThickness}">
-                        <ContentPresenter x:Name="contentPresenter" 
-                                        ContentTemplate="{TemplateBinding ContentTemplate}" 
-                                        ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" 
-                                        Content="{TemplateBinding Content}"/>
+                        <ContentPresenter x:Name="contentPresenter"
+                                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                                        ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                        Content="{TemplateBinding Content}" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="False">
-                            <Setter Property="Background" Value="{StaticResource FadedHatchBrush}"/>
-                            <!--<Setter Property="BorderThickness" Value="15"/>-->
+                            <Setter Property="Background" Value="{StaticResource FadedHatchBrush}" />
+                            <!--<Setter Property="BorderThickness" Value="15" />-->
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <!--<Setter Property="BorderThickness" Value="0"/>-->
+                            <Setter Property="Background" Value="Transparent" />
+                            <!--<Setter Property="BorderThickness" Value="0" />-->
                         </Trigger>
                         <!--<Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource HatchBrush}"/>
+                                    <Setter Property="Background" Value="{StaticResource HatchBrush}" />
                                     -->
-                        <!--<Setter Property="BorderThickness" Value="0"/>-->
+                        <!--<Setter Property="BorderThickness" Value="0" />-->
                         <!--
                                 </Trigger>-->
                         <MultiTrigger>
@@ -97,5 +96,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
 </ResourceDictionary>

@@ -1,11 +1,11 @@
-﻿using JulMar.Core.Concurrency;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Specialized;
 
 //using System.Windows.Data;
 //using System.Windows.Threading;
 using System.ComponentModel;
 using System.Diagnostics;
+using JulMar.Core.Concurrency;
 
 namespace JulMar.Windows.Collections
 {

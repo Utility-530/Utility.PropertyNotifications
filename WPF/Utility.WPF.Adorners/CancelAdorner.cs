@@ -3,8 +3,6 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Shapes;
-using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Adorners;
 
@@ -37,7 +35,6 @@ public class CancelAdorner : Adorner
             drawingContext.DrawEllipse(renderBrush2, renderPen, new Point(control.ActualWidth, 0), width, width);
             drawingContext.DrawLine(renderPen, new Point(control.ActualWidth - size, 0 - size), new Point(control.ActualWidth + size, 0 + size));
             drawingContext.DrawLine(renderPen, new Point(control.ActualWidth - size, 0 + size), new Point(control.ActualWidth + size, 0 - size));
-
         }
     }
 }

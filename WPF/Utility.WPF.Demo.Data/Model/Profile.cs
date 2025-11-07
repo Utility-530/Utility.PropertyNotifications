@@ -8,7 +8,7 @@ namespace Utility.WPF.Demo.Data.Model
     {
         public static IValueConverter ToCompanyBrush =
             LambdaConverters.ValueConverter.Create<Profile, Brush>(
-                e => e.Value?.IsFreelancer ==true? Brushes.Green : Brushes.Blue);
+                e => e.Value?.IsFreelancer == true ? Brushes.Green : Brushes.Blue);
 
         public static IValueConverter ToCompanyText =
             LambdaConverters.ValueConverter.Create<Profile, string>(

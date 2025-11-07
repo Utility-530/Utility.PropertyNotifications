@@ -30,7 +30,7 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Fill="{TemplateBinding Background}"
-                                
+
                                 Width="160"
                                 Height="160" />
                             <Path
@@ -40,11 +40,11 @@
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Data="{TemplateBinding Data}"
-                                    Stretch="Uniform"          
+                                    Stretch="Uniform"
                                     Fill="{TemplateBinding Fill}"
                                     Stroke="{TemplateBinding Foreground}"
-                                    StrokeEndLineCap="Round" 
-                                    StrokeLineJoin="Round"  
+                                    StrokeEndLineCap="Round"
+                                    StrokeLineJoin="Round"
                                     StrokeStartLineCap="Round"
                                     StrokeThickness="{TemplateBinding StrokeThickness}">
                             </Path>
@@ -73,8 +73,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    
-    
-
 </ResourceDictionary>

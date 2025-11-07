@@ -10,4 +10,4 @@ using System.Windows.Markup;
                                               // app, or any theme specific resource dictionaries)
 )]
 [assembly: XmlnsPrefix("http://schemas.utility.com/tabs", "tabs")]
-[assembly: XmlnsDefinition("http://schemas.utility.com/tabs", "Utility.WPF.Controls.Tabs")] 
+[assembly: XmlnsDefinition("http://schemas.utility.com/tabs", "Utility.WPF.Controls.Tabs")]

@@ -104,7 +104,7 @@
                     PropertyName="Expired">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="CriteriaMet">
-                            <i:InvokeCommandAction Command="{Binding ElementName=oc, Path=.}"/>
+                            <i:InvokeCommandAction Command="{Binding ElementName=oc, Path=.}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </view:ListBoxCriteria>

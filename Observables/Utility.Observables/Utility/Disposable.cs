@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Utility.Interfaces.NonGeneric;
@@ -9,8 +8,10 @@ namespace Utility.Observables
     public class Disposable : IObservableCollection<IDisposable>, ICollection<IDisposable>, IDisposable
     {
         private bool disposed;
+
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
-        Collection<IObserver<NotifyCollectionChangedEventArgs>> observers = new();
+
+        private Collection<IObserver<NotifyCollectionChangedEventArgs>> observers = new();
 
         public Disposable(IDisposable disposable) : this()
         {
@@ -55,12 +56,12 @@ namespace Utility.Observables
             }
             disposed = true;
         }
+
         public int Count => Disposables.Count;
 
         public bool IsReadOnly => false;
 
         public IDisposable this[int index] { get => Disposables[index]; set => Disposables[index] = value; }
-
 
         public int IndexOf(IDisposable item)
         {
@@ -75,19 +76,16 @@ namespace Utility.Observables
         public void RemoveAt(int index)
         {
             Disposables.RemoveAt(index);
-
         }
 
         public void Add(IDisposable item)
         {
             Disposables.Add(item);
-
         }
 
         public void Clear()
         {
             Disposables.Clear();
-
         }
 
         public bool Contains(IDisposable item)
@@ -98,7 +96,6 @@ namespace Utility.Observables
         public void CopyTo(IDisposable[] array, int arrayIndex)
         {
             Disposables.CopyTo(array, arrayIndex);
-
         }
 
         public bool Remove(IDisposable item)
@@ -109,10 +106,7 @@ namespace Utility.Observables
         public IEnumerator<IDisposable> GetEnumerator()
         {
             return Disposables.GetEnumerator();
-
         }
-
-
 
         public IDisposable Subscribe(IObserver<NotifyCollectionChangedEventArgs> observer)
         {
@@ -123,13 +117,10 @@ namespace Utility.Observables
         {
             return Disposables.GetEnumerator();
         }
-
-
     }
 
     public sealed class Disposer<T> : Generic.Disposer<IObserver<T>, T>
     {
-
         public Disposer(ICollection<IObserver<T>> observers, IObserver<T> observer) : base(observers, observer)
         {
         }

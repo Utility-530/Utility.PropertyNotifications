@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Pather.CSharp.PathElements
 {
@@ -23,7 +20,7 @@ namespace Pather.CSharp.PathElements
         public IEnumerable Apply(CSharp.Selection target)
         {
             var results = new List<object>();
-            foreach(var entry in target.Entries)
+            foreach (var entry in target.Entries)
             {
                 var enumerable = entry as IEnumerable;
                 if (enumerable == null)

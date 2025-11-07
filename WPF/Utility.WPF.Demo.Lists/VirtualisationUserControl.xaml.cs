@@ -1,5 +1,4 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Collections;
 using System.Linq;
 using System.Reactive.Linq;
@@ -7,12 +6,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Media;
+using Microsoft.Xaml.Behaviors;
 using Utility.PropertyNotifications;
 using Utility.WPF.Demo.Data.Model;
 using Utility.WPF.Helpers;
 using Utility.WPF.Reactives;
-
 
 namespace Utility.WPF.Demo.Lists
 {
@@ -24,7 +22,6 @@ namespace Utility.WPF.Demo.Lists
         public VirtualisationUserControl()
         {
             InitializeComponent();
-
         }
 
         public IEnumerable Collection { get; }
@@ -48,7 +45,6 @@ namespace Utility.WPF.Demo.Lists
         public int Second { get => second; set => RaisePropertyChanged(ref second, value); }
     }
 
-
     public static class TrackVisibleItems
     {
         private static Panel[] panels;
@@ -60,6 +56,7 @@ namespace Utility.WPF.Demo.Lists
 
         public static void SetEnabled(DependencyObject element, bool value) =>
             element.SetValue(EnabledProperty, value);
+
         public static bool GetEnabled(DependencyObject element) =>
             (bool)element.GetValue(EnabledProperty);
 
@@ -67,8 +64,10 @@ namespace Utility.WPF.Demo.Lists
             DependencyProperty.RegisterAttached(
                 "FirstVisibleIndex", typeof(int), typeof(TrackVisibleItems),
                 new PropertyMetadata(-1));
+
         public static void SetFirstVisibleIndex(DependencyObject element, int value) =>
             element.SetValue(FirstVisibleIndexProperty, value);
+
         public static int GetFirstVisibleIndex(DependencyObject element) =>
             (int)element.GetValue(FirstVisibleIndexProperty);
 
@@ -77,9 +76,9 @@ namespace Utility.WPF.Demo.Lists
                 "LastVisibleIndex", typeof(int), typeof(TrackVisibleItems),
                 new PropertyMetadata(-1));
 
-
         public static void SetLastVisibleIndex(DependencyObject element, int value) =>
             element.SetValue(LastVisibleIndexProperty, value);
+
         public static int GetLastVisibleIndex(DependencyObject element) =>
             (int)element.GetValue(LastVisibleIndexProperty);
 
@@ -106,7 +105,7 @@ namespace Utility.WPF.Demo.Lists
         {
             panels ??= itemsControl.FindChildren<Panel>().ToArray();
 
-            if (panels.SingleOrDefault(a=>a is VirtualizingStackPanel) is VirtualizingStackPanel vsp)
+            if (panels.SingleOrDefault(a => a is VirtualizingStackPanel) is VirtualizingStackPanel vsp)
                 await Task.Run(() =>
                 {
                     int first = (int)vsp.VerticalOffset;
@@ -119,7 +118,6 @@ namespace Utility.WPF.Demo.Lists
                         SetLastVisibleIndex(itemsControl, last);
                     });
                 });
-
             else if (panels.SingleOrDefault(a => a is StackPanel) is StackPanel stackPanel)
                 await Task.Run(() =>
                 {
@@ -133,14 +131,8 @@ namespace Utility.WPF.Demo.Lists
                         SetLastVisibleIndex(itemsControl, last);
                     });
                 });
-
         }
     }
-
-
-
-
-
 
     /// <summary>
     /// Returns the indices of rows in the DataGrid that are visible to the user
@@ -241,7 +233,6 @@ namespace Utility.WPF.Demo.Lists
                 var lastVisible = firstVisible + totalCount - verticalScrollBar.Maximum;
 
                 return ((int)firstVisible, (int)lastVisible);
-
             }
         }
     }

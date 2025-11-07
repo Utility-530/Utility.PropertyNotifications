@@ -1,13 +1,10 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Utility.Structs
 {
-
     /// <summary>
     ///  Represents a range of dates.
     ///  <a href="https://gist.github.com/crmorgan/5de0359b31555a80d9d8"></a>
@@ -52,8 +49,6 @@ namespace Utility.Structs
 
         public DateRange(DateTime startDate, DateTime endDate) : this()
         {
-
-
             Start = startDate;
             End = endDate;
 
@@ -62,16 +57,16 @@ namespace Utility.Structs
                 throw new ArgumentException("endDate must be greater than or equal to startDate");
             }
         }
+
         /// <summary>
         ///     Gets the start date compthisnt of the date range.
         /// </summary>
-        public DateTime Start { get;  }
-
+        public DateTime Start { get; }
 
         /// <summary>
         ///     Gets the end date compthisnt of the date range.
         /// </summary>
-        public DateTime End { get;  }
+        public DateTime End { get; }
 
         /// <summary>
         ///     Gets a collection of the dates in the date range.
@@ -96,7 +91,6 @@ namespace Utility.Structs
             get { return (End - Start).Days + 1; }
         }
 
-
         public DateRange GetoverLapWith(DateRange other)
         {
             if (this.HasPartialOverLapWith(other))
@@ -112,8 +106,6 @@ namespace Utility.Structs
             else
                 return default(DateRange);
         }
-
-
 
         public bool HasOverLapWith(DateRange other)
         {
@@ -165,10 +157,7 @@ namespace Utility.Structs
         }
 
         public DateTime GetNullSafeEnd() => End == default ? DateTime.MaxValue : this.End;
-
     }
-
-
 
     public static class Grouper
     {
@@ -202,5 +191,3 @@ namespace Utility.Structs
         }
     }
 }
-
-

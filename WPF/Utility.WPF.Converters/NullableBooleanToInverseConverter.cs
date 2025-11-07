@@ -16,8 +16,10 @@ namespace Utility.WPF.Converters
                 {
                     case null:
                         return null;
+
                     case false:
                         return true;
+
                     case true:
                         return false;
                 }
@@ -34,15 +36,16 @@ namespace Utility.WPF.Converters
                 {
                     case null:
                         return null;
+
                     case false:
                         return true;
+
                     case true:
                         return false;
                 }
             }
 
             return DependencyProperty.UnsetValue;
-
         }
     }
 }

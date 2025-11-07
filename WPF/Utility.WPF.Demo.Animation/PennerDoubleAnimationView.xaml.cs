@@ -1,19 +1,8 @@
-﻿using LookOrFeel.Animation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using LookOrFeel.Animation;
 
 namespace Utility.WPF.Demo.Animations
 {
@@ -26,10 +15,9 @@ namespace Utility.WPF.Demo.Animations
         {
             InitializeComponent();
             this.Loaded += new RoutedEventHandler(Window1_Loaded);
-
         }
 
-         void Window1_Loaded(object sender, RoutedEventArgs e)
+        private void Window1_Loaded(object sender, RoutedEventArgs e)
         {
             // populate ComboBox with Equation types
             foreach (string equationName in Enum.GetNames(typeof(PennerDoubleAnimation.Equations)))
@@ -51,7 +39,7 @@ namespace Utility.WPF.Demo.Animations
             StatusTB.Text = "Animating";
         }
 
-        void OnAnimateClicked(object sender, RoutedEventArgs e)
+        private void OnAnimateClicked(object sender, RoutedEventArgs e)
         {
             Animate();
         }
@@ -61,7 +49,7 @@ namespace Utility.WPF.Demo.Animations
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void OnAnimateRandomClicked(object sender, RoutedEventArgs e)
+        private void OnAnimateRandomClicked(object sender, RoutedEventArgs e)
         {
             Random rand = new Random();
             _FromTB.Text = Canvas.GetLeft(_Rect).ToString();

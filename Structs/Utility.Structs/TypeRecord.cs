@@ -2,7 +2,7 @@
 
 namespace Utility.Structs
 {
-    public ref struct TypeRecord
+    public struct TypeRecord
     {
         public TypeRecord(ReadOnlySpan<char> assembly, ReadOnlySpan<char> nameSpace, ReadOnlySpan<char> name)
         {

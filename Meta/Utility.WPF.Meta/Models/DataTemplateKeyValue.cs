@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
-using Utility.WPF.Factorys;
 
 namespace Utility.WPF.Meta
 {
@@ -25,5 +24,4 @@ namespace Utility.WPF.Meta
 
         public override FrameworkElement Value => lazy.Value;
     }
-
 }

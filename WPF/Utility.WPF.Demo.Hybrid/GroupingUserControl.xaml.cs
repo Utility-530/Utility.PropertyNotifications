@@ -1,8 +1,8 @@
-﻿using ReactiveUI;
-using System.Linq;
+﻿using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ReactiveUI;
 using Utility.Enums;
 using Utility.EventArguments;
 using Utility.ViewModels;

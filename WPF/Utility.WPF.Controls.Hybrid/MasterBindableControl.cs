@@ -1,7 +1,7 @@
-﻿using Dragablz;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using Dragablz;
 using Utility.WPF.Controls.Master;
 
 namespace Utility.WPF.Controls.Hybrid

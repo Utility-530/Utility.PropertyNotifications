@@ -39,18 +39,19 @@ namespace Utility.WPF.Demo.Trees
         }
     }
 
-
     public class FolderViewModel : NotifyPropertyClass
     {
         public IList<FolderViewModel> Children { get; private set; }
 
         private readonly string _name;
+
         public string Name
         {
             get { return _name + " (" + GetHashCode() + ")"; }
         }
 
         private bool _isExpanded;
+
         public bool IsExpanded
         {
             get { return _isExpanded; }

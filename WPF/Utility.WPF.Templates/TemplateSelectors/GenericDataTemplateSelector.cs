@@ -6,18 +6,15 @@ namespace Utility.WPF.Templates
 {
     public abstract class GenericDataTemplateSelector : DataTemplateSelector
     {
-
         public virtual ResourceDictionary Templates { get; }
 
         public DataTemplate NullTemplate { get; set; }
     }
 
-
     public abstract class TemplateFactory
     {
         //public static DataTemplate SelectTemplate(Type type)
         //{
-
         //    var interfaces = type.GetInterfaces();
 
         //    if (interfaces.Any(a => a.Name == "IDictionary`2") || interfaces.Contains(typeof(IDictionary)))
@@ -59,9 +56,8 @@ namespace Utility.WPF.Templates
                FontSize = 14,
                HorizontalAlignment = HorizontalAlignment.Stretch,
                VerticalAlignment = VerticalAlignment.Stretch,
-               FontStyle= FontStyles.Italic,
+               FontStyle = FontStyles.Italic,
                Text = $"null"
            });
-
     }
 }

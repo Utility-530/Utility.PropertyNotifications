@@ -1,14 +1,15 @@
 ﻿namespace Utility.WPF.Behaviors
 {
-    //https://stackoverflow.com/questions/942548/setting-a-property-with-an-eventtrigger
-    // Neutrino
-    //FocusedWolf
-    using Microsoft.Xaml.Behaviors;
     using System;
     using System.ComponentModel;
     using System.Reflection;
     using System.Windows;
     using System.Windows.Data;
+
+    //https://stackoverflow.com/questions/942548/setting-a-property-with-an-eventtrigger
+    // Neutrino
+    //FocusedWolf
+    using Microsoft.Xaml.Behaviors;
 
     /// <summary>
     /// Sets a specified property to a value when invoked.
@@ -22,11 +23,12 @@
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(object), typeof(SetterAction),
                 new PropertyMetadata(null));
-        
+
         public static readonly DependencyProperty ConverterProperty =
             DependencyProperty.Register("Converter", typeof(IValueConverter), typeof(SetterAction), new PropertyMetadata());
 
         #region properties
+
         /// <summary>
         /// Property that is being set by this setter.
         /// </summary>

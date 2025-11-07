@@ -38,7 +38,6 @@ namespace Utility.Models.Trees
                 {
                     if (items.Count > i)
                     {
-
                         if (topNode.Count > i)
                         {
                             if (topNode[i] != items[i] && topNode[i].Equals(items[i]) == false)
@@ -70,7 +69,6 @@ namespace Utility.Models.Trees
                 topNode.RemoveAt(j);
             }
         }
-
 
         public override void Addition(IReadOnlyTree a)
         {

@@ -44,6 +44,7 @@ namespace Utility.WPF.Adorners
                 textBlock.Text = DefaultValue.ToString();
             }
         }
+
         protected virtual void Cancel()
         {
             if (AssociatedObject is ContentControl contentControl)
@@ -59,6 +60,5 @@ namespace Utility.WPF.Adorners
                 textBlock.Text = null;
             }
         }
-
     }
 }

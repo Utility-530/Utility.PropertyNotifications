@@ -1,5 +1,5 @@
-﻿using MoreLinq;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
+using MoreLinq;
 using Utility.Interfaces.Generic;
 using Utility.Trees.Abstractions;
 
@@ -14,12 +14,10 @@ namespace Utility.Trees.Extensions
             return SelfAndAncestors(tree, action).SingleOrDefault();
         }
 
-
         public static IEnumerable<IReadOnlyTree> Ancestors(this IReadOnlyTree tree, Predicate<(IReadOnlyTree tree, int level)>? action = null)
         {
             return SelfAndAncestors((tree as IGetParent<IReadOnlyTree>).Parent, action);
         }
-
 
         public static IEnumerable<IReadOnlyTree> SelfAndAncestors(this IReadOnlyTree tree, Predicate<(IReadOnlyTree tree, int level)>? action = null, int level = 0)
         {

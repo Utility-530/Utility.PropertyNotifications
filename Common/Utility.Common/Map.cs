@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utility.Common
 {
     public class Map<T, TR> where T : class where TR : class
     {
-
         protected Map(TR value)
         {
             Value = value;
@@ -46,7 +41,6 @@ namespace Utility.Common
 
         public static explicit operator Map(string value)
         {
-
             return new Map(new Version(value));
         }
 

@@ -4,7 +4,6 @@
     {
         T One { get; }
 
-        T Two { get;  }
+        T Two { get; }
     }
-
 }

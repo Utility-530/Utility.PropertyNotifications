@@ -1,8 +1,4 @@
-﻿using DynamicData;
-using Evan.Wpf;
-using Microsoft.Xaml.Behaviors;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
@@ -11,6 +7,10 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using DynamicData;
+using Evan.Wpf;
+using Microsoft.Xaml.Behaviors;
+using ReactiveUI;
 using Utility.Commands;
 using Utility.Helpers;
 using Utility.Interfaces.Generic;
@@ -26,14 +26,11 @@ namespace Utility.WPF.Behaviors
         public static readonly DependencyProperty ValueProperty = DependencyHelper.Register<Enum>(new FrameworkPropertyMetadata(default, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
         public static readonly DependencyProperty EnumProperty = DependencyHelper.Register<Type>(new FrameworkPropertyMetadata());
 
-
-
         public static readonly DependencyProperty IsReadOnlyProperty = DependencyHelper.Register<bool>();
         public static readonly DependencyProperty IsMultiSelectProperty = DependencyHelper.Register<bool>();
         public static readonly DependencyProperty ClearCommandProperty = DependencyHelper.Register<ICommand>();
         private ObservableCollection<EnumItem> items = new();
         private Enum internalValue;
-
 
         static EnumComboBehavior()
         {
@@ -50,7 +47,6 @@ namespace Utility.WPF.Behaviors
             {
                 Value = (Enum)System.Enum.ToObject(Value?.GetType() ?? Enum as Type, 0);
             });
-
 
             this.WhenAnyValue(a => a.Enum)
                 .WhereNotNull()
@@ -88,11 +84,9 @@ namespace Utility.WPF.Behaviors
                                 internalValue = e.HasFlag(e) ?
                                 Utility.Helpers.EnumHelper.CombineFlags(enums.Where(a => a.IsChecked).Select(e => e.Value), Enum) :
                                 e;
-
                             }
                             Value = internalValue;
                             AssociatedObject.SelectedIndex = enums.Select(a => a.Value).IndexOf(internalValue);
-
                         }).DisposeWith(disposable);
                     }
                 });
@@ -103,7 +97,6 @@ namespace Utility.WPF.Behaviors
                 {
                     Value = (Enum)System.Enum.ToObject(e, 0);
                 });
-
 
             static EnumItem[] BuildFromEnum(Type t, Enum? Value, bool isReadOnly)
             {
@@ -196,9 +189,6 @@ namespace Utility.WPF.Behaviors
             }
 
             public bool IsReadOnly { get; set; }
-
-
-
 
             public override string ToString()
             {

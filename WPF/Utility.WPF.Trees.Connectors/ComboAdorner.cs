@@ -1,5 +1,5 @@
-﻿using System.Windows.Controls;
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
@@ -34,10 +34,9 @@ namespace Utility.WPF.Trees.Connectors
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            _comboBox.Arrange(new Rect(new Point(position.X, position.Y -_comboBox.DesiredSize.Height), _comboBox.DesiredSize));
+            _comboBox.Arrange(new Rect(new Point(position.X, position.Y - _comboBox.DesiredSize.Height), _comboBox.DesiredSize));
             return finalSize;
         }
-
     }
 
     public class Combo2Adorner : Adorner
@@ -72,7 +71,5 @@ namespace Utility.WPF.Trees.Connectors
             _comboBox.Arrange(new Rect(new Point(position.X, position.Y - _comboBox.DesiredSize.Height), _comboBox.DesiredSize));
             return finalSize;
         }
-
     }
-
 }

@@ -73,6 +73,5 @@ namespace Utility.WPF.Helpers
                 return element.TryFindResource(key) is DataTemplate target ? target : default;
             return FindTemplate(key);
         }
-
     }
 }

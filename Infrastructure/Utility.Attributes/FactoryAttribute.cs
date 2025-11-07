@@ -3,7 +3,7 @@
 namespace Utility.Attributes
 {
     [AttributeUsage(AttributeTargets.Constructor)]
-    public class FactoryAttribute: Attribute
+    public class FactoryAttribute : Attribute
     {
     }
 }

@@ -7,7 +7,7 @@ using Utility.WPF.Models;
 
 namespace Utility.WPF.Controls.Lists.Infrastructure
 {
-    class DifferenceHelper : IDifferenceHelper
+    internal class DifferenceHelper : IDifferenceHelper
     {
         private readonly Selector selector;
         private Dictionary<object, bool?>? dictionary;

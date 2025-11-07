@@ -4,8 +4,6 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.WPF.Templates
 {
-
-
     public class ReadOnlyValueDataTemplateSelector : GenericDataTemplateSelector
     {
         private ReadOnlyValueTemplates valueTemplates;
@@ -27,7 +25,6 @@ namespace Utility.WPF.Templates
 
             return (Templates["Missing"] as DataTemplate) ?? throw new Exception("dfs 33091111111");
         }
-
 
         public DataTemplate FromType(Type type)
         {
@@ -70,7 +67,6 @@ namespace Utility.WPF.Templates
                     valueTemplates.InitializeComponent();
                 }
                 return valueTemplates;
-
             }
         }
 

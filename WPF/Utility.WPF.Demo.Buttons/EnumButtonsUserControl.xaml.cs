@@ -33,7 +33,6 @@ namespace Utility.WPF.Demo.Buttons
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             EditCollectionButtons.Enabled = Enums.AddRemove.Add;
-
         }
 
         private void Reset_Click(object sender, RoutedEventArgs e)
@@ -52,14 +51,12 @@ namespace Utility.WPF.Demo.Buttons
 
         private void Forward_Hide_Click(object sender, RoutedEventArgs e)
         {
-
-            NavigationButtons.Visible = Enums.Direction.Up| Enums.Direction.Left | Enums.Direction.Down;
+            NavigationButtons.Visible = Enums.Direction.Up | Enums.Direction.Left | Enums.Direction.Down;
         }
 
         private void Up_Disable_Click_1(object sender, RoutedEventArgs e)
         {
             NavigationButtons.Enabled = Enums.Direction.Right | Enums.Direction.Left | Enums.Direction.Down;
-
         }
 
         private void Reset_Click_1(object sender, RoutedEventArgs e)

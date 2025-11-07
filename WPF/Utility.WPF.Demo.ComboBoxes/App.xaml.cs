@@ -1,8 +1,4 @@
-﻿using Autofac;
-using Splat.Autofac;
-using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
 using Utility.WPF.Controls.Meta;
 
 namespace Utility.WPF.Demo.ComboBoxes
@@ -21,5 +17,4 @@ namespace Utility.WPF.Demo.ComboBoxes
             }.Show();
         }
     }
-
 }

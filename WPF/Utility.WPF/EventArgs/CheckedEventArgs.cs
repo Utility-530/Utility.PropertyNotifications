@@ -13,6 +13,4 @@ namespace Utility.WPF
     }
 
     public delegate void CheckedRoutedEventHandler(object sender, CheckedEventArgs e);
-
-
 }

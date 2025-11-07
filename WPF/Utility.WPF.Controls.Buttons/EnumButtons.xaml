@@ -89,18 +89,16 @@
                                 Kind="DebugStepOver" />
                 </Viewbox>
             </Button>
-
         </UniformGrid>
     </ControlTemplate>
-
 
     <ControlTemplate x:Key="PlayBackTemplate"  TargetType="{x:Type local:PlayBackButtons}">
         <ControlTemplate.Resources>
             <Style TargetType="{x:Type Button}">
-                <Setter Property="BorderBrush" Value="Transparent"/>
-                <Setter Property="Background" Value="Transparent"/>
-            </Style>           
-        </ControlTemplate.Resources>        
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+        </ControlTemplate.Resources>
         <UniformGrid Rows="1">
             <Button x:Name="Backward" Margin="{TemplateBinding Margins}" Height="{Binding ElementName=PlayPauseButton, Path=ActualHeight}">
                 <Viewbox>
@@ -109,7 +107,7 @@
                 </Viewbox>
             </Button>
 
-            <local:PlayPauseButton x:Name="PlayPauseButton"/>
+            <local:PlayPauseButton x:Name="PlayPauseButton" />
 
             <Button x:Name="Forward" Margin="{TemplateBinding Margins}" Height="{Binding ElementName=PlayPauseButton, Path=ActualHeight}">
                 <Viewbox>
@@ -117,11 +115,8 @@
                                 Kind="StepForward" />
                 </Viewbox>
             </Button>
-
         </UniformGrid>
     </ControlTemplate>
-
-
 
     <Style TargetType="{x:Type local:DirectionButtons}">
         <Setter Property="Template" Value="{StaticResource DirectionTemplate}" />

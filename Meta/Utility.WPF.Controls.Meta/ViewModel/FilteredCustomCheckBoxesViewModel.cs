@@ -1,13 +1,11 @@
-﻿using DynamicData;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Utility.Services;
-using Utility.Models.Filters;
-using Utility.ViewModels;
-using System.Reactive.Disposables;
-using Utility.Reactives;
 using System.Reactive;
+using System.Reactive.Disposables;
+using DynamicData;
+using Utility.Models.Filters;
 using Utility.Services.Deprecated;
+using Utility.ViewModels;
 
 namespace Utility.WPF.Controls.Meta.ViewModels
 {
@@ -18,7 +16,7 @@ namespace Utility.WPF.Controls.Meta.ViewModels
 
         public FilteredCustomCheckBoxesViewModel(
             IObservable<IChangeSet<ViewModelEntity>> profiles,
-            IObservable<IChangeSet<Filter>> filters, 
+            IObservable<IChangeSet<Filter>> filters,
             IObservable<Unit> deselections)
         {
             filters

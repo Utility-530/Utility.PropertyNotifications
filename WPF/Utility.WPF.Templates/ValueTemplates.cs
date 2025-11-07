@@ -9,6 +9,6 @@ namespace Utility.WPF.Templates
             //InitializeComponent();
         }
 
-        public static ValueTemplates Instance { get; } = new(); 
+        public static ValueTemplates Instance { get; } = new();
     }
 }

@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Utility.WPF.Attached
@@ -18,7 +14,6 @@ namespace Utility.WPF.Attached
 
         private static void changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            
         }
 
         public static void SetInteger(DependencyObject dep, int value)
@@ -29,10 +24,8 @@ namespace Utility.WPF.Attached
         public static int GetInteger(DependencyObject dep)
         {
             return (int)dep.GetValue(IntegerProperty);
-        }       
-        
-        
-        
+        }
+
         public static readonly DependencyProperty StringProperty = DependencyProperty.RegisterAttached(
         "String",
         typeof(string),
@@ -47,10 +40,7 @@ namespace Utility.WPF.Attached
         public static string GetString(DependencyObject dep)
         {
             return (string)dep.GetValue(StringProperty);
-        }        
-        
-
-
+        }
 
         public static readonly DependencyProperty DoubleProperty = DependencyProperty.RegisterAttached(
         "Double",
@@ -65,8 +55,6 @@ namespace Utility.WPF.Attached
 
         public static double GetDouble(DependencyObject dep) => (double)dep.GetValue(DoubleProperty);
 
-
-
         public static readonly DependencyProperty EnumerableProperty = DependencyProperty.RegisterAttached(
         "Enumerable",
         typeof(IEnumerable),
@@ -79,8 +67,5 @@ namespace Utility.WPF.Attached
         }
 
         public static IEnumerable GetEnumerable(DependencyObject dep) => (IEnumerable)dep.GetValue(EnumerableProperty);
-
-
-
     }
 }

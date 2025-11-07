@@ -1,8 +1,8 @@
-﻿using Splat;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using Splat;
 using Utility.Interfaces;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
@@ -76,7 +76,7 @@ namespace Utility.WPF.Trees.Filters
                     ContentTemplateSelector = Locator.Current.GetService<System.Windows.Controls.DataTemplateSelector>()
                     //ContentTemplateSelector =// CustomDataTemplateSelector.Instance
                 };
-                if(width.HasValue)
+                if (width.HasValue)
                     contentControl.Width = width.Value;
 
                 contentControl.SetBinding(ContentPresenter.ContentProperty, binding);
@@ -88,13 +88,11 @@ namespace Utility.WPF.Trees.Filters
 
         private DataTemplate MakeEmptyTemplate(object item)
         {
-
             return TemplateGenerator.CreateHierarcialDataTemplate(() =>
             {
                 return new System.Windows.Shapes.Rectangle { Fill = Brushes.Red, Height = 20, Width = 20 };
             }, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Children)), Source = item });
         }
-
 
         private DataTemplate MakeVoidTemplate()
         {
@@ -117,7 +115,6 @@ namespace Utility.WPF.Trees.Filters
             //    //_style.Setters.Add(new Setter { Property = TreeViewItem.HeaderProperty, Value = new Binding { Path = new PropertyPath(".") } });
             //    isInitialised = true;
             //}
-
 
             return TemplateGenerator.CreateHierarcialDataTemplate(() =>
             {
@@ -160,7 +157,6 @@ namespace Utility.WPF.Trees.Filters
             }
         }
 
-
         private DataTemplate MakeHeaderTemplate(object item, int count)
         {
             return TemplateGenerator.CreateHierarcialDataTemplate(() =>
@@ -174,7 +170,7 @@ namespace Utility.WPF.Trees.Filters
 
                 var toggle = new DoubleClickCheckBox() { Content = textBlock/*, Style = App.Current.Resources["NullToggleButton"] as Style*/ };
 
-                if (item is  IDescriptor { } descriptor )
+                if (item is IDescriptor { } descriptor)
                     if (item is IGetValue { Value: { } value } _value)
                     {
                         toggle.IsChecked = true;
@@ -184,7 +180,7 @@ namespace Utility.WPF.Trees.Filters
 
                 void Toggle_Click(object sender, RoutedEventArgs e)
                 {
-                    if (item is  IDescriptor { } descriptor )
+                    if (item is IDescriptor { } descriptor)
                         if (item is ISetValue _setValue)
                             if (item is IValue _value)
                                 if (item is IValueChanges _values)
@@ -223,10 +219,8 @@ namespace Utility.WPF.Trees.Filters
         {
             return TemplateGenerator.CreateDataTemplate(() =>
             {
-
                 var button = new Button
                 {
-
                 };
                 button.SetBinding(Button.ContentProperty, Binding(item));
                 //button.SetBinding(Button.CommandProperty, Binding2(item));

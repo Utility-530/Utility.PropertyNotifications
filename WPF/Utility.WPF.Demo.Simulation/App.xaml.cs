@@ -1,17 +1,12 @@
-﻿using Chronic;
-using CsvHelper;
-using Splat;
-using System.Collections;
-using System.Configuration;
-using System.Data;
-using System.Reactive.Concurrency;
+﻿using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Chronic;
+using Splat;
 using Utility.Commands;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
-using Utility.Models;
 using Utility.Nodes;
 using Utility.Services;
 using Utility.Simulation;
@@ -48,7 +43,6 @@ namespace Utility.WPF.Demo.Simulation
         }
     }
 
-
     public class CommandsViewModel
     {
         public int GridRow => 0;
@@ -57,8 +51,6 @@ namespace Utility.WPF.Demo.Simulation
 
     public class ExampleViewModel
     {
-
-
         public object[] Collection => [Locator.Current.GetService<CommandsViewModel>(), Locator.Current.GetService<MasterPlayViewModel>()];
     }
 
@@ -68,7 +60,6 @@ namespace Utility.WPF.Demo.Simulation
     //    {
     //        Observable.Interval(TimeSpan.FromSeconds(0.2)).Subscribe(a =>
     //        {
-
     //        });
     //    }
     //}
@@ -80,5 +71,4 @@ namespace Utility.WPF.Demo.Simulation
             return new NodeViewModel() { Data = config };
         }
     }
-
 }

@@ -1,5 +1,4 @@
-﻿using AnyClone;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Utility.Interfaces.Generic;
@@ -108,7 +107,6 @@ namespace Utility.Trees
             return;
         }
 
-
         public override void Add(object data)
         {
             if (data == null)
@@ -120,7 +118,6 @@ namespace Utility.Trees
                 return;
             }
 
-
             if (data is T t)
             {
                 m_items.Add(new Tree<T>(t));
@@ -128,7 +125,6 @@ namespace Utility.Trees
             }
             throw new InvalidOperationException("Cannot add unknown content type.");
         }
-
 
         //public override void Add()
         //{
@@ -158,7 +154,6 @@ namespace Utility.Trees
                 return x;
             }
         }
-
 
         protected override IList CreateChildren()
         {
@@ -213,7 +208,5 @@ namespace Utility.Trees
         {
             return m_items == null ? Enumerable.Empty<ITree<T>>().GetEnumerator() : Children.GetEnumerator();
         }
-
-
     }
 }

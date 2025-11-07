@@ -8,19 +8,17 @@ namespace Utility.Interfaces.NonGeneric.Data
     {
         object Find(object item);
     }
-      
 
     public interface IFindBy
     {
         object FindBy(IQuery query);
     }
 
-
     public interface IFindById
     {
         object FindById(long id);
-    }  
-    
+    }
+
     public interface IFindByGuid
     {
         object FindByGuid(Guid guid);
@@ -40,11 +38,9 @@ namespace Utility.Interfaces.NonGeneric.Data
     {
         IEnumerable FindManyById(IEnumerable<long> ids);
     }
-    
+
     public interface IFindManyByGuid
     {
         IEnumerable FindManyByGuid(IEnumerable<Guid> guids);
     }
-
-
 }

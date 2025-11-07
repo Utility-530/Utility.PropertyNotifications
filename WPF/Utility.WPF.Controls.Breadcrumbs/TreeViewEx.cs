@@ -1,5 +1,5 @@
-﻿using System.Windows.Controls;
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Controls;
 using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Controls.Breadcrumbs
@@ -37,7 +37,6 @@ namespace Utility.WPF.Controls.Breadcrumbs
             itemsControl.SetValue(SelectedItemProperty, value);
         }
 
-
         public static object GetCurrentItem(ItemsControl CurrentItemBlock)
         {
             return (object)CurrentItemBlock.GetValue(CurrentItemProperty);
@@ -47,8 +46,6 @@ namespace Utility.WPF.Controls.Breadcrumbs
         {
             CurrentItemBlock.SetValue(CurrentItemProperty, value);
         }
-
-
 
         public static bool GetIsCollapseOnSelection(ItemsControl itemsControl)
         {
@@ -60,9 +57,8 @@ namespace Utility.WPF.Controls.Breadcrumbs
             itemsControl.SetValue(IsCollapseOnSelectionProperty, value);
         }
 
-
         private static bool flag;
-        static Dictionary<TreeViewItem, TreeView> treeViews = [];
+        private static Dictionary<TreeViewItem, TreeView> treeViews = [];
 
         private static void OnCurrentItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -103,7 +99,6 @@ namespace Utility.WPF.Controls.Breadcrumbs
             if (flag == true)
                 return;
 
-
             if (sender.DataContext.Equals(e.NewValue) == false)
             {
                 if (sender.FindRecursive<TreeViewItem>(e.NewValue) is not TreeViewItem find)
@@ -114,12 +109,9 @@ namespace Utility.WPF.Controls.Breadcrumbs
                 {
                     TreeViewItem child = find;
 
-
                     while (child != null && child.FindParent<TreeViewItem>() != sender)
                     {
-
                         child = child.FindParent<TreeViewItem>();
-
                     }
                     if (child != null)
                     {
@@ -142,7 +134,6 @@ namespace Utility.WPF.Controls.Breadcrumbs
             {
                 if (GetIsCollapseOnSelection(sender))
                 {
-
                 }
                 //foreach (var item in (sender).Items.Cast<object>().ToArray())
                 //{
@@ -162,10 +153,8 @@ namespace Utility.WPF.Controls.Breadcrumbs
             }
         }
 
-
         private static void SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-
             if (flag == true)
                 //return;
                 flag = true;
@@ -192,6 +181,5 @@ namespace Utility.WPF.Controls.Breadcrumbs
                 flag = false;
             }
         }
-
     }
 }

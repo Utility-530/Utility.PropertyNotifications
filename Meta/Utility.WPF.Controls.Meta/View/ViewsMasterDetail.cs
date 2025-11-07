@@ -1,20 +1,19 @@
-﻿using Evan.Wpf;
-using ReactiveUI;
-using System;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.WPF.Controls.Base;
-using Utility.WPF.Meta;
-using Utility.WPF.Controls.Master;
+using Evan.Wpf;
+using ReactiveUI;
 using Utility.Enums;
-using System.Collections;
-using System.Collections.Generic;
-using Utility.WPF.ResourceDictionarys;
 using Utility.WPF.Attached;
+using Utility.WPF.Controls.Base;
+using Utility.WPF.Controls.Master;
+using Utility.WPF.Meta;
+using Utility.WPF.ResourceDictionarys;
 
 namespace Utility.WPF.Controls.Meta
 {

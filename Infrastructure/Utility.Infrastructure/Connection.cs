@@ -24,12 +24,10 @@ namespace Utility.Infrastructure
 
     public abstract class Connection
     {
-        public abstract string Name { get;  }
+        public abstract string Name { get; }
 
         public abstract bool Match(Key key);
-
     }
-
 
     public class Connection<T> : Connection
     {
@@ -41,8 +39,6 @@ namespace Utility.Infrastructure
         }
     }
 
-
-
     public class DynamicConnection : Connection
     {
         public override string Name => "Dynamic";
@@ -52,7 +48,6 @@ namespace Utility.Infrastructure
             return typeof(BaseObject).IsAssignableFrom(key.Type) == false;
         }
     }
-
 
     //public class Connection
     //{
@@ -91,7 +86,6 @@ namespace Utility.Infrastructure
 
     //public interface IConnection
     //{
-
     //    public bool IsPriority { get; set; }
 
     //    public bool SkipContext { get; set; }

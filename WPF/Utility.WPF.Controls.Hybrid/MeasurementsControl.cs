@@ -1,10 +1,10 @@
-﻿using Evan.Wpf;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Evan.Wpf;
+using ReactiveUI;
 using Utility.WPF.Behaviors;
 using Utility.WPF.Controls.Base;
 

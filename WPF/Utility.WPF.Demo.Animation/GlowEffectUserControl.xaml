@@ -16,17 +16,17 @@
                                 <!-- Glow animation -->
                                 <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"
                                                  From="0" To="20" Duration="0:0:0.5"
-                                                 AutoReverse="True" RepeatBehavior="3x"/>
+                                                 AutoReverse="True" RepeatBehavior="3x" />
                                 <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"
                                                  From="0" To="0.8" Duration="0:0:0.5"
-                                                 AutoReverse="True" RepeatBehavior="3x"/>
+                                                 AutoReverse="True" RepeatBehavior="3x" />
                                 <!-- Scale animation -->
                                 <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX"
                                                  From="1" To="1.05" Duration="0:0:0.5"
-                                                 AutoReverse="True" RepeatBehavior="3x"/>
+                                                 AutoReverse="True" RepeatBehavior="3x" />
                                 <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY"
                                                  From="1" To="1.05" Duration="0:0:0.5"
-                                                 AutoReverse="True" RepeatBehavior="3x"/>
+                                                 AutoReverse="True" RepeatBehavior="3x" />
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.EnterActions>
@@ -34,13 +34,13 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"
-                                                 To="0" Duration="0:0:0.2"/>
+                                                 To="0" Duration="0:0:0.2" />
                                 <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"
-                                                 To="0" Duration="0:0:0.2"/>
+                                                 To="0" Duration="0:0:0.2" />
                                 <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX"
-                                                 To="1" Duration="0:0:0.2"/>
+                                                 To="1" Duration="0:0:0.2" />
                                 <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY"
-                                                 To="1" Duration="0:0:0.2"/>
+                                                 To="1" Duration="0:0:0.2" />
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.ExitActions>
@@ -48,40 +48,39 @@
             </Style.Triggers>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect x:Name="GlowEffect" 
-                                      Color="Orange" 
-                                      ShadowDepth="0" 
-                                      BlurRadius="0" 
-                                      Opacity="0"/>
+                    <DropShadowEffect x:Name="GlowEffect"
+                                      Color="Orange"
+                                      ShadowDepth="0"
+                                      BlurRadius="0"
+                                      Opacity="0" />
                 </Setter.Value>
             </Setter>
             <Setter Property="RenderTransform">
                 <Setter.Value>
-                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                    <ScaleTransform ScaleX="1" ScaleY="1" />
                 </Setter.Value>
             </Setter>
-            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
         </Style>
-
 
         <!-- Alternative pulsing border highlight style -->
         <Style x:Key="PulsingBorderHighlight" TargetType="Border">
             <Setter Property="BorderBrush">
                 <Setter.Value>
-                    <SolidColorBrush Color="Transparent"/>
+                    <SolidColorBrush Color="Transparent" />
                 </Setter.Value>
             </Setter>
-            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderThickness" Value="2" />
             <Style.Triggers>
                 <Trigger Property="Tag" Value="Pulse">
                     <Trigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard RepeatBehavior="Forever">
                                 <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                                                From="Transparent" To="Cyan" 
-                                                Duration="0:0:1" AutoReverse="True"/>
+                                                From="Transparent" To="Cyan"
+                                                Duration="0:0:1" AutoReverse="True" />
                                 <ThicknessAnimation Storyboard.TargetProperty="BorderThickness"
-                                                    From="2" To="4" Duration="0:0:1" AutoReverse="True"/>
+                                                    From="2" To="4" Duration="0:0:1" AutoReverse="True" />
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.EnterActions>
@@ -89,9 +88,9 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                                                To="Transparent" Duration="0:0:0.3"/>
+                                                To="Transparent" Duration="0:0:0.3" />
                                 <ThicknessAnimation Storyboard.TargetProperty="BorderThickness"
-                                                    To="2" Duration="0:0:0.3"/>
+                                                    To="2" Duration="0:0:0.3" />
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.ExitActions>
@@ -102,62 +101,61 @@
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- Title -->
-        <TextBlock Grid.Row="0" Text="WPF Control Highlight Animation Demo" 
+        <TextBlock Grid.Row="0" Text="WPF Control Highlight Animation Demo"
                    FontSize="24" FontWeight="Bold" Foreground="White"
-                   HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                   HorizontalAlignment="Center" Margin="0,0,0,20" />
 
         <!-- Demo Controls -->
         <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
 
             <!-- Button with glow highlight -->
-            <Button x:Name="btnDemo" Content="Click me for glow effect!" 
+            <Button x:Name="btnDemo" Content="Click me for glow effect!"
                     Width="200" Height="50" Margin="10"
                     Style="{StaticResource HighlightableControl}"
                     Background="#4CAF50" Foreground="White"
                     FontSize="14" FontWeight="Bold"
-                    Click="BtnDemo_Click"/>
+                    Click="BtnDemo_Click" />
 
             <!-- TextBox with glow highlight -->
             <TextBox x:Name="txtDemo" Text="Type here for glow effect"
                      Width="250" Height="30" Margin="10"
                      Style="{StaticResource HighlightableControl}"
-                     GotFocus="TxtDemo_GotFocus" LostFocus="TxtDemo_LostFocus"/>
+                     GotFocus="TxtDemo_GotFocus" LostFocus="TxtDemo_LostFocus" />
 
             <!-- Border with pulsing highlight -->
             <Border x:Name="borderDemo" Style="{StaticResource PulsingBorderHighlight}"
                     Width="200" Height="80" Margin="10"
                     Background="#FF6B6B" CornerRadius="5"
                     MouseEnter="BorderDemo_MouseEnter" MouseLeave="BorderDemo_MouseLeave">
-                <TextBlock Text="Hover for pulsing border" 
+                <TextBlock Text="Hover for pulsing border"
                            HorizontalAlignment="Center" VerticalAlignment="Center"
-                           Foreground="White" FontWeight="Bold"/>
+                           Foreground="White" FontWeight="Bold" />
             </Border>
 
             <!-- ComboBox with highlight -->
             <ComboBox x:Name="cmbDemo" Width="200" Height="30" Margin="10"
                       Style="{StaticResource HighlightableControl}"
                       DropDownOpened="CmbDemo_DropDownOpened">
-                <ComboBoxItem Content="Option 1"/>
-                <ComboBoxItem Content="Option 2"/>
-                <ComboBoxItem Content="Option 3"/>
+                <ComboBoxItem Content="Option 1" />
+                <ComboBoxItem Content="Option 2" />
+                <ComboBoxItem Content="Option 3" />
             </ComboBox>
-
         </StackPanel>
 
         <!-- Control Buttons -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Highlight All" Width="100" Height="30" Margin="5"
                     Background="#2196F3" Foreground="White"
-                    Click="HighlightAll_Click"/>
+                    Click="HighlightAll_Click" />
             <Button Content="Stop Highlights" Width="100" Height="30" Margin="5"
                     Background="#FF5722" Foreground="White"
-                    Click="StopHighlights_Click"/>
+                    Click="StopHighlights_Click" />
         </StackPanel>
     </Grid>
 </UserControl>

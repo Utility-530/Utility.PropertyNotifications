@@ -1,8 +1,8 @@
-﻿
-using Utility.Enums;
+﻿using Utility.Enums;
 
 namespace Utility.Models.Trees
-{    public enum CustomStringComparison
+{
+    public enum CustomStringComparison
     {
         EqualTo, NotEqualTo, Contains, DoesNotContain, StartsWith, EndsWith, IsNull, IsNotNull, IsNotNullOrWhiteSpace
     }
@@ -27,7 +27,6 @@ namespace Utility.Models.Trees
         Default, String, Number, Boolean, Type,
     }
 
-
     public interface IAndOr
     {
         AndOr Value { get; }
@@ -40,6 +39,5 @@ namespace Utility.Models.Trees
 
     public interface ISelectable
     {
-
     }
 }

@@ -33,7 +33,7 @@ namespace Utility.WPF.Controls.Base
     {
         protected override DependencyObject GetContainerForItemOverride() => new T();
 
-        protected sealed override void PrepareContainerForItemOverride(DependencyObject element, object item)
+        protected override sealed void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
             if (element is not T t)
                 throw new System.Exception("s fdsd  77ffs");
@@ -44,7 +44,6 @@ namespace Utility.WPF.Controls.Base
 
         protected virtual void PrepareContainerForItemOverride(T element, object item)
         {
-
         }
 
         protected override bool IsItemItsOwnContainerOverride(object item) => item is T;
@@ -65,7 +64,7 @@ namespace Utility.WPF.Controls.Base
     {
         protected override DependencyObject GetContainerForItemOverride() => new T();
 
-        protected sealed override void PrepareContainerForItemOverride(DependencyObject element, object item)
+        protected override sealed void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
             if (element is not T t)
                 throw new System.Exception("s fdsd  77ffs");
@@ -76,7 +75,6 @@ namespace Utility.WPF.Controls.Base
 
         protected virtual void PrepareContainerForItemOverride(T element, object item)
         {
-
         }
 
         protected override bool IsItemItsOwnContainerOverride(object item) => item is T;

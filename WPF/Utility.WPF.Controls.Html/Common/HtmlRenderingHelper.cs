@@ -6,18 +6,14 @@
 // like the days and months;
 // they die and are reborn,
 // like the four seasons."
-// 
+//
 // - Sun Tsu,
 // "The Art of War"
 
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using TheArtOfDev.HtmlRenderer.Core.Entities;
-using TheArtOfDev.HtmlRenderer.Demo.Common;
 using TheArtOfDev.HtmlRenderer.WPF;
 
 namespace TheArtOfDev.HtmlRenderer.Demo.WPF
@@ -31,8 +27,7 @@ namespace TheArtOfDev.HtmlRenderer.Demo.WPF
         /// </summary>
         private static readonly Dictionary<string, BitmapImage> _imageCache = new Dictionary<string, BitmapImage>(StringComparer.OrdinalIgnoreCase);
 
-        #endregion
-
+        #endregion Fields/Consts
 
         /// <summary>
         /// Get encoder to be used for encoding bitmap frame by given file extension.<br/>
@@ -47,18 +42,22 @@ namespace TheArtOfDev.HtmlRenderer.Demo.WPF
                 case ".jpg":
                 case ".jpeg":
                     return new JpegBitmapEncoder();
+
                 case ".bmp":
                     return new BmpBitmapEncoder();
+
                 case ".tif":
                 case ".tiff":
                     return new TiffBitmapEncoder();
+
                 case ".gif":
                     return new GifBitmapEncoder();
+
                 case ".wmp":
                     return new WmpBitmapEncoder();
+
                 default:
                     return new PngBitmapEncoder();
-
             }
         }
 

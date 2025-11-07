@@ -26,7 +26,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Markup;
-using System.Windows.Media;
 
 namespace Custom.Controls
 {
@@ -34,8 +33,6 @@ namespace Custom.Controls
     public class EditableTextBlock : Control
     {
         public static readonly DependencyProperty OldTextProperty = DependencyProperty.Register("OldText", typeof(string), typeof(EditableTextBlock), new PropertyMetadata());
-
-
 
         public string OldText
         {
@@ -98,7 +95,7 @@ namespace Custom.Controls
 
         private void EditableTextBlock_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if(this.Content is TextBlock textBlock)
+            if (this.Content is TextBlock textBlock)
             {
                 textBlock.TextDecorations = new TextDecorationCollection { TextDecorations.Underline };
             }
@@ -139,7 +136,7 @@ namespace Custom.Controls
                     new PropertyChangedCallback(OnTextChanged),
                     new CoerceValueCallback(CoerceText),
                     true
-                    //UpdateSourceTrigger.LostFocus | UpdateSourceTrigger.PropertyChanged 
+                //UpdateSourceTrigger.LostFocus | UpdateSourceTrigger.PropertyChanged
                 ), new ValidateValueCallback(ValidateText)
             );
 
@@ -602,6 +599,7 @@ namespace Custom.Controls
                 SetValue(IsInEditModeProperty, value);
             }
         }
+
         public static readonly DependencyProperty IsInEditModeProperty =
             DependencyProperty.Register(
                 "IsInEditMode",
@@ -632,7 +630,7 @@ namespace Custom.Controls
         private static object CoerceIsInEditMode(DependencyObject element, object value)
         {
             EditableTextBlock etb = element as EditableTextBlock;
-            bool mode=(bool)value;
+            bool mode = (bool)value;
             if (etb.IsReadOnly)
             {
                 if (mode)
@@ -671,6 +669,7 @@ namespace Custom.Controls
                 SetValue(TextFormatProperty, value);
             }
         }
+
         public static readonly DependencyProperty TextFormatProperty =
             DependencyProperty.Register(
                 "TextFormat",
@@ -738,7 +737,7 @@ namespace Custom.Controls
 
         #region Content
 
-        [ReadOnly(true),DesignerSerializationVisibilityAttribute(DesignerSerializationVisibility.Hidden),Bindable(false)]
+        [ReadOnly(true), DesignerSerializationVisibilityAttribute(DesignerSerializationVisibility.Hidden), Bindable(false)]
         internal object Content
         {
             get
@@ -747,7 +746,7 @@ namespace Custom.Controls
             }
             private set
             {
-                SetValue(EditableTextBlock.ContentPropertyKey,value);
+                SetValue(EditableTextBlock.ContentPropertyKey, value);
             }
         }
 
@@ -1075,7 +1074,7 @@ namespace Custom.Controls
         private void SetFocusThroughDispatcher(TextBox tb)
         {
             this.Dispatcher.BeginInvoke(
-                new SetFocusDelegate(delegate()
+                new SetFocusDelegate(delegate ()
                 {
                     tb.Focus();
                 }), System.Windows.Threading.DispatcherPriority.Loaded);

@@ -1,23 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Utility.Common.Models
+﻿namespace Utility.Common.Models
 {
 #nullable enable
 
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Reactive.Subjects;
-    using System.Runtime.CompilerServices;
-
-
     //public class ReactiveProperty : ReactiveProperty<string>
     //{
-
     //}
 
     //public class ReactiveProperty<T> : Property<T>, IObservable<T>
@@ -72,7 +58,6 @@ namespace Utility.Common.Models
     //        Value = value;
     //    }
 
-
     //    public virtual T Value
     //    {
     //        get => value;
@@ -84,7 +69,6 @@ namespace Utility.Common.Models
     //        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(callerMemberName));
     //    }
 
-
     //    public IDisposable Subscribe(IObserver<T> observer)
     //    {
     //        return subject.Subscribe(observer);
@@ -93,7 +77,6 @@ namespace Utility.Common.Models
 
     //public class Property
     //{
-
     //}
 
     //public class StringProperty : Property
@@ -111,5 +94,4 @@ namespace Utility.Common.Models
     //        return new StringProperty(stringValue);
     //    }
     //}
-
 }

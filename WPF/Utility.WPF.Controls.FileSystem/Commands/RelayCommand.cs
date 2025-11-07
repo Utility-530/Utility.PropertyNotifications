@@ -46,11 +46,8 @@ namespace Utility.WPF.Commands
 
     public class RelayCommand<T> : ICommand
     {
-
         private readonly Action<T?>? execute = null;
         private readonly Predicate<T?>? canExecute = null;
-
-
 
         /// <summary>
         /// Creates a new command that can always execute.
@@ -71,7 +68,6 @@ namespace Utility.WPF.Commands
             this.execute = execute ?? throw new ArgumentNullException(nameof(execute));
             this.canExecute = canExecute;
         }
-
 
         public bool CanExecute(object? parameter)
         {

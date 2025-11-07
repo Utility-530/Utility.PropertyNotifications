@@ -1,12 +1,12 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using static Utility.WPF.Controls.Buttons.SwitchControl;
 using Evan.Wpf;
+using ReactiveUI;
+using static Utility.WPF.Controls.Buttons.SwitchControl;
 
 namespace Utility.WPF.Controls.Buttons
 {
@@ -52,7 +52,7 @@ namespace Utility.WPF.Controls.Buttons
             setValueCommand.DistinctUntilChanged().Subscribe(a =>
             {
                 Value = Main.Equals(a);
-                RaiseToggleEvent(Value ? Main: Alternate, Value);
+                RaiseToggleEvent(Value ? Main : Alternate, Value);
             });
             base.OnApplyTemplate();
         }

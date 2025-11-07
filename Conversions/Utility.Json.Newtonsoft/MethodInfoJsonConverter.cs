@@ -1,18 +1,15 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
+﻿using System;
 using System.Reflection;
-using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Utility.Helpers.NonGeneric;
 
 namespace Utility.Conversions.Json.Newtonsoft
 {
-
     public class MethodInfoJsonConverter : JsonConverter<MethodInfo>
     {
-
         public override void WriteJson(JsonWriter writer, MethodInfo value, JsonSerializer serializer)
         {
-
             // Begin object
             writer.WriteStartObject();
 

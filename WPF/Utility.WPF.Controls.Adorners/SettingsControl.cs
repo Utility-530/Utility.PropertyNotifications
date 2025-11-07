@@ -1,7 +1,7 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using ReactiveUI;
 using Utility.WPF.Behaviors;
 
 namespace Utility.WPF.Controls.Adorners

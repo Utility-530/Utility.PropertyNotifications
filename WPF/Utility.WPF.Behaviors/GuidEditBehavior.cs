@@ -1,23 +1,20 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Behaviors
 {
-
     public class GuidEditBehavior : Behavior<TextBox>
     {
         private Brush borderBrush;
 
-        const int guidLength = 36;
-        const int guidhexcharacters = 32;
-        int caretIndex = guidLength;
+        private const int guidLength = 36;
+        private const int guidhexcharacters = 32;
+        private int caretIndex = guidLength;
 
         private string _guid = "";
 
@@ -49,7 +46,6 @@ namespace Utility.WPF.Behaviors
             this.AssociatedObject.TextChanged -= AssociatedObject_TextChanged;
         }
 
-
         private void AssociatedObject_TextChanged(object sender, TextChangedEventArgs e)
         {
             HashSet<int> specialOffsets = new HashSet<int> { 8, 13, 18, 23 };
@@ -60,7 +56,6 @@ namespace Utility.WPF.Behaviors
                     caretIndex = FindLastNonWhitespaceOrHyphenIndex(AssociatedObject.Text) + 1;
                     if (change.Offset == 9 || change.Offset == 14 || change.Offset == 19 || change.Offset == 20)
                     {
-
                         AssociatedObject.Text = AssociatedObject.Text.Remove(change.Offset - 1, 1);
                     }
                 }
@@ -70,15 +65,12 @@ namespace Utility.WPF.Behaviors
                     {
                         caretIndex = FindLastNonWhitespaceOrHyphenIndex(AssociatedObject.Text) + 1;
                         //this.AssociatedObject.Text = format(AssociatedObject.Text);
-
                     }
                     else
                     {
                         caretIndex = FindLastNonWhitespaceOrHyphenIndex(AssociatedObject.Text) + 1;
                         //this.AssociatedObject.Text = format(AssociatedObject.Text);
-
                     }
-
                 }
                 if (change.RemovedLength == 1 && change.AddedLength == 0)
                 {
@@ -95,7 +87,6 @@ namespace Utility.WPF.Behaviors
             }
 
             FinalizeFormatting();
-
 
             void HandleAddedText(TextChange change)
             {
@@ -160,7 +151,6 @@ namespace Utility.WPF.Behaviors
                         caretIndex = adjustmentOffset;
                     AssociatedObject.Text = AssociatedObject.Text.Insert(change.Offset, " ");
                 }
-
             }
 
             void FinalizeFormatting()
@@ -283,9 +273,5 @@ namespace Utility.WPF.Behaviors
         {
             return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
         }
-
-
-
     }
 }
-

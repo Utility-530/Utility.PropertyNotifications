@@ -6,6 +6,4 @@ namespace Utility.Interfaces.NonGeneric
     {
         IEnumerable Items();// { get; }
     }
-
-
 }

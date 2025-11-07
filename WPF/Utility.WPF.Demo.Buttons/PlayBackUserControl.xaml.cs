@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using Utility.Enums;
 using Utility.Nodes;
-using Utility.WPF.Behaviors;
-using Utility.WPF.Demo.Data.Factory;
-using Utility.Helpers.NonGeneric;
 using Utility.PropertyNotifications;
+using Utility.WPF.Demo.Data.Factory;
 
 namespace Utility.WPF.Demo.Buttons
 {
     public partial class PlayBackUserControl : UserControl
     {
-        Utility.Services.PlaybackService service = new();
-        PlayBackViewModel viewmodel = new PlayBackViewModel();
+        private Utility.Services.PlaybackService service = new();
+        private PlayBackViewModel viewmodel = new PlayBackViewModel();
+
         public PlayBackUserControl()
         {
             InitializeComponent();
@@ -33,14 +31,13 @@ namespace Utility.WPF.Demo.Buttons
                     }
                     viewmodel.Index %= viewmodel.Collection.Length;
                     viewmodel.Collection[viewmodel.Index].IsSelected = true;
-
                 });
 
             viewmodel
                 .WithChangesTo(a => a.Last)
                 .Subscribe(a =>
                 {
-                    if(a is Playback playback)
+                    if (a is Playback playback)
                     {
                         service.OnNext(playback);
                     }
@@ -69,6 +66,5 @@ namespace Utility.WPF.Demo.Buttons
 
         public ViewModelTree[] Collection { get; } = [];
         public int Index { get; set; } = 0;
-
     }
 }

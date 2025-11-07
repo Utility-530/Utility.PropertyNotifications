@@ -1,8 +1,7 @@
 ﻿<Application x:Class="Utility.WPF.Demo.Trees.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Utility.WPF.Demo.Trees"
-            >
+             xmlns:local="clr-namespace:Utility.WPF.Demo.Trees">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

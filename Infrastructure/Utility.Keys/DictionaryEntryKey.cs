@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Utility.Keys;
 
 namespace Utility.ProjectStructure
@@ -25,4 +24,3 @@ namespace Utility.ProjectStructure
         //public override object Value => FrameworkElementConverter.GetFrameworkElement(Entry.Value);
     }
 }
-

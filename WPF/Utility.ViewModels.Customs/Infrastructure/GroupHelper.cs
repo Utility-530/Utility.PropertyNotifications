@@ -1,8 +1,8 @@
-﻿using DynamicData;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+using DynamicData;
+using ReactiveUI;
 using Utility.ViewModels.Customs.Infrastructure;
 
 namespace Utility.ViewModels;

@@ -40,10 +40,10 @@ namespace Utility.WPF.Demo.Adorners
 
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
-            if (flag2)            
+            if (flag2)
                 adornerController?.Hide();
-            else            
-                adornerController?.Apply();            
+            else
+                adornerController?.Apply();
             flag2 = !flag2;
         }
     }

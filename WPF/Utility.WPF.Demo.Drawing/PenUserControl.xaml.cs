@@ -10,7 +10,7 @@ namespace Utility.WPF.Demo.Drawing
     /// </summary>
     public partial class PenUserControl : UserControl
     {
-        Point point0 = new(0, 0), point1 = new(0, 0);
+        private Point point0 = new(0, 0), point1 = new(0, 0);
 
         public PenUserControl()
         {
@@ -28,7 +28,7 @@ namespace Utility.WPF.Demo.Drawing
 
         private void Spinner2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
         {
-            point1 = new Point(this.ActualWidth-(double)e.NewValue, this.ActualHeight- (double)e.NewValue);
+            point1 = new Point(this.ActualWidth - (double)e.NewValue, this.ActualHeight - (double)e.NewValue);
             InvalidateVisual();
         }
 
@@ -45,12 +45,10 @@ namespace Utility.WPF.Demo.Drawing
             //var point = TransformToVisual(Grid).Transform(ofs);
         }
 
-
         protected Pen Pen
         {
             get
             {
-
                 var ResourcePen = (Pen)this.TryFindResource("ChildConnectionPen");
                 // Make a copy of the resource pen so it can
                 // be modified, the resource pen is frozen.
@@ -66,6 +64,5 @@ namespace Utility.WPF.Demo.Drawing
                 return connectorPen;
             }
         }
-
     }
 }

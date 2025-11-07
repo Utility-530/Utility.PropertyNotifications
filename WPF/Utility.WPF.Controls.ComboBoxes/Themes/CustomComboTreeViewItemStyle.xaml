@@ -193,7 +193,7 @@
                                     <Storyboard TargetName="WrapPanel1">
                                         <DoubleAnimation To="1" Storyboard.TargetProperty="Opacity" Duration="0:0:0.2" />
                         -->
-                        <!--<ObjectAnimationUsingKeyFrames  Duration="0:0:0" Storyboard.TargetProperty="Visibility" >
+                        <!--<ObjectAnimationUsingKeyFrames  Duration="0:0:0" Storyboard.TargetProperty="Visibility">
                                             <ObjectAnimationUsingKeyFrames.KeyFrames>
                                                 <DiscreteObjectKeyFrame Value="{x:Static Visibility.Visible}"></DiscreteObjectKeyFrame>
                                             </ObjectAnimationUsingKeyFrames.KeyFrames>
@@ -207,7 +207,7 @@
                                     <Storyboard TargetName="WrapPanel1">
                                         <DoubleAnimation BeginTime="0:0:0" Storyboard.TargetProperty="Opacity"  To="0.5" Duration="0:0:0.1" />
                         -->
-                        <!--<ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetProperty="Visibility" BeginTime="0:0:0.1" >
+                        <!--<ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetProperty="Visibility" BeginTime="0:0:0.1">
                                             <ObjectAnimationUsingKeyFrames.KeyFrames>
                                                 <DiscreteObjectKeyFrame Value="{x:Static Visibility.Collapsed}"></DiscreteObjectKeyFrame>
                                             </ObjectAnimationUsingKeyFrames.KeyFrames>
@@ -260,19 +260,12 @@
                              Mode=FindAncestor,
                              AncestorType={x:Type TreeViewItem},
                              AncestorLevel=2}}"
-                    Value="False"/>
-
+                    Value="False" />
                 </MultiDataTrigger.Conditions>
                 <Setter Property="IsShowing"  Value="False" />
             </MultiDataTrigger>
         </Style.Triggers>-->
     </Style>
 
-
-
-
-
-    <!--<Style  x:Key="{x:Type trees:CustomTreeViewItem}" TargetType="{x:Type trees:CustomTreeViewItem}"  BasedOn="{StaticResource CustomTreeViewItemStyle}"/>-->
-
-
+    <!--<Style  x:Key="{x:Type trees:CustomTreeViewItem}" TargetType="{x:Type trees:CustomTreeViewItem}"  BasedOn="{StaticResource CustomTreeViewItemStyle}" />-->
 </ResourceDictionary>

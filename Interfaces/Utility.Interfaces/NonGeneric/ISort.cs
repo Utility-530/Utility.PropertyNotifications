@@ -3,6 +3,5 @@
     public interface ISort
     {
         bool Sort(object o);
-
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace Utility.WPF.DataTemplateSelectors
+﻿namespace Utility.WPF.DataTemplateSelectors
 {
     //public class StringDataTemplateSelector : System.Windows.Controls.DataTemplateSelector
     //{

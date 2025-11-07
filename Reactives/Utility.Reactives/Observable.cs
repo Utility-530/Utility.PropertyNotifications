@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Disposables;
-using System.Text;
-using System.Threading.Tasks;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Reactives
@@ -11,7 +8,7 @@ namespace Utility.Reactives
     public class Observable<T> : IObservable<T>, IGetReference
     {
         public readonly IObservable<T>[] observables;
-        T previousValue;
+        private T previousValue;
 
         public Observable(IObservable<T>[] observables)
         {
@@ -26,7 +23,6 @@ namespace Utility.Reactives
                     {
                         throw new ArgumentException("All observables must provide the same reference.");
                     }
-
                 }
                 else
                 {
@@ -63,5 +59,4 @@ namespace Utility.Reactives
             return base.ToString();
         }
     }
-
 }

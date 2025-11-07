@@ -19,8 +19,8 @@ namespace Utility.WPF.Demo.Data.Factory
                   .RuleFor(fake => fake.Surname, fake => fake.Name.LastName())
                   .RuleFor(fake => fake.Age, fake => fake.Random.Int(0, 100))
                   .RuleFor(fake => fake.PhoneNumber, fake => fake.Phone.PhoneNumber());
-             //.FinishWith((a,b)=> b.Id=a.Random.Guid());
-         });
+              //.FinishWith((a,b)=> b.Id=a.Random.Guid());
+          });
 
         public IEnumerator<ReactiveFields> Build()
         {

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using Utility.Interfaces.NonGeneric.Data;
 
@@ -37,4 +35,3 @@ public record CollectionChange
 public record CollectionChangeMessage(CollectionChange change);
 
 public record RepositoryMessage(IRepository Service);
-

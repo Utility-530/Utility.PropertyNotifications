@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -42,7 +39,6 @@ namespace Utility.WPF.Controls.Texts
                 typeof(SearchBox),
                 new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
 
-
         /// <summary>
         /// Identifies the <see cref="AllowEmptySearches" /> dependency property.
         /// </summary>
@@ -54,6 +50,7 @@ namespace Utility.WPF.Controls.Texts
                 new FrameworkPropertyMetadata(
                     true,
                     new PropertyChangedCallback(OnAllowEmptySearchesChanged)));
+
         /// <summary>
         /// Identifies the <see cref="Command" /> dependency property.
         /// </summary>
@@ -65,6 +62,7 @@ namespace Utility.WPF.Controls.Texts
                 new FrameworkPropertyMetadata(
                     null,
                     new PropertyChangedCallback(OnCommandPropsChanged)));
+
         /// <summary>
         /// Identifies the <see cref="CommandParameter" /> dependency property.
         /// </summary>
@@ -76,6 +74,7 @@ namespace Utility.WPF.Controls.Texts
                 new FrameworkPropertyMetadata(
                     null,
                     new PropertyChangedCallback(OnCommandPropsChanged)));
+
         /// <summary>
         /// Identifies the <see cref="CommandTarget" /> dependency property.
         /// </summary>
@@ -87,11 +86,13 @@ namespace Utility.WPF.Controls.Texts
                 new FrameworkPropertyMetadata(
                     null,
                     new PropertyChangedCallback(OnCommandPropsChanged)));
+
         /// <summary>
         /// Identifies the <see cref="HasText" /> dependency property.
         /// </summary>
         public static readonly DependencyProperty HasTextProperty =
             HasTextPropertyKey.DependencyProperty;
+
         /// <summary>
         /// Identifies the <see cref="InstantSearchDelay" /> dependency property.
         /// </summary>
@@ -103,6 +104,7 @@ namespace Utility.WPF.Controls.Texts
                 new FrameworkPropertyMetadata(
                     new Duration(TimeSpan.Zero),
                     new PropertyChangedCallback(OnInstantSearchDelayChanged)));
+
         /// <summary>
         /// Identifies the <see cref="Prompt" /> dependency property.
         /// </summary>
@@ -112,6 +114,7 @@ namespace Utility.WPF.Controls.Texts
                 typeof(object),
                 typeof(SearchBox),
                 new FrameworkPropertyMetadata("Search", FrameworkPropertyMetadataOptions.AffectsRender));
+
         /// <summary>
         /// Identifies the <see cref="PromptTemplate" /> dependency property.
         /// </summary>
@@ -121,6 +124,7 @@ namespace Utility.WPF.Controls.Texts
                 typeof(DataTemplate),
                 typeof(SearchBox),
                 new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
+
         /// <summary>
         /// Identifies the <see cref="SearchMode" /> dependency property.
         /// </summary>
@@ -132,6 +136,7 @@ namespace Utility.WPF.Controls.Texts
                 new FrameworkPropertyMetadata(
                     SearchBoxMode.Instant,
                     FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsMeasure));
+
         /// <summary>
         /// Identifies the <see cref="Search"/> routed event.
         /// </summary>
@@ -159,6 +164,7 @@ namespace Utility.WPF.Controls.Texts
                 }
             }
         }
+
         private static void OnCommandPropsChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             SearchBox stb = o as SearchBox;
@@ -168,6 +174,7 @@ namespace Utility.WPF.Controls.Texts
                 stb.UpdateSearchButtonIsEnabled();
             }
         }
+
         private static void OnInstantSearchDelayChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             SearchBox stb = o as SearchBox;
@@ -177,6 +184,7 @@ namespace Utility.WPF.Controls.Texts
                 stb._searchDelayTimer.Stop();
             }
         }
+
         private static void OnTextPropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             SearchBox stb = o as SearchBox;
@@ -189,6 +197,7 @@ namespace Utility.WPF.Controls.Texts
         //private FrameworkElement _contentHost;
         //private FrameworkElement _promptHost;
         private ButtonBase _searchButtonHost;
+
         private ButtonBase _clearButtonHost;
 
         private DispatcherTimer _searchDelayTimer;
@@ -218,6 +227,7 @@ namespace Utility.WPF.Controls.Texts
             get { return (bool)GetValue(AllowEmptySearchesProperty); }
             set { SetValue(AllowEmptySearchesProperty, value); }
         }
+
         /// <summary>
         /// Gets or sets the command to invoke when the search button is pressed or during instant search.
         /// </summary>
@@ -228,6 +238,7 @@ namespace Utility.WPF.Controls.Texts
             get { return (ICommand)GetValue(CommandProperty); }
             set { SetValue(CommandProperty, value); }
         }
+
         /// <summary>
         /// Gets or sets the parameter to pass to the <see cref="P:Command"/> property.
         /// </summary>
@@ -238,6 +249,7 @@ namespace Utility.WPF.Controls.Texts
             get { return GetValue(CommandParameterProperty); }
             set { SetValue(CommandParameterProperty, value); }
         }
+
         /// <summary>
         /// Gets or sets the element on which to raise the specified command.
         /// </summary>
@@ -247,6 +259,7 @@ namespace Utility.WPF.Controls.Texts
             get { return (IInputElement)GetValue(CommandTargetProperty); }
             set { SetValue(CommandTargetProperty, value); }
         }
+
         /// <summary>
         /// Gets a value indicating whether this control has text entered or not.
         /// </summary>
@@ -256,6 +269,7 @@ namespace Utility.WPF.Controls.Texts
             get { return (bool)GetValue(HasTextProperty); }
             private set { SetValue(HasTextPropertyKey, value); }
         }
+
         /// <summary>
         /// Gets or sets the delay between firing command during instant search mode.
         /// </summary>
@@ -265,6 +279,7 @@ namespace Utility.WPF.Controls.Texts
             get { return (Duration)GetValue(InstantSearchDelayProperty); }
             set { SetValue(InstantSearchDelayProperty, value); }
         }
+
         /// <summary>
         /// Gets or sets content to display as a prompt when the textbox is empty.
         /// </summary>
@@ -277,6 +292,7 @@ namespace Utility.WPF.Controls.Texts
             get { return GetValue(PromptProperty); }
             set { SetValue(PromptProperty, value); }
         }
+
         /// <summary>
         /// Gets or sets the template to use for the prompt content.
         /// </summary>
@@ -285,6 +301,7 @@ namespace Utility.WPF.Controls.Texts
             get { return (DataTemplate)GetValue(PromptTemplateProperty); }
             set { SetValue(PromptTemplateProperty, value); }
         }
+
         /// <summary>
         /// Gets or sets the search behavior of the textbox.
         /// </summary>
@@ -297,6 +314,7 @@ namespace Utility.WPF.Controls.Texts
             get { return (SearchBoxMode)GetValue(SearchModeProperty); }
             set { SetValue(SearchModeProperty, value); }
         }
+
         /// <summary>
         /// Occurs when the search button is pressed or during instant search.
         /// </summary>
@@ -317,6 +335,7 @@ namespace Utility.WPF.Controls.Texts
             RaiseSearchEvent();
             ExecuteSearchCommand();
         }
+
         /// <summary>
         /// Is called when a control template is applied.
         /// </summary>
@@ -372,6 +391,7 @@ namespace Utility.WPF.Controls.Texts
                 base.OnKeyDown(e);
             }
         }
+
         /// <summary>
         /// Is called when content in this editing control changes.
         /// </summary>
@@ -390,6 +410,7 @@ namespace Utility.WPF.Controls.Texts
                 _searchDelayTimer.Start();
             }
         }
+
         /// <summary>
         /// Raises the <see cref="E:Search"/> event.
         /// </summary>
@@ -408,30 +429,36 @@ namespace Utility.WPF.Controls.Texts
         {
             UpdateSearchButtonIsEnabled();
         }
+
         private void HandleSearchDelayTimerTick(object sender, EventArgs e)
         {
             _searchDelayTimer.Stop();
             RaiseSearchEvent();
             ExecuteSearchCommand();
         }
+
         private void HandleSearchButtonClick(object sender, RoutedEventArgs e)
         {
             RaiseSearchEvent();
         }
+
         private void HandleClearButtonClick(object sender, RoutedEventArgs e)
         {
             Reset();
         }
+
         private void RaiseSearchEvent()
         {
             if (AllowEmptySearches || HasText)
                 OnSearch(new RoutedEventArgs(SearchEvent));
         }
+
         private void ExecuteSearchCommand()
         {
             if ((AllowEmptySearches || HasText) && Command != null && Command.CanExecute(CommandParameter))
                 Command.Execute(CommandParameter);
         }
+
         private void UpdateSearchButtonCommand()
         {
             if (_searchButtonHost != null)
@@ -451,6 +478,7 @@ namespace Utility.WPF.Controls.Texts
                 }
             }
         }
+
         private void UpdateSearchButtonIsEnabled()
         {
             if (!AllowEmptySearches && _searchButtonHost != null)
@@ -478,6 +506,7 @@ namespace Utility.WPF.Controls.Texts
         /// InstantSearchDelay.
         /// </summary>
         Instant,
+
         /// <summary>
         /// Command will be fired only when the search button is explicitly
         /// clicked or when the user presses Enter while focus is in the

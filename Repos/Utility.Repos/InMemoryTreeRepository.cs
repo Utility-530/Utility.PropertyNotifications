@@ -1,10 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using Utility.Helpers;
+﻿using System.Reactive.Disposables;
 using Utility.Interfaces.Exs;
 using Utility.Structs.Repos;
 using static Utility.Repos.TreeRepository;
@@ -13,14 +7,13 @@ namespace Utility.Repos
 {
     public class InMemoryTreeRepository : ITreeRepository
     {
+        private Dictionary<string, List<Relationships>> relationships = new();
+        private Dictionary<System.Type, int> types = new();
+        private Dictionary<Guid, string> names = new();
+        private List<Values> _values = new();
 
-        Dictionary<string, List<Relationships>> relationships = new();
-        Dictionary<System.Type, int> types = new();
-        Dictionary<Guid, string> names = new();
-        List<Values> _values = new();
         public InMemoryTreeRepository()
         {
-
         }
 
         public void Copy(Guid guid, Guid newGuid)
@@ -35,8 +28,6 @@ namespace Utility.Repos
 
         public IObservable<Key?> Find(Guid parentGuid, string? name = null, Guid? guid = null, System.Type? type = null, int? index = null)
         {
-
-
             if (parentGuid == default)
                 throw new Exception($"{nameof(parentGuid)} is default");
             return Observable.Create<Key?>(observer =>
@@ -48,13 +39,11 @@ namespace Utility.Repos
 
                 if (parentGuid == Guid.Empty)
                 {
-
                 }
                 if (relationships.ContainsKey(table_name) == false)
                 {
                     relationships[table_name] = [];
                 }
-
 
                 var typeId = type != null ? TypeId(type) : null;
                 var tables = relationships[table_name].Where(a => a.Parent == parentGuid && guid != null ? a.Guid == guid : true && name != null ? a.Name == name : true && index != null ? a._Index == index : true && a.TypeId != default ? a.TypeId == typeId : true).ToList();
@@ -125,6 +114,7 @@ namespace Utility.Repos
         {
             return names[guid];
         }
+
         private void setName(Guid guid, string name)
         {
             names[guid] = name;
@@ -140,7 +130,7 @@ namespace Utility.Repos
             return types.Where(a => a.Value == type).SingleOrDefault().Key;
         }
 
-        Dictionary<Guid, Dictionary<string, DateValue>> values = new();
+        private Dictionary<Guid, Dictionary<string, DateValue>> values = new();
 
         public IObservable<DateValue> Get(Guid guid, string? name = null)
         {
@@ -158,7 +148,6 @@ namespace Utility.Repos
                     tables = _values.Where(a => a.Guid == guid).GroupBy(a => a.Name).Select(a => a.MaxBy(a => a.Added)).ToList();
                 else
                     tables = _values.Where(a => a.Guid == guid && a.Name == name).OrderByDescending(a => a.Added).Take(1).ToList();
-
 
                 if (tables.Count != 0)
                 {
@@ -197,7 +186,6 @@ namespace Utility.Repos
                 {
                     observer.OnNext(new DateValue(guid, name, default, null));
                     observer.OnCompleted();
-
                 }
                 return Disposable.Empty;
             });
@@ -207,7 +195,6 @@ namespace Utility.Repos
         {
             return Observable.Create<Guid>(observer =>
             {
-
                 table_name ??= getName(parentGuid);
                 var guid = Guid.NewGuid();
                 setName(guid, table_name);
@@ -242,7 +229,6 @@ namespace Utility.Repos
             }
             else
             {
-
                 foreach (var item in relationships[name])
                 {
                     names[item.Guid] = name;
@@ -309,7 +295,6 @@ namespace Utility.Repos
                 }
             }
 
-
             return Observable.Return((IReadOnlyCollection<Key>)selections);
         }
 
@@ -350,7 +335,4 @@ namespace Utility.Repos
             throw new NotImplementedException();
         }
     }
-
-
-
 }

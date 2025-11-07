@@ -1,5 +1,4 @@
-﻿
-using Utility.Meta;
+﻿using Utility.Meta;
 
 namespace Utility.PropertyDescriptors
 {
@@ -15,11 +14,10 @@ namespace Utility.PropertyDescriptors
 
         public override void Finalise(object? item = null)
         {
-         
         }
+
         public override void Initialise(object? item = null)
         {
-   
         }
 
         public override object? Get()
@@ -40,4 +38,3 @@ namespace Utility.PropertyDescriptors
         }
     }
 }
-

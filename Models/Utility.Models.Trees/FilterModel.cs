@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
+using Newtonsoft.Json;
 using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
 using Utility.Helpers.Reflection;
@@ -12,23 +12,23 @@ using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
+using Utility.ServiceLocation;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Extensions;
 using Type = System.Type;
-using Utility.ServiceLocation;
 
 namespace Utility.Models.Trees
 {
     public class FilterModel : Model, IPredicate
     {
-        const string res = nameof(res);
-        const string b_ool = nameof(b_ool);
-        const string _value = nameof(_value);
+        private const string res = nameof(res);
+        private const string b_ool = nameof(b_ool);
+        private const string _value = nameof(_value);
         private ResolvableModel resolvableModel;
         private ComparisonModel comparisonModel;
         private ValueModel model;
         protected INodeSource source = Utility.Globals.Resolver.Resolve<INodeSource>();
-        
+
         public FilterModel()
         {
             this.WithChangesTo(a => (a as IGetParent<IReadOnlyTree>).Parent).Subscribe(a =>
@@ -55,7 +55,6 @@ namespace Utility.Models.Trees
 
         [JsonIgnore]
         [Child(b_ool)]
-
         public ComparisonModel ComparisonModel
         {
             get => comparisonModel;
@@ -67,7 +66,6 @@ namespace Utility.Models.Trees
                     comparisonModel = value;
                     this.RaisePropertyChanged(previous, value);
                 }
-
             }
         }
 
@@ -134,6 +132,7 @@ namespace Utility.Models.Trees
                                 throw new Exception("ee33 ffp[oe");
                         });
                     break;
+
                 case b_ool:
                     ComparisonModel = a as ComparisonModel; break;
                 case _value:
@@ -174,7 +173,6 @@ namespace Utility.Models.Trees
                 return comparisonModel.Compare(value, Model.Value);
             }
             return false;
-
         }
     }
 }

@@ -39,7 +39,6 @@
 	C288.511,40.283,305.427,70.832,333.284,88.276
         </Geometry>
 
-
         <Geometry x:Key="Pumpkin">
             M412.48,119.743c-4.062,0-8.074,0.428-12.011,1.27c-14.174-12.325-30.071-19.444-46.874-19.959
 	c-0.667-0.025-1.346-0.038-2.012-0.038c-12.174,0-23.883,3.459-34.838,9.86C298.598,95.659,277.934,87.044,256,87.044
@@ -57,26 +56,21 @@
 		c25.631,5.358,51.514,9.08,77.511,11.193v31.19h33.957v-29.367C287.807,354.74,336.378,350.426,384.094,340.453z
         </Geometry>
 
-
         <Geometry x:Key="Triangle">
             M 21.9 19.3 C 18.9 14.1 15.9 8.9 12.9 3.7 C 12.4939 3.0899 11.4561 3.0587 11.1468 3.7922 C 8.1645 8.9615 5.1823 14.1307 2.2 19.3 c -0.392 0.679 -0.104 1.501 1.0662 1.5 c 5.9561 -0.001 11.9121 0.0021 17.8682 -0.0016 C 21.8553 20.7782 22.1774 19.8883 21.9 19.3 Z
         </Geometry>
-
 
         <!-- https://yqnn.github.io/svg-path-editor/ -->
         <Geometry x:Key="Triangle_Wink">
             M 21.9 2.4125 C 18.9 1.7625 15.9 1.1125 12.9 0.4625 C 12.4939 0.3862 11.4561 0.3823 11.1468 0.474 C 8.1645 1.1202 5.1823 1.7663 2.2 2.4125 c -0.392 0.0849 -0.104 0.1876 1.0662 0.1875 c 5.9561 -0.0001 11.9121 0.0003 17.8682 -0.0002 C 21.8553 2.5973 22.1774 2.486 21.9 2.4125 Z
         </Geometry>
-
     </FrameworkElement.Resources>
-    
-    <UniformGrid>
 
+    <UniformGrid>
 
         <GroupBox Header="PlayPause">
             <btn:PlayPauseButton></btn:PlayPauseButton>
         </GroupBox>
-
 
         <GroupBox Header="Transition">
             <FrameworkElement.Resources>
@@ -99,7 +93,7 @@
                             <EasingColorKeyFrame.EasingFunction>
                                 <QuarticEase EasingMode="EaseInOut" />
                             </EasingColorKeyFrame.EasingFunction>
-                        </EasingColorKeyFrame>                   
+                        </EasingColorKeyFrame>
                     </ColorAnimationUsingKeyFrames>-->
                 </Storyboard>
             </FrameworkElement.Resources>
@@ -143,10 +137,8 @@
                                 <QuarticEase EasingMode="EaseInOut" />
                             </EasingColorKeyFrame.EasingFunction>
                         </EasingColorKeyFrame>
-
                     </ColorAnimationUsingKeyFrames>
                 </Storyboard>
-
             </FrameworkElement.Resources>
             <FrameworkElement.Triggers>
                 <EventTrigger RoutedEvent="FrameworkElement.Loaded">
@@ -170,9 +162,7 @@
                     Data="{StaticResource Triangle}"
                     Fill="Yellow" />
                 </hc:TransitioningContentControl>
-
             </Grid>
-
         </GroupBox>
     </UniformGrid>
 </UserControl>

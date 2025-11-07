@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections;
+using System.Collections.Specialized;
 using System.Drawing;
-using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using Utility.Commands;
-using Utility.Helpers.Generic;
-using Utility.PropertyNotifications;
-using System.Collections.Specialized;
 using Utility.Enums;
 using Utility.Interfaces.Exs.Diagrams;
+using Utility.PropertyNotifications;
 
 namespace Utility.Nodes
 {

@@ -18,9 +18,9 @@ namespace Utility.WPF.Helpers
 
         public static bool CheckIdProperty(string id, Type type)
         {
-            var pt = type.GetProperty(id)?.PropertyType?? throw new Exception("SDDf4 ggg5");
+            var pt = type.GetProperty(id)?.PropertyType ?? throw new Exception("SDDf4 ggg5");
             var interfaces = pt.GetInterfaces();
-            return type.IsAssignableFrom(typeof(IConvertible)) || 
+            return type.IsAssignableFrom(typeof(IConvertible)) ||
                    interfaces
                        .Select(a => a.Name)
                        .Any(a => a.StartsWith("IEquatable"));

@@ -1,7 +1,7 @@
-﻿using PropertyTools.Wpf;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using PropertyTools.Wpf;
 using Utility.Commands;
 
 namespace Utility.WPF.Demo.External

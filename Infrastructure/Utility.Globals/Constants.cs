@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Environment;
+﻿using static System.Environment;
 
 namespace Utility
 {
@@ -15,20 +10,17 @@ namespace Utility
         public static readonly string DefaultModelsFilePath = Path.Combine(DefaultDataPath, DefaultModelsFileName);
         public static readonly string DefaultAPIFilePath = Path.Combine(DefaultDataPath, DefaultAPIFileName);
 
-
         /// <summary>
         /// <a href="https://gist.github.com/DamianSuess/c143ed869e02e002d252056656aeb9bf"></a>
         /// </summary>
 
         public static readonly string ProgramData = GetFolderPath(SpecialFolder.CommonApplicationData);
 
-
         // C:\Users\USERNAME\AppData\Roaming
         public static readonly string ApplicationData = GetFolderPath(SpecialFolder.ApplicationData);
 
         // C:\Users\USERNAME\Documents\
         public static readonly string Personal = GetFolderPath(SpecialFolder.Personal);
-
 
         /// <summary>
         /// Generate List
@@ -95,8 +87,5 @@ namespace Utility
                 return System.Enum.GetValues(typeof(T)).Cast<T>();
             }
         }
-
-
     }
-
 }

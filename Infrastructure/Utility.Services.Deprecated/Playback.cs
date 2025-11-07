@@ -29,19 +29,24 @@ public class Playback : BaseObject
             {
                 case Step.None:
                     break;
+
                 case Step.Backward:
                     back();
                     break;
+
                 case Step.Forward:
                     forward();
                     break;
+
                 case Step.In:
                     play();
                     break;
+
                 case Step.Out:
                     pause();
                     //OnNext(default);
                     break;
+
                 case Step.All:
                     break;
             }
@@ -76,7 +81,6 @@ public class Playback : BaseObject
         Dispatch(() => forward());
     }
 
-
     public void OnNext(Changes.Set changeSet)
     {
         if (changeSet.Any() == false)
@@ -96,9 +100,7 @@ public class PlaybackViewModel : NotifyPropertyClass
     //List<Direction> directions = new();
     public System.Timers.Timer Timer { get; set; } = new(TimeSpan.FromSeconds(0.01));
 
-
     public ICommand Command { get; set; }
 
     public Step Enabled { get => enabled; set => RaisePropertyChanged(ref enabled, value); }
 }
-

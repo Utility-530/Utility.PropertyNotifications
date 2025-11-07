@@ -13,8 +13,7 @@
             <Setter Property="Width" Value="30"></Setter>
         </Style>
 
-
-        <Style TargetType="{x:Type HeaderedContentControl}" >
+        <Style TargetType="{x:Type HeaderedContentControl}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type HeaderedContentControl}">
@@ -39,16 +38,14 @@
         </Style>
     </FrameworkElement.Resources>
 
-
-
-    <UniformGrid >
+    <UniformGrid>
 
         <HeaderedContentControl Header="Native">
             <local:NativeColoursView />
         </HeaderedContentControl>
 
         <HeaderedContentControl Header="Random">
-            <local:RandomRectanglesView  MinHeight="300"/>
+            <local:RandomRectanglesView  MinHeight="300" />
         </HeaderedContentControl>
 
         <HeaderedContentControl Header="Custom">

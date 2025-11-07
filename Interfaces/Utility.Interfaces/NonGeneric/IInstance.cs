@@ -1,6 +1,6 @@
 ﻿namespace Utility.Interfaces
 {
-    public  interface IInstance
+    public interface IInstance
     {
         object Instance { get; }
     }

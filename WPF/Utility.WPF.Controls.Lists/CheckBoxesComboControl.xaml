@@ -12,7 +12,6 @@
         <res:SharedResourceDictionary Source="/Utility.WPF.Themes;component/Themes/CheckBox.xaml"></res:SharedResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
 
-
     <Style TargetType="{x:Type local:CheckBoxesFilteredControl}" BasedOn="{StaticResource GenericListBox}">
         <Setter Property="ItemContainerStyle" Value="{StaticResource CloseListBoxItemStyle}" />
         <Setter Property="ItemsPanel">
@@ -141,12 +140,12 @@
                                     Opacity="0.95" />
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
 
-                                    <ctrl:FilterControl Height="25" 
-                                                    Header="Type here to filter" 
+                                    <ctrl:FilterControl Height="25"
+                                                    Header="Type here to filter"
                                                     DockPanel.Dock="Top"
                                                     TargetControl="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                                     <ScrollViewer Grid.Row="1"  Margin="4,6,4,6" SnapsToDevicePixels="True" VerticalScrollBarVisibility="Auto">
@@ -160,9 +159,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
-
 
     <Style x:Key="Combobox2Style" TargetType="{x:Type ComboBox}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -210,7 +206,7 @@
                                   VerticalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
                                   Fill="Gray" />
-                        </ToggleButton>         
+                        </ToggleButton>
                         <Popup Name="Popup"
                                Placement="Bottom"
                                IsOpen="{TemplateBinding IsDropDownOpen}"
@@ -228,24 +224,24 @@
                                     Opacity="0.95" />
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
 
                                     <Grid>
-                                        <ctrl:FilterControl Height="25" 
-                                                               Visibility="{Binding 
+                                        <ctrl:FilterControl Height="25"
+                                                               Visibility="{Binding
                                                                     RelativeSource={RelativeSource Mode=TemplatedParent},
                                                                     Path=FilterCollection,
                                                                     Converter={x:Static conv:NullToVisibilityConverter.Instance}}"
-                                                    Header="Type here to filter" 
+                                                    Header="Type here to filter"
                                                     DockPanel.Dock="Top"
                                                     TargetControl="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}}" />
 
                                         <local:CheckBoxesListControl
                                             Grid.Row="1"
-                                                                    Visibility="{Binding 
+                                                                    Visibility="{Binding
                                                                     RelativeSource={RelativeSource Mode=TemplatedParent},
                                                                     Path=FilterCollection,
                                                                     Converter={x:Static conv:NullToInverseVisibilityConverter.Instance}}"
@@ -253,17 +249,16 @@
                                                                     SelectedValuePath="Header"
                                                                     ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                                                     ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=FilterCollection}"
-                                                                    IsCheckedPath="IsChecked"    
-                                            
+                                                                    IsCheckedPath="IsChecked"
+
                                                                     Orientation="Horizontal">
                                         </local:CheckBoxesListControl>
-
                                     </Grid>
                                     <ScrollViewer Grid.Row="2"  Margin="4,6,4,6" SnapsToDevicePixels="True" VerticalScrollBarVisibility="Auto">
                                         <StackPanel x:Name="ItemsHostStackPanel" IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
                                     </ScrollViewer>
-                                    <!--<DataGrid 
-                                        Grid.Row="1"  
+                                    <!--<DataGrid
+                                        Grid.Row="1"
                                         ItemsSource="{Binding CollectionViewModel.Collection}" />-->
                                 </Grid>
                             </Grid>

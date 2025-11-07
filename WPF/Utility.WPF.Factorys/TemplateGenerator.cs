@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace Utility.WPF.Factorys
@@ -46,9 +46,9 @@ namespace Utility.WPF.Factorys
         }
 
         public static HierarchicalDataTemplate CreateHierarcialDataTemplate(Func<FrameworkElement> factory, string childPropertyName) =>
-            CreateHierarcialDataTemplate(factory, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(childPropertyName)});
- 
-        public static HierarchicalDataTemplate CreateHierarcialDataTemplate(Func<object> factory, BindingBase itemsSourceBinding )
+            CreateHierarcialDataTemplate(factory, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(childPropertyName) });
+
+        public static HierarchicalDataTemplate CreateHierarcialDataTemplate(Func<object> factory, BindingBase itemsSourceBinding)
         {
             if (factory == null)
                 throw new ArgumentNullException(nameof(factory));
@@ -85,7 +85,6 @@ namespace Utility.WPF.Factorys
             action?.Invoke(itemsPanelTemplate.VisualTree);
             return itemsPanelTemplate;
         }
-
 
         /// <summary>
         /// Creates a control-template

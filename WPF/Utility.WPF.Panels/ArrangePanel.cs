@@ -59,6 +59,7 @@ namespace Utility.WPF.Panels
         }
 
         #region dependency properties
+
         public static int GetOrder(DependencyObject obj)
         {
             return (int)obj.GetValue(OrderProperty);
@@ -94,7 +95,8 @@ namespace Utility.WPF.Panels
             get => (Orientation)GetValue(OrientationProperty);
             set => SetValue(OrientationProperty, value);
         }
-        #endregion
+
+        #endregion dependency properties
 
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
@@ -208,7 +210,6 @@ namespace Utility.WPF.Panels
             return _strategy.ResultSize;
         }
 
-
         private Size[] MeasureChildren()
         {
             if (_measures == null || Children.Count != _measures.Length)
@@ -221,7 +222,6 @@ namespace Utility.WPF.Panels
                 {
                     child.Measure(infiniteSize);
                 }
-
 
                 var i = 0;
                 foreach (var measure in Children.OfType<UIElement>().OrderBy(GetOrder).Select(ch => ch.DesiredSize))
@@ -262,8 +262,6 @@ namespace Utility.WPF.Panels
             }
         }
 
-
-
         private static void OnDesiredPositionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var desiredPosition = (Rect)e.NewValue;
@@ -279,6 +277,7 @@ namespace Utility.WPF.Panels
                     case Orientation.Vertical:
                         panel._strategy = new VerticalTableLayoutStrategy();
                         break;
+
                     case Orientation.Horizontal:
                         panel._strategy = new HorizontalTableLayoutStrategy();
                         break;

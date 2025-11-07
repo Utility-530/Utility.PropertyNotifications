@@ -3,10 +3,9 @@
 namespace Utility.WPF
 {
     public class ChangeRoutedEventArgs : RoutedEventArgs
+    {
+        public ChangeRoutedEventArgs(Utility.Changes.Type type, object instance, RoutedEvent routedEvent, object source) : base(routedEvent, source)
         {
-
-            public ChangeRoutedEventArgs(Utility.Changes.Type type, object instance, RoutedEvent routedEvent, object source) : base(routedEvent, source)
-            {
             Type = type;
             Instance = instance;
         }
@@ -16,7 +15,4 @@ namespace Utility.WPF
     }
 
     public delegate void ChangeRoutedEventHandler(object sender, ChangeRoutedEventArgs e);
-
-
-
 }

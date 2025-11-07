@@ -10,8 +10,10 @@ namespace Utility.WPF.Panels
     public class AnimatedListPanel : Panel
     {
         #region DependencyProperties
+
         public static readonly DependencyProperty OrientationProperty =
             DependencyProperty.Register("Orientation", typeof(Orientation), typeof(AnimatedListPanel), new PropertyMetadata(Orientation.Vertical));
+
         public Orientation Orientation
         {
             get { return (Orientation)GetValue(OrientationProperty); }
@@ -20,6 +22,7 @@ namespace Utility.WPF.Panels
 
         public static readonly DependencyProperty StartPointProperty =
             DependencyProperty.Register("StartPoint", typeof(Point), typeof(AnimatedListPanel), new PropertyMetadata(new Point(0, 0)));
+
         public Point StartPoint
         {
             get { return (Point)GetValue(StartPointProperty); }
@@ -28,12 +31,14 @@ namespace Utility.WPF.Panels
 
         public static readonly DependencyProperty DurationProperty =
             DependencyProperty.Register("Duration", typeof(double), typeof(AnimatedListPanel), new PropertyMetadata(200.0));
+
         public double Duration
         {
             get { return (double)GetValue(DurationProperty); }
             set { SetValue(DurationProperty, value); }
         }
-        #endregion
+
+        #endregion DependencyProperties
 
         private Size ourSize;
         private double totalChildrenSize;
@@ -57,6 +62,7 @@ namespace Utility.WPF.Panels
                         idealSize.Width = Math.Max(idealSize.Width, child.DesiredSize.Width);
                         idealSize.Height += child.DesiredSize.Height;
                         break;
+
                     case Orientation.Horizontal:
                         idealSize.Width += child.DesiredSize.Width;
                         idealSize.Height = Math.Max(idealSize.Height, child.DesiredSize.Height);
@@ -115,6 +121,7 @@ namespace Utility.WPF.Panels
                         y = Offset + child.DesiredSize.Height;
                         Offset += child.DesiredSize.Height;
                         break;
+
                     case Orientation.Horizontal:
                         x = Offset + child.DesiredSize.Width;
                         Offset += child.DesiredSize.Width;

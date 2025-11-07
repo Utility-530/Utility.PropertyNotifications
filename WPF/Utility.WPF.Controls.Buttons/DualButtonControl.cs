@@ -1,9 +1,9 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using ReactiveUI;
 
 namespace Utility.WPF.Controls.Buttons
 {

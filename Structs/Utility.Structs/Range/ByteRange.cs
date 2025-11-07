@@ -28,37 +28,36 @@ namespace Utility.Structs
     using System;
     using System.Collections.Generic;
 
-
     /// <summary>
     ///   Represents a byte range with Minimum and Maximum values.
     /// </summary>
-    /// 
+    ///
     /// <remarks>
     ///   This class represents a byt range with inclusive limits, where
     ///   both Minimum and Maximum values of the range are included into it.
     ///   Mathematical notation of such range is <b>[Min, Max]</b>.
     /// </remarks>
-    /// 
+    ///
     /// <example>
     /// <code>
     /// // create [0, 255] range
     /// var range1 = new ByteRange(0, 255);
-    /// 
+    ///
     /// // create [64, 128] range
     /// var range2 = new ByteRange(64, 128);
-    /// 
+    ///
     /// // check if values is inside of the first range
     /// if (range1.IsInside(5))
     /// {
     ///     // ...
     /// }
-    /// 
+    ///
     /// // check if the second range is inside of the first range
     /// if (range1.IsInside(range2))
     /// {
     ///     // ...
     /// }
-    /// 
+    ///
     /// // check if two ranges overlap
     /// if (range1.IsOverlapping(range2))
     /// {
@@ -66,38 +65,35 @@ namespace Utility.Structs
     /// }
     /// </code>
     /// </example>
-    /// 
+    ///
     /// <seealso cref="IntRange"/>
     /// <seealso cref="DoubleRange"/>
     /// <seealso cref="Range"/>
-    /// 
+    ///
     [Serializable]
     public readonly struct ByteRange : /*IRange<byte>, */IEquatable<ByteRange>, IEnumerable<byte>
     {
-   
-
         /// <summary>
         ///   Minimum value of the range.
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         ///   Represents Minimum value (left side limit) of the range [<b>Min</b>, Max].
         /// </remarks>
-        /// 
+        ///
         public byte Min
         {
             get;
-    
         }
 
         /// <summary>
         ///   Maximum value of the range.
         /// </summary>
-        /// 
+        ///
         /// <remarks>
         ///   Represents Maximum value (right side limit) of the range [Min, <b>Max</b>].
         /// </remarks>
-        /// 
+        ///
         public byte Max
         {
             get;
@@ -106,7 +102,7 @@ namespace Utility.Structs
         /// <summary>
         ///   Gets the length of the range, defined as (Max - Min).
         /// </summary>
-        /// 
+        ///
         public int Length
         {
             get { return Max - Min; }
@@ -115,10 +111,10 @@ namespace Utility.Structs
         /// <summary>
         ///   Initializes a new instance of the <see cref="IntRange"/> class.
         /// </summary>
-        /// 
+        ///
         /// <param name="min">Minimum value of the range.</param>
         /// <param name="max">Maximum value of the range.</param>
-        /// 
+        ///
         public ByteRange(byte min, byte max)
         {
             this.Min = min;
@@ -128,13 +124,13 @@ namespace Utility.Structs
         /// <summary>
         ///   Check if the specified value is inside of the range.
         /// </summary>
-        /// 
+        ///
         /// <param name="x">Value to check.</param>
-        /// 
+        ///
         /// <returns>
         ///   <b>True</b> if the specified value is inside of the range or <b>false</b> otherwise.
         /// </returns>
-        /// 
+        ///
         public bool IsInside(byte x)
         {
             return ((x >= Min) && (x <= Max));
@@ -143,13 +139,13 @@ namespace Utility.Structs
         /// <summary>
         ///   Check if the specified range is inside of the range.
         /// </summary>
-        /// 
+        ///
         /// <param name="range">Range to check.</param>
-        /// 
+        ///
         /// <returns>
         ///   <b>True</b> if the specified range is inside of the range or <b>false</b> otherwise.
         /// </returns>
-        /// 
+        ///
         public bool IsInside(ByteRange range)
         {
             return ((IsInside(range.Min)) && (IsInside(range.Max)));
@@ -158,13 +154,13 @@ namespace Utility.Structs
         /// <summary>
         ///   Check if the specified range overlaps with the range.
         /// </summary>
-        /// 
+        ///
         /// <param name="range">Range to check for overlapping.</param>
-        /// 
+        ///
         /// <returns>
         ///   <b>True</b> if the specified range overlaps with the range or <b>false</b> otherwise.
         /// </returns>
-        /// 
+        ///
         public bool IsOverlapping(ByteRange range)
         {
             return ((IsInside(range.Min)) || (IsInside(range.Max)) ||
@@ -174,12 +170,12 @@ namespace Utility.Structs
         /// <summary>
         ///   Computes the intersection between two ranges.
         /// </summary>
-        /// 
+        ///
         /// <param name="range">The second range for which the intersection should be calculated.</param>
-        /// 
+        ///
         /// <returns>An new <see cref="ByteRange"/> structure containing the intersection
         /// between this range and the <paramref name="range"/> given as argument.</returns>
-        /// 
+        ///
         public ByteRange Intersection(ByteRange range)
         {
             return new ByteRange(System.Math.Max(this.Min, range.Min), System.Math.Min(this.Max, range.Max));
@@ -188,7 +184,7 @@ namespace Utility.Structs
         /// <summary>
         ///   DeterMines whether two instances are equal.
         /// </summary>
-        /// 
+        ///
         public static bool operator ==(ByteRange range1, ByteRange range2)
         {
             return ((range1.Min == range2.Min) && (range1.Max == range2.Max));
@@ -197,7 +193,7 @@ namespace Utility.Structs
         /// <summary>
         ///   DeterMines whether two instances are not equal.
         /// </summary>
-        /// 
+        ///
         public static bool operator !=(ByteRange range1, ByteRange range2)
         {
             return ((range1.Min != range2.Min) || (range1.Max != range2.Max));
@@ -206,13 +202,13 @@ namespace Utility.Structs
         /// <summary>
         ///   Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// 
+        ///
         /// <param name="other">An object to compare with this object.</param>
-        /// 
+        ///
         /// <returns>
         ///   true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
         /// </returns>
-        /// 
+        ///
         public bool Equals(ByteRange other)
         {
             return this == other;
@@ -221,13 +217,13 @@ namespace Utility.Structs
         /// <summary>
         ///   DeterMines whether the specified <see cref="System.Object" />, is equal to this instance.
         /// </summary>
-        /// 
+        ///
         /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
-        /// 
+        ///
         /// <returns>
         ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        /// 
+        ///
         public override bool Equals(object obj)
         {
             return (obj is ByteRange) ? (this == (ByteRange)obj) : false;
@@ -236,11 +232,11 @@ namespace Utility.Structs
         /// <summary>
         ///   Returns a hash code for this instance.
         /// </summary>
-        /// 
+        ///
         /// <returns>
-        ///   A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        ///   A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
-        /// 
+        ///
         public override int GetHashCode()
         {
             unchecked
@@ -255,11 +251,11 @@ namespace Utility.Structs
         /// <summary>
         ///   Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
-        /// 
+        ///
         /// <returns>
         ///   A <see cref="System.String" /> that represents this instance.
         /// </returns>
-        /// 
+        ///
         public override string ToString()
         {
             return String.Format("[{0}, {1}]", Min, Max);
@@ -268,14 +264,14 @@ namespace Utility.Structs
         /// <summary>
         ///   Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
-        /// 
+        ///
         /// <param name="format">The format.</param>
         /// <param name="formatProvider">The format provider.</param>
-        /// 
+        ///
         /// <returns>
         ///   A <see cref="System.String" /> that represents this instance.
         /// </returns>
-        /// 
+        ///
         public string ToString(string format, IFormatProvider formatProvider)
         {
             return String.Format("[{0}, {1}]",
@@ -283,18 +279,16 @@ namespace Utility.Structs
                 Max.ToString(format, formatProvider));
         }
 
-
-
         /// <summary>
         ///   Performs an implicit conversion from <see cref="ByteRange"/> to <see cref="IntRange"/>.
         /// </summary>
-        /// 
+        ///
         /// <param name="range">The range.</param>
-        /// 
+        ///
         /// <returns>
         ///   The result of the conversion.
         /// </returns>
-        /// 
+        ///
         public static implicit operator IntRange(ByteRange range)
         {
             return new IntRange(range.Min, range.Max);
@@ -303,13 +297,13 @@ namespace Utility.Structs
         /// <summary>
         ///   Performs an implicit conversion from <see cref="IntRange"/> to <see cref="DoubleRange"/>.
         /// </summary>
-        /// 
+        ///
         /// <param name="range">The range.</param>
-        /// 
+        ///
         /// <returns>
         ///   The result of the conversion.
         /// </returns>
-        /// 
+        ///
         public static implicit operator DoubleRange(ByteRange range)
         {
             return new DoubleRange(range.Min, range.Max);
@@ -318,13 +312,13 @@ namespace Utility.Structs
         ///// <summary>
         /////   Performs an implicit conversion from <see cref="IntRange"/> to <see cref="Range"/>.
         ///// </summary>
-        ///// 
+        /////
         ///// <param name="range">The range.</param>
-        ///// 
+        /////
         ///// <returns>
         /////   The result of the conversion.
         ///// </returns>
-        ///// 
+        /////
         //public static implicit operator Range(ByteRange range)
         //{
         //    return new Range(range.Min, range.Max);
@@ -333,11 +327,11 @@ namespace Utility.Structs
         /// <summary>
         ///   Returns an enumerator that iterates through a collection.
         /// </summary>
-        /// 
+        ///
         /// <returns>
         ///   An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        /// 
+        ///
         public IEnumerator<byte> GetEnumerator()
         {
             for (byte i = Min; i < Max; i++)
@@ -347,11 +341,11 @@ namespace Utility.Structs
         /// <summary>
         ///   Returns an enumerator that iterates through a collection.
         /// </summary>
-        /// 
+        ///
         /// <returns>
         ///   An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
-        /// 
+        ///
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             for (byte i = Min; i < Max; i++)

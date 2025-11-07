@@ -6,7 +6,7 @@ namespace Utility.Keys
     {
         private readonly int[] value;
 
-        public ComboKey(params int[] value) : base(string.Join( ",", value))
+        public ComboKey(params int[] value) : base(string.Join(",", value))
         {
             this.value = value;
         }

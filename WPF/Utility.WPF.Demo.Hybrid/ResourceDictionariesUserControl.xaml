@@ -20,7 +20,7 @@
             <FrameworkElement.Resources>
             </FrameworkElement.Resources>
 
-            <view1:ResourceDictionariesControl 
+            <view1:ResourceDictionariesControl
                 mk:NameOfExtension.Type="{x:Type vm2:TickViewModel}"
                 DisplayMemberPath="{mk:NameOf Path=Text}"
                 CommandPath="{mk:NameOf  Path=Command}"

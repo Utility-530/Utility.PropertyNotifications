@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Utility.Structs
 {
@@ -10,7 +8,7 @@ namespace Utility.Structs
         public static bool HasOverLapWith(this IEnumerable<DateRange> membershipList, DateRange newItem)
         {
             return membershipList.Any(m => m.HasOverLapWith(newItem));
-            //return !membershipList.All(m => m.IsFullyAfter(newItem) || newItem.IsFullyAfter(m)); 
+            //return !membershipList.All(m => m.IsFullyAfter(newItem) || newItem.IsFullyAfter(m));
             //return membershipList.Any(m => m.HasPartialOverLapWith(newItem) || newItem.HasFullOverLapWith(newItem));
         }
     }

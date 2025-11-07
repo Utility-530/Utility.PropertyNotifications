@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Tiny.Toolkits;
 
 namespace Utility.WPF.Controls.Trees
 {
@@ -15,23 +9,17 @@ namespace Utility.WPF.Controls.Trees
         public static readonly DependencyProperty FooterProperty =
     DependencyProperty.Register("Footer", typeof(object), typeof(CustomTreeViewItem), new PropertyMetadata());
 
-
-
         public static readonly DependencyProperty FooterTemplateProperty =
     DependencyProperty.Register("FooterTemplate", typeof(DataTemplate), typeof(CustomTreeViewItem), new PropertyMetadata());
-        
 
         public static readonly DependencyProperty FooterTemplateSelectorProperty =
     DependencyProperty.Register("FooterTemplateSelector", typeof(DataTemplateSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
-
 
         public object Footer
         {
             get { return (object)GetValue(FooterProperty); }
             set { SetValue(FooterProperty, value); }
         }
-
-
 
         public DataTemplate FooterTemplate
         {
@@ -45,11 +33,8 @@ namespace Utility.WPF.Controls.Trees
             set { SetValue(FooterTemplateSelectorProperty, value); }
         }
 
-
-
-        void apply_template()
+        private void apply_template()
         {
-
             var acb = this.GetTemplateChild("EditPresenter") as ContentPresenter;
             if (acb == null)
                 return;
@@ -60,7 +45,6 @@ namespace Utility.WPF.Controls.Trees
                 //{
                 //    this.IsSelected = true;
                 //}
-
             }));
             acb.AddHandler(TextBox.LostFocusEvent, new RoutedEventHandler((s, e) =>
             {
@@ -76,20 +60,13 @@ namespace Utility.WPF.Controls.Trees
 
             acb.AddHandler(TextBox.LoadedEvent, new RoutedEventHandler((s, e) =>
             {
-
                 inputBox_Loaded(s, e);
-
-
             }));
             // PreviewKeyDown, because KeyDown does not bubble up for Enter
-
         }
-
-
 
         private void inputBox_Loaded(object s, RoutedEventArgs e)
         {
-
         }
 
         private void inputBox_GotFocus(object s, RoutedEventArgs e)
@@ -99,14 +76,10 @@ namespace Utility.WPF.Controls.Trees
             Keyboard.Focus((e.OriginalSource as FrameworkElement));
 
             (e.OriginalSource as FrameworkElement).PreviewKeyDown += handler;
-
-
         }
 
         private void handler(object sender, KeyEventArgs e)
         {
-
-
             switch (e.Key)
             {
                 case Key.Tab:
@@ -132,6 +105,7 @@ namespace Utility.WPF.Controls.Trees
                     //(AddCommand as ICommand)?.Execute(null);
                     (this as TreeViewItem).Focus();
                     break;
+
                 case Key.Escape: // reject tag
                                  // isEscapeClicked = true;
                     this.AcceptComboTreeViewItem_Click(this, default);
@@ -139,6 +113,7 @@ namespace Utility.WPF.Controls.Trees
                     this.Focus();
                     //parent.RemoveTag(this, true); // do not raise RemoveTag event
                     break;
+
                 case Key.Back:
                     //if (string.IsNullOrWhiteSpace(Text))
                     //{
@@ -153,9 +128,6 @@ namespace Utility.WPF.Controls.Trees
                     break;
             }
         }
-            
-        
-        
 
         private void inputBox_LostFocus(object s, RoutedEventArgs e)
         {

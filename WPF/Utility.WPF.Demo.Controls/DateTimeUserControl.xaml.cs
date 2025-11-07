@@ -1,8 +1,8 @@
-﻿using LiveCharts;
-using LiveCharts.Defaults;
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows.Controls;
+using LiveCharts;
+using LiveCharts.Defaults;
 using Utility.Helpers;
 using Utility.WPF.Controls.Infrastructure;
 using Utility.WPF.Demo.Data.Model;

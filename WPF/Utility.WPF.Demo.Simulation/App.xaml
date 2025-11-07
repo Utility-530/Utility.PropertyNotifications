@@ -5,9 +5,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Utility.WPF.Controls.Simulation;component/Themes/Generic.xaml"/>
+                <ResourceDictionary Source="/Utility.WPF.Controls.Simulation;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
 
             <DataTemplate DataType="{x:Type models:MethodAction}">
                 <Ellipse Fill="Red" Height="20" Width="20"></Ellipse>
@@ -18,7 +17,7 @@
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type local:ExampleViewModel}">
-                <ItemsControl ItemsSource="{Binding Collection}" >
+                <ItemsControl ItemsSource="{Binding Collection}">
                     <ItemsControl.ItemContainerStyle>
                         <Style TargetType="{x:Type ContentPresenter}">
                             <Setter Property="Grid.Row" Value="{Binding GridRow}"></Setter>
@@ -35,7 +34,6 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
-
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>

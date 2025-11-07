@@ -1,30 +1,26 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    x:Class="Utility.WPF.Templates.ValueTemplates"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-                    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
-                    xmlns:draw="clr-namespace:System.Drawing;assembly=System.Drawing"
-                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
-                    xmlns:conv="http://schemas.utility.com/converters"
-                    xmlns:local="clr-namespace:Utility.WPF.Templates"
-                    xmlns:infra="clr-namespace:Utility.WPF.Templates.Infrastructure"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                    xmlns:t="http://schemas.utility.com/trees"
-                    xmlns:ad="http://schemas.utility.com/adorners"
-                    xmlns:bhvrs="http://schemas.utility.com/behaviors" 
-                    xmlns:num="clr-namespace:NumericUpDownLib;assembly=NumericUpDownLib"
-                    xmlns:controls1="clr-namespace:Utility.WPF.Templates.Infrastructure"                    
                     xmlns:controls="http://schemas.utility.com"
-                    xmlns:structs="clr-namespace:Utility.Structs;assembly=Utility.Structs"
-                    xmlns:windows="clr-namespace:System.Windows;assembly=WindowsBase"
+                    xmlns:ad="http://schemas.utility.com/adorners"
+                    xmlns:bhvrs="http://schemas.utility.com/behaviors"
                     xmlns:cbx="http://schemas.utility.com/cboxes"
+                    xmlns:conv="http://schemas.utility.com/converters"
+                    xmlns:wpf="http://schemas.utility.com/utilitywpf"
                     xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
-                    xmlns:hc="https://handyorg.github.io/handycontrol"       
-                    xmlns:wpf="http://schemas.utility.com/utilitywpf"                  
-                    xmlns:dotNetKitControls="http://wpfcontrols.com/">
+                    xmlns:num="clr-namespace:NumericUpDownLib;assembly=NumericUpDownLib"
+                    xmlns:draw="clr-namespace:System.Drawing;assembly=System.Drawing"
+                    xmlns:windows="clr-namespace:System.Windows;assembly=WindowsBase"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+                    xmlns:structs="clr-namespace:Utility.Structs;assembly=Utility.Structs"
+                    xmlns:local="clr-namespace:Utility.WPF.Templates"
+                    xmlns:controls1="clr-namespace:Utility.WPF.Templates.Infrastructure"
+                    x:Class="Utility.WPF.Templates.ValueTemplates">
 
-    <conv:IntToEnumConverter x:Key="IntToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
+    <conv:IntToEnumConverter x:Key="IntToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}" />
 
-    <conv:StringToEnumConverter x:Key="StringToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
+    <conv:StringToEnumConverter x:Key="StringToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}" />
 
     <local:VisibilityConverter x:Key="VisibilityConverter" />
     <conv:TypeNameConverter x:Key="TypeNameConverter" />
@@ -55,7 +51,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:DateTime}">
-        <xc:DateTimePicker Value="{Binding Path=Value, Mode=TwoWay}"/>
+        <xc:DateTimePicker Value="{Binding Path=Value, Mode=TwoWay}" />
     </DataTemplate>
 
     <DataTemplate x:Key="Number">
@@ -63,16 +59,15 @@
     </DataTemplate>
 
     <DataTemplate x:Key="Combo">
-        <ComboBox IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding AutoList}"  >
+        <ComboBox IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding AutoList}">
             <i:Interaction.Behaviors>
-                <bhvrs:SelectorSelectedItemBehavior SelectedItem="{Binding Value, Mode=TwoWay}"/>
+                <bhvrs:SelectorSelectedItemBehavior SelectedItem="{Binding Value, Mode=TwoWay}" />
             </i:Interaction.Behaviors>
         </ComboBox>
     </DataTemplate>
 
-    
     <DataTemplate DataType="{x:Type draw:Color}">
-        <xc:ColorPicker SelectedColor="{Binding Path=Value, Mode=TwoWay, Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"/>
+        <xc:ColorPicker SelectedColor="{Binding Path=Value, Mode=TwoWay, Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type Color}">
@@ -81,7 +76,7 @@
                 <wpf:DataContextSpy x:Key="DataContextSpy" Property="Value"></wpf:DataContextSpy>
             </Grid.Resources>
 
-            <xc:ColorPicker SelectedColor="{Binding Path=Value, Mode=TwoWay, Converter={x:Static conv:ColorConverter.Instance}, ConverterParameter={StaticResource DataContextSpy}}" 
+            <xc:ColorPicker SelectedColor="{Binding Path=Value, Mode=TwoWay, Converter={x:Static conv:ColorConverter.Instance}, ConverterParameter={StaticResource DataContextSpy}}"
                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2">
             </xc:ColorPicker>
         </Grid>
@@ -89,12 +84,12 @@
 
     <DataTemplate DataType="{x:Type sys:Boolean}">
         <Grid MinHeight="30"                                     MinWidth="30">
-            <CheckBox IsChecked="{Binding Path=Value, Mode=TwoWay}"/>
+            <CheckBox IsChecked="{Binding Path=Value, Mode=TwoWay}" />
         </Grid>
     </DataTemplate>
 
     <!--<DataTemplate DataType="{x:Type sys:String}">
-        <dotNetKitControls:AutoCompleteComboBox Text="{Binding Value}" Provider="{Binding Converter={x:Static local:AutoCompleteConverter.Instance}}"/>
+        <dotNetKitControls:AutoCompleteComboBox Text="{Binding Value}" Provider="{Binding Converter={x:Static local:AutoCompleteConverter.Instance}}" />
         -->
     <!--<xc:AutoCompleteBox Text="{Binding Path=Value, Mode=TwoWay}" VerticalContentAlignment="Center" ItemsSource="{Binding Converter={StaticResource AutoCompleteConverter}}" />-->
     <!--
@@ -117,17 +112,17 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:Type}">
-        <cbx:ComboBoxTreeView >
+        <cbx:ComboBoxTreeView>
             <i:Interaction.Behaviors>
-                <cbx:TypeSelectorBehavior  x:Name="TypeSelector" Type="{Binding Value, Mode=TwoWay}" UseEntryAssembly="True"/>
+                <cbx:TypeSelectorBehavior  x:Name="TypeSelector" Type="{Binding Value, Mode=TwoWay}" UseEntryAssembly="True" />
             </i:Interaction.Behaviors>
         </cbx:ComboBoxTreeView>
     </DataTemplate>
-    
+
     <DataTemplate DataType="{x:Type sys:Enum}">
-        <ComboBox >
+        <ComboBox>
             <i:Interaction.Behaviors>
-                <bhvrs:EnumComboBehavior  Value="{Binding Value, Mode=TwoWay}"/>
+                <bhvrs:EnumComboBehavior  Value="{Binding Value, Mode=TwoWay}" />
             </i:Interaction.Behaviors>
         </ComboBox>
     </DataTemplate>
@@ -143,23 +138,20 @@
     </DataTemplate>
 
     <DataTemplate x:Key="Nullable`1[Enum]">
-        <ComboBox >
+        <ComboBox>
             <i:Interaction.Behaviors>
-                <bhvrs:EnumComboBehavior Enum="{Binding Type}" Value="{Binding Value.Value, Mode=TwoWay}"/>
+                <bhvrs:EnumComboBehavior Enum="{Binding Type}" Value="{Binding Value.Value, Mode=TwoWay}" />
                 <ad:NullBehavior ShowCancel="{Binding Value.HasValue, Mode=OneWay}"></ad:NullBehavior>
             </i:Interaction.Behaviors>
         </ComboBox>
     </DataTemplate>
 
-
     <DataTemplate x:Key="Nullable`1[Boolean]">
 
         <Grid         MinHeight="30"                                     MinWidth="30">
-            <CheckBox IsChecked="{Binding Path=Value, Mode=TwoWay}" IsThreeState="True"/>
+            <CheckBox IsChecked="{Binding Path=Value, Mode=TwoWay}" IsThreeState="True" />
         </Grid>
-
     </DataTemplate>
-
 
     <DataTemplate x:Key="Nullable`1[Double]">
         <TextBox Text="{Binding Path=Value.Value, Mode=TwoWay, StringFormat={}{0:N0}}">
@@ -168,7 +160,6 @@
             </i:Interaction.Behaviors>
         </TextBox>
     </DataTemplate>
-
 
     <Style TargetType="ToolTip" x:Key="WrappedToolTip">
         <Setter Property="MaxWidth" Value="20" />
@@ -191,22 +182,20 @@
         </Setter>
     </Style>
 
-
     <DataTemplate x:Key="Missing">
         <controls1:MissingTemplateControl>
             <TextBlock FontSize="8">
                 <Run>Missing Template for</Run>
-                <LineBreak/>
-                <Run Text="{Binding Value, Mode=OneTime,Converter={StaticResource TypeNameConverter}}" FontWeight="Bold" >
+                <LineBreak />
+                <Run Text="{Binding Value, Mode=OneTime,Converter={StaticResource TypeNameConverter}}" FontWeight="Bold">
                     <Run.ToolTip>
-                        <ToolTip Style="{StaticResource WrappedToolTip}" Content="{Binding Mode=OneTime}">                               
+                        <ToolTip Style="{StaticResource WrappedToolTip}" Content="{Binding Mode=OneTime}">
                         </ToolTip>
                     </Run.ToolTip>
                 </Run>
             </TextBlock>
         </controls1:MissingTemplateControl>
     </DataTemplate>
-
 
     <DataTemplate DataType="{x:Type structs:Point}">
         <controls:PointControl X="{Binding Value.X}" Y ="{Binding Value.Y}"></controls:PointControl>
@@ -215,5 +204,4 @@
     <DataTemplate DataType="{x:Type windows:Point}">
         <controls:PointControl X="{Binding Value.X}" Y ="{Binding Value.Y}"></controls:PointControl>
     </DataTemplate>
-
 </ResourceDictionary>

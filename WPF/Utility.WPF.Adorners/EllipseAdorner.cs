@@ -55,7 +55,6 @@ public class EllipseAdorner : Adorner
     }
 }
 
-
 public class PlusAdorner : Adorner
 {
     private ICommand? command;
@@ -77,14 +76,13 @@ public class PlusAdorner : Adorner
 
         Pen renderPen = new Pen(new SolidColorBrush(Colors.DarkBlue), 1.0);
 
-      
         if (AdornedElement is FrameworkElement control)
         {
             // Draw the ellipse
             drawingContext.DrawEllipse(renderBrush, renderPen, new Point(control.Width, control.Height), 10, 10);
 
             // Draw the plus symbol inside the ellipse
-            Point center = new (control.Width, control.Height);
+            Point center = new(control.Width, control.Height);
             double plusSize = 6; // Adjust size to fit nicely within the 10-radius ellipse
 
             // Draw horizontal line of the plus
@@ -96,7 +94,6 @@ public class PlusAdorner : Adorner
             drawingContext.DrawLine(renderPen,
                 new Point(center.X, center.Y - plusSize),
                 new Point(center.X, center.Y + plusSize));
-
         }
     }
 }

@@ -1,25 +1,17 @@
-﻿using Chronic;
-using IKriv.Threading.Tasks;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Subjects;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reactive.Subjects;
 using Utility.Enums;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
-
 
 namespace Utility.Services
 {
     public class PlaybackService : IObservable<ZMovement>, IObserver<Playback>, IGetValue<Playback>
     {
-        ReplaySubject<ZMovement> movement = new(1);
+        private ReplaySubject<ZMovement> movement = new(1);
 
         public Playback Value { get; set; } = Playback.Pause;
         object IGetValue.Value => Value;
+
         public PlaybackService()
         {
         }

@@ -1,7 +1,7 @@
-﻿using DateWork.Models;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using DateWork.Models;
 
 namespace Utility.WPF.Controls.Date
 {
@@ -10,18 +10,23 @@ namespace Utility.WPF.Controls.Date
         public static readonly DependencyProperty DayProperty =
             DependencyProperty.Register("Day", typeof(DateTime), typeof(DayControl),
                 new PropertyMetadata(DateTime.Now, new PropertyChangedCallback(OnDayPropertyChanged)));
+
         public static readonly DependencyProperty DayNameProperty =
             DependencyProperty.Register("DayName", typeof(string), typeof(DayControl),
                 new PropertyMetadata(null, new PropertyChangedCallback(OnDayNamePropertyChanged)));
+
         public static readonly DependencyProperty MonthDayNameProperty =
             DependencyProperty.Register("MonthDayName", typeof(string), typeof(DayControl),
                 new PropertyMetadata(null, new PropertyChangedCallback(OnMonthDayNamePropertyChanged)));
+
         public static readonly DependencyProperty NoteTextProperty =
             DependencyProperty.Register("NoteText", typeof(string), typeof(DayControl),
                 new PropertyMetadata(null, new PropertyChangedCallback(OnNoteTextPropertyChanged)));
+
         public static readonly DependencyProperty CurrentProperty =
             DependencyProperty.Register("Current", typeof(DateTime), typeof(DayControl),
                 new PropertyMetadata(DateTime.Now, new PropertyChangedCallback(OnCurrentPropertyChanged)));
+
         public static readonly DependencyProperty DayTypeProperty =
             DependencyProperty.Register("DayType", typeof(DayType), typeof(DayControl),
                 new PropertyMetadata(DayType.CurrentMonth, new PropertyChangedCallback(OnDayTypePropertyChanged)));
@@ -32,6 +37,7 @@ namespace Utility.WPF.Controls.Date
         }
 
         #region properties
+
         public DateTime Current
         {
             get { return (DateTime)GetValue(CurrentProperty); }
@@ -94,8 +100,6 @@ namespace Utility.WPF.Controls.Date
             set { SetValue(NoteTextProperty, value); }
         }
 
-
-
         public DayType DayType
         {
             get { return (DayType)GetValue(DayTypeProperty); }
@@ -109,6 +113,7 @@ namespace Utility.WPF.Controls.Date
                 (obj as DayControl).OnDayTypeValueChanged();
             }
         }
+
         private static void OnNoteTextPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             if (obj is DayControl)
@@ -117,7 +122,7 @@ namespace Utility.WPF.Controls.Date
             }
         }
 
-        #endregion
+        #endregion properties
 
         private void RefreshMonthDayName()
         {
@@ -126,7 +131,6 @@ namespace Utility.WPF.Controls.Date
 
         protected void OnDayTypeValueChanged()
         {
-
         }
 
         private void RefreshBackground()
@@ -136,7 +140,6 @@ namespace Utility.WPF.Controls.Date
 
         protected void OnNoteTextValueChanged()
         {
-
         }
 
         protected void OnCurrentValueChanged()
@@ -146,7 +149,6 @@ namespace Utility.WPF.Controls.Date
 
         protected void OnMonthDayNameValueChanged()
         {
-
         }
 
         protected void OnDayValueChanged()
@@ -158,7 +160,6 @@ namespace Utility.WPF.Controls.Date
 
         protected void OnDayNameValueChanged()
         {
-
         }
 
         private void RefreshDayName()

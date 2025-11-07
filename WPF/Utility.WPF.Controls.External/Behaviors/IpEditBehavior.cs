@@ -1,10 +1,6 @@
 using System;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using Microsoft.Xaml.Behaviors;
 
 namespace AR.WPF.Behaviors
@@ -15,6 +11,7 @@ namespace AR.WPF.Behaviors
     public class IpEditBehavior : Behavior<TextBox>
     {
         private string _ip = "";
+
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -29,8 +26,6 @@ namespace AR.WPF.Behaviors
 
             this.AssociatedObject.TextChanged -= AssociatedObject_TextChanged;
         }
-
-
 
         private void AssociatedObject_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -66,7 +61,5 @@ namespace AR.WPF.Behaviors
             if (firstChange != null)
                 this.AssociatedObject.CaretIndex = firstChange.Offset;
         }
-
     }
-
 }

@@ -20,8 +20,7 @@
 //                case DictionaryEntryKeyValue dictionaryEntryKeyValue:
 //                    return dictionaryEntryKeyValue.Key.Contains(nameof(DataTemplateKey))? "DTK": dictionaryEntryKeyValue.Key;
 //                case KeyValue keyValue:
-//                    return keyValue.Key;      
-         
+//                    return keyValue.Key;
 
 //            }
 //            return string.Empty;

@@ -1,10 +1,7 @@
-using Splat;
-using System.Collections;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.Interfaces.Exs;
+using Splat;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Nodes;
@@ -17,7 +14,7 @@ namespace Utility.WPF.Controls.PropertyTrees
 {
     public class PropertyTree : CustomTreeView
     {
-        static HashSet<string> keys = new();
+        private static HashSet<string> keys = new();
         private string _key;
         public static readonly DependencyProperty ObjectProperty = DependencyProperty.Register(nameof(Object), typeof(object), typeof(PropertyTree), new PropertyMetadata(null, changed));
         public static readonly DependencyProperty SchemaProperty = DependencyProperty.Register("Schema", typeof(Schema), typeof(PropertyTree), new PropertyMetadata());
@@ -44,12 +41,11 @@ namespace Utility.WPF.Controls.PropertyTrees
             //TODO : replace
             //dynamicStyle.Setters.Add(new Setter(TreeView.ItemTemplateSelectorProperty, Utility.Nodes.WPF.DataTemplateSelector.Instance));
             dynamicStyle.Setters.Add(new Setter(TreeView.ItemContainerStyleSelectorProperty, Utility.Nodes.WPF.StyleSelector.Instance));
-        
 
             StyleProperty.OverrideMetadata(typeof(PropertyTree), new FrameworkPropertyMetadata(dynamicStyle));
         }
 
-        static DataTemplate createEditTemplate()
+        private static DataTemplate createEditTemplate()
         {
             return Factorys.TemplateGenerator.CreateDataTemplate(() =>
             {
@@ -62,7 +58,6 @@ namespace Utility.WPF.Controls.PropertyTrees
             });
         }
 
-
         public PropertyTree()
         {
             string key = "obj";
@@ -71,14 +66,12 @@ namespace Utility.WPF.Controls.PropertyTrees
                 key = Utility.Randoms.Next.Instance.Word();
             }
             this._key = key;
-       
+
             //Locator.CurrentMutable.RegisterConstant<IContext>(new Context());
             Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
             Locator.CurrentMutable.RegisterConstant<IExpander>(Utility.Nodes.WPF.Expander.Instance);
             Locator.CurrentMutable.RegisterConstant<System.Windows.Controls.DataTemplateSelector>(CustomDataTemplateSelector.Instance);
         }
-
-
 
         public object Object
         {
@@ -94,7 +87,7 @@ namespace Utility.WPF.Controls.PropertyTrees
 
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
-            if(element is CustomTreeViewItem treeViewItem && item is NodeViewModel { Data: ICollectionDescriptor collectionDescriptor })
+            if (element is CustomTreeViewItem treeViewItem && item is NodeViewModel { Data: ICollectionDescriptor collectionDescriptor })
             {
                 var innerType = collectionDescriptor.ElementType;
                 treeViewItem.Edit = ActivateAnything.Activate.New(innerType);
@@ -102,18 +95,16 @@ namespace Utility.WPF.Controls.PropertyTrees
 
             base.PrepareContainerForItemOverride(element, item);
         }
+
         protected override DependencyObject GetContainerForItemOverride()
         {
             var item = base.GetContainerForItemOverride();
 
-            if(item is CustomTreeViewItem customTreeViewItem)
+            if (item is CustomTreeViewItem customTreeViewItem)
             {
                 customTreeViewItem.EditTemplate = createEditTemplate();
-   
             }
             return item;
         }
     }
 }
-
-

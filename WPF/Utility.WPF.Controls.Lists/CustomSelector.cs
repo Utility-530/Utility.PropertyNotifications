@@ -1,8 +1,4 @@
-﻿using AnimatedScrollViewer;
-using Fasterflect;
-using Itenso.Windows.Controls.ListViewLayout;
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -10,6 +6,8 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using AnimatedScrollViewer;
+using Fasterflect;
 using Utility.Commands;
 using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
@@ -100,7 +98,6 @@ namespace Utility.WPF.Controls.Lists
             set { SetValue(AllowsColumnReorderProperty, value); }
         }
 
-
         static CustomSelector()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomSelector), new FrameworkPropertyMetadata(typeof(CustomSelector)));
@@ -132,7 +129,6 @@ namespace Utility.WPF.Controls.Lists
             }
             else if (e.Property == EditProperty)
             {
-
             }
 
             void updateColumns(bool b, IEnumerable enumerable)
@@ -165,13 +161,11 @@ namespace Utility.WPF.Controls.Lists
             base.OnPropertyChanged(e);
         }
 
-
         public static readonly RoutedEvent FinishEditEvent = EventManager.RegisterRoutedEvent(
          name: "FinishEdit",
          routingStrategy: RoutingStrategy.Bubble,
          handlerType: typeof(FinishEditRoutedEventHandler),
          ownerType: typeof(CustomSelector));
-
 
         public override void OnApplyTemplate()
         {
@@ -196,7 +190,6 @@ namespace Utility.WPF.Controls.Lists
 
             RemoveCommand ??= new Command<object>((a) =>
             {
-
                 int i = 0;
                 if (this.ItemsSource is IList collection)
                     remove(a, collection);
@@ -272,7 +265,7 @@ namespace Utility.WPF.Controls.Lists
             RaiseCustomRoutedEvent(true);
         }
 
-        void RaiseCustomRoutedEvent(bool isAccepted)
+        private void RaiseCustomRoutedEvent(bool isAccepted)
         {
             EditRoutedEventArgs routedEventArgs;
 
@@ -302,7 +295,6 @@ namespace Utility.WPF.Controls.Lists
 
         private void Copy_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-
             if (e.OriginalSource is ListBoxItem { DataContext: ICopy context })
             {
                 Clipboard.SetText(context.Copy());
@@ -336,11 +328,9 @@ namespace Utility.WPF.Controls.Lists
                         //throw new System.Exception("£333444");
                     }
                 }, System.Windows.Threading.DispatcherPriority.Background);
-
             }
             base.PrepareContainerForItemOverride(element, item);
         }
-
 
         #region events
 
@@ -351,6 +341,7 @@ namespace Utility.WPF.Controls.Lists
         }
 
         #endregion events
+
         #region properties
 
         public double ItemsWidth
@@ -358,6 +349,7 @@ namespace Utility.WPF.Controls.Lists
             get { return (double)GetValue(ItemsWidthProperty); }
             set { SetValue(ItemsWidthProperty, value); }
         }
+
         public double ItemsHeight
         {
             get { return (double)GetValue(ItemsHeightProperty); }
@@ -411,7 +403,7 @@ namespace Utility.WPF.Controls.Lists
             get { return (string)GetValue(CheckedPropertyNameProperty); }
             set { SetValue(CheckedPropertyNameProperty, value); }
         }
-        #endregion properties
 
+        #endregion properties
     }
 }

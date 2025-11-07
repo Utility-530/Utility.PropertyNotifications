@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Reactive.Disposables;
+using Newtonsoft.Json.Linq;
 using Splat;
-using System.Reactive.Disposables;
 using Utility.Interfaces.Exs;
 using Utility.Structs.Repos;
 
@@ -9,17 +9,18 @@ namespace Utility.Repos
     public interface IJObjectService
     {
         public JObject? Get();
+
         public void Set(JObject jObject);
     }
 
     public class JsonRepository : ITreeRepository
     {
         public readonly record struct JsonKey(Guid ParentGuid, string Name);
-        Dictionary<JsonKey, Guid> keys = new();
+        private Dictionary<JsonKey, Guid> keys = new();
 
-        Lazy<IJObjectService> jObjectService = new(() => Locator.Current.GetService<IJObjectService>());
+        private Lazy<IJObjectService> jObjectService = new(() => Locator.Current.GetService<IJObjectService>());
 
-        List<Guid> guids = new();
+        private List<Guid> guids = new();
 
         public void Copy(Guid guid, Guid newGuid)
         {
@@ -33,7 +34,6 @@ namespace Utility.Repos
 
         public IObservable<Key?> Find(Guid parentGuid, string? name = null, Guid? guid = null, Type? type = null, int? index = null)
         {
-
             if (name != null)
             {
                 if (jObjectService.Value.Get() is JObject jObject)
@@ -153,14 +153,12 @@ namespace Utility.Repos
                 if (token == null)
                     return;
 
-
                 //var serialisedValue = JsonConvert.SerializeObject(value.ToString());
                 var innerToken = token.SelectToken(name);
 
                 if (value == null)
                 {
                     innerToken.Replace(null);
-
                 }
                 else if (TypeHelper.IsValueOrString(value.GetType()) == false)
                 {
@@ -173,9 +171,7 @@ namespace Utility.Repos
                 }
                 //entity.Body = jObject.ToString();
                 jObjectService.Value.Set(jObject);
-
             }
-
         }
 
         public void UpdateName(Guid parentGuid, Guid guid, string name, string newName)

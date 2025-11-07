@@ -6,8 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Utility.Enums;
 using Utility.Interfaces.NonGeneric;
 using Utility.Observables;
@@ -92,6 +90,7 @@ namespace Utility.Models.Trees
     public class TransformersModel : ListModel<TransformerModel>
     {
         public const string transformer = nameof(transformer);
+
         public TransformersModel()
         {
             this.IsEditable = false;
@@ -109,6 +108,7 @@ namespace Utility.Models.Trees
         public FiltersModel()
         {
         }
+
         public override IEnumerable Proliferation()
         {
             yield return new FilterModel { Name = "filter" };
@@ -122,8 +122,8 @@ namespace Utility.Models.Trees
     public class AndOrModel : ListModel<AndOrModel>, /*IAndOr*/ System.IObservable<Unit>, IPredicate
     {
         protected AndOr value = 0;
-        List<System.IObserver<Unit>> observers = [];
-        Dictionary<IReadOnlyTree, IDisposable> dictionary = [];
+        private List<System.IObserver<Unit>> observers = [];
+        private Dictionary<IReadOnlyTree, IDisposable> dictionary = [];
 
         public AndOrModel() : base()
         {
@@ -177,7 +177,6 @@ namespace Utility.Models.Trees
                             //}).DisposeWith(composite);
                         }).DisposeWith(composite);
                     dictionary[filterModel] = composite;
-
                 }
             }
             else
@@ -191,7 +190,6 @@ namespace Utility.Models.Trees
                     obs.OnNext(Unit.Default);
             }
         }
-
 
         public override void Subtraction(IReadOnlyTree a)
         {
@@ -209,7 +207,6 @@ namespace Utility.Models.Trees
                 throw new Exception("877 hhj9099   ");
         }
 
-
         public IDisposable Subscribe(System.IObserver<Unit> observer)
         {
             observers.Add(observer);
@@ -222,6 +219,4 @@ namespace Utility.Models.Trees
             yield return new FilterModel() { Name = "filter" };
         }
     }
-
-
 }

@@ -4,6 +4,5 @@ namespace Utility.Interfaces.NonGeneric
 {
     public interface IEquatable : IEquatable<IEquatable>
     {
-
     }
 }

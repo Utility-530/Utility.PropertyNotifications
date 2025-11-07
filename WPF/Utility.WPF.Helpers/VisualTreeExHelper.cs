@@ -38,7 +38,6 @@ namespace Utility.WPF.Helpers
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(visual); i++)
             {
-
                 if (VisualTreeHelper.GetChild(visual, i) is Visual child)
                 {
                     if (child is { } temp && VisualTreeHelper.GetParent(child) is ItemsPresenter)
@@ -115,26 +114,22 @@ namespace Utility.WPF.Helpers
             return FindChild<T>(parent, a => a.Name == childName);
         }
 
-
-
         public static T? FindChild<T>(this DependencyObject? parent, Predicate<T>? predicate = null) where T : DependencyObject
         {
             // Confirm parent and childName are valid.
-            if (parent == null) 
+            if (parent == null)
                 throw new ArgumentNullException(nameof(parent));
 
-            foreach(var child in parent.ChildrenOfType<T>())
+            foreach (var child in parent.ChildrenOfType<T>())
             {
                 if (child is T t && predicate?.Invoke(t) != false)
                 {
                     return t;
-                }            
+                }
             }
 
             return null;
-
         }
-
 
         public static void ForEachChild<T>(this DependencyObject parent, Action<T> action) where T : DependencyObject
         {
@@ -142,7 +137,6 @@ namespace Utility.WPF.Helpers
             for (int i = 0; i < childrenCount; i++)
             {
                 action(VisualTreeHelper.GetChild(parent, i) as T);
-
             }
         }
 
@@ -282,6 +276,7 @@ namespace Utility.WPF.Helpers
         {
             DetachChild(child.Parent, child);
         }
+
         public static void DetachChild(this DependencyObject parent, UIElement child)
         {
             switch (parent)
@@ -289,12 +284,15 @@ namespace Utility.WPF.Helpers
                 case Panel panel:
                     panel.Children.Remove(child);
                     break;
+
                 case Decorator decorator when decorator.Child == child:
                     decorator.Child = null;
                     break;
+
                 case ContentPresenter contentPresenter when contentPresenter.Content == child:
                     contentPresenter.Content = null;
                     break;
+
                 case ContentControl contentControl when contentControl.Content == child:
                     contentControl.Content = null;
                     break;

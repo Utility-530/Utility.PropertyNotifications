@@ -4,7 +4,7 @@ namespace Utility.Pipes
 {
     public class PipeLoader : IPipeInitialiser
     {
-        Timer timer;
+        private Timer timer;
 
         public PipeLoader()
         {
@@ -21,4 +21,3 @@ namespace Utility.Pipes
         }
     }
 }
-

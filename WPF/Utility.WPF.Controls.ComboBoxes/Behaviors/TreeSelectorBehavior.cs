@@ -1,7 +1,7 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Microsoft.Xaml.Behaviors;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
@@ -9,14 +9,12 @@ using Utility.WPF.Factorys;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
-
     public class TreeSelectorBehavior : Behavior<ComboBoxTreeView>
     {
         private HierarchicalDataTemplate hierarchicalDataTemplate;
 
         public TreeSelectorBehavior()
         {
-
         }
 
         protected override void OnAttached()

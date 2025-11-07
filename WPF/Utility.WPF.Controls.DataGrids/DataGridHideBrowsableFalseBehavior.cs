@@ -1,6 +1,6 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows.Controls;
+using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Controls.DataGrids
 {
@@ -11,11 +11,13 @@ namespace Utility.WPF.Controls.DataGrids
             AssociatedObject.AutoGeneratingColumn += AssociatedObject_AutoGeneratingColumn;
             base.OnAttached();
         }
+
         protected override void OnDetaching()
         {
             AssociatedObject.AutoGeneratingColumn -= AssociatedObject_AutoGeneratingColumn;
             base.OnDetaching();
         }
+
         private void AssociatedObject_AutoGeneratingColumn(object? sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             if (((PropertyDescriptor)e.PropertyDescriptor).IsBrowsable == false)

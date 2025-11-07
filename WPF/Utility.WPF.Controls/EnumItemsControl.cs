@@ -1,28 +1,28 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
-using Utility.WPF.Attached;
-using Utility.Enums;
-using Utility.WPF.Controls.Base;
-using Evan.Wpf;
-using Utility.Helpers;
-using System.Windows.Input;
-using MintPlayer.ObservableCollection;
-using Utility.WPF.Helpers;
 using System.Windows.Controls;
-using Utility.PropertyNotifications;
-using Utility.Interfaces.NonGeneric;
+using System.Windows.Input;
+using Evan.Wpf;
+using MintPlayer.ObservableCollection;
+using ReactiveUI;
 using Utility.Commands;
+using Utility.Enums;
+using Utility.Helpers;
+using Utility.Interfaces.NonGeneric;
+using Utility.PropertyNotifications;
+using Utility.WPF.Attached;
+using Utility.WPF.Controls.Base;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Controls
 {
     public class EnumItemsControl : LayOutItemsControl
-    {        record EnumType(Type Type, Enum? Value);
-
+    {
+        record EnumType(Type Type, Enum? Value);
 
         public static readonly DependencyProperty ValueProperty = DependencyHelper.Register<Enum>(new FrameworkPropertyMetadata(default, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
         public static readonly DependencyProperty EnumProperty = DependencyHelper.Register<Type>(new FrameworkPropertyMetadata());
@@ -30,10 +30,9 @@ namespace Utility.WPF.Controls
         public static readonly DependencyProperty IsMultiSelectProperty = DependencyHelper.Register<bool>();
         public static readonly DependencyProperty ClearCommandProperty = DependencyHelper.Register<ICommand>();
         //private Subject<Type> subject = new();
-      
+
         private ObservableCollection<EnumItem> items = new();
         private Enum internalValue;
-
 
         static EnumItemsControl()
         {
@@ -44,7 +43,6 @@ namespace Utility.WPF.Controls
                 EnumProperty.OverrideMetadata(typeof(EnumItemsControl), new FrameworkPropertyMetadata(typeof(Switch)));
             }
         }
-
 
         public EnumItemsControl()
         {
@@ -96,10 +94,8 @@ namespace Utility.WPF.Controls
                                 internalValue = e.HasFlag(e) ?
                                 EnumHelper.CombineFlags(enums.Where(a => a.IsChecked).Select(e => e.Enum), Enum) :
                                 e;
-
                             }
                             Value = internalValue;
-
                         }).DisposeWith(disposable);
                     }
                 });

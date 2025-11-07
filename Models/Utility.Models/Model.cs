@@ -2,7 +2,6 @@
 using System.Reactive.Linq;
 using Utility.Helpers;
 using Utility.Helpers.Reflection;
-using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes;
@@ -37,13 +36,11 @@ namespace Utility.Models
 
         public override object Data { get => typeof(T); set => throw new NotImplementedException("ds dd2111"); }
 
-
         public override object? Value
         {
             get { RaisePropertyCalled(value); return value; }
             set => this.RaisePropertyReceived<T>(ref this.value, (T)value);
         }
-
 
         public override object? Get(string name)
         {
@@ -83,8 +80,7 @@ namespace Utility.Models
         private readonly Action<IReadOnlyTree>? attach;
 
         public virtual Version Version { get; set; } = new();
-        bool isInitialised = false;
-
+        private bool isInitialised = false;
 
         public Model(Func<IEnumerable<IReadOnlyTree>>? childrenLambda = null, Action<IReadOnlyTree>? addition = null, Action<Model>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true)
         {
@@ -93,7 +89,6 @@ namespace Utility.Models
             this.attach = new Action<IReadOnlyTree>(a => attach?.Invoke((Model)a));
             Initialise();
         }
-
 
         public virtual void Initialise()
         {
@@ -205,12 +200,9 @@ namespace Utility.Models
                     (instance as ISetName).Name = x.Attribute.attribute.Name;
 
                     yield return instance;
-
                 }
             }
         }
-
-
 
         public virtual void Update(IReadOnlyTree current)
         {
@@ -221,7 +213,6 @@ namespace Utility.Models
                 });
         }
 
-
         public virtual void Addition(IReadOnlyTree a)
         {
             if ((a as IGetParent<IReadOnlyTree>).Parent == null)
@@ -231,7 +222,6 @@ namespace Utility.Models
                 //    source.Add(a as INode);
                 //else
                 //{
-
                 //}
             }
 
@@ -256,7 +246,6 @@ namespace Utility.Models
 
         public virtual void Replacement(IReadOnlyTree @new, IReadOnlyTree old)
         {
-
         }
 
         public virtual void Subtraction(IReadOnlyTree a)
@@ -264,7 +253,7 @@ namespace Utility.Models
             //a.Parent = null;
         }
 
-        public sealed override string ToString()
+        public override sealed string ToString()
         {
             return Name;
         }
@@ -280,9 +269,7 @@ namespace Utility.Models
         {
             attach?.Invoke(value);
         }
-
     }
-
 
     [AttributeUsage(AttributeTargets.Property)]
     public class ChildAttribute(string Name, System.Type Type = null) : Attribute

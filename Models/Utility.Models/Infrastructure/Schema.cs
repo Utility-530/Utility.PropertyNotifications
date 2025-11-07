@@ -5,16 +5,19 @@ namespace Utility.Models
 {
     public class SchemaStore
     {
-        Dictionary<Type, Schema> Schemas { get; } = [];
+        private Dictionary<Type, Schema> Schemas { get; } = [];
 
         public Schema this[Type type] => Schemas[type];
+
         public void Add(Type type, Schema schema) => Schemas.Add(type, schema);
+
         public bool TryGetValue(Type type, out Schema? schema)
         {
             bool v = Schemas.TryGetValue(type, out var _schema);
             schema = _schema;
             return v;
         }
+
         public static SchemaStore Instance { get; } = new SchemaStore();
     }
 

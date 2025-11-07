@@ -3,5 +3,5 @@
     public interface IGet<T>
     {
         public T? Get();
-    }  
+    }
 }

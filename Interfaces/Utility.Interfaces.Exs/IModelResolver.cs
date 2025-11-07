@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Interfaces.Exs
 {
-    public interface IModelResolver: IObservable<IReadOnlyTree>
+    public interface IModelResolver : IObservable<IReadOnlyTree>
     {
         void Register(string key, Func<IReadOnlyTree> factory);
 
-        IReadOnlyTree this[string key] {get;}
+        IReadOnlyTree this[string key] { get; }
     }
 }

@@ -1,7 +1,6 @@
-
+using System.Windows;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Windows;
 
 namespace Utility.WPF.Converters.Json
 {

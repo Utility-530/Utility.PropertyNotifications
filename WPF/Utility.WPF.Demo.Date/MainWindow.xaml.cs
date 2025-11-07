@@ -7,7 +7,6 @@ namespace Utility.WPF.Demo.Date
     /// </summary>
     public partial class MainWindow : Window
     {
-
         public MainWindow()
         {
             InitializeComponent();

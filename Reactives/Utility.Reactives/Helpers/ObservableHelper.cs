@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Utility.Helpers.Reflection;
 
@@ -19,7 +16,6 @@ namespace Utility.Reactives;
 /// </summary>
 public static partial class ObservableHelper
 {
-
     public static IObservable<T[]> Combine<T>(this IEnumerable<IObservable<T>> observables)
     {
         return Observable.Create<T[]>(observer =>
@@ -43,14 +39,12 @@ public static partial class ObservableHelper
                     }
                 }, () =>
                 {
-                  
                 }).DisposeWith(disposables);
             }
             return disposables;
         });
         // return observable.SelectMany().Subscribe(observer);
     }
-
 
     public static IDisposable SubscribeMany<T>(this IEnumerable<IObservable<T>> observable, IObserver<T> observer)
     {
@@ -88,7 +82,6 @@ public static partial class ObservableHelper
     //{
     //    return observable.Where(a => a != null);
     //}
-
 
     public static IObservable<T> TakeLastItem<T>(this IObservable<IEnumerable<T>> observable)
     {
@@ -285,12 +278,10 @@ IScheduler? scheduler = null)
         });
     }
 
-
     public static IObservable<T> BufferTakeLast<T>(this IObservable<T> observable, TimeSpan buffer)
     {
         return observable.Buffer(buffer).WhereAny().TakeLastItem();
     }
-
 
     public static IObservable<(T, R)> Combine<T, R>(this IObservable<T> observable, R observed)
     {
@@ -340,9 +331,8 @@ IScheduler? scheduler = null)
     public static IObservable<T> OfGenericType<T>(this IObservable<object> value, Type? type = null)
     {
         return value.Select(v => TypeHelper.OfType<T>(v, type)).WhereNotDefault();
-    }    
-    
-    
+    }
+
     public static IObservable<T> StartWithDefault<T>(this IObservable<T> value)
     {
         return value.StartWith(default(T));

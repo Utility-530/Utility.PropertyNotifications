@@ -1,7 +1,4 @@
-﻿using DynamicData;
-using DynamicData.Operators;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,6 +6,9 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
+using DynamicData;
+using DynamicData.Operators;
+using ReactiveUI;
 
 namespace Utility.WPF.Controls
 {

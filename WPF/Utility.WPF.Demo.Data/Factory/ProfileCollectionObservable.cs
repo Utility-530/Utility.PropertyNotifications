@@ -1,10 +1,10 @@
-﻿using Endless;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Threading;
+using Endless;
 using Utility.WPF.Demo.Data.Model;
 
 namespace Utility.WPF.Demo.Data.Factory

@@ -1,5 +1,5 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
+using ReactiveUI;
 using Utility.Models;
 using Utility.ViewModels;
 

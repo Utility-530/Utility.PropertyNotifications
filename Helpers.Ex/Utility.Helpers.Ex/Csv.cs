@@ -1,10 +1,10 @@
-﻿using CsvHelper;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using CsvHelper;
 using Utility.Helpers.Reflection;
 
 namespace Utility.Helpers.Ex
@@ -27,12 +27,12 @@ namespace Utility.Helpers.Ex
 
     public static class Csv
     {
-        public static MemoryStream ToMemoryStream(this IEnumerable records,  bool useHeaderAttribute = false)
+        public static MemoryStream ToMemoryStream(this IEnumerable records, bool useHeaderAttribute = false)
         {
             var memoryStream = new MemoryStream();
             var writer = new StreamWriter(memoryStream);
             var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
-         
+
             WriteRecordsCustom(records, csv, useHeaderAttribute);
 
             writer.Flush(); // flush the buffered text to stream
@@ -45,7 +45,6 @@ namespace Utility.Helpers.Ex
             using (var reader = new StreamReader(path))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
-
                 var records = csv.GetRecords<T>();
                 return records.ToArray();
             }
@@ -63,7 +62,6 @@ namespace Utility.Helpers.Ex
             return memoryStream;
         }
 
-
         public static string ToString<T>(this IEnumerable<T> records, bool useHeaderAttribute = false)
         {
             using (var memoryStream = new MemoryStream())
@@ -79,7 +77,7 @@ namespace Utility.Helpers.Ex
             }
         }
 
-        static void WriteRecordsCustom<T>(IEnumerable<T> records, CsvWriter csv, bool useHeaderAttribute)
+        private static void WriteRecordsCustom<T>(IEnumerable<T> records, CsvWriter csv, bool useHeaderAttribute)
         {
             if (useHeaderAttribute)
             {
@@ -102,7 +100,7 @@ namespace Utility.Helpers.Ex
             }
         }
 
-        static void WriteRecordsCustom(IEnumerable records, CsvWriter csv, bool useHeaderAttribute)
+        private static void WriteRecordsCustom(IEnumerable records, CsvWriter csv, bool useHeaderAttribute)
         {
             if (useHeaderAttribute)
             {
@@ -113,7 +111,6 @@ namespace Utility.Helpers.Ex
                 {
                     csv.WriteField(property.GetAttributeProperty<CsvHeaderAttribute>(a => a.Header));
                 }
-
 
                 csv.NextRecord();
 

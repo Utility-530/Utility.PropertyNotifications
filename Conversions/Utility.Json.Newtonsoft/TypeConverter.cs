@@ -1,10 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Linq;
-using System.ComponentModel;
-using System.Collections;
 using System.Reflection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Utility.Helpers;
 using Utility.Helpers.Reflection;
 
@@ -12,7 +10,6 @@ namespace Utility.Conversions.Json.Newtonsoft
 {
     public class TypeConverter : JsonConverter<Type>
     {
-
         public override void WriteJson(JsonWriter writer, Type value, JsonSerializer serializer)
         {
             // Begin object
@@ -52,9 +49,8 @@ namespace Utility.Conversions.Json.Newtonsoft
 
             var assembly = jObject["Assembly"]?.ToString();
             var nameSpace = jObject["Namespace"]?.ToString();
-            var name = jObject["Name"]?.ToString();  
-            var genericTypeNames = jObject["GenericTypeNames"]?.ToString();  
-
+            var name = jObject["Name"]?.ToString();
+            var genericTypeNames = jObject["GenericTypeNames"]?.ToString();
 
             string assemblyQualifiedName = Assembly.CreateQualifiedName(assembly, $"{nameSpace}.{name}");
             var baseType = System.Type.GetType(assemblyQualifiedName);
@@ -63,7 +59,6 @@ namespace Utility.Conversions.Json.Newtonsoft
             if (constructedType == null)
                 throw new Exception($"Type, {assemblyQualifiedName},  does not exist");
             return constructedType;
-        
         }
     }
 }

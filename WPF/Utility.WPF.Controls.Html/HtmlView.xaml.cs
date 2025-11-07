@@ -6,25 +6,20 @@
 // like the days and months;
 // they die and are reborn,
 // like the four seasons."
-// 
+//
 // - Sun Tsu,
 // "The Art of War"
 
-using System;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using TheArtOfDev.HtmlRenderer.Core.Entities;
-using TheArtOfDev.HtmlRenderer.Demo.Common;
 using TheArtOfDev.HtmlRenderer.Demo.WPF;
 using TheArtOfDev.HtmlRenderer.WPF;
-
 
 namespace Utility.WPF.Controls.Html
 {
@@ -33,8 +28,6 @@ namespace Utility.WPF.Controls.Html
     /// </summary>
     public partial class HtmlView
     {
-
-
         public string Html
         {
             get { return (string)GetValue(HtmlProperty); }
@@ -53,9 +46,7 @@ namespace Utility.WPF.Controls.Html
             }
         }
 
-
         #region Fields and Consts
-
 
         /// <summary>
         /// timer to update the rendered html when html in editor changes with delay
@@ -72,8 +63,7 @@ namespace Utility.WPF.Controls.Html
         /// </summary>
         private bool _useGeneratedHtml;
 
-        #endregion
-
+        #endregion Fields and Consts
 
         public HtmlView()
         {
@@ -93,7 +83,6 @@ namespace Utility.WPF.Controls.Html
             _updateHtmlTimer = new Timer(OnUpdateHtmlTimerTick);
         }
 
-
         /// <summary>
         /// used ignore html editor updates when updating separately
         /// </summary>
@@ -111,7 +100,6 @@ namespace Utility.WPF.Controls.Html
             get { return _useGeneratedHtml; }
             set { _useGeneratedHtml = value; }
         }
-
 
         /// <summary>
         /// Update the html shown in the web browser
@@ -139,14 +127,10 @@ namespace Utility.WPF.Controls.Html
             }
         }
 
-
         #region Private methods
 
-
-
-
         /// <summary>
-        /// On text change in the html editor update 
+        /// On text change in the html editor update
         /// </summary>
         private void OnHtmlEditor_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -311,16 +295,13 @@ namespace Utility.WPF.Controls.Html
             Cursor = Cursors.Arrow;
             _updateLock = false;
 
-
             UpdateWebBrowserHtml();
-
         }
 
-        #endregion
+        #endregion Private methods
 
         private void OnHtmlEditor_TextChanged(object sender, EventArgs e)
         {
-
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using DynamicData;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
+using DynamicData;
 using Utility.WPF.Demo.Data.Model;
 using static Utility.WPF.Controls.Chart.ViewModels.MultiTimeModel;
 

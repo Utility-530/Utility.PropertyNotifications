@@ -1,17 +1,15 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.WPF.Behaviors;
 using Microsoft.Xaml.Behaviors;
+using Utility.WPF.Behaviors;
 
 namespace Utility.WPF.Controls
 {
     public class EnumComboBox : ComboBox
     {
-
         static EnumComboBox()
         {
-
         }
 
         public EnumComboBox()
@@ -47,8 +45,5 @@ namespace Utility.WPF.Controls
         //    get => (Enum)GetValue(SelectedEnumProperty);
         //    set => SetValue(SelectedEnumProperty, value);
         //}
-
     }
-
-
 }

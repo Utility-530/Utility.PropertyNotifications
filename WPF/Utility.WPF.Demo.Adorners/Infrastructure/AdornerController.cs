@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using Utility.WPF.Adorners.Infrastructure;
-using Utility.WPF.Helpers;
 using Utility.WPF.Controls.Adorners;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Demo.Adorners.Infrastructure;
 
@@ -32,4 +32,3 @@ internal class AdornerController
         adornedElement.RemoveAdorners();
     }
 }
-

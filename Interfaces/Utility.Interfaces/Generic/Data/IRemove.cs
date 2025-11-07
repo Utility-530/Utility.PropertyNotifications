@@ -20,15 +20,15 @@ namespace Utility.Interfaces.Generic.Data
     public interface IRemoveMany<T, TQueryResult>
     {
         TQueryResult RemoveMany(IEnumerable<T> items);
-    }   
-    
+    }
+
     public interface IRemoveManyBy<TQuery, TQueryResult>
     {
         TQueryResult RemoveManyBy(TQuery query);
     }
+
     public interface IRemoveManyById<TId, TQueryResult>
     {
         TQueryResult RemoveManyById(IEnumerable<TId> ids);
     }
-
 }

@@ -1,7 +1,7 @@
-﻿using ReactiveUI;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ReactiveUI;
 
 namespace Utility.WPF.Demo.Controls
 {

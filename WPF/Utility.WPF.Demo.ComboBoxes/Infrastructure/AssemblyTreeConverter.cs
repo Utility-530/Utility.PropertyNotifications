@@ -1,7 +1,7 @@
-﻿using System.Globalization;
+﻿using System.Collections;
+using System.Globalization;
 using System.Windows.Data;
 using Utility.Trees.Abstractions;
-using System.Collections;
 
 namespace Utility.WPF.Demo.ComboBoxes
 {
@@ -17,7 +17,6 @@ namespace Utility.WPF.Demo.ComboBoxes
             ITree tree = Utility.WPF.Controls.ComboBoxes.Ex.ToTree(new[] { typeof(Utility.WPF.Demo.Data.Model.Character).Assembly }, new Predicate<DictionaryEntry>(a =>
             {
                 return a.Value.GetType().ToString().Contains(sParameter);
-
             }));
             return tree.Children;
         }
@@ -29,5 +28,4 @@ namespace Utility.WPF.Demo.ComboBoxes
 
         public static AssemblyTreeConverter Instance { get; } = new AssemblyTreeConverter();
     }
-
 }

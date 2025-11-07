@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Evan.Wpf;
 
 namespace Utility.WPF.Controls
-{   
-    
+{
     public class DoubleClickCheckBox : ContentControl
     {
         public static readonly DependencyProperty IsCheckedProperty = DependencyHelper.Register<bool>();
@@ -20,14 +14,12 @@ namespace Utility.WPF.Controls
         static DoubleClickCheckBox()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DoubleClickCheckBox), new FrameworkPropertyMetadata(typeof(DoubleClickCheckBox)));
-
         }
 
         public DoubleClickCheckBox()
         {
             this.MouseDown += DoubleClickCheckBox_MouseDown;
         }
-
 
         public event RoutedEventHandler IsCheckedChanged
         {

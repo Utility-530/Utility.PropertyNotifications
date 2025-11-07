@@ -11,7 +11,7 @@ namespace CustomHelper
         private readonly string _name;
         internal readonly Type _type;
         private readonly MethodInfo? _getMethod, _setMethod;
-        private readonly List<Attribute> _attributes = new ();
+        private readonly List<Attribute> _attributes = new();
 
         public CustomPropertyInfoHelper(string name, Type type, Type ownerType)
         {

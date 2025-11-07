@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Security;
 
-
 namespace Utility.Structs;
 
 public sealed class SecurePin : IDisposable
@@ -27,6 +26,7 @@ public sealed class SecurePin : IDisposable
 
         _secure.MakeReadOnly();
     }
+
     public SecurePin(ReadOnlySpan<int> digits)
     {
         if (digits.Length < 4 || digits.Length > 6)
@@ -87,5 +87,5 @@ public sealed class SecurePin : IDisposable
         _secure?.Dispose();
     }
 
-    public override string ToString() => new ('*', _secure.Length);
+    public override string ToString() => new('*', _secure.Length);
 }

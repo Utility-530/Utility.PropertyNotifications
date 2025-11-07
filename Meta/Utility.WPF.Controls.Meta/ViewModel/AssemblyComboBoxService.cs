@@ -1,26 +1,25 @@
-﻿using DynamicData;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using System.Reactive.Threading.Tasks;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using DynamicData;
 using Evan.Wpf;
 using FreeSql;
 using ReactiveUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
-using System.Reflection;
-using System.Windows;
-
-using Utility.Persists;
-using Utility.Interfaces.NonGeneric;
-using Utility.WPF.Meta;
-using Utility.Models.Filters;
-using Utility.Helpers;
-using System.Reactive.Subjects;
-using System.Reactive;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using TypeSerialization;
 using Utility.Common.Models;
+using Utility.Helpers;
+using Utility.Interfaces.NonGeneric;
+using Utility.Models.Filters;
+using Utility.Persists;
+using Utility.WPF.Meta;
 
 namespace Utility.WPF.Controls.Meta.ViewModels
 {
@@ -40,7 +39,6 @@ namespace Utility.WPF.Controls.Meta.ViewModels
     //    }
     //}
 
-
     public class AssemblyComboBoxService : ComboBoxServcice
     {
         //public FunctionNode<(CheckedRoutedEventArgs, AssemblyType), Unit> checkedViewModel;
@@ -55,7 +53,6 @@ namespace Utility.WPF.Controls.Meta.ViewModels
             //    //var filters = new Filter[] { new StringMatchFilter(), /*new AssemblyTypeFilter()*/ };
 
             //    return UpdateAndCreate(assemblies, filters, deselectSubject);
-
 
             //});
         }
@@ -73,12 +70,8 @@ namespace Utility.WPF.Controls.Meta.ViewModels
                 var filters = new Filter[] { };
                 return UpdateAndCreate(assemblies, filters, deselectSubject);
             });
-
-
         }
     }
-
-
 
     public class ComboBoxServcice
     {
@@ -92,7 +85,6 @@ namespace Utility.WPF.Controls.Meta.ViewModels
         public ComboBoxServcice()
         {
             FreeSqlFactory.InitialiseSQLite();
-
 
             //.Select(demoType =>
             //{
@@ -138,7 +130,6 @@ namespace Utility.WPF.Controls.Meta.ViewModels
             deselectSubject.OnNext(new Unit());
         }
 
-
         protected static IObservable<FilteredCustomCheckBoxesViewModel> UpdateAndCreate(IEnumerable<KeyValue> assemblies, Filter[] filters, IObservable<Unit> observable)
         {
             return Update(assemblies.ToArray())
@@ -159,7 +150,7 @@ namespace Utility.WPF.Controls.Meta.ViewModels
         private static async System.Threading.Tasks.Task<ViewModelEntity[]> Update(KeyValue[] collection)
         {
             ViewModelEntity[] array = collection
-                .Select(a => new ViewModelEntity { Key = a.Key, Value = (a.Value as Type)?.AsString() ?? "No Value" , IsChecked = true})
+                .Select(a => new ViewModelEntity { Key = a.Key, Value = (a.Value as Type)?.AsString() ?? "No Value", IsChecked = true })
                 .OrderByDescending(a => BaseEntityOrderer<ViewModelEntity>.Order(a.Key))
                 .ToArray();
             var items = (await ViewModelEntity.Select.ToListAsync()).OrderBy(a => a.UpdateTime == default ? a.CreateTime : a.UpdateTime);

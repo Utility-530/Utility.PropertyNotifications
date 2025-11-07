@@ -51,7 +51,7 @@ namespace Utility.WPF.Controls
 
         protected override CriteriaItem InitialiseItem(CriteriaItem criteriaItem, object viewmodel)
         {
-            Binding myBinding = new (PropertyName)
+            Binding myBinding = new(PropertyName)
             {
                 Source = viewmodel
             };

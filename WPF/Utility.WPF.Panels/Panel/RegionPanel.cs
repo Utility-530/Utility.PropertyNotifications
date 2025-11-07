@@ -339,7 +339,8 @@ namespace Utility.WPF.Demo.Panels
                         centerCount += widthCount;
                         middleCount += heightCount;
                         break;
-                };
+                }
+                ;
             }
         }
 

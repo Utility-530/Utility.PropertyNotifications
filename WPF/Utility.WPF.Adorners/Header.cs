@@ -7,7 +7,7 @@ namespace Utility.WPF.Adorners
 {
     public class Header
     {
-        static List<Guid> guids = new();
+        private static List<Guid> guids = new();
 
         public static readonly DependencyProperty TextProperty = DependencyProperty.RegisterAttached(
             "Text", typeof(string), typeof(Header), new FrameworkPropertyMetadata(string.Empty, OnChanged));
@@ -34,7 +34,8 @@ namespace Utility.WPF.Adorners
 
     public class LeftHeader
     {
-        static List<Guid> guids = new();
+        private static List<Guid> guids = new();
+
         public static readonly DependencyProperty TextProperty = DependencyProperty.RegisterAttached(
        "Text", typeof(string), typeof(LeftHeader), new FrameworkPropertyMetadata(string.Empty, OnChanged));
 
@@ -56,7 +57,6 @@ namespace Utility.WPF.Adorners
         private static void OnChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             Text.AddAdorner(sender, (string)e.NewValue, guids, (f, t) => new Text(f, t, Dock.Left, Place.Outside));
-
         }
     }
 }

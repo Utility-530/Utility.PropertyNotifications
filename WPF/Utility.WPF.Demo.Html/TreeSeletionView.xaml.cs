@@ -1,25 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using TheArtOfDev.HtmlRenderer.Core.Entities;
 using TheArtOfDev.HtmlRenderer.Demo.Common;
 using TheArtOfDev.HtmlRenderer.WPF;
 
-
 namespace Utility.WPF.Demo.Html
 {
-    public class HtmlSelectionChangedArgs 
+    public class HtmlSelectionChangedArgs
     {
         public HtmlSelectionChangedArgs(TreeViewItem item, HtmlSample? sample)
         {
@@ -30,14 +16,12 @@ namespace Utility.WPF.Demo.Html
         public TreeViewItem Item { get; }
         public HtmlSample? Sample { get; }
     }
+
     /// <summary>
     /// Interaction logic for TreeSeletionView.xaml
     /// </summary>
     public partial class TreeSelectionView : UserControl
     {
-
-
-
         public static readonly RoutedEvent SelectionChangedEvent = EventManager.RegisterRoutedEvent("SelectionChanged", RoutingStrategy.Bubble, typeof(RoutedEventHandler<HtmlSelectionChangedArgs>), typeof(TreeSelectionView));
         /// <summary>
         /// the name of the tree node root for all performance samples
@@ -46,7 +30,6 @@ namespace Utility.WPF.Demo.Html
         public TreeSelectionView()
         {
             InitializeComponent();
-
         }
 
         /// <summary>

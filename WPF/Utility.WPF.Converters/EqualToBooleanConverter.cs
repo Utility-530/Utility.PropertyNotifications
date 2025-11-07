@@ -7,6 +7,7 @@ namespace Utility.WPF.Converters
     public class EqualToBooleanConverter : IValueConverter
     {
         public bool Invert { get; set; }
+
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return value.Equals(parameter) != Invert;
@@ -20,7 +21,6 @@ namespace Utility.WPF.Converters
         public static EqualToBooleanConverter Instance => new EqualToBooleanConverter();
         public static EqualToBooleanConverter InverseInstance => new() { Invert = true };
     }
-
 
     public class EqualToVisibilityConverter : IValueConverter
     {
@@ -36,7 +36,7 @@ namespace Utility.WPF.Converters
             throw new NotImplementedException();
         }
 
-        public static EqualToVisibilityConverter Instance => new ();
-        public static EqualToVisibilityConverter InverseInstance => new () { Invert=true };
-    }   
+        public static EqualToVisibilityConverter Instance => new();
+        public static EqualToVisibilityConverter InverseInstance => new() { Invert = true };
+    }
 }

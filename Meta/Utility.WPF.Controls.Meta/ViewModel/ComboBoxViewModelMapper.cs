@@ -1,8 +1,6 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Windows.Controls;
 using Utility.WPF.Controls.Lists;
 using Utility.WPF.Reactives;
 
@@ -41,7 +39,6 @@ namespace Utility.WPF.Controls.Meta.ViewModels
                 .selectedItemViewModel
                 .Subscribe(a => comboBox.SelectedItem = a)
                 .DisposeWith(composite);
-
 
             //comboBox
             //    .SelectOutputChanges()

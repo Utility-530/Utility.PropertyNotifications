@@ -46,9 +46,8 @@ namespace Utility.WPF.Panels
         }
     }
 
-
     /// <summary>
-    /// 
+    ///
     /// UniformStackPanel
     ///   Filed under: WPF — Leave a comment
     ///   September 30, 2012
@@ -65,7 +64,6 @@ namespace Utility.WPF.Panels
     public class UniformStackPanel : Panel
     {
         public double DefaultHeight { get; set; } = 30;
-
 
         public static bool GetIsAutoSized(UIElement element)
         {

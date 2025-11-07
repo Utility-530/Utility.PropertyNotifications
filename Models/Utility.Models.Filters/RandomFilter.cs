@@ -1,6 +1,6 @@
 ﻿using System;
-using Utility.Reactives;
 using Utility.Interfaces.NonGeneric;
+using Utility.Reactives;
 
 namespace Utility.Models.Filters
 {
@@ -12,6 +12,7 @@ namespace Utility.Models.Filters
         {
             Value = new ReactiveProperty<int>(random.Next(0, 2));
         }
+
         public override ReactiveProperty<int> Value { get; }
 
         public override bool Evaluate(object _)

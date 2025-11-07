@@ -13,8 +13,6 @@ namespace Utility.WPF.Demo.Animation
         {
             InitializeComponent();
 
-
-
             var progress = Observable
                                                         .Interval(TimeSpan.FromSeconds(0.1))
 
@@ -30,10 +28,8 @@ namespace Utility.WPF.Demo.Animation
                     }
                 });
 
-
             var interval = Observable
                 .Interval(TimeSpan.FromSeconds(3));
-
 
             interval.ObserveOnDispatcher().Subscribe(a =>
             {

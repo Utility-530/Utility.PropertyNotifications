@@ -22,9 +22,9 @@ namespace Utility.WPF.Reactives
             .Select(a => Unit.Default);
 
             return obs;
-        }      
-        
-        public static IDisposable OnLoaded<T>(this T element, Action<T> action) where T: FrameworkElement
+        }
+
+        public static IDisposable OnLoaded<T>(this T element, Action<T> action) where T : FrameworkElement
         {
             if (element.IsLoaded)
             {
@@ -35,7 +35,7 @@ namespace Utility.WPF.Reactives
             return Observable
             .FromEventPattern<RoutedEventHandler, RoutedEventArgs>
             (a => element.Loaded += a, a => element.Loaded -= a)
-            .Subscribe(a=>action(element));
+            .Subscribe(a => action(element));
         }
 
         public static IObservable<RoutedEventArgs> VisibleChanges(this FrameworkElement combo) =>

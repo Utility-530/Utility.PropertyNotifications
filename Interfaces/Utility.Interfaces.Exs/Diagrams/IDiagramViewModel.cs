@@ -3,9 +3,9 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Interfaces.Exs.Diagrams
 {
-    public interface IDiagramViewModel: IKey, IGuid
+    public interface IDiagramViewModel : IKey, IGuid
     {
         ObservableCollection<IConnectionViewModel> Connections { get; }
-        ObservableCollection<INodeViewModel> Nodes { get;  }
+        ObservableCollection<INodeViewModel> Nodes { get; }
     }
 }

@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utility.Reactives.Helpers
 {
     public static class OnNextAwaiterHelper
     {
-        public static NotifyOnCompletion<T> GetAwaiter<T>(this IObservable<T> lazy) => new (lazy);
+        public static NotifyOnCompletion<T> GetAwaiter<T>(this IObservable<T> lazy) => new(lazy);
     }
-
 
     public class NotifyOnCompletion<T> : INotifyCompletion
     {
@@ -39,6 +35,3 @@ namespace Utility.Reactives.Helpers
         public bool IsCompleted => isCompleted;
     }
 }
-
-
-

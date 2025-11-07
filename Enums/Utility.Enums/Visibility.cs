@@ -9,10 +9,12 @@
         // Summary:
         //     Display the element.
         Visible,
+
         //
         // Summary:
         //     Do not display the element, but reserve space for the element in layout.
         Hidden,
+
         //
         // Summary:
         //     Do not display the element, and do not reserve space for it in layout.

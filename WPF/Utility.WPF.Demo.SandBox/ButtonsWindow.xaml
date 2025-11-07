@@ -9,8 +9,8 @@
     <FrameworkElement.Resources>
         <math:MathConverter x:Key="MathConverter"></math:MathConverter>
 
-        <Style x:Key="CloseListBoxItemStyle" 
-               TargetType="{x:Type ContentControl}" 
+        <Style x:Key="CloseListBoxItemStyle"
+               TargetType="{x:Type ContentControl}"
                BasedOn="{StaticResource {x:Type ContentControl}}">
             <Setter Property="Height" Value="80"></Setter>
             <Setter Property="FontSize" Value="14"></Setter>
@@ -49,11 +49,9 @@
         </Style>
     </FrameworkElement.Resources>
     <Grid>
-        <ContentControl Style="{StaticResource CloseListBoxItemStyle}" >
+        <ContentControl Style="{StaticResource CloseListBoxItemStyle}">
 
             SOME CONTENT
         </ContentControl>
     </Grid>
 </Window>
-
-

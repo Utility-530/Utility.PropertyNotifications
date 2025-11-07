@@ -13,6 +13,4 @@
         <Setter Property="ItemContainerStyle" Value="{StaticResource OtherStyle}" />
         <!--<Setter Property="ItemTemplateSelector" Value="{StaticResource CheckBoxesDataTemplateSelector}" />-->
     </Style>
-
-
 </ResourceDictionary>

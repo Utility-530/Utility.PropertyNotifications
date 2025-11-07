@@ -1,20 +1,15 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
-using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using Utility.Commands;
-using Utility.WPF.Controls.Objects;
 using System.Windows.Data;
-using Utility.WPF.Demo.Data.Model;
-using System.Collections.Generic;
-using System.Reactive.Linq;
-using System.Collections.ObjectModel;
+using System.Windows.Input;
 using System.Windows.Media;
-using Utility.WPF.Controls.Base;
 using Microsoft.Xaml.Behaviors;
+using Utility.Commands;
+using Utility.WPF.Controls.Base;
+using Utility.WPF.Demo.Data.Model;
 
 namespace Utility.WPF.Demo.SandBox
 {
@@ -36,7 +31,7 @@ namespace Utility.WPF.Demo.SandBox
                 }
             });
 
-            Items = new (Utility.WPF.Demo.Data.Resources.Instance["Characters"] as Character[]);
+            Items = new(Utility.WPF.Demo.Data.Resources.Instance["Characters"] as Character[]);
 
             MainGrid.DataContext = this;
         }
@@ -44,6 +39,7 @@ namespace Utility.WPF.Demo.SandBox
         public ICommand FinishEdit { get; }
 
         public ObservableCollection<Character> Items { get; }
+
         public Character Edit
         {
             get => newObject; set
@@ -53,12 +49,11 @@ namespace Utility.WPF.Demo.SandBox
         }
     }
 
-
     public class BreadCrumbs : CustomItemsControl
     {
-
         public static readonly DependencyProperty IsExpandedProperty =
             DependencyProperty.Register("IsExpanded", typeof(bool), typeof(BreadCrumbs), new PropertyMetadata());
+
         public static readonly DependencyProperty ContainerWidthProperty =
             DependencyProperty.Register("ContainerWidth", typeof(double), typeof(BreadCrumbs), new PropertyMetadata(80.0));
 
@@ -74,8 +69,6 @@ namespace Utility.WPF.Demo.SandBox
             set { SetValue(IsExpandedProperty, value); }
         }
 
-
-
         public double ContainerWidth
         {
             get { return (double)GetValue(ContainerWidthProperty); }
@@ -83,9 +76,6 @@ namespace Utility.WPF.Demo.SandBox
         }
 
         // Using a DependencyProperty as the backing store for ContainerWidth.  This enables animation, styling, binding, etc...
-
-
-
     }
 
     public class LastItemConverter : IMultiValueConverter
@@ -132,8 +122,6 @@ namespace Utility.WPF.Demo.SandBox
             throw new NotImplementedException();
         }
     }
-
-
 
     public class ScrollToBottomBehavior : Behavior<System.Windows.Controls.ScrollViewer>
     {

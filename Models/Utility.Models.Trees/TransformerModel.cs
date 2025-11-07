@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using Newtonsoft.Json;
 using Utility.Enums;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Generic;
@@ -21,7 +21,7 @@ namespace Utility.Models.Trees
         private InputsModel _inputs;
         private ThroughPutModel _output;
         private ConverterModel _converter;
-        IDisposable disposable;
+        private IDisposable disposable;
 
         [JsonIgnore]
         public InputsModel Inputs
@@ -78,15 +78,12 @@ namespace Utility.Models.Trees
                         .Subscribe(async i =>
                         {
                             i.Parameters = value.Method.GetParameters();
-
                         });
-
                     });
 
                 RaisePropertyChanged(previous, value);
             }
         }
-
 
         public override IEnumerable<IReadOnlyTree> Items()
         {
@@ -120,8 +117,6 @@ namespace Utility.Models.Trees
                 this.IsExpanded = true;
                 //base.SetNode(node);
             });
-
-
         }
     }
 }

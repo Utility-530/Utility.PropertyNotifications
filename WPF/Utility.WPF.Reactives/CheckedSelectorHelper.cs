@@ -9,7 +9,6 @@ namespace Utility.WPF.Reactives
 {
     public static class CheckedSelectorHelper
     {
-
         public static IObservable<CheckedChangedEventArgs> SelectCheckedChangedEventArgs(this ICheckedSelector selector) =>
             Observable
             .FromEventPattern<CheckedChangedEventHandler, CheckedChangedEventArgs>

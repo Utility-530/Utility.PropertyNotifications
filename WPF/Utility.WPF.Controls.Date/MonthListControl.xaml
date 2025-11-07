@@ -23,7 +23,6 @@
 
     <conv:DefaultConverter x:Key="DefaultConverter" />
 
-
     <Style x:Key="Day2ListBoxItem" TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource DayListBoxItem}">
         <!--<Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
         <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>-->
@@ -32,12 +31,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <ctrl:DayControl 
+                    <ctrl:DayControl
                         Style="{StaticResource VerticalStyle}"
                         x:Name="DayControl"
                         HorizontalAlignment="Stretch"
                         Content="{Binding }"
-                        Day="{Binding }"/>
+                        Day="{Binding }" />
                     <!--  Current="{Binding Current, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctrl:MonthGridControl}, Converter={StaticResource DefaultConverter}}"  -->
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
@@ -52,32 +51,31 @@
         </Setter>
     </Style>
 
-
-    <infrastructure:ListBoxToScrollViewerConverter x:Key="ListBoxToScrollViewerConverter"/>
+    <infrastructure:ListBoxToScrollViewerConverter x:Key="ListBoxToScrollViewerConverter" />
 
     <Style TargetType="ctrl:MonthListControl">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctrl:MonthListControl">
-                    
-                        <DockPanel x:Name="Panel">
-                            <RepeatButton x:Name="LineUpButton" DockPanel.Dock="Top" Height="20"
+
+                    <DockPanel x:Name="Panel">
+                        <RepeatButton x:Name="LineUpButton" DockPanel.Dock="Top" Height="20"
                                           Command="{x:Static ScrollBar.LineUpCommand}"
                                           CommandTarget="{Binding ElementName=CalendarDaysListBox, Converter={StaticResource ListBoxToScrollViewerConverter}}"
                                           IsEnabled="{Binding ElementName=CalendarDaysListBox, Path=CanContentScrollUp, Converter={StaticResource ListBoxToScrollViewerConverter}}"
                                           ClickMode="Hover">
 
-                                <Path Data="M 0 4 L 8 4 L 4 0 Z" Fill="Black"></Path>
-                            </RepeatButton>
-                            <RepeatButton x:Name="LineDownButton" DockPanel.Dock="Bottom" Height="20"
+                            <Path Data="M 0 4 L 8 4 L 4 0 Z" Fill="Black"></Path>
+                        </RepeatButton>
+                        <RepeatButton x:Name="LineDownButton" DockPanel.Dock="Bottom" Height="20"
                                           IsEnabled="{Binding ElementName=CalendarDaysListBox, Path=CanContentScrollDown, Converter={StaticResource ListBoxToScrollViewerConverter}}"
                                           Command="{x:Static ScrollBar.LineDownCommand}"
                                           CommandTarget="{Binding ElementName=CalendarDaysListBox, Converter={StaticResource ListBoxToScrollViewerConverter}}"
                                           ClickMode="Hover">
-                                <Path Data="M 0 0 L 4 4 L 8 0 Z" Fill="Black"></Path>
-                            </RepeatButton>
-                            <!--<ext:ScrollViewer x:Name="ScrollViewer">-->
-                                <ctrl:DayListBox 
+                            <Path Data="M 0 0 L 4 4 L 8 0 Z" Fill="Black"></Path>
+                        </RepeatButton>
+                        <!--<ext:ScrollViewer x:Name="ScrollViewer">-->
+                        <ctrl:DayListBox
                                                x:Name="CalendarDaysListBox"
                                                Margin="0"
                                                Padding="0"
@@ -86,17 +84,16 @@
                                                ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                                ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                                    <i:Interaction.Behaviors>
-                                        <b:SmoothAutoScrollBehavior ScrollablePosition="Middle"/>
-                                    </i:Interaction.Behaviors>
-                                </ctrl:DayListBox>
-                                <!--<b:Interaction.Behaviors>
-                                    <utl:ScrollAnimationBehavior/>
-                                    <utl:MouseWheelScrollBehavior/>
+                            <i:Interaction.Behaviors>
+                                <b:SmoothAutoScrollBehavior ScrollablePosition="Middle" />
+                            </i:Interaction.Behaviors>
+                        </ctrl:DayListBox>
+                        <!--<b:Interaction.Behaviors>
+                                    <utl:ScrollAnimationBehavior />
+                                    <utl:MouseWheelScrollBehavior />
                                 </b:Interaction.Behaviors>
                             </ext:ScrollViewer>-->
-                        </DockPanel>
-                  
+                    </DockPanel>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

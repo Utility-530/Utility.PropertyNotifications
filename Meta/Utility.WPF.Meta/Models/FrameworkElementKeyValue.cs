@@ -2,10 +2,9 @@
 using System.Windows;
 using System.Windows.Controls;
 
-
 namespace Utility.WPF.Meta
 {
-    public record FrameworkElementKeyValue(string Key, Type Type)  : KeyValue(Key)
+    public record FrameworkElementKeyValue(string Key, Type Type) : KeyValue(Key)
     {
         private readonly Lazy<FrameworkElement?> lazy = new(() =>
         {
@@ -20,6 +19,5 @@ namespace Utility.WPF.Meta
         });
 
         public override FrameworkElement? Value => lazy.Value;
-
     }
 }

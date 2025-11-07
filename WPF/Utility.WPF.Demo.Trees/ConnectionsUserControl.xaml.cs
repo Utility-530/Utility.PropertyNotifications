@@ -1,5 +1,4 @@
-﻿using LiteDB;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,12 +6,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Utility.Trees.Extensions;
+using LiteDB;
 using Utility.Extensions;
 using Utility.Interfaces;
 using Utility.Persists;
-using Utility.Trees;
 using Utility.PropertyNotifications;
+using Utility.Trees;
+using Utility.Trees.Extensions;
 
 namespace Utility.WPF.Demo.Trees
 {
@@ -24,11 +24,10 @@ namespace Utility.WPF.Demo.Trees
         private Point? point0, point1;
         private LineViewModel last;
 
-        LiteDbRepository repository = new(new(typeof(ConnectionModel), nameof(ConnectionModel.Id)));
-        Converter converter;
-        Dictionary<LineViewModel, LineViewModelInfo> dictionary = new();
+        private LiteDbRepository repository = new(new(typeof(ConnectionModel), nameof(ConnectionModel.Id)));
+        private Converter converter;
+        private Dictionary<LineViewModel, LineViewModelInfo> dictionary = new();
         private readonly ConnectionsViewModel viewModel;
-
 
         public ConnectionsUserControl()
         {
@@ -81,19 +80,15 @@ namespace Utility.WPF.Demo.Trees
             {
                 point0 = point1 = null;
                 last = null;
-
             }
             else
                 Add();
         }
 
-
-
-        static FrameworkElement GetHeaderControl(TreeViewItem item)
+        private static FrameworkElement GetHeaderControl(TreeViewItem item)
         {
             return (FrameworkElement)item.Template.FindName("PART_Header", item);
         }
-
 
         private void MyTreeView2_SelectedItemChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -104,7 +99,6 @@ namespace Utility.WPF.Demo.Trees
                 element = MyTreeView2.ItemContainerGenerator.ContainerFromItem(e.AddedItems.Cast<object>().Single()) as FrameworkElement;
                 size = element.RenderSize;
             }
-
 
             Point ofs = new(0, size.Height / 2d);
             var pointA = MyTreeView2.TransformToAncestor(this).Transform(ofs);
@@ -118,9 +112,6 @@ namespace Utility.WPF.Demo.Trees
             else
                 Add();
         }
-
-
-
 
         private void ConnectionsUserControl_MouseMove(object sender, MouseEventArgs e)
         {
@@ -188,7 +179,7 @@ namespace Utility.WPF.Demo.Trees
             MyTreeView.ClearSelections();
         }
 
-        void Add()
+        private void Add()
         {
             var pos = Mouse.GetPosition(this);
             viewModel.Lines.Add(last = new LineViewModel { Id = Guid.NewGuid(), StartPoint = point0.HasValue ? point0.Value : pos, EndPoint = point1.HasValue ? point1.Value : pos });
@@ -216,14 +207,13 @@ namespace Utility.WPF.Demo.Trees
 
             public LineViewModel To(ConnectionModel connectionViewModel)
             {
-
                 Point pointA, pointB;
                 Tree viewmodel = dataContext.ViewModel.Descendant(new((a) => (a.tree.Data() as IName).Name == connectionViewModel.ViewModelName)) as Tree;
 
                 var treeViewItem = TreeHelper.FindRecursive<TreeViewItem>(userControl.MyTreeView, viewmodel);
                 {
                     var y = userControl.MyTreeView.FindDepth(treeViewItem);
-                    pointA =new Point(userControl.MyTreeView.ActualWidth, y);
+                    pointA = new Point(userControl.MyTreeView.ActualWidth, y);
                 }
                 IName service = null;
                 foreach (var x in dataContext.ServiceModel)
@@ -235,11 +225,9 @@ namespace Utility.WPF.Demo.Trees
 
                 var listBoxItem = TreeHelper.FindRecursive<ListBoxItem>(userControl.MyTreeView2, service);
                 {
-
                     Size size = listBoxItem.RenderSize;
                     Point ofs = new(0, size.Height / 2d);
                     pointB = listBoxItem.TransformToAncestor(userControl).Transform(ofs);
-
                 }
 
                 return new LineViewModel { Id = connectionViewModel.Id, StartPoint = pointA, EndPoint = pointB };
@@ -344,7 +332,6 @@ namespace Utility.WPF.Demo.Trees
                 }
                 else if (treeView.ItemContainerGenerator.ContainerFromItem(x) is ItemsControl itemsControl)
                 {
-
                     if (FindRecursive<T>(itemsControl, instance) is T xx)
                         return xx;
                 }
@@ -352,7 +339,6 @@ namespace Utility.WPF.Demo.Trees
             return null;
         }
     }
-
 
     public class ConnectionsViewModel
     {
@@ -385,6 +371,7 @@ namespace Utility.WPF.Demo.Trees
         }
 
         private Point _endPoint;
+
         public Point EndPoint
         {
             get { return _endPoint; }
@@ -395,7 +382,6 @@ namespace Utility.WPF.Demo.Trees
             }
         }
     }
-
 
     public class ConnectionModel
     {
@@ -424,7 +410,6 @@ namespace Utility.WPF.Demo.Trees
     {
         public static void ClearSelections(this TreeView tview)
         {
-
             ClearTreeViewItemsControlSelection(tview.Items, tview.ItemContainerGenerator);
 
             static void ClearTreeViewItemsControlSelection(ItemCollection ic, ItemContainerGenerator icg)
@@ -436,7 +421,7 @@ namespace Utility.WPF.Demo.Trees
                     {
                         //Recursive call to traverse deeper levels
                         ClearTreeViewItemsControlSelection(tvi.Items, tvi.ItemContainerGenerator);
-                        //Deselect the TreeViewItem 
+                        //Deselect the TreeViewItem
                         tvi.IsSelected = false;
                     }
                 }

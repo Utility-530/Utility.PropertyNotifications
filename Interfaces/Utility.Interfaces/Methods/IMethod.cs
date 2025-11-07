@@ -9,6 +9,5 @@ namespace Utility.Interfaces.Methods
         object? Instance { get; }
         MethodInfo MethodInfo { get; }
         IReadOnlyCollection<ParameterInfo> Parameters { get; }
-
     }
 }

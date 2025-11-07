@@ -28,11 +28,11 @@
         </btns:ToggleButton>
         <ComboBox x:Name="ComboBox" DockPanel.Dock="Top" Width="100" Margin="10">
             <i:Interaction.Behaviors>
-                <b1:EnumSelectorBehavior EnumType="{x:Type enum:Arrangement}" 
-                                          SelectedEnum="{x:Static enum:Arrangement.Uniform}"/>
+                <b1:EnumSelectorBehavior EnumType="{x:Type enum:Arrangement}"
+                                          SelectedEnum="{x:Static enum:Arrangement.Uniform}" />
             </i:Interaction.Behaviors>
         </ComboBox>
-        
+
         <ScrollViewer>
             <ItemsControl att:ItemsControlEx.Orientation="{Binding ElementName=ToggleButton, Path=Content}"
                           att:ItemsControlEx.Arrangement="{Binding ElementName=ComboBox, Path=SelectedValue}">

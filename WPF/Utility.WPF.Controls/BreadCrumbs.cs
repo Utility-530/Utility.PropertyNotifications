@@ -1,24 +1,21 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Microsoft.Xaml.Behaviors;
 using Utility.WPF.Controls.Base;
 
 namespace Utility.WPF.Controls
 {
     public class BreadCrumbs : CustomItemsControl
     {
-
         public static readonly DependencyProperty IsExpandedProperty =
             DependencyProperty.Register("IsExpanded", typeof(bool), typeof(BreadCrumbs), new PropertyMetadata());
+
         public static readonly DependencyProperty ContainerWidthProperty =
 DependencyProperty.Register("ContainerWidth", typeof(double), typeof(BreadCrumbs), new PropertyMetadata(80.0));
+
         static BreadCrumbs()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(BreadCrumbs), new FrameworkPropertyMetadata(typeof(BreadCrumbs)));
@@ -36,7 +33,6 @@ DependencyProperty.Register("ContainerWidth", typeof(double), typeof(BreadCrumbs
             get { return (double)GetValue(ContainerWidthProperty); }
             set { SetValue(ContainerWidthProperty, value); }
         }
-
     }
 
     public class LastItemConverter : IMultiValueConverter
@@ -89,5 +85,3 @@ DependencyProperty.Register("ContainerWidth", typeof(double), typeof(BreadCrumbs
         }
     }
 }
-
-

@@ -1,17 +1,16 @@
-﻿using DynamicData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Utility.Services;
-using Utility.ViewModels;
+using DynamicData;
 using Utility.Helpers.Ex;
-using Utility.WPF.Demo.Data.Factory;
-using Utility.WPF.Demo.Data.Model;
 using Utility.Models.Filters;
 using Utility.Reactives;
 using Utility.Services.Deprecated;
+using Utility.ViewModels;
+using Utility.WPF.Demo.Data.Factory;
+using Utility.WPF.Demo.Data.Model;
 
 namespace Utility.WPF.Demo.Lists.Infrastructure
 {

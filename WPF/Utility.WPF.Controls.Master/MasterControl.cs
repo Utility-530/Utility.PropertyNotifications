@@ -1,17 +1,17 @@
-﻿using Endless;
-using Evan.Wpf;
-using Microsoft.Xaml.Behaviors;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using Endless;
+using Evan.Wpf;
+using Microsoft.Xaml.Behaviors;
+using ReactiveUI;
+using Utility.Enums;
 using Utility.WPF.Abstract;
 using Utility.WPF.Controls.Base;
-using Utility.Enums;
 using Visibility = System.Windows.Visibility;
 
 namespace Utility.WPF.Controls.Master

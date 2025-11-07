@@ -1,5 +1,5 @@
-﻿using DynamicData;
-using System;
+﻿using System;
+using DynamicData;
 using Utility.Models;
 
 namespace Utility.ViewModels;

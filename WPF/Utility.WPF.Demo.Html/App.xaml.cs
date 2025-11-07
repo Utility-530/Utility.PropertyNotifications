@@ -1,11 +1,7 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using TheArtOfDev.HtmlRenderer.Demo.Common;
-using TheArtOfDev.HtmlRenderer.Demo.WPF;
 using TheArtOfDev.HtmlRenderer.WPF;
 using Utility.WPF.Controls.Base;
 using Utility.WPF.Controls.Buttons;
@@ -29,7 +25,6 @@ namespace Utility.WPF.Demo.Html
             var mainView = new TinyHtmlEditorControl();
             var splitControl = new SplitControl()
             {
-
                 Content = mainView,
                 Header = treeSel
             };
@@ -52,8 +47,6 @@ namespace Utility.WPF.Demo.Html
                     return;
                 }
 
-
-
                 mainView.Html = e.Data.Sample.Html;
             };
             grid.Children.Add(splitControl);
@@ -63,5 +56,4 @@ namespace Utility.WPF.Demo.Html
             base.OnStartup(e);
         }
     }
-
 }

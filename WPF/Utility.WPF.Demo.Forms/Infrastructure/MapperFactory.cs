@@ -1,13 +1,10 @@
 ﻿//using LiteDB;
 
-using AutoMapper;
-using Fasterflect;
-using LiteDB;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using AutoMapper;
+using LiteDB;
 using Utility.Helpers.Ex;
 using Utility.WPF.Demo.Forms.Model;
 using Utility.WPF.Demo.Forms.ViewModels;
@@ -77,9 +74,9 @@ namespace Utility.WPF.Demo.Forms.Infrastructure
                 serialize: a => new BsonMapper().Serialize(a),
                 deserialize: (bson) =>
                 {
-                    var headerModels = 
-                        from arr in bson["Collection"].AsArray 
-                        let type = Type.GetType(arr["_type"]) ?? throw new Exception("g 33fgfd4 444") 
+                    var headerModels =
+                        from arr in bson["Collection"].AsArray
+                        let type = Type.GetType(arr["_type"]) ?? throw new Exception("g 33fgfd4 444")
                         select (HeaderModel?)BsonHelper.Deserialise(arr.ToString(), type);
 
                     return new EditModel(bson["_id"].AsGuid, headerModels.ToArray());

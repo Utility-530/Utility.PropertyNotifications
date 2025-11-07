@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using Utility.WPF.Abstract;
-using Orientation = System.Windows.Controls.Orientation;
-using Arrangement = Utility.Enums.Arrangement;
 using Utility.WPF.Factorys;
+using Arrangement = Utility.Enums.Arrangement;
+using Orientation = System.Windows.Controls.Orientation;
 
 namespace Utility.WPF.Controls.Base
 {

@@ -1,26 +1,16 @@
-﻿using Microsoft.Xaml.Behaviors;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Pather.CSharp;
-using Pather.CSharp.PathElements;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Xaml.Behaviors;
+using Newtonsoft.Json.Linq;
 
 namespace Utility.WPF.Controls.Objects
 {
     public class WriteBehavior : Behavior<JsonControl>
     {
-
-
         public string Source
         {
             get { return (string)GetValue(SourceProperty); }
@@ -30,8 +20,6 @@ namespace Utility.WPF.Controls.Objects
         // Using a DependencyProperty as the backing store for Source.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SourceProperty =
             DependencyProperty.Register("Source", typeof(string), typeof(WriteBehavior), new PropertyMetadata());
-
-
 
         private static void changed2(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -62,17 +50,13 @@ namespace Utility.WPF.Controls.Objects
         {
             if (e.Property.Name == nameof(Collections))
             {
-
             }
             base.OnPropertyChanged(e);
         }
+
         static WriteBehavior()
         {
-
         }
-
-
-
 
         protected override void OnAttached()
         {
@@ -89,10 +73,7 @@ namespace Utility.WPF.Controls.Objects
                 var source = Source;
                 Task.Run(() =>
             {
-
-
                 System.IO.File.WriteAllText(source, parsed);
-
             });
             }
         }

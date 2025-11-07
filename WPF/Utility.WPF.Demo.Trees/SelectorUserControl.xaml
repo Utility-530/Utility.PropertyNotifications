@@ -1,19 +1,19 @@
 ﻿<UserControl x:Class="Utility.WPF.Demo.Trees.SelectorUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Utility.WPF.Demo.Trees"
              xmlns:node="clr-namespace:Utility.Nodes;assembly=Utility.Nodes" xmlns:tree="http://schemas.utility.com/trees"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              xmlns:conv="http://schemas.utility.com/converters"
              x:Name="root"
-  
+
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.DataContext>
-        <local:SelectorMainViewModel/>
+        <local:SelectorMainViewModel />
     </FrameworkElement.DataContext>
-    
+
     <FrameworkElement.Resources>
         <ResourceDictionary>
 
@@ -21,11 +21,11 @@
 
             <Style x:Key="Style" TargetType="{x:Type tree:CustomTreeViewItem}" BasedOn="{StaticResource SelectedHorizontalStyle}">
                 <Setter Property="Edit" Value="{Binding Converter={StaticResource EditConverter}}"></Setter>
-            </Style>      
-            
+            </Style>
+
             <Style x:Key="RootStyle" TargetType="{x:Type tree:CustomTreeViewItem}" BasedOn="{StaticResource RootSelectedHorizontalStyle}">
                 <Setter Property="Edit" Value="{Binding Converter={StaticResource EditConverter}}"></Setter>
-                <Setter Property="FooterTemplate" >
+                <Setter Property="FooterTemplate">
                     <Setter.Value>
                         <DataTemplate>
                             <TextBlock Text="{Binding Data}"></TextBlock>
@@ -35,11 +35,10 @@
             </Style>
 
             <local:CustomStyleSelector x:Key="StyleSelector" RootStyle ="{StaticResource RootStyle}" DefaultStyle="{StaticResource Style}">
-                
             </local:CustomStyleSelector>
-            
+
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/SelectedHorizontalStyle.xaml"/>
+                <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/SelectedHorizontalStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </FrameworkElement.Resources>
@@ -48,28 +47,26 @@
                          ItemsSource="{Binding Nodes}"
                          ItemContainerStyleSelector="{StaticResource StyleSelector}"
                          tree:CustomTreeViewItem.FinishEdit="tree_FinishEdit">
-        
+
         <TreeView.Resources>
             <ResourceDictionary>
 
-                <HierarchicalDataTemplate 
-          DataType="{x:Type node:NodeViewModel}" 
-          ItemsSource="{Binding Children}"
-          >
+                <HierarchicalDataTemplate
+          DataType="{x:Type node:NodeViewModel}"
+          ItemsSource="{Binding Children}">
                     <TextBlock Text="{Binding Data}" />
                 </HierarchicalDataTemplate>
             </ResourceDictionary>
         </TreeView.Resources>
 
-        <!-- Put the root item(s) in a centered Grid so that 
+        <!-- Put the root item(s) in a centered Grid so that
          they will be centered and retain their width. -->
         <TreeView.ItemsPanel>
             <ItemsPanelTemplate>
-                <Grid 
-          HorizontalAlignment="Center" 
+                <Grid
+          HorizontalAlignment="Center"
           IsItemsHost="True" />
             </ItemsPanelTemplate>
         </TreeView.ItemsPanel>
     </tree:CustomTreeView>
-    
 </UserControl>

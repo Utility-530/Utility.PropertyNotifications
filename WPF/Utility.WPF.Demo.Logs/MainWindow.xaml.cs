@@ -1,6 +1,6 @@
 ﻿using System.Windows;
-using Utility.Helpers.Ex;
 using Utility.Entities;
+using Utility.Helpers.Ex;
 
 namespace Utility.WPF.Demo.Logs
 {
@@ -25,7 +25,7 @@ namespace Utility.WPF.Demo.Logs
             }
             catch (Exception ex)
             {
-                Globals.Logs.OnNext(new Log() { Message= ex.Message, Date = DateTime.Now, Level = Enums.Diagnostic.Error});
+                Globals.Logs.OnNext(new Log() { Message = ex.Message, Date = DateTime.Now, Level = Enums.Diagnostic.Error });
             }
         }
 

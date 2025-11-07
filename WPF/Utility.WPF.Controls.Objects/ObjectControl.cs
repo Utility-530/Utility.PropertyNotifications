@@ -1,8 +1,4 @@
-﻿using Endless.Functional;
-using Humanizer;
-using MoreLinq;
-using Splat;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -17,12 +13,16 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using Endless.Functional;
+using Humanizer;
+using MoreLinq;
+using Splat;
 using Utility.Helpers.Reflection;
 
 namespace Utility.WPF.Controls.Objects
 {
-    using Utility.WPF.Converters;
     using Utility.Helpers;
+    using Utility.WPF.Converters;
 
     public class ObjectControl : ContentControl, IEnableLogger
     {
@@ -350,5 +350,4 @@ namespace Utility.WPF.Controls.Objects
                 members;
         }
     }
-
 }

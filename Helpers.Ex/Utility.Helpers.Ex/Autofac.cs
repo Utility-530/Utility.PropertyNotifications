@@ -5,14 +5,12 @@ namespace Utility.Helpers.Ex
 {
     public static class AutofacHelper
     {
-
         public static void RegisterSelf(this ContainerBuilder builder)
         {
             IContainer container = null;
             builder.Register(c => container).AsSelf().SingleInstance();
             builder.RegisterBuildCallback(c => container = (IContainer)c);
         }
-
 
         public static IRegistrationBuilder<TR, IConcreteActivatorData, SingleRegistrationStyle> WithOptions<TR, TY>(
 this IRegistrationBuilder<TR, IConcreteActivatorData, TY> builder,
@@ -24,7 +22,6 @@ bool watch = true)
 where TY : SingleRegistrationStyle
 where TR : class
         {
-
             //if (autoActivate)
             //{
             //    builder.AutoActivate();
@@ -43,7 +40,7 @@ where TR : class
             //    {
             //        if ((a.Instance ?? throw new Exception("Instance is null")) is INode node)
             //        {
-            //            var graphExample = a.Context.Resolve<GraphExample>();   
+            //            var graphExample = a.Context.Resolve<GraphExample>();
             //            graphExample.BuildVertex(new GraphX.Measure.Point(0,0), node.Key);
             //        }
             //    });

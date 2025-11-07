@@ -1,11 +1,11 @@
-﻿using Evan.Wpf;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using Evan.Wpf;
+using ReactiveUI;
 using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls

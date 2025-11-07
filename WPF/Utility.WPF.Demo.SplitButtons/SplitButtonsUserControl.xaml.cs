@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using Utility.WPF.Controls.SplitButtons;
 
 namespace Utility.WPF.Demo.SplitButtons
 {
-    public class SplitButtonsViewModel: INotifyPropertyChanged
+    public class SplitButtonsViewModel : INotifyPropertyChanged
     {
         private string _selectedAction;
         private ObservableCollection<string> _availableActions;
@@ -49,18 +47,16 @@ namespace Utility.WPF.Demo.SplitButtons
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion
+        #endregion INotifyPropertyChanged Implementation
     }
-
 
     public partial class SplitButtonsUserControl
     {
-
         private int _eventCounter = 0;
-        SplitButtonsViewModel splitButtonsViewModel = new SplitButtonsViewModel();
+        private SplitButtonsViewModel splitButtonsViewModel = new SplitButtonsViewModel();
+
         public SplitButtonsUserControl()
         {
-    
             InitializeComponent();
 
             // Initialize data binding context
@@ -73,10 +69,7 @@ namespace Utility.WPF.Demo.SplitButtons
             UpdateHasContentStatus();
         }
 
-        #region Data Binding Properties
 
-     
-        #endregion
 
         #region Event Handlers
 
@@ -125,7 +118,7 @@ namespace Utility.WPF.Demo.SplitButtons
             LogEvent($"Data updated: New action set loaded ({selectedSet.Length} items)");
         }
 
-        #endregion
+        #endregion Event Handlers
 
         #region Helper Methods
 
@@ -228,7 +221,6 @@ namespace Utility.WPF.Demo.SplitButtons
             //}
         }
 
-        #endregion
-
+        #endregion Helper Methods
     }
 }

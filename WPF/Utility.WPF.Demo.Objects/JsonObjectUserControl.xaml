@@ -15,34 +15,31 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    
+
     <UserControl.Resources>
         <sys:Exception x:Key="exception" />
         <local:ExceptionOne x:Key="ExceptionOne" ></local:ExceptionOne>
         <conv:ColorConverter x:Key="ColorConverter"></conv:ColorConverter>
         <local:DemoItem x:Key="AuctionItem"></local:DemoItem>
-    
 
         <DataTemplate x:Key="Ellipse">
             <Rectangle Fill="{Binding Value, Converter={StaticResource ColorConverter}}"></Rectangle>
         </DataTemplate>
 
-
         <x:Array x:Key="properties" Type="{x:Type model:SchemaProperty}">
             <model:SchemaProperty Name="Color" Template="Ellipse"></model:SchemaProperty>
         </x:Array>
 
-        <model:Schema x:Key="CharacterSchema" Properties="{StaticResource properties}"/>
+        <model:Schema x:Key="CharacterSchema" Properties="{StaticResource properties}" />
 
         <ObjectDataProvider x:Key="SchemaFromFile"
                 ObjectType="{x:Type local:SchemaLoader}"
-                MethodName="LoadSchema" >
+                MethodName="LoadSchema">
         </ObjectDataProvider>
 
-        <view:ObjectToTokenConverter x:Key="ObjectToTokenConverter"/>
-
+        <view:ObjectToTokenConverter x:Key="ObjectToTokenConverter" />
     </UserControl.Resources>
-    
+
     <DockPanel Name="DockPanel" Visibility="Visible">
         <StackPanel DockPanel.Dock="Top">
 
@@ -59,13 +56,12 @@
             <UniformGrid Columns="1">
                 <view:JsonControl>
                     <i:Interaction.Behaviors>
-                        <view:ObjectBehavior Object="{StaticResource AuctionItem}" RaisePropertyChanged="True"/>
+                        <view:ObjectBehavior Object="{StaticResource AuctionItem}" RaisePropertyChanged="True" />
                     </i:Interaction.Behaviors>
                 </view:JsonControl>
                 <view:JsonControl att:FileEx.Source="../../../Data/example2.json"
                                   Json="{Binding (att:FileEx.FileContent), RelativeSource={RelativeSource Self}}"
-                                  FallbackRootType="{markup:GenericType 'System.Collections.Generic.List`1', {x:Type local:DemoItem}}"
-                                  >
+                                  FallbackRootType="{markup:GenericType 'System.Collections.Generic.List`1', {x:Type local:DemoItem}}">
                     <i:Interaction.Behaviors>
                         <view:WriteBehavior Source="../../../Data/example2.json" />
                     </i:Interaction.Behaviors>
@@ -74,11 +70,11 @@
                 <view:JsonControl Object="{Binding Source={StaticResource ExceptionOne}, Converter={StaticResource ObjectToTokenConverter}}" />
                 <view:JsonControl>
                     <i:Interaction.Behaviors>
-                        <view:ObjectBehavior Object="{DynamicResource exceptions}"/>
+                        <view:ObjectBehavior Object="{DynamicResource exceptions}" />
                     </i:Interaction.Behaviors>
                 </view:JsonControl>
                 <DockPanel>
-                    <Button DockPanel.Dock="Top" 
+                    <Button DockPanel.Dock="Top"
                         Click="Button_Click"
                         Height="30" Width="200">
                         Load from clipboard

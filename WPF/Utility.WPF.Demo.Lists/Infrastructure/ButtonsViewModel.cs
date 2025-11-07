@@ -1,8 +1,8 @@
-﻿using Microsoft.Xaml.Behaviors.Core;
-using ReactiveUI;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
+using Microsoft.Xaml.Behaviors.Core;
+using ReactiveUI;
 using Utility.WPF.Demo.Common.ViewModels;
 
 namespace Utility.WPF.Demo.Lists.Infrastructure

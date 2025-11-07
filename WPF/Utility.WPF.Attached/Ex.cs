@@ -153,8 +153,6 @@ namespace Utility.WPF.Attached
         public static IObservable<bool> Checked(Predicate<DependencyObject> predicateObject) =>
             Observable<bool>(predicateObject, a => a == IsCheckedProperty);
 
-
-
         public const string Reverse = "Reverse";
         public static readonly DependencyProperty ReverseProperty = DependencyProperty.RegisterAttached(Reverse, typeof(bool), typeof(Ex), new PropertyMetadata(false, PropertyChanged));
 
@@ -168,7 +166,6 @@ namespace Utility.WPF.Attached
             d.SetValue(ReverseProperty, (bool)value);
         }
 
-
         public const string ToggleStyle = nameof(ToggleStyle);
         public static readonly DependencyProperty ToggleStyleProperty = DependencyProperty.RegisterAttached(ToggleStyle, typeof(Style), typeof(Ex), new PropertyMetadata(null, PropertyChanged));
 
@@ -181,7 +178,5 @@ namespace Utility.WPF.Attached
         {
             d.SetValue(ToggleStyleProperty, (Style)value);
         }
-
-
     }
 }

@@ -1,16 +1,14 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
+﻿using System;
 using System.Reflection;
-using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Utility.Conversions.Json.Newtonsoft
 {
     public class AssemblyJsonConverter : JsonConverter<Assembly>
     {
-
         public override void WriteJson(JsonWriter writer, Assembly value, JsonSerializer serializer)
         {
-
             // Begin object
             writer.WriteStartObject();
 

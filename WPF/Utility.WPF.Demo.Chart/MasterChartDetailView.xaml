@@ -17,12 +17,12 @@
 
     <chart:MasterChartDetail x:Name="MasterDetail1"
                                    IdKey="{util:NameOf Type={x:Type vm:ChartDetailViewModel},Path=Id}"
-                                   DataKey="{Binding DataKey, Mode=OneTime}"> 
+                                   DataKey="{Binding DataKey, Mode=OneTime}">
             <drg:ListControl
                 DisplayMemberPath="{util:NameOf Type={x:Type vm:ChartDetailViewModel}, Path=Id}"
             IsCheckedPath="{util:NameOf Type={x:Type vm:ChartDetailViewModel}, Path=IsChecked}"
             CommandPath="{util:NameOf Type={x:Type vm:ChartDetailViewModel}, Path=Command}"
             ItemsSource="{Binding Collection}">
-            </drg:ListControl>   
+            </drg:ListControl>
     </chart:MasterChartDetail>
 </UserControl>

@@ -1,9 +1,9 @@
-﻿using Evan.Wpf;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Evan.Wpf;
 using Utility.Enums;
 using Utility.WPF.Controls.Base;
 using Utility.WPF.Controls.Infrastructure;
@@ -33,11 +33,10 @@ namespace Utility.WPF.Controls
             });
         }
 
-        
         public decimal Value
         {
-            get =>(decimal) this.GetValue(ValueProperty);
-                set => this.SetValue(ValueProperty, value);
+            get => (decimal)this.GetValue(ValueProperty);
+            set => this.SetValue(ValueProperty, value);
         }
 
         public event RoutedEventHandler<(decimal value, TimeInterval timeInterval)> ValueChanged

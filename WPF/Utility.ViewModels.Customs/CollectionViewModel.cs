@@ -1,7 +1,4 @@
-﻿using DynamicData;
-using DynamicData.PLinq;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +6,9 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using DynamicData;
+using DynamicData.PLinq;
+using ReactiveUI;
 using Utility.Models;
 using Utility.Services.Deprecated;
 using Utility.ViewModels.Customs.Infrastructure;
@@ -134,7 +134,6 @@ public class CollectionGroupViewModel<T, TKey> : ViewModel, IObserver<ClassPrope
     public IReadOnlyCollection<ClassProperty> Properties => typeof(T).GetProperties().Select(a => new ClassProperty(a.Name, typeof(T).Name)).ToArray();
 
     public override ICollection Children => collection;
-
 
     public override Property Model => throw new NotImplementedException();
     //public override Model Model { get; }

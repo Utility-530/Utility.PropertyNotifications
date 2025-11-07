@@ -7,7 +7,7 @@ namespace Utility.WPF.Adorners
 {
     public class Footer
     {
-        static List<Guid> guids = new();
+        private static List<Guid> guids = new();
 
         public static readonly DependencyProperty TextProperty = DependencyProperty.RegisterAttached(
        "Text", typeof(string), typeof(Footer), new FrameworkPropertyMetadata(string.Empty, OnChanged));

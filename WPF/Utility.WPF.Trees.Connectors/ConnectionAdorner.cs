@@ -1,18 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Controls;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Security.Policy;
-using System;
-using System.Diagnostics;
-using Utility.WPF.Helpers;
 using Utility.Enums;
-using Utility.Interfaces.NonGeneric;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Trees.Connectors
 {
@@ -48,7 +42,6 @@ namespace Utility.WPF.Trees.Connectors
         }
     }
 
-
     public class ConnectionAdorner : Adorner
     {
         public static readonly RoutedEvent HitEvent = EventManager.RegisterRoutedEvent(name: "Hit", routingStrategy: RoutingStrategy.Bubble, handlerType: typeof(RoutedEventHandler), ownerType: typeof(ConnectionAdorner));
@@ -61,7 +54,6 @@ namespace Utility.WPF.Trees.Connectors
         private FrameworkElement hitItem = null;
         private bool isComplete;
         private Connector sourceConnector, sinkConnector;
-
 
         public ConnectionAdorner(FrameworkElement treeView, Connector sourceConnector, ConnectorAdorner sourceConnectorAdorner)
             : base(treeView)
@@ -76,13 +68,11 @@ namespace Utility.WPF.Trees.Connectors
 
         public ConnectionEventArgs Args { get; set; }
 
-
         public event RoutedEventHandler Hit
         {
             add { AddHandler(HitEvent, value); }
             remove { RemoveHandler(HitEvent, value); }
         }
-
 
         public event RoutedEventHandler ConnectionMade
         {
@@ -97,10 +87,8 @@ namespace Utility.WPF.Trees.Connectors
                 AdornerLayer _adornerLayer = AdornerLayer.GetAdornerLayer(hitItem);
                 if (_adornerLayer != null)
                 {
-
                     if (_adornerLayer.GetAdorners(hitItem) is Adorner[] adornersOfStackPanel)
                     {
-
                         var hitPoint = e.GetPosition(this);
 
                         foreach (var adorner in adornersOfStackPanel)
@@ -118,7 +106,6 @@ namespace Utility.WPF.Trees.Connectors
                                     Args = new ConnectionEventArgs(ConnectionMadeEvent, treeView, pos, sourceConnector, sinkConnector, true);
                                     RaiseEvent(Args);
                                 }
-
                             }
                         }
                     }
@@ -130,25 +117,20 @@ namespace Utility.WPF.Trees.Connectors
                 update();
                 sourceConnector.element.SizeChanged += (s, _e) =>
                 {
-
                     update();
-
                 };
                 sinkConnector.element.SizeChanged += (s, _e) =>
                 {
-
                     update();
                 };
 
                 sourceConnector.element.IsVisibleChanged += (s, _e) =>
                 {
-
                     update();
                 };
 
                 sinkConnector.element.IsVisibleChanged += (s, _e) =>
                 {
-
                     update();
                 };
 
@@ -166,19 +148,15 @@ namespace Utility.WPF.Trees.Connectors
             }
             InvalidateVisual();
 
-
             if (IsMouseCaptured)
                 ReleaseMouseCapture();
-
-
         }
 
-        void update()
+        private void update()
         {
             pathGeometry = GetPathGeometry(sourceCentre(), sinkCentre());
             InvalidateVisual();
         }
-
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
@@ -222,15 +200,12 @@ namespace Utility.WPF.Trees.Connectors
             if (sourceConnector != null)
                 dc.DrawEllipse(Brushes.Pink, new Pen(Brushes.Black, 1), sourceCentre(), 2, 2);
 
-
             // without a background the OnMouseMove event would not be fired
             // Alternative: implement a Canvas as a child of this adorner, like
             // the ConnectionAdorner does.
             if (isComplete == false)
                 dc.DrawRectangle(Brushes.Transparent, null, new Rect(RenderSize));
-
         }
-
 
         private PathGeometry GetPathGeometry(Point sourcePosition, Point sinkPosition)
         {
@@ -258,7 +233,6 @@ namespace Utility.WPF.Trees.Connectors
             return geometry;
         }
 
-
         private void HitTesting(Point hitPoint)
         {
             DependencyObject hitObject = treeView.InputHitTest(hitPoint) as DependencyObject;
@@ -275,8 +249,6 @@ namespace Utility.WPF.Trees.Connectors
                 }
                 //if (hitObject is DesignerItem ditem)
                 //{
-
-
                 //    hitItem = ditem;
                 //    add(ditem, Position.All);
                 //    return;
@@ -299,8 +271,6 @@ namespace Utility.WPF.Trees.Connectors
                         //Ex.Add(item, pos);
                         return;
                     }
-
-
                 }
                 hitObject = VisualTreeHelper.GetParent(hitObject);
             }

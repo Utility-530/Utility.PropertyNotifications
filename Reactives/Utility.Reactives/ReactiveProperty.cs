@@ -29,7 +29,6 @@ namespace Utility.Reactives
             this.onCompleted = onCompleted;
         }
 
-
         public ReactiveProperty(object value, IEqualityComparer<object> equalityComparer = default) : this(equalityComparer)
         {
             Value = value;
@@ -71,6 +70,7 @@ namespace Utility.Reactives
         }
 
         #region propertyChanged
+
         /// <inheritdoc />
         /// <summary>
         ///     The event on property changed
@@ -88,7 +88,6 @@ namespace Utility.Reactives
         }
 
         #endregion propertyChanged
-
     }
 
     public class ReactiveProperty<T> : INotifyPropertyChanged, IObservable<T>, IObserver<T>, IValue<T>, ISetValue<T>
@@ -144,6 +143,7 @@ namespace Utility.Reactives
         }
 
         #region propertyChanged
+
         /// <inheritdoc />
         /// <summary>
         ///     The event on property changed
@@ -161,7 +161,6 @@ namespace Utility.Reactives
         }
 
         #endregion propertyChanged
-
     }
 
     public class ReactiveEquatableProperty<T> : IObservable<T> where T : IEquatable<T>
@@ -185,5 +184,4 @@ namespace Utility.Reactives
             return subject.Subscribe(observer);
         }
     }
-
 }

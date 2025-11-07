@@ -15,9 +15,10 @@ internal static class Types
     public static readonly Type Exception = typeof(Exception);
 
     public static bool IsStatic(this Type type) => type.IsAbstract && type.IsSealed;
-    public static bool IsAttribute(this Type type) => Attribute.IsAssignableFrom(type);
-    public static bool IsException(this Type type) => Exception.IsAssignableFrom(type);
 
+    public static bool IsAttribute(this Type type) => Attribute.IsAssignableFrom(type);
+
+    public static bool IsException(this Type type) => Exception.IsAssignableFrom(type);
 
     public static readonly Lazy<Type[]> Defaults = new(() => Array.Empty<Type>()
         .Concat(typeof(int).Assembly.GetTypes().Where(x => typeof(IComparable).IsAssignableFrom(x)))
@@ -26,7 +27,7 @@ internal static class Types
         .Where(x => !x.IsAttribute())
         .Where(x => !x.IsException())
         .Concat(new[] {
-            typeof(object), typeof(Stream), 
+            typeof(object), typeof(Stream),
             typeof(Task), typeof(Task<>), typeof(CancellationToken?)
         }).ToArray());
 }

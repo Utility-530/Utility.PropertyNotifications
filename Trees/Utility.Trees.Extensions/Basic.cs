@@ -1,16 +1,16 @@
 ﻿namespace Utility.Trees.Extensions
 {
     using System;
+    using System.Collections.Specialized;
     using System.Reactive.Disposables;
     using System.Reactive.Linq;
     using Utility.Changes;
-    using Utility.Trees;
-    using Utility.Trees.Abstractions;
-    using Utility.Reactives;
-    using Type = Changes.Type;
-    using System.Collections.Specialized;
     using Utility.Interfaces.Generic;
     using Utility.Interfaces.NonGeneric;
+    using Utility.Reactives;
+    using Utility.Trees;
+    using Utility.Trees.Abstractions;
+    using Type = Changes.Type;
 
     public static partial class Basic
     {
@@ -74,7 +74,7 @@
         {
             return new Tree(data, items);
         }
- 
+
         public static void VisitAncestors(this IReadOnlyTree tree, Action<IReadOnlyTree> action)
         {
             action(tree);
@@ -92,7 +92,7 @@
                     t.VisitDescendants(action);
             }
         }
-    
+
         public static IObservable<Change<IReadOnlyTree>> Changes(this ITree tree)
         {
             return Observable.Create<Change<IReadOnlyTree>>(observer =>
@@ -100,7 +100,6 @@
                 CompositeDisposable disposables = new();
                 tree.CollectionChanged += (sender, args) =>
                 {
-
                     if (args.Action == NotifyCollectionChangedAction.Add && args.NewItems != null)
                     {
                         foreach (IReadOnlyTree item in args.NewItems.Cast<IReadOnlyTree>())
@@ -121,7 +120,6 @@
                         }
                     }
                     //base.ItemsOnCollectionChanged(sender, args);
-
                 };
                 return disposables;
             });
@@ -155,12 +153,9 @@
             return clone;
         }
 
-    
         public static bool IsRoot(this ITree tree)
         {
             return tree.Index.IsEmpty;
         }
-
-    
     }
 }

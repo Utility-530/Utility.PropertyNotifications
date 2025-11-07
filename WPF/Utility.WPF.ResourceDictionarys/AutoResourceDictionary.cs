@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Windows;
 using Utility.Helpers;
 
 namespace Utility.WPF.ResourceDictionarys
@@ -35,7 +32,7 @@ namespace Utility.WPF.ResourceDictionarys
 
         private static bool predicate(System.Collections.DictionaryEntry a, string[] exclusions)
         {
-            if (exclusions is { } ex &&  a.Key is string key)
+            if (exclusions is { } ex && a.Key is string key)
                 return StringHelper.Contains(ex, key, StringComparison.InvariantCultureIgnoreCase);
             return false;
         }
@@ -46,11 +43,9 @@ namespace Utility.WPF.ResourceDictionarys
 //{
 //    try
 //    {
-
 //        MergedDictionaries.Add(new ResourceDictionary { Source = new Uri(item, UriKind.Relative) });
 //    }
 //    catch(IOException ex) when (ex.Message.Contains("Cannot locate resource"))
 //    {
-
 //    }
 //}

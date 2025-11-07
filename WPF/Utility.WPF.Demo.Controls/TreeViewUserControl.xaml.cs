@@ -1,10 +1,10 @@
-﻿using DynamicData;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Windows.Controls;
+using DynamicData;
 using Utility.WPF.Demo.Data.Model;
 
 namespace Utility.WPF.Demo.Controls

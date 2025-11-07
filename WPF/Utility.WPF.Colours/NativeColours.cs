@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 
 namespace Utility.WPF.Colours
 {
- 
-
-
     public class NiceNativeColours
     {
         public static class Light
@@ -43,10 +34,10 @@ namespace Utility.WPF.Colours
 
         public static class Regular
         {
-
         }
-//        AliceBlue
-//Gets the system-defined color that has an ARGB value of #FFF0F8FF.
+
+        //        AliceBlue
+        //Gets the system-defined color that has an ARGB value of #FFF0F8FF.
 
         //AntiqueWhite
         //Gets the system-defined color that has an ARGB value of #FFFAEBD7.

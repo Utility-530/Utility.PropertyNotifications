@@ -1,9 +1,7 @@
 ﻿<Application x:Class="Utility.WPF.Demo.SplitButtons.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Utility.WPF.Demo.SplitButtons"
-             >
+             xmlns:local="clr-namespace:Utility.WPF.Demo.SplitButtons">
     <Application.Resources>
-         
     </Application.Resources>
 </Application>

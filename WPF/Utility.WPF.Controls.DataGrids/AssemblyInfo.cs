@@ -10,4 +10,4 @@ using System.Windows.Markup;
                                               // app, or any theme specific resource dictionaries)
 )]
 [assembly: XmlnsPrefix("http://schemas.utility.com/datagrids", "dgrids")]
-[assembly: XmlnsDefinition("http://schemas.utility.com/datagrids", "Utility.WPF.Controls.DataGrids")] 
+[assembly: XmlnsDefinition("http://schemas.utility.com/datagrids", "Utility.WPF.Controls.DataGrids")]

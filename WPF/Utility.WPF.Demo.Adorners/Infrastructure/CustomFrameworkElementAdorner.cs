@@ -1,14 +1,10 @@
-﻿using HandyControl.Controls;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Utility.WPF.Adorners;
 
 namespace Utility.WPF.Demo.Adorners.Infrastructure
 {
-
     public class CustomFrameworkElementAdorner : FrameworkElementAdorner
     {
         public CustomFrameworkElementAdorner(FrameworkElement adornedElement) : base(adornedElement)
@@ -43,5 +39,4 @@ namespace Utility.WPF.Demo.Adorners.Infrastructure
             }
         }
     }
-
 }

@@ -16,12 +16,12 @@
         <TextBox x:Name="IntegerIntegerUpDown" Text="10" FontSize="30" Margin="20"></TextBox>
 
         <TextBlock FontSize="30" Margin="20"
-                    Text="{Binding ElementName=IntegerIntegerUpDown, UpdateSourceTrigger=PropertyChanged,   
+                    Text="{Binding ElementName=IntegerIntegerUpDown, UpdateSourceTrigger=PropertyChanged,
             Path=Text, Converter={x:Static converters:StringToIntConverter.Instance}}"
                    ></TextBlock>
         <anim:FlipControl Margin="20"
             Integer="{Binding ElementName=IntegerIntegerUpDown, UpdateSourceTrigger=PropertyChanged,
-            
+
             Path=Text, Converter={x:Static converters:StringToIntConverter.Instance}}" />
 
         <anim:FlipControl Style="{StaticResource FadeFlipControl}" Margin="20"

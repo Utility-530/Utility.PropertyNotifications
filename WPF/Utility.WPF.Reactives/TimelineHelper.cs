@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ using System.Windows.Media.Animation;
 namespace Utility.WPF.Reactives
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static class TimelineHelper
     {
@@ -24,6 +23,5 @@ namespace Utility.WPF.Reactives
         {
             return Completions(animation).Take(1).ToTask();
         }
-
     }
 }

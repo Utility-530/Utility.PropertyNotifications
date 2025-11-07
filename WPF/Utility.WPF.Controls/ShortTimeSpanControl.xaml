@@ -3,28 +3,28 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:btl="clr-namespace:Utility.WPF.Controls"
     xmlns:res="http://schemas.utility.com/resourcedictionary"
+    xmlns:btl="clr-namespace:Utility.WPF.Controls"
     xmlns:btl1="clr-namespace:Utility.WPF.Controls"
     mc:Ignorable="d">
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls;component/SpinnerControl.xaml"></res:SharedResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
-    
+
     <Style TargetType="{x:Type btl:ShortTimeSpanControl}">
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type btl:ShortTimeSpanControl}">
-                    <Grid >
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>                        
+                            <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <btl1:SpinnerControl
                              Grid.Column="0"

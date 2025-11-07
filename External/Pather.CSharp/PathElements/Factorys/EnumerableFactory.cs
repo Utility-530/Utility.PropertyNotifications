@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace Pather.CSharp.PathElements
 {
@@ -22,5 +18,5 @@ namespace Pather.CSharp.PathElements
         {
             return Regex.IsMatch(path, @"^\[\d+\]");
         }
-    }   
+    }
 }

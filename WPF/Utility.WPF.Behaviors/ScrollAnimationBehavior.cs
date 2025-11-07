@@ -1,10 +1,10 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Windows.Controls;
-using System.Windows.Media.Animation;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
+using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Behaviors
 {
@@ -29,7 +29,6 @@ namespace Utility.WPF.Behaviors
             base.OnAttached();
         }
 
-
         protected override void OnDetaching()
         {
             this.AssociatedObject.ScrollChanged -= AssociatedObjectOnScrollChanged;
@@ -41,7 +40,6 @@ namespace Utility.WPF.Behaviors
         {
             mouseDown = false;
         }
-
 
         private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -56,7 +54,6 @@ namespace Utility.WPF.Behaviors
 
         private static void ScrollViewer_ScrollChanged(ScrollViewer scrollViewer, double itemMaxHeight, ScrollChangedEventArgs e)
         {
-
             const double MIN_SCALE = 0.0;
             const double MAX_SCALE = Math.PI;
             var viewHeight = scrollViewer.ActualHeight;
@@ -112,7 +109,6 @@ namespace Utility.WPF.Behaviors
                     default:
                         throw new Exception("G  S$GBGdgflkfdg fdgdf");
                 }
-
 
                 static bool IsItemVisible(FrameworkElement child, FrameworkElement parent)
                 {

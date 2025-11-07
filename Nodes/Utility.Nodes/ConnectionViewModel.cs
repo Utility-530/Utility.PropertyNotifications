@@ -1,10 +1,6 @@
-﻿using System;
-using Utility.Helpers.Generic;
+﻿using Utility.Helpers.Generic;
 using Utility.Interfaces.Exs.Diagrams;
-using Utility.Interfaces.Generic.Data;
-using Utility.Interfaces.NonGeneric.Data;
 using Utility.Nodify.Base;
-using Utility.PropertyNotifications;
 
 namespace Utility.Nodes
 {

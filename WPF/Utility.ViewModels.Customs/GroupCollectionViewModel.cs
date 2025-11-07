@@ -1,6 +1,4 @@
-﻿using DynamicData;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,8 +7,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Utility.Common.Contract;
-using Utility.Common.Models;
+using DynamicData;
+using ReactiveUI;
 using Utility.Helpers.Ex;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;

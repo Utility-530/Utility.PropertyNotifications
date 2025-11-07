@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace Utility.Common
 {
     public static class ReflectionHelper
     {
-
         public static IEnumerable<Assembly> LoadedUtilitySolutionAssemblies()
         {
             return Store.LoadedSolutionAssemblies(a => a.Name?.StartsWith(Meta.Constants.GeneralAssemblyName) ?? false);

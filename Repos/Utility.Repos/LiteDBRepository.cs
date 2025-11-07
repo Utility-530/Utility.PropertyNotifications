@@ -1,6 +1,4 @@
 ﻿using LiteDB;
-using System;
-using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 
 namespace Utility.Repos
@@ -16,6 +14,7 @@ namespace Utility.Repos
         Task Update(object value);
 
         Task Remove(object value);
+
         Task<object[]> FindBy(string name, string value);
 
         Task<object[]> All();
@@ -27,7 +26,6 @@ namespace Utility.Repos
         private readonly DatabaseSettings settings;
 
         public IEquatable Key => new Key<LiteDBRepository>(Guids.LiteDB);
-
 
         public LiteDBRepository(DatabaseSettings settings)
         {
@@ -84,10 +82,8 @@ namespace Utility.Repos
             }
         }
 
-
         public Task<object?[]> FindValue(object equatable)
         {
-
             var array = Objects().Select(item => _mapper.Deserialize(settings.Type, item)).ToArray();
             return Task.FromResult((object?[])array);
 
@@ -95,7 +91,6 @@ namespace Utility.Repos
             {
                 using (GetCollection(out var collection))
                 {
-
                     foreach (var findByType in collection.Find(a => a["_id"].Equals(equatable)))
                         yield return findByType;
                 }

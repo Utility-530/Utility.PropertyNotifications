@@ -12,7 +12,7 @@ namespace Hardcodet.Wpf.DataBinding
     /// <summary>
     /// A base class for custom markup extension which provides properties
     /// that can be found on regular <see cref="Binding"/> markup extension.<br/>
-    /// See: http://www.hardcodet.net/2008/04/wpf-custom-binding-class 
+    /// See: http://www.hardcodet.net/2008/04/wpf-custom-binding-class
     /// </summary>
     [MarkupExtensionReturnType(typeof(object))]
     public abstract class BindingDecoratorBase : MarkupExtension
@@ -21,7 +21,6 @@ namespace Hardcodet.Wpf.DataBinding
         /// The decorated binding class.
         /// </summary>
         private Binding binding = new();
-
 
         //check documentation of the Binding class for property information
 
@@ -36,7 +35,6 @@ namespace Hardcodet.Wpf.DataBinding
             get { return binding; }
             set { binding = value; }
         }
-
 
         [DefaultValue(null)]
         public object AsyncState
@@ -205,11 +203,7 @@ namespace Hardcodet.Wpf.DataBinding
             set { binding.BindingGroupName = value; }
         }
 
-
-
-        #endregion
-
-
+        #endregion properties
 
         /// <summary>
         /// This basic implementation just sets a binding on the targeted
@@ -219,7 +213,7 @@ namespace Hardcodet.Wpf.DataBinding
         /// instance.
         /// </summary>
         /// <returns>
-        /// The object value to set on the property where the extension is applied. 
+        /// The object value to set on the property where the extension is applied.
         /// In case of a valid binding expression, this is a <see cref="BindingExpressionBase"/>
         /// instance.
         /// </returns>
@@ -230,8 +224,6 @@ namespace Hardcodet.Wpf.DataBinding
             //create a binding and associate it with the target
             return binding.ProvideValue(provider);
         }
-
-
 
         /// <summary>
         /// Validates a service provider that was submitted to the <see cref="ProvideValue"/>
@@ -261,6 +253,5 @@ namespace Hardcodet.Wpf.DataBinding
             dp = service.TargetProperty as DependencyProperty;
             return target != null && dp != null;
         }
-
     }
 }

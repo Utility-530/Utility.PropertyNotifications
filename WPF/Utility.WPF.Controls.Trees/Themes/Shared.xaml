@@ -15,7 +15,6 @@
 
     <SineEase x:Key="Ease" EasingMode="EaseInOut" />
 
-
     <Style x:Key="ExpandCollapseToggleStyle" TargetType="ToggleButton">
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Template">
@@ -68,9 +67,6 @@
         </Setter>
     </Style>
 
-
-
-
     <Style x:Key="TreeViewItemFocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -88,7 +84,6 @@
         </Setter>
     </Style>
 
-
     <LinearGradientBrush x:Key="ProgressBarIndicatorAnimatedFill" StartPoint="0,0" EndPoint="1,0">
         <LinearGradientBrush.GradientStops>
             <GradientStopCollection>
@@ -99,8 +94,6 @@
             </GradientStopCollection>
         </LinearGradientBrush.GradientStops>
     </LinearGradientBrush>
-
-
 
     <!--  Control colors.  -->
     <Color x:Key="WindowColor">#FFE8EDF9</Color>
@@ -120,7 +113,6 @@
 
     <Color x:Key="ControlMouseOverColor">#FF3843C4</Color>
     <Color x:Key="ControlPressedColor">#FF211AA9</Color>
-
 
     <Color x:Key="GlyphColor">#FF444444</Color>
     <Color x:Key="GlyphMouseOver">sc#1, 0.004391443, 0.002428215, 0.242281124</Color>
@@ -150,7 +142,6 @@
         <GradientStop Offset="0.5" Color="{DynamicResource ControlMediumColor}" />
         <GradientStop Offset="1" Color="{DynamicResource ControlLightColor}" />
     </LinearGradientBrush>
-
 
     <Style x:Key="CustomStyle" TargetType="TreeView">
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -183,5 +174,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-
 </ResourceDictionary>

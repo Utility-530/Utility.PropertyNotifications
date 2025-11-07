@@ -40,7 +40,6 @@ namespace Utility.Nodes.WPF
                 if (style == null)
                     style = res[Predicate.Backput] as Style;
 
-
                 return style;
             }
 

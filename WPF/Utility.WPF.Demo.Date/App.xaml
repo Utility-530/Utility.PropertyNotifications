@@ -14,23 +14,24 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-
-            <conv:AbbreviationConverter x:Key="AbbreviationConverter" MaxLength="10"/>
+            <conv:AbbreviationConverter x:Key="AbbreviationConverter" MaxLength="10" />
 
             <!--<DataTemplate DataType="{x:Type model:NoteViewModel}">
-                <TextBlock Text="{Binding Text, 
-                    Converter={StaticResource AbridgeConverter}}"  />
-                --><!--<TextBlock Text="{Binding Text}"></TextBlock>--><!--
+                <TextBlock Text="{Binding Text,
+                    Converter={StaticResource AbridgeConverter}}" />
+                -->
+            <!--<TextBlock Text="{Binding Text}"></TextBlock>-->
+            <!--
             </DataTemplate>-->
 
             <DataTemplate DataType="{x:Type model:NoteViewModel}">
-                <TextBlock Text="{Binding Text, 
-                    Converter={StaticResource AbbreviationConverter}}"  />
+                <TextBlock Text="{Binding Text,
+                    Converter={StaticResource AbbreviationConverter}}" />
                 <!--<TextBlock Text="{Binding Text}"></TextBlock>-->
             </DataTemplate>
             <DataTemplate DataType="{x:Type entity:NoteEntity}">
-                <TextBlock Text="{Binding Text, 
-                    Converter={StaticResource AbbreviationConverter}}"  />
+                <TextBlock Text="{Binding Text,
+                    Converter={StaticResource AbbreviationConverter}}" />
                 <!--<TextBlock Text="{Binding Text}"></TextBlock>-->
             </DataTemplate>
         </ResourceDictionary>

@@ -1,8 +1,7 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Behaviors
 {
@@ -53,6 +52,6 @@ namespace Utility.WPF.Behaviors
 
         private void OnTreeViewSelectedItemChanged(object sender,
             RoutedPropertyChangedEventArgs<object> e) =>
-          SelectedItem = AssociatedObject.ItemsSource.Cast<object>().FirstOrDefault(a => a==e.NewValue || a.Equals(e.NewValue));
+          SelectedItem = AssociatedObject.ItemsSource.Cast<object>().FirstOrDefault(a => a == e.NewValue || a.Equals(e.NewValue));
     }
 }

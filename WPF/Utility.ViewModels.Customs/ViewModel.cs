@@ -1,6 +1,4 @@
-﻿using DynamicData;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,10 +7,10 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
-using Utility.Common.Contract;
+using DynamicData;
+using ReactiveUI;
 using Utility.Common.Models;
 using Utility.Helpers;
-using Utility.Helpers.Ex;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.PropertyNotifications;
@@ -100,8 +98,6 @@ namespace Utility.ViewModels
                 return childCollection;
             }
         }
-
-
 
         public ViewModel? SelectedChild
         {
@@ -264,9 +260,6 @@ namespace Utility.ViewModels
                 .Subscribe(observer);
         }
 
-
-
-
         #region dispose
 
         // Implement IDisposable.
@@ -285,5 +278,4 @@ namespace Utility.ViewModels
 
         #endregion dispose
     }
-
 }

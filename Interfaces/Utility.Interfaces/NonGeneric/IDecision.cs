@@ -4,5 +4,4 @@
     {
         bool Evaluate(object? input);
     }
-
 }

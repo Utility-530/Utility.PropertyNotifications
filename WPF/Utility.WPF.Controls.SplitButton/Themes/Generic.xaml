@@ -1,11 +1,9 @@
-﻿<ResourceDictionary  xmlns:res="http://schemas.utility.com/resourcedictionary"
-                             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                             xmlns:local="clr-namespace:Utility.WPF.Controls.SplitButtons"
-                             >
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:res="http://schemas.utility.com/resourcedictionary">
     <!-- use standard resourcedictionary to avoid issue with TreeListView.xaml -->
     <ResourceDictionary.MergedDictionaries>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.SplitButtons;component/PopupButton.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.SplitButtons;component/SplitButton.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.SplitButtons;component/PopupButton.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.SplitButtons;component/SplitButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

@@ -16,25 +16,24 @@ namespace Utility.WPF.Controls.Buttons
         public static readonly DependencyProperty PressedBackgroundBrushProperty = DependencyProperty.Register("PressedBackground", typeof(Brush), typeof(GeometryButton), new PropertyMetadata(Brushes.Silver));
         public static readonly DependencyProperty FillProperty = DependencyProperty.Register("Fill", typeof(Brush), typeof(GeometryButton), new PropertyMetadata(Brushes.Transparent));
         public static readonly DependencyProperty StrokeThicknessProperty = Shape.StrokeThicknessProperty.AddOwner(typeof(GeometryButton), new PropertyMetadata(12.0));
-        public static readonly DependencyProperty HoverForegroundBrushProperty =      DependencyProperty.Register("HoverForegroundBrush", typeof(Brush), typeof(GeometryButton), new PropertyMetadata(Brushes.Green));
-
-
+        public static readonly DependencyProperty HoverForegroundBrushProperty = DependencyProperty.Register("HoverForegroundBrush", typeof(Brush), typeof(GeometryButton), new PropertyMetadata(Brushes.Green));
 
         static GeometryButton()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(GeometryButton), new FrameworkPropertyMetadata(typeof(GeometryButton)));
             BackgroundProperty.OverrideMetadata(typeof(GeometryButton), new FrameworkPropertyMetadata(Brushes.Transparent));
-
         }
 
         public GeometryButton()
-        { 
+        {
         }
-         public override void OnApplyTemplate()
+
+        public override void OnApplyTemplate()
         {
             Data ??= Geometry.Parse(InitialData) ?? new EllipseGeometry(new Rect(new Size(30, 30)));
             base.OnApplyTemplate();
         }
+
         #region properties
 
         public Geometry Data
@@ -48,6 +47,7 @@ namespace Utility.WPF.Controls.Buttons
             get => (Brush)GetValue(HoverBackgroundBrushProperty);
             set => SetValue(HoverBackgroundBrushProperty, value);
         }
+
         public Brush HoverForegroundBrush
         {
             get { return (Brush)GetValue(HoverForegroundBrushProperty); }
@@ -78,13 +78,11 @@ namespace Utility.WPF.Controls.Buttons
             set { SetValue(FillProperty, value); }
         }
 
-
         public double StrokeThickness
         {
             get => (double)GetValue(StrokeThicknessProperty);
             set => SetValue(StrokeThicknessProperty, value);
         }
-
 
         #endregion properties
     }
@@ -95,7 +93,7 @@ namespace Utility.WPF.Controls.Buttons
 
         public static readonly DependencyProperty DataProperty = DependencyProperty.Register("Data", typeof(Geometry), typeof(GeometryToggleButton), new PropertyMetadata());
         public static readonly DependencyProperty HoverBackgroundBrushProperty = DependencyProperty.Register("HoverBackgroundBrush", typeof(Brush), typeof(GeometryToggleButton), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(255, 255, 139, 0))));
-        public static readonly DependencyProperty CheckedBackgroundBrushProperty =  DependencyProperty.Register("CheckedBackgroundBrush", typeof(Brush), typeof(GeometryToggleButton), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(55, 55, 139, 0))));
+        public static readonly DependencyProperty CheckedBackgroundBrushProperty = DependencyProperty.Register("CheckedBackgroundBrush", typeof(Brush), typeof(GeometryToggleButton), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(55, 55, 139, 0))));
         public static readonly DependencyProperty StrokeThicknessProperty = Shape.StrokeThicknessProperty.AddOwner(typeof(GeometryToggleButton), new PropertyMetadata(4.0));
         public static readonly DependencyProperty FillProperty = Shape.FillProperty.AddOwner(typeof(GeometryToggleButton), new PropertyMetadata(Brushes.Transparent));
         public static readonly DependencyProperty PressedForegroundBrushProperty = DependencyProperty.Register("PressedForegroundBrush", typeof(Brush), typeof(GeometryToggleButton), new PropertyMetadata(Brushes.Red));
@@ -126,6 +124,7 @@ namespace Utility.WPF.Controls.Buttons
             get => (Geometry)GetValue(DataProperty);
             set => SetValue(DataProperty, value);
         }
+
         public Brush HoverBackgroundBrush
         {
             get { return (Brush)GetValue(HoverBackgroundBrushProperty); }
@@ -136,7 +135,7 @@ namespace Utility.WPF.Controls.Buttons
         {
             get { return (Brush)GetValue(HoverForegroundBrushProperty); }
             set { SetValue(HoverForegroundBrushProperty, value); }
-        }    
+        }
 
         public Brush CheckedBackgroundBrush
         {

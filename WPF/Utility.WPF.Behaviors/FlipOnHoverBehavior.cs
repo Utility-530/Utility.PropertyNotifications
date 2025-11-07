@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows;
 using System.Windows.Media;
-using System.Windows;
 using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Behaviors
@@ -26,12 +21,12 @@ namespace Utility.WPF.Behaviors
             base.OnAttached();
         }
 
-        void AssociatedObject_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        private void AssociatedObject_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             ((ScaleTransform)((TransformGroup)AssociatedObject.RenderTransform).Children[1]).ScaleY = 1;
         }
 
-        void AssociatedObject_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        private void AssociatedObject_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             ((ScaleTransform)((TransformGroup)AssociatedObject.RenderTransform).Children[1]).CenterX = AssociatedObject.ActualWidth / 2;
             ((ScaleTransform)((TransformGroup)AssociatedObject.RenderTransform).Children[1]).CenterY = AssociatedObject.ActualHeight / 2;

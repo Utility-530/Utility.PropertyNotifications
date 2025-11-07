@@ -10,4 +10,4 @@ using System.Windows.Markup;
                                               // app, or any theme specific resource dictionaries)
 )]
 [assembly: XmlnsPrefix("http://schemas.utility.com/meta", "meta")]
-[assembly: XmlnsDefinition("http://schemas.utility.com/meta", "Utility.WPF.Controls.Meta")] 
+[assembly: XmlnsDefinition("http://schemas.utility.com/meta", "Utility.WPF.Controls.Meta")]

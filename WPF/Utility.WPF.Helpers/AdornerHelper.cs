@@ -35,6 +35,7 @@ namespace Utility.WPF.Helpers
                 }
             }
         }
+
         public static void Clear<T>(this AdornerLayer adornedLayer, UIElement? adornedElement = null) where T : Adorner
         {
             Adorner[]? toRemoveArray = adornedElement != null ? adornedLayer.GetAdorners(adornedElement) : adornedLayer.Children<Adorner>().ToArray();
@@ -47,6 +48,5 @@ namespace Utility.WPF.Helpers
                 }
             }
         }
-
     }
 }

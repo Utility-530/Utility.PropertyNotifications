@@ -1,9 +1,9 @@
-﻿using Fasterflect;
-using System.Collections;
+﻿using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using Fasterflect;
 using Utility.Commands;
 using Utility.Interfaces.NonGeneric;
 using Utility.WPF.Helpers;
@@ -14,16 +14,22 @@ namespace Utility.WPF.Controls.Trees
     {
         public static readonly DependencyProperty CheckedCommandProperty =
             DependencyProperty.Register("CheckedCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
+
         public static readonly DependencyProperty SwapCommandProperty =
             DependencyProperty.Register("SwapCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
+
         public static readonly DependencyProperty UnCheckedCommandProperty =
             DependencyProperty.Register("UnCheckedCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
+
         public static readonly DependencyProperty CheckedPropertyNameProperty =
             DependencyProperty.Register("CheckedPropertyName", typeof(string), typeof(CustomTreeViewItem), new PropertyMetadata("IsChecked", isCheckedChanged));
+
         public static readonly DependencyProperty FinishEditCommandProperty =
             DependencyProperty.Register("FinishEditCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
+
         public static readonly DependencyProperty EditConverterProperty =
             DependencyProperty.Register("EditConverter", typeof(IValueConverter), typeof(CustomTreeViewItem), new PropertyMetadata(new EditConverter()));
+
         public static readonly DependencyProperty MaxHeightOfEditBoxProperty =
             DependencyProperty.Register("MaxHeightOfEditBox", typeof(double), typeof(CustomTreeViewItem), new PropertyMetadata(300.0));
 
@@ -47,13 +53,11 @@ namespace Utility.WPF.Controls.Trees
                         var dragged = collection[fromS];
                         collection[to] = dragged;
                         collection[fromS] = elementSource;
-
                     }
                 });
 
             RemoveCommand ??= new Command<object>((a) =>
             {
-
                 int i = 0;
                 if (this.ItemsSource is IList collection)
                     foreach (var item in collection)
@@ -69,10 +73,8 @@ namespace Utility.WPF.Controls.Trees
 
             CheckedCommand ??= new Command<object>((a) =>
             {
-
                 if (string.IsNullOrEmpty(CheckedPropertyName) == false)
                     a.TrySetPropertyValue(CheckedPropertyName, true);
-
             });
 
             UnCheckedCommand ??= new Command<object>((a) =>
@@ -86,7 +88,6 @@ namespace Utility.WPF.Controls.Trees
         {
             if (item is IGetIsSelected { IsSelected: true })
             {
-
             }
             else if (element is ListBoxItem lbi)
             {
@@ -95,12 +96,10 @@ namespace Utility.WPF.Controls.Trees
             void Lbi_Loaded(object sender, RoutedEventArgs e)
             {
                 BindingOperations.SetBinding(element.FindChild<CheckBox>(), CheckBox.IsCheckedProperty, new Binding { Source = item, Path = new PropertyPath(CheckedPropertyName) });
-
             }
 
             base.PrepareContainerForItemOverride(element, item);
         }
-
 
         #region properties
 
@@ -128,7 +127,6 @@ namespace Utility.WPF.Controls.Trees
             set { SetValue(UnCheckedCommandProperty, value); }
         }
 
-
         public ICommand SwapCommand
         {
             get { return (ICommand)GetValue(SwapCommandProperty); }
@@ -148,6 +146,5 @@ namespace Utility.WPF.Controls.Trees
         }
 
         #endregion properties
-
     }
 }

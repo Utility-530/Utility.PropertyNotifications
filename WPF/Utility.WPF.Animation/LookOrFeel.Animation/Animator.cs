@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Media.Animation;
 using System.Windows;
-using System.Windows.Threading;
-using System.Diagnostics;
+using System.Windows.Media.Animation;
 
 namespace LookOrFeel.Animation
 {
@@ -61,7 +57,7 @@ namespace LookOrFeel.Animation
             return Animate(element, prop, anim, durationMS, null, null, callbackFunc);
         }
 
-        #endregion
+        #endregion PennerDoubleAnimation Helpers
 
         #region DoubleAnimation Helpers
 
@@ -98,7 +94,7 @@ namespace LookOrFeel.Animation
             return Animate(element, prop, anim, durationMS, null, null, callbackFunc);
         }
 
-        #endregion
+        #endregion DoubleAnimation Helpers
 
         /// <summary>
         /// Method to configure and start an animation.
@@ -120,7 +116,7 @@ namespace LookOrFeel.Animation
 
             AnimationClock animClock = anim.CreateClock();
 
-            // When animation is complete, remove animation and set the animation's "To" 
+            // When animation is complete, remove animation and set the animation's "To"
             // value as the new value of the property.
             EventHandler eh = null;
             eh = delegate (object sender, EventArgs e)

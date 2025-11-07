@@ -1,5 +1,5 @@
-﻿using Splat;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using Splat;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Collections

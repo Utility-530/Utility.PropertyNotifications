@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows;
 using Utility.Enums;
 
 namespace Utility.WPF.Controls.Base
@@ -14,7 +9,6 @@ namespace Utility.WPF.Controls.Base
         public static readonly DependencyProperty MovementProperty =
             DependencyProperty.Register("Movement", typeof(XYMovement), typeof(SplitItemsControl), new PropertyMetadata(XYTraversal.LeftToRight));
 
-
         static SplitItemsControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(SplitItemsControl), new FrameworkPropertyMetadata(typeof(SplitItemsControl)));
@@ -22,11 +16,9 @@ namespace Utility.WPF.Controls.Base
 
         public SplitItemsControl()
         {
-
         }
 
         #region properties
-
 
         public XYMovement Movement
         {
@@ -35,7 +27,5 @@ namespace Utility.WPF.Controls.Base
         }
 
         #endregion properties
-
-
     }
 }

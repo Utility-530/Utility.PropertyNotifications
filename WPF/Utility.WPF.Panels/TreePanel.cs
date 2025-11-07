@@ -1,28 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using TreeCollections;
 using Utility.Interfaces.NonGeneric;
-using Utility.Interfaces.Trees;
 using Utility.Trees.Abstractions;
 using IIndex = Utility.Interfaces.Trees.IIndex;
 using Size = System.Windows.Size;
 
 namespace Utility.WPF.Panels
 {
-
     public class TreeNode : ITreeIndex, IComparable
     {
         public TreeNode(IIndex index)
         {
             Index = index;
         }
+
         public IIndex Index { get; }
         public UIElement Element { get; set; }
         public List<TreeNode> Children { get; set; } = [];
@@ -35,7 +30,6 @@ namespace Utility.WPF.Panels
             throw new Exception("224ik e3s");
         }
     }
-
 
     // Custom Panel that arranges items in a hierarchical tree structure
     public class TreePanel : Panel
@@ -70,7 +64,6 @@ namespace Utility.WPF.Panels
                 panel.InvalidateArrange();
             }
         }
-
 
         protected override Size MeasureOverride(Size availableSize)
         {
@@ -150,7 +143,6 @@ namespace Utility.WPF.Panels
             }
             throw new Exception($"Element of type {element.GetType()} does not implement ITreeIndex or have a valid DataContext with ITreeIndex or KeyPropertyName '{KeyPropertyName}'.");
         }
-
 
         public static TreeNode FindParentNode(List<TreeNode> allNodes, IReadOnlyList<int> childPath)
         {

@@ -1,5 +1,4 @@
-﻿
-// Look in UtilityDAL
+﻿// Look in UtilityDAL
 
 //using System;
 //using System.Collections.Generic;

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows.Data;
 using Utility.Enums;
 using Utility.Interfaces;
@@ -12,7 +11,6 @@ using O = System.Windows.Controls.Orientation;
 
 namespace Utility.Nodes.WPF
 {
-
     public class ItemsPanelConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -27,9 +25,9 @@ namespace Utility.Nodes.WPF
             //}
             if (value is IReferenceDescriptor { Count: int _count } && value is IGetParent<IReadOnlyTree> { Parent: ICollectionDescriptor { } })
             {
-                return ItemsPanelFactory.Template([new Dimension()] , Enumerable.Repeat(new Dimension(), Math.Max(_count, 1)).ToArray(), O.Horizontal, Arrangement.Uniform);
+                return ItemsPanelFactory.Template([new Dimension()], Enumerable.Repeat(new Dimension(), Math.Max(_count, 1)).ToArray(), O.Horizontal, Arrangement.Uniform);
             }
-            if (value is ICollectionHeadersDescriptor { Count: var __count } )
+            if (value is ICollectionHeadersDescriptor { Count: var __count })
             {
                 return ItemsPanelFactory.Template([new Dimension()], Enumerable.Repeat(new Dimension(), Math.Max(__count, 1)).ToArray(), O.Horizontal, Arrangement.Uniform);
             }
@@ -55,8 +53,5 @@ namespace Utility.Nodes.WPF
         }
 
         public static ItemsPanelConverter Instance { get; } = new();
-
     }
-
-
 }

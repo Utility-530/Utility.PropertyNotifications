@@ -1,12 +1,8 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TriggerCollection = Microsoft.Xaml.Behaviors.TriggerCollection;
-using TriggerBase = Microsoft.Xaml.Behaviors.TriggerBase;
+﻿using System.Collections.Generic;
 using System.Windows;
+using Microsoft.Xaml.Behaviors;
+using TriggerBase = Microsoft.Xaml.Behaviors.TriggerBase;
+using TriggerCollection = Microsoft.Xaml.Behaviors.TriggerCollection;
 
 namespace Utility.WPF.Attached
 {
@@ -17,7 +13,6 @@ namespace Utility.WPF.Attached
     /// </summary>
     public class InteractivityTemplate : DataTemplate
     {
-
     }
 
     /// <summary>
@@ -32,8 +27,6 @@ namespace Utility.WPF.Attached
         public List<TriggerBase> Triggers => _triggers ??= [];
 
         public List<Behavior> Behaviors => _behaviors ??= [];
-
-
 
         public static InteractivityTemplate GetTemplate(DependencyObject obj)
         {
@@ -71,10 +64,7 @@ namespace Utility.WPF.Attached
             foreach (TriggerBase trigger in ih.Triggers)
                 tc.Add(trigger);
         }
-
-
     }
-
 
     public class InteractivitySetter : Setter
     {

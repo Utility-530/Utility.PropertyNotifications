@@ -59,25 +59,23 @@ namespace Utility.PropertyDescriptors
                 //Type t when t == typeof(IDictionary) => new DictionaryValue(descriptor, value),
                 Type t when t.IsValueType => new StructValue(descriptor, value),
 
-
                 Type t when t.IsDerivedFrom<object>() && tryGetValue(descriptor, value, out var _value) => new ReferenceDescriptor(descriptor, _value),
 
                 _ => new NullValue(descriptor, value),
-
             };
 
             //_descriptor.Initialise();
             return _descriptor;
         }
 
-        static bool tryGetValue(Descriptor descriptor, object instance, out object value)
+        private static bool tryGetValue(Descriptor descriptor, object instance, out object value)
         {
             try
             {
                 value = descriptor.GetValue(instance);
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 value = ex;
                 return false;

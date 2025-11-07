@@ -1,20 +1,20 @@
-﻿using LanguageExt.Pipes;
+﻿using System.Diagnostics;
+using System.Reactive;
+using System.Reactive.Subjects;
+using System.Reactive.Threading.Tasks;
+using System.Windows.Input;
+using Byter;
+using DryIoc;
+using LanguageExt.Pipes;
 using Netly;
 using Netly.Core;
-using System.Reactive.Subjects;
-using System.Reactive;
-using Byter;
-using System.Reactive.Threading.Tasks;
-using System.Diagnostics;
-using Utility.Models.UDP;
-using DryIoc;
 using Utility.Collections;
-using System.Windows.Input;
 using Utility.Commands;
+using Utility.Models.UDP;
 
 namespace Utility.Infrastructure
 {
-    class Constants
+    internal class Constants
     {
         public const string IPAddress = "127.0.0.1";
         public const int Port = 8000;
@@ -23,16 +23,20 @@ namespace Utility.Infrastructure
     public interface ILogger
     {
         Task<Unit> Send(GuidValue guidValue, IObserverIOType observer);
+
         void Send(BaseObject[] nodes);
+
         void Send(BaseObject node);
+
         Task Add(IObserverIOType node);
+
         Task Remove(IObserverIOType node);
     }
 
     public class DummyLogger : ILogger
     {
         private readonly IContainer container;
-        Queue<Subject<Unit>> _subjects = new();
+        private Queue<Subject<Unit>> _subjects = new();
 
         public DummyLogger(IContainer container)
         {
@@ -63,11 +67,9 @@ namespace Utility.Infrastructure
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-
             }
             //if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             //{
-
             //}
         }
 
@@ -96,14 +98,13 @@ namespace Utility.Infrastructure
         }
     }
 
-
-
     public class Logger : ILogger
     {
         private readonly IContainer container;
-        UdpClient client = new();
-        Dictionary<Guid, ReplaySubject<Unit>> observables = new();
-        SynchronizationContext synchronizationContext => container.Resolve<SynchronizationContext>();
+        private UdpClient client = new();
+        private Dictionary<Guid, ReplaySubject<Unit>> observables = new();
+        private SynchronizationContext synchronizationContext => container.Resolve<SynchronizationContext>();
+
         public Logger(IContainer container)
         {
             var host = new Host(Constants.IPAddress, Constants.Port);
@@ -159,12 +160,10 @@ namespace Utility.Infrastructure
                         }
                         else
                         {
-
                         }
                     }
                     else
                     {
-
                     }
                 }, default);
             });
@@ -213,6 +212,7 @@ namespace Utility.Infrastructure
             var bytes = writer.GetBytes();
             client.ToEvent(nameof(KeyDto), bytes);
         }
+
         public void Send(BaseObject node)
         {
             var dto = new KeyDto(node.Key.Guid, node.Key.Name);
@@ -234,4 +234,3 @@ namespace Utility.Infrastructure
         }
     }
 }
-

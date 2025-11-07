@@ -1,7 +1,6 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
-using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows;
+using Microsoft.Xaml.Behaviors;
+
 //using Utility.WPF.Attached;
 
 namespace Utility.WPF.Behaviors

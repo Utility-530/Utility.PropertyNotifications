@@ -10,7 +10,6 @@ namespace Utility.WPF.Demo.Date
     /// </summary>
     public partial class App : Application
     {
-
         public App()
         {
             FreeSqlFactory.InitialiseSQLite();

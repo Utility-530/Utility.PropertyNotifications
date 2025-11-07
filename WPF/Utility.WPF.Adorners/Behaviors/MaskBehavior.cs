@@ -1,9 +1,9 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using Microsoft.Xaml.Behaviors;
 using Utility.Commands;
 using Utility.WPF.Helpers;
 
@@ -21,17 +21,14 @@ namespace Utility.WPF.Adorners
             set { SetValue(TextProperty, value); }
         }
 
-
         public bool? ShowCancel
         {
             get { return (bool?)GetValue(ShowCancelProperty); }
             set { SetValue(ShowCancelProperty, value); }
         }
 
-
         public static readonly DependencyProperty ShowCancelProperty =
             DependencyProperty.Register("ShowCancel", typeof(bool?), typeof(MaskBehavior), new PropertyMetadata(false));
-
 
         public ICommand CancelCommand
         {
@@ -39,13 +36,11 @@ namespace Utility.WPF.Adorners
             set { SetValue(CancelCommandProperty, value); }
         }
 
-
         public ICommand MaskCommand
         {
             get { return (ICommand)GetValue(MaskCommandProperty); }
             set { SetValue(MaskCommandProperty, value); }
         }
-
 
         protected override void OnAttached()
         {
@@ -60,7 +55,7 @@ namespace Utility.WPF.Adorners
             }
         }
 
-        void Refresh()
+        private void Refresh()
         {
             if (this.ShowCancel == false)
                 Show_Mask();
@@ -70,7 +65,6 @@ namespace Utility.WPF.Adorners
 
         protected override void OnDetaching()
         {
-
             base.OnDetaching();
         }
 
@@ -83,7 +77,7 @@ namespace Utility.WPF.Adorners
                 Command relayCommand = new Command(() =>
                 {
                     MaskCommand?.Execute(null);
-                    ShowCancel=true;
+                    ShowCancel = true;
                     Refresh();
                 });
 
@@ -92,8 +86,6 @@ namespace Utility.WPF.Adorners
 
                 var watermarkadorner = new WatermarkAdorner(AssociatedObject, Text) { Opacity = 0 };
                 adLayer.Add(watermarkadorner);
-
-
 
                 DoubleAnimation doubleAnimation = new(1, new Duration(TimeSpan.FromSeconds(1)));
                 //doubleAnimation.Completed += fadeOutAnimation_Completed;
@@ -123,6 +115,5 @@ namespace Utility.WPF.Adorners
                 adorner.BeginAnimation(UIElement.OpacityProperty, doubleAnimation);
             }
         }
-
     }
 }

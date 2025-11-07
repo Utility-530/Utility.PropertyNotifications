@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Utility.Structs
+﻿namespace Utility.Structs
 {
     public readonly struct IntegerPoint3
     {
@@ -13,12 +9,10 @@ namespace Utility.Structs
             Z = z;
         }
 
-
         public int X { get; }
 
         public int Y { get; }
 
         public int Z { get; }
     }
-
 }

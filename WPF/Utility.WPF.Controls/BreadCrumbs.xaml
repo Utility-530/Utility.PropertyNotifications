@@ -2,8 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Utility.WPF.Controls"
                     xmlns:mvvm="http://hexinnovation.com/math"
-                    xmlns:conv="http://schemas.utility.com/converters" 
-                    xmlns:sys="clr-namespace:System;assembly=netstandard" 
+                    xmlns:conv="http://schemas.utility.com/converters"
+                    xmlns:sys="clr-namespace:System;assembly=netstandard"
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:geo="http://schemas.utility.com/geometries"
                     xmlns:res="http://schemas.utility.com/resourcedictionary">
@@ -12,10 +12,9 @@
         <res:GeometryResourceDictionary />
     </ResourceDictionary.MergedDictionaries>
 
-    <local:LastItemConverter x:Key="LastItemConverter"/>
+    <local:LastItemConverter x:Key="LastItemConverter" />
     <!--<local:MathConverter x:Key="MathConverter"></local:MathConverter>-->
     <mvvm:MathConverter x:Key="MathConverter"></mvvm:MathConverter>
-
 
     <Storyboard x:Key="Storyboard3">
         <!-- Animate the Background color to change -->
@@ -40,12 +39,8 @@
         </BooleanAnimationUsingKeyFrames>
     </Storyboard>
 
-
-
-
     <Style  TargetType="{x:Type local:BreadCrumbs}">
         <Style.Resources>
-
         </Style.Resources>
 
         <Setter Property="SnapsToDevicePixels"
@@ -66,42 +61,36 @@
                     </ControlTemplate.Resources>
                     <Grid>
 
-                        <Border x:Name="Var_Animation_0to1" Width="0.33"/>
-
-
+                        <Border x:Name="Var_Animation_0to1" Width="0.33" />
 
                         <ScrollViewer HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Disabled" Background="Transparent" FlowDirection="RightToLeft" HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
                             <FrameworkElement.Width>
                                 <MultiBinding Converter="{StaticResource MathConverter}" ConverterParameter="xy">
-                                    <Binding ElementName="Var_Animation_0to1" Path="Width"/>
-                                    <Binding ElementName="BackBorder" Path="ActualWidth"/>
+                                    <Binding ElementName="Var_Animation_0to1" Path="Width" />
+                                    <Binding ElementName="BackBorder" Path="ActualWidth" />
                                 </MultiBinding>
                             </FrameworkElement.Width>
                             <i:Interaction.Behaviors>
-                                <local:ScrollToBottomBehavior/>
+                                <local:ScrollToBottomBehavior />
                             </i:Interaction.Behaviors>
 
                             <ItemsPresenter x:Name="BackBorder" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
-
                         </ScrollViewer>
-
 
                         <ToggleButton HorizontalAlignment="Left" x:Name="Toggle">
                             <ToggleButton.Template>
                                 <ControlTemplate TargetType="ToggleButton">
-                                    <Border  >
+                                    <Border>
 
-                                        <Grid Background="{TemplateBinding Background}" >
-                                            <Path 
-                                        
-                                        x:Name="Arrow"                               
-                                        Fill="{TemplateBinding Foreground}"                                        
-                                        Margin="3,0,4,-4" 
+                                        <Grid Background="{TemplateBinding Background}">
+                                            <Path
+
+                                        x:Name="Arrow"
+                                        Fill="{TemplateBinding Foreground}"
+                                        Margin="3,0,4,-4"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
-                                        Data="{StaticResource RightChevronGeometry2}"
-                                        />
-
+                                        Data="{StaticResource RightChevronGeometry2}" />
                                         </Grid>
                                     </Border>
                                 </ControlTemplate>
@@ -115,7 +104,6 @@
                                     <Setter Property="Foreground" Value="Orange"></Setter>
                                     <Setter Property="BorderBrush" Value="Transparent"></Setter>
 
-
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
                                             <DataTrigger.EnterActions>
@@ -123,10 +111,10 @@
                                                     <Storyboard>
                                                         <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
                                                         To="LightGreen"
-                                                        Duration="0:0:0.3"/>
+                                                        Duration="0:0:0.3" />
                                                         <ColorAnimation Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
                                                         To="Black"
-                                                        Duration="0:0:0.3"/>
+                                                        Duration="0:0:0.3" />
                                                     </Storyboard>
                                                 </BeginStoryboard>
                                             </DataTrigger.EnterActions>
@@ -135,15 +123,14 @@
                                                     <Storyboard>
                                                         <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
                                                         To="White"
-                                                        Duration="0:0:0.3"/>
+                                                        Duration="0:0:0.3" />
                                                         <ColorAnimation Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
                                                         To="Orange"
-                                                        Duration="0:0:0.3"/>
+                                                        Duration="0:0:0.3" />
                                                     </Storyboard>
                                                 </BeginStoryboard>
                                             </DataTrigger.ExitActions>
                                         </DataTrigger>
-
 
                                         <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}" Value="True">
                                             <DataTrigger.EnterActions>
@@ -151,7 +138,7 @@
                                                     <Storyboard>
                                                         <ColorAnimation  Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
                                                         To="Black"
-                                                        Duration="0:0:0"/>
+                                                        Duration="0:0:0" />
                                                     </Storyboard>
                                                 </BeginStoryboard>
                                             </DataTrigger.EnterActions>
@@ -160,22 +147,14 @@
                                                     <Storyboard>
                                                         <ColorAnimation  Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
                                                         To="Orange"
-                                                        Duration="0:0:0"/>
+                                                        Duration="0:0:0" />
                                                     </Storyboard>
                                                 </BeginStoryboard>
                                             </DataTrigger.ExitActions>
                                         </DataTrigger>
-
-
                                     </Style.Triggers>
-
-
-
-
                                 </Style>
                             </ToggleButton.Style>
-
-
                         </ToggleButton>
                     </Grid>
 
@@ -194,19 +173,16 @@
                             </DataTrigger.ExitActions>
                         </DataTrigger>
 
-
                         <!--MouseOver trigger to change background-->
                         <DataTrigger Binding="{Binding IsChecked,ElementName=Toggle}" Value="True">
                             <DataTrigger.EnterActions>
-                                <BeginStoryboard Name="sb2" Storyboard="{StaticResource Storyboard5}"/>
+                                <BeginStoryboard Name="sb2" Storyboard="{StaticResource Storyboard5}" />
                             </DataTrigger.EnterActions>
                             <DataTrigger.ExitActions>
                                 <StopStoryboard BeginStoryboardName="sb2" />
                             </DataTrigger.ExitActions>
                         </DataTrigger>
-
                     </ControlTemplate.Triggers>
-
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -217,24 +193,20 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="ContentControl">
 
-
                                 <StackPanel Orientation="Horizontal" Background="Transparent" x:Name="grid" TextBlock.FontSize="10">
-
 
                                     <!-- animated Border.Width    From 0 to (TotalWidth-SliderWidth) -->
 
-                                    <Path 
-                                        
-                                        x:Name="Arrow"                               
+                                    <Path
+
+                                        x:Name="Arrow"
                                         Fill="Black"
-                                        Margin="4,0,4,-4" 
+                                        Margin="4,0,4,-4"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Data="{StaticResource RightChevronGeometry2}"
-                                        />
-                                    <ContentPresenter Width="{Binding Path=ContainerWidth, RelativeSource={RelativeSource AncestorType={x:Type local:BreadCrumbs}}}" VerticalAlignment="Center"/>
+                                        Data="{StaticResource RightChevronGeometry2}" />
+                                    <ContentPresenter Width="{Binding Path=ContainerWidth, RelativeSource={RelativeSource AncestorType={x:Type local:BreadCrumbs}}}" VerticalAlignment="Center" />
                                 </StackPanel>
-
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -243,11 +215,8 @@
         </Setter>
     </Style>
 
-
-
     <Style x:Key="BreadCrumbsAlernate2Style" TargetType="{x:Type local:BreadCrumbs}">
         <Style.Resources>
-
         </Style.Resources>
 
         <Setter Property="SnapsToDevicePixels"
@@ -265,25 +234,22 @@
             <Setter.Value>
                 <ControlTemplate>
                     <ControlTemplate.Resources>
-
-
                     </ControlTemplate.Resources>
                     <Grid>
 
-                        <Border x:Name="Var_Animation_0to1" Width="0.33"/>
+                        <Border x:Name="Var_Animation_0to1" Width="0.33" />
                         <ScrollViewer HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Disabled" Background="Transparent" FlowDirection="RightToLeft" HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
                             <FrameworkElement.Width>
                                 <MultiBinding Converter="{StaticResource MathConverter}" ConverterParameter="xy">
-                                    <Binding ElementName="Var_Animation_0to1" Path="Width"/>
-                                    <Binding ElementName="BackBorder" Path="ActualWidth"/>
+                                    <Binding ElementName="Var_Animation_0to1" Path="Width" />
+                                    <Binding ElementName="BackBorder" Path="ActualWidth" />
                                 </MultiBinding>
                             </FrameworkElement.Width>
                             <i:Interaction.Behaviors>
-                                <local:ScrollToBottomBehavior/>
+                                <local:ScrollToBottomBehavior />
                             </i:Interaction.Behaviors>
 
                             <ItemsPresenter x:Name="BackBorder" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
-
                         </ScrollViewer>
                     </Grid>
 
@@ -302,19 +268,16 @@
                             </DataTrigger.ExitActions>
                         </DataTrigger>
 
-
                         <!-- MouseOver trigger to change background -->
                         <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
                             <DataTrigger.EnterActions>
-                                <BeginStoryboard Name="sb2" Storyboard="{StaticResource Storyboard3}"/>
+                                <BeginStoryboard Name="sb2" Storyboard="{StaticResource Storyboard3}" />
                             </DataTrigger.EnterActions>
                             <DataTrigger.ExitActions>
                                 <StopStoryboard BeginStoryboardName="sb2" />
                             </DataTrigger.ExitActions>
                         </DataTrigger>
-
                     </ControlTemplate.Triggers>
-
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -325,24 +288,20 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="ContentControl">
 
-
                                 <StackPanel Orientation="Horizontal" Background="Transparent" x:Name="grid" TextBlock.FontSize="10">
-
 
                                     <!-- animated Border.Width    From 0 to (TotalWidth-SliderWidth) -->
 
-                                    <Path 
-                                        
-                                        x:Name="Arrow"                               
+                                    <Path
+
+                                        x:Name="Arrow"
                                         Fill="Black"
-                                        Margin="4,0,4,-4" 
+                                        Margin="4,0,4,-4"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Data="{StaticResource RightChevronGeometry2}"
-                                        />
-                                    <ContentPresenter Width="80" VerticalAlignment="Center"/>
+                                        Data="{StaticResource RightChevronGeometry2}" />
+                                    <ContentPresenter Width="80" VerticalAlignment="Center" />
                                 </StackPanel>
-
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -351,18 +310,15 @@
         </Setter>
     </Style>
 
-
-
     <Storyboard x:Key="Storyboard4">
-        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(FrameworkElement.Width)" >
-            <EasingDoubleKeyFrame KeyTime="00:00:0" Value="100"/>
-            <EasingDoubleKeyFrame KeyTime="00:00:01" Value="0"/>
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(FrameworkElement.Width)">
+            <EasingDoubleKeyFrame KeyTime="00:00:0" Value="100" />
+            <EasingDoubleKeyFrame KeyTime="00:00:01" Value="0" />
         </DoubleAnimationUsingKeyFrames>
         <!--<ColorAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)">
-            <EasingColorKeyFrame KeyTime="00:00:01" Value="#FFBB2F2F"/>
+            <EasingColorKeyFrame KeyTime="00:00:01" Value="#FFBB2F2F" />
         </ColorAnimationUsingKeyFrames>-->
     </Storyboard>
-
 
     <Style x:Key="BreadCrumbsAlernateStyle" TargetType="{x:Type local:BreadCrumbs}">
         <Setter Property="SnapsToDevicePixels"
@@ -385,7 +341,6 @@
 
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                         </ScrollViewer>
-
                     </ToggleButton>
                 </ControlTemplate>
             </Setter.Value>
@@ -397,17 +352,15 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="ContentControl">
 
-
                                 <StackPanel Orientation="Horizontal" Background="Transparent" x:Name="grid" ToolTip="{TemplateBinding Content}">
-                                    <Path 
-                                        
-                                        x:Name="Arrow"                               
+                                    <Path
+
+                                        x:Name="Arrow"
                                         Fill="Black"
-                                        Margin="4,0,4,0" 
+                                        Margin="4,0,4,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Data="{StaticResource RightChevronGeometry2}"
-                                        />
+                                        Data="{StaticResource RightChevronGeometry2}" />
                                     <ContentPresenter />
                                 </StackPanel>
 
@@ -431,7 +384,6 @@
                                         </DataTrigger.ExitActions>
                                     </DataTrigger>
                                 </ControlTemplate.Triggers>
-
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -439,5 +391,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-
 </ResourceDictionary>

@@ -1,11 +1,11 @@
-﻿using MaterialDesignThemes.Wpf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using MaterialDesignThemes.Wpf;
 
 namespace Utility.WPF.Demo.Animation
 {

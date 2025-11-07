@@ -1,5 +1,5 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System.Windows;
+﻿using System.Windows;
+using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Behaviors
 {
@@ -16,9 +16,8 @@ namespace Utility.WPF.Behaviors
         public DependencyProperty Property { get; set; }
 
         protected override void Invoke(object parameter)
-        { 
+        {
             (Source ?? AssociatedObject).GetBindingExpression(Property)?.UpdateSource();
         }
-
     }
 }

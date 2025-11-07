@@ -9,7 +9,7 @@ namespace Utility
     public class Globals
     {
         private static readonly SynchronizationContext ui;
-        private static Store store = new ();
+        private static Store store = new();
 
         static Globals()
         {
@@ -22,14 +22,13 @@ namespace Utility
                       .Publish();
 
             Date = interval
-                        .Select(_ => DateTime.Now)                        
+                        .Select(_ => DateTime.Now)
                         .Publish();
 
             ui = SynchronizationContext.Current ?? throw new Exception($"Expected {nameof(SynchronizationContext)}!");
         }
 
-
-        public static SynchronizationContext UI => ui;        
+        public static SynchronizationContext UI => ui;
 
         public static ReplaySubject<Log> Logs { get; } = new();
         public static ReplaySubject<Exception> Exceptions { get; } = new();
@@ -38,11 +37,9 @@ namespace Utility
         public static IConnectableObservable<TimeSpan> Time { get; }
         public static IConnectableObservable<DateTime> Date { get; }
 
-
         public static IResolver Resolver => store;
         public static IRegister Register => store;
 
         public static Type[] Types { get; } = [.. System.AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes())];
-
     }
 }

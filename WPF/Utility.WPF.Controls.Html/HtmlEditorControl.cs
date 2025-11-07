@@ -1,8 +1,8 @@
-﻿using AvalonEditB;
-using System.IO;
+﻿using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using AvalonEditB;
 using TheArtOfDev.HtmlRenderer.Demo.WPF;
 using Utility.WPF.Controls.Base;
 
@@ -29,8 +29,6 @@ namespace Utility.WPF.Controls.Html
             set { SetValue(HtmlProperty, value); }
         }
 
-
-
         public override void OnApplyTemplate()
         {
             //this.Movement = Enums.XYMovement.TopToBottom;
@@ -45,7 +43,7 @@ namespace Utility.WPF.Controls.Html
             _htmlControl.Html = GetFixedHtml();
         }
 
-        string GetFixedHtml()
+        private string GetFixedHtml()
         {
             var html = GetHtmlEditorText();
 
@@ -79,7 +77,7 @@ namespace Utility.WPF.Controls.Html
             return html;
         }
 
-        string GetHtmlEditorText()
+        private string GetHtmlEditorText()
         {
             //return new TextRange(_htmlEditor.Document.ContentStart, _htmlEditor.Document.ContentEnd).Text;
             return _textEditor.Document.Text;

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Utility.Structs
 {
-    public ref struct Name
+    public struct Name
     {
         public ReadOnlySpan<char> Value { get; }
 
@@ -17,6 +15,7 @@ namespace Utility.Structs
             Value = value;
             Order = position;
         }
+
         public int Order { get; }
     }
 }

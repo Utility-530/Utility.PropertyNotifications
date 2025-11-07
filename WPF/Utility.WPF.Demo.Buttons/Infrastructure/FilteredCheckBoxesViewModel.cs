@@ -1,15 +1,15 @@
-﻿using DynamicData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Utility.ViewModels;
+using DynamicData;
+using Utility.Models;
 using Utility.Models.Filters;
+using Utility.Services.Deprecated;
+using Utility.ViewModels;
 using Utility.WPF.Demo.Data.Factory;
 using Utility.WPF.Demo.Data.Model;
-using Utility.Models;
-using Utility.Services.Deprecated;
 
 namespace Utility.WPF.Demo.Buttons.Infrastructure
 {

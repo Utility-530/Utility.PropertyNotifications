@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Collections;
 
 // ReSharper disable once CheckNamespace
 namespace IKriv.Threading.Tasks
@@ -10,8 +6,8 @@ namespace IKriv.Threading.Tasks
     /// <summary>
     /// Represents running task timer, a disposable infinite series of tasks
     /// </summary>
-    /// <remarks>Task timer must be disposed (stopped) in the end of the usage. 
-    /// In can be enumerated only once. Attempting second enumeration will cause an 
+    /// <remarks>Task timer must be disposed (stopped) in the end of the usage.
+    /// In can be enumerated only once. Attempting second enumeration will cause an
     /// InvalidOperationException.</remarks>
     public interface ITaskTimer : IDisposable, IEnumerable<Task>
     {

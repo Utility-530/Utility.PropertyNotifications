@@ -27,7 +27,7 @@ namespace Utility.WPF.Converters
             return value is T value1 && EqualityComparer<T>.Default.Equals(value1, True);
         }
 
-        protected abstract bool Check(R value);     
+        protected abstract bool Check(R value);
 
         protected abstract R Convert(object value);
     }

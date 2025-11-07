@@ -1,14 +1,10 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace Utility.Conversions.Json.Newtonsoft
 {
     public class StringToGuidConverter : JsonConverter<Guid>
     {
-
         public override void WriteJson(JsonWriter writer, Guid value, JsonSerializer serializer)
         {
             writer.WriteValue(value);
@@ -18,7 +14,6 @@ namespace Utility.Conversions.Json.Newtonsoft
         {
             if (reader.TokenType == JsonToken.String)
             {
-
                 if (reader.Read())
                 {
                     if (Guid.TryParse(reader.ReadAsString(), out var guid))

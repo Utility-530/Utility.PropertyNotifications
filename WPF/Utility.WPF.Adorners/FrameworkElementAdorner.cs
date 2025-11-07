@@ -25,7 +25,6 @@ namespace Utility.WPF.Adorners
         Outside
     }
 
-
     public class FrameworkElementAdorner<T> : FrameworkElementAdorner where T : Control
     {
         private IDisposable? disposable;
@@ -39,7 +38,6 @@ namespace Utility.WPF.Adorners
                 adorner.MouseLeave += Adorner_MouseLeave;
                 adornedElement.AddIfMissingAdorner(adorner);
                 Adorners = AdornerEx.GetAdorners(adornedElement);
-
             }
         }
 
@@ -63,7 +61,8 @@ namespace Utility.WPF.Adorners
             disposable = SetAdornedElement(adorner as T ?? throw new Exception("gd6fnb54 fdgd,,f"), adornedElement);
         }
 
-        protected virtual IDisposable SetAdornedElement(T control, FrameworkElement? adornedElement) { return null; }
+        protected virtual IDisposable SetAdornedElement(T control, FrameworkElement? adornedElement)
+        { return null; }
     }
 
     /// <summary>
@@ -95,7 +94,6 @@ namespace Utility.WPF.Adorners
             this.InvalidateArrange();
             this.InvalidateMeasure();
             this.InvalidateVisual();
-
         }
 
         /// <summary>
@@ -109,7 +107,6 @@ namespace Utility.WPF.Adorners
         /// </summary>
         public static readonly DependencyProperty PositionYProperty =
             DependencyProperty.RegisterAttached("PositionY", typeof(double), typeof(FrameworkElementAdorner), new PropertyMetadata(double.NaN));
-
 
         public FrameworkElementAdorner(FrameworkElement adornedElement) : base(adornedElement)
         {
@@ -127,7 +124,6 @@ namespace Utility.WPF.Adorners
 
         public virtual void SetAdornedElement(DependencyObject adorner, FrameworkElement? adornedElement)
         {
-
         }
 
         public static double GetPositionX(DependencyObject d)
@@ -165,9 +161,6 @@ namespace Utility.WPF.Adorners
         #endregion EventHandlers
 
         #region Methods
-
-
-
 
         /// <summary>
         /// Determine the X coordinate of the adorner.
@@ -479,7 +472,7 @@ namespace Utility.WPF.Adorners
             CollectionChanged?.Invoke(_adornedElement, args);
         }
 
-        #endregion
+        #endregion INotifyCollectionChanged
 
         #region Properties
 
@@ -523,7 +516,7 @@ namespace Utility.WPF.Adorners
             }
         }
 
-        #endregion
+        #endregion Properties
 
         #region IList<FrameworkElement>
 
@@ -582,7 +575,7 @@ namespace Utility.WPF.Adorners
                 yield return fe;
         }
 
-        #endregion
+        #endregion IList<FrameworkElement>
 
         #region IList
 
@@ -660,6 +653,6 @@ namespace Utility.WPF.Adorners
             return _internalCollection.GetEnumerator();
         }
 
-        #endregion
+        #endregion IList
     }
 }

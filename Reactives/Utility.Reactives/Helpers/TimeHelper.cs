@@ -5,17 +5,11 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
-
 
 namespace Utility.Reactives
 {
     public static class TimeHelper
     {
-
-
-
-
         // James World
         //http://www.zerobugbuild.com/?p=323
         ///The events should be output at a maximum rate specified by a TimeSpan, but otherwise as soon as possible.
@@ -29,7 +23,7 @@ namespace Utility.Reactives
             return paced;
         }
 
-       public static IObservable<T> RepeatAfterDelay<T>(this IObservable<T> source, TimeSpan delay, IScheduler scheduler)
+        public static IObservable<T> RepeatAfterDelay<T>(this IObservable<T> source, TimeSpan delay, IScheduler scheduler)
         {
             var repeatSignal = Observable
                 .Empty<T>()
@@ -40,24 +34,18 @@ namespace Utility.Reactives
             return source.Concat(repeatSignal).Repeat();
         }
 
-
-
         public static IObservable<long> ToCountDowns<T>(this IObservable<T> obs, int seconds, int interval = 1, int delay = 0)
         {
-
             return obs
             .Select(a =>
             Observable.Timer(TimeSpan.FromSeconds(delay), TimeSpan.FromSeconds(interval)))
             .Switch()
             .Select(lp => seconds - interval * lp);
-
         }
-
 
         public static IObservable<KeyValuePair<DateTime, T>> ByTimeStamp<T>(this IEnumerable<KeyValuePair<DateTime, T>> scheduledTimes, TimeSpan offset = default(TimeSpan))
         {
             return scheduledTimes.ByTimeStamp(kvp => kvp.Key, offset);
-
         }
 
         public static IObservable<DateTime> ByTimeStamp(this IEnumerable<DateTime> scheduledTimes, TimeSpan offset = default(TimeSpan))
@@ -73,7 +61,6 @@ namespace Utility.Reactives
                 e => e,
   e => e.Current,
   e => func(e.Current) + offset);
-
         }
 
         /// <summary>
@@ -97,6 +84,7 @@ namespace Utility.Reactives
                 }
             }
         }
+
         /// <summary>
         /// Speeds up slows down <see cref="scheduledTimes"/>.
         /// </summary>
@@ -121,7 +109,7 @@ namespace Utility.Reactives
         }
 
         /// <summary>
-        ///  Adjusts all dates so that the the first date starts at <see cref="startDateTime"></see> 
+        ///  Adjusts all dates so that the the first date starts at <see cref="startDateTime"></see>
         ///  whilst the difference between dates  is preserved.
         /// </summary>
         /// <param name="scheduledTimes"></param>
@@ -142,9 +130,8 @@ namespace Utility.Reactives
             }
         }
 
-
         /// <summary>
-        ///  Adjusts all dates so that the the first date starts at <see cref="startDateTime"></see> 
+        ///  Adjusts all dates so that the the first date starts at <see cref="startDateTime"></see>
         ///  whilst the difference between dates  is preserved.
         /// </summary>
         /// <param name="scheduledTimes"></param>
@@ -152,7 +139,6 @@ namespace Utility.Reactives
         /// <returns></returns>
         public static IEnumerable<KeyValuePair<DateTime, DateTime>> SelectCountDowns(this IEnumerable<DateTime> scheduledTimes, TimeSpan timeSpan)
         {
-
             using (var enmr = scheduledTimes.GetEnumerator())
             {
                 enmr.MoveNext();
@@ -175,7 +161,7 @@ namespace Utility.Reactives
         }
 
         /// <summary>
-        ///  Adjusts all dates so that the the first date starts at <see cref="startDateTime"></see> 
+        ///  Adjusts all dates so that the the first date starts at <see cref="startDateTime"></see>
         ///  whilst the difference between dates  is preserved.
         /// </summary>
         /// <param name="scheduledTimes"></param>
@@ -183,7 +169,6 @@ namespace Utility.Reactives
         /// <returns></returns>
         public static IObservable<KeyValuePair<TimeSpan, DateTime>> SelectCountDowns(this IObservable<DateTime> scheduledTimes, TimeSpan timeSpan)
         {
-
             return scheduledTimes.Select(a =>
              {
                  var dtn = DateTime.Now;
@@ -197,12 +182,11 @@ namespace Utility.Reactives
                  });
 
                  return sum > 0 ? obs : obs.Prepend(new KeyValuePair<TimeSpan, DateTime>(DateTime.Now - a, a));
-
              }).Switch();
         }
 
         /// <summary>
-        ///  Adjusts all numbers so that the the first number starts at <see cref="start"></see> 
+        ///  Adjusts all numbers so that the the first number starts at <see cref="start"></see>
         ///  whilst the difference between numbers is preserved.
         /// </summary>
         /// <param name="sequence"></param>
@@ -225,15 +209,10 @@ namespace Utility.Reactives
 
         public static IObservable<KeyValuePair<DateTime, TimeSpan>> TimeOffsets(this IObservable<DateTime> scheduledTimes)
         {
-
-
             return scheduledTimes
                  .Scan(
                 new KeyValuePair<DateTime, TimeSpan>(default(DateTime), new TimeSpan(0)),
                 (acc, nw) => new KeyValuePair<DateTime, TimeSpan>(nw, nw - (acc.Key == default(DateTime) ? nw : acc.Key)));
-
-
-
         }
 
         public static IObservable<KeyValuePair<Tuple<DateTime, TimeSpan>, T>> IncrementalTimeOffsets<T>(this IObservable<KeyValuePair<DateTime, T>> scheduledTimes)
@@ -245,7 +224,6 @@ namespace Utility.Reactives
                      return new KeyValuePair<Tuple<DateTime, TimeSpan>, T>(new Tuple<DateTime, TimeSpan>(nw.Key, ts), nw.Value);
                  });
         }
-
 
         public static IObservable<KeyValuePair<T, Tuple<double, double>>> IncrementalPositionOffsets<T>(this IObservable<KeyValuePair<T, double>> scheduledTimes)
         {
@@ -282,9 +260,6 @@ namespace Utility.Reactives
                 });
         }
 
-
-
-
         public static IObservable<KeyValuePair<T, Tuple<double?, double>>> IncrementalPositionOffsets<T>(this IObservable<KeyValuePair<T, double?>> scheduledTimes)
         {
             return scheduledTimes
@@ -295,10 +270,6 @@ namespace Utility.Reactives
                      return new KeyValuePair<T, Tuple<double?, double>>(nw.Key, new Tuple<double?, double>(nw.Value, ts));
                  });
         }
-
-
-
-
 
         // convert IEnumerable to IObservable using Scheduler
         //        answered Dec 13 '16 at 7:22        // Lee Campbell
@@ -312,7 +283,7 @@ namespace Utility.Reactives
             {
                 var enumerator = enumerable.GetEnumerator();
 
-                //declare a recursive function 
+                //declare a recursive function
                 Action<Action> scheduleNext = (self) =>
                 {
                     //move
@@ -344,7 +315,6 @@ namespace Utility.Reactives
                 return StableCompositeDisposable.Create(scheduledTask, enumerator);
             });
         }
-
 
         //        IObservable<int> ob =
         //    Observable.Create<int>(o =>

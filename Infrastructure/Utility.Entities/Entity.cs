@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 using Utility.Attributes;
 
 namespace Utility.Entities
 {
     public class Entity : INotifyPropertyChanged
     {
-
         [System.ComponentModel.ReadOnly(true)]
-        public DateTime Added { get; set;  }
+        public DateTime Added { get; set; }
 
         [Ignore]
-        public DateTime Removed { get; set;  }
+        public DateTime Removed { get; set; }
 
         [System.ComponentModel.ReadOnly(true)]
-        public DateTime LastUpdated { get; set;  }
+        public DateTime LastUpdated { get; set; }
+
         #region propertyChanged
+
         /// <inheritdoc />
         /// <summary>
         ///     The event on property changed

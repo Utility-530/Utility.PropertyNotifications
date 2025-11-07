@@ -5,7 +5,6 @@ using UnitsNet;
 
 namespace Utility.WPF.Demo.Forms.Infrastructure
 {
-
     public class Item : IEquatable<Item>
     {
         public Item(Guid id, string title, string subTitle, IReadOnlyCollection<string> descriptions,
@@ -81,6 +80,7 @@ namespace Utility.WPF.Demo.Forms.Infrastructure
         {
             return new Length(length, UnitsNet.Units.LengthUnit.Centimeter).Inches;
         }
+
         private static double GetCm(double length)
         {
             return new Length(length, UnitsNet.Units.LengthUnit.Centimeter).Centimeters;
@@ -120,5 +120,4 @@ namespace Utility.WPF.Demo.Forms.Infrastructure
         public double Length { get; init; }
         public double SleeveLength { get; init; }
     }
-
 }

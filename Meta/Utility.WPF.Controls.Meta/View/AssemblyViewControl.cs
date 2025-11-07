@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System;
-using System.Windows;
-using Utility.WPF.Controls.Buttons;
-using Utility.Enums;
-using System.Reflection;
 using ReactiveUI;
-using Utility.WPF.Factorys;
+using Utility.Enums;
 using Utility.Interfaces.NonGeneric;
+using Utility.WPF.Controls.Buttons;
+using Utility.WPF.Factorys;
 using Utility.WPF.Meta;
 
 namespace Utility.WPF.Controls.Meta
@@ -25,7 +25,6 @@ namespace Utility.WPF.Controls.Meta
             }
 
             Content = dockPanel;
-
 
             this.Resources.Add(new DataTemplateKey(
                 typeof(KeyValue)),
@@ -54,7 +53,6 @@ namespace Utility.WPF.Controls.Meta
             var detailControl = CreateViewsMasterDetailControl(assembly, dualButtonControl);
             yield return detailControl;
 
-
             static DualButtonControl CreateDualButtonControl(AssemblyType demoType)
             {
                 var dualButtonControl = new DualButtonControl
@@ -72,7 +70,7 @@ namespace Utility.WPF.Controls.Meta
             {
                 var viewsDetailControl = new ViewsMasterDetail { Assembly = assembly };
                 comboBox
-                    .WhenAnyValue(ass => ass.Value)      
+                    .WhenAnyValue(ass => ass.Value)
                     .Subscribe(type =>
                     {
                         viewsDetailControl.AssemblyType = (AssemblyType)comboBox.ValueToKey();
@@ -80,7 +78,5 @@ namespace Utility.WPF.Controls.Meta
                 return viewsDetailControl;
             }
         }
-
-
     }
 }

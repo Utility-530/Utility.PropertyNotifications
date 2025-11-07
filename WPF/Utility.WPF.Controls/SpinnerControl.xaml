@@ -13,7 +13,6 @@
 
     <math:MathConverter x:Key="Math" />
 
-
     <DataTemplate x:Key="VisualStateTemplate">
         <Grid>
             <VisualStateManager.VisualStateGroups>
@@ -124,9 +123,6 @@
         </Setter>
     </Style>
 
-
-
-
     <ControlTemplate x:Key="RepeatButtons" TargetType="{x:Type Control}">
         <UniformGrid
             x:Name="grid1"
@@ -210,7 +206,6 @@
         </UniformGrid>
     </ControlTemplate>
 
-
     <ControlTemplate x:Key="ReadOnly" TargetType="{x:Type btl:SpinnerControl}">
         <Grid Background="{Binding Path=Background, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}">
 
@@ -239,7 +234,6 @@
             </Viewbox>
         </Grid>
     </ControlTemplate>
-
 
     <ControlTemplate x:Key="Writeable" TargetType="{x:Type btl:SpinnerControl}">
         <Grid Background="{Binding Path=Background, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}">
@@ -270,8 +264,6 @@
         </Grid>
     </ControlTemplate>
 
-
-
     <Style TargetType="{x:Type btl:SpinnerControl}">
         <Style.Resources>
             <!--<VisualStateGroup x:Key="CommonStates">
@@ -301,7 +293,6 @@
                     </Storyboard>
                 </VisualState>
             </VisualStateGroup>-->
-
 
             <Style TargetType="Border">
                 <Style.Setters>
@@ -354,7 +345,6 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-
         </Style.Resources>
 
         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -362,11 +352,9 @@
         <Setter Property="Template" Value="{StaticResource Writeable}" />
         <!--<Setter Property="Template">
             <Setter.Value>
-
             </Setter.Value>
         </Setter>-->
     </Style>
-
 
     <Style x:Key="ReadOnlyStyle" TargetType="{x:Type btl:SpinnerControl}">
         <Setter Property="Template" Value="{StaticResource ReadOnly}" />

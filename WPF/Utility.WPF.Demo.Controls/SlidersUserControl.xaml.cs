@@ -1,10 +1,10 @@
-﻿using AutoBogus;
-using MoreLinq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using AutoBogus;
+using MoreLinq;
 using Utility.WPF.Demo.Data.Model;
 
 namespace Utility.WPF.Demo.Controls

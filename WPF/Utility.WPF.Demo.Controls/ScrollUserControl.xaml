@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:view="http://schemas.utility.com" 
+    xmlns:view="http://schemas.utility.com"
       xmlns:beh="http://schemas.utility.com/behaviors"
     xmlns:factory="clr-namespace:Utility.WPF.Demo.Data.Factory;assembly=Utility.WPF.Demo.Data"
     d:DesignHeight="450"

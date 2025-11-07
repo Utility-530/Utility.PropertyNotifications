@@ -6,11 +6,10 @@
 // like the days and months;
 // they die and are reborn,
 // like the four seasons."
-// 
+//
 // - Sun Tsu,
 // "The Art of War"
 
-using System;
 using System.Drawing;
 using System.Text;
 
@@ -44,12 +43,12 @@ namespace TheArtOfDev.HtmlRenderer.Demo.Common
 
         /// <summary>
         /// cf0 = default
-        /// cf1 = dark red  
+        /// cf1 = dark red
         /// cf2 = bright red
         /// cf3 = green
-        /// cf4 = blue    
-        /// cf5 = blue    
-        /// cf6 = purple          
+        /// cf4 = blue
+        /// cf5 = blue
+        /// cf6 = purple
         /// </summary>
         private const string DefaultColorScheme = "\\red128\\green0\\blue0;\\red240\\green0\\blue0;\\red0\\green128\\blue0;\\red0\\green0\\blue255;\\red0\\green0\\blue255;\\red128\\green0\\blue171;";
 
@@ -58,7 +57,7 @@ namespace TheArtOfDev.HtmlRenderer.Demo.Common
         /// </summary>
         private static readonly char[] _unicodeTest = new char[1];
 
-        #endregion
+        #endregion Fields/Consts
 
         /// <summary>
         /// Process the given text to create RTF text with HTML syntax highlighting using default Visual Studio colors.<br/>
@@ -87,7 +86,6 @@ namespace TheArtOfDev.HtmlRenderer.Demo.Common
         {
             return Process(text, CreateColorScheme(element, attribute, comment, chars, values, style));
         }
-
 
         #region Private/Protected methods
 
@@ -224,7 +222,7 @@ namespace TheArtOfDev.HtmlRenderer.Demo.Common
             {
                 sb.Append(text, 0, idx);
 
-                // insert our color table at our chosen location                
+                // insert our color table at our chosen location
                 sb.Append(ColorTbl).Append(";").Append(colorScheme).Append("}");
 
                 // skip the existing color table
@@ -250,7 +248,7 @@ namespace TheArtOfDev.HtmlRenderer.Demo.Common
                     rtfFormated = false;
                 }
 
-                // insert the color table at our chosen location                
+                // insert the color table at our chosen location
                 sb.Append("{").Append(ColorTbl).Append(";").Append(colorScheme).Append("}");
             }
             return idx;
@@ -282,6 +280,6 @@ namespace TheArtOfDev.HtmlRenderer.Demo.Common
                 .Append(';');
         }
 
-        #endregion
+        #endregion Private/Protected methods
     }
 }

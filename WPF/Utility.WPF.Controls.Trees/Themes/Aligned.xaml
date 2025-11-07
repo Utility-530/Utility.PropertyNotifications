@@ -9,8 +9,6 @@
 
     <!--  https://leecampbell.com/2009/01/14/horizontal-stretch-on-treeviewitems/  -->
 
-
-
     <Style
         x:Key="AlignedTreeViewitemStyle"
         BasedOn="{StaticResource {x:Type TreeViewItem}}"

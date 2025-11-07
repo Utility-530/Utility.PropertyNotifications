@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using static Utility.WPF.Helpers.HitTestHelper;
 
 namespace Utility.WPF.Reactives
@@ -20,7 +16,7 @@ namespace Utility.WPF.Reactives
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public static IObservable<T?> MouseDoubleClickSelections<T>(this Control control) where T:DependencyObject
+        public static IObservable<T?> MouseDoubleClickSelections<T>(this Control control) where T : DependencyObject
         {
             return Observable.FromEventPattern<MouseButtonEventHandler, MouseButtonEventArgs>(
                    s => control.MouseDoubleClick += s,
@@ -41,7 +37,6 @@ namespace Utility.WPF.Reactives
                     return GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control);
                 });
         }
-
 
         public static IObservable<T?> MouseHoverEnterSelections<T>(this UIElement control) where T : DependencyObject
         {
@@ -67,14 +62,13 @@ namespace Utility.WPF.Reactives
                 });
         }
 
-
         public static IObservable<(T? item, MouseEventArgs args)> MouseHoverLeaveSelections<T>(this UIElement control) where T : DependencyObject
         {
             return Observable.FromEventPattern<MouseEventHandler, MouseEventArgs>(
                    s => control.MouseLeave += s,
                    s => control.MouseLeave -= s)
                 .Select(evt =>
-                { 
+                {
                     return (GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control), evt.EventArgs);
                 });
         }

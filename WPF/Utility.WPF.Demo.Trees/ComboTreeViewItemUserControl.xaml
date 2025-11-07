@@ -29,11 +29,9 @@
                 <ResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-
             <DataTemplate x:Key="EditTemplate">
                 <Grid Name="rootElement" Background="#DCDCDC">
                     <Grid.Resources>
-
 
                         <Style x:Key="inlineText" TargetType="{x:Type TextBlock}">
                             <Setter Property="Margin" Value="10,5,10,0" />
@@ -66,7 +64,6 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-
                     </Grid.RowDefinitions>
 
                     <TextBlock
@@ -105,8 +102,6 @@
                         Grid.Column="1"
                         Grid.ColumnSpan="3" />
 
-
-
                     <TextBlock
                         Name="zipLabel"
                         Grid.Row="4"
@@ -119,7 +114,6 @@
                         Grid.Row="4"
                         Grid.Column="1"
                         Width="100" />
-
                 </Grid>
             </DataTemplate>
 
@@ -133,13 +127,7 @@
                 </Border>
             </DataTemplate>
 
-
             <sys:Double x:Key="MaxDropDownHeight">400.0</sys:Double>
-
-
-
-
-
 
             <SineEase x:Key="Ease" EasingMode="EaseInOut" />
 
@@ -212,8 +200,6 @@
                 </Storyboard>
             </Storyboard>
 
-
-
             <SolidColorBrush x:Key="ARGB">
                 <SolidColorBrush.Color>
                     <Color
@@ -223,7 +209,6 @@
                         R="10" />
                 </SolidColorBrush.Color>
             </SolidColorBrush>
-
 
             <Style x:Key="CustomTreeViewItem" TargetType="{x:Type trees:CustomTreeViewItem}">
                 <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
@@ -334,14 +319,10 @@
                                                 <Style TargetType="Border">
                                                     <Style.Setters>
                                                         <Setter Property="BorderBrush" Value="Transparent" />
-
-
                                                     </Style.Setters>
                                                 </Style>
                                             </Border.Style>
                                         </Border>
-
-
 
                                         <WrapPanel
                                             x:Name="WrapPanel1"
@@ -363,18 +344,17 @@
                                                 ItemsSource="{TemplateBinding NodeItemsSource}"
                                                 Style="{TemplateBinding SplitButtonStyle}">
 
-
-                                                <!--<local:ChildrenSelectorConverter x:Key="ChildrenSelectorConverter"/>-->
+                                                <!--<local:ChildrenSelectorConverter x:Key="ChildrenSelectorConverter" />-->
 
                                                 <!--<sb:SplitButton.ItemsSource>
                                             <MultiBinding Converter="{StaticResource ChildrenSelectorConverter}">
                                                 -->
                                                 <!--  first binding ensures refresh every time combo-box opened  -->
                                                 <!--
-                                                <Binding Path="SelectedIndex"  ElementName="SplitButton"/>
-                                                <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
-                                                <Binding Path="NodeModels" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
-                                                <Binding Path="ChildrenSelector"  RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                                                <Binding Path="SelectedIndex"  ElementName="SplitButton" />
+                                                <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+                                                <Binding Path="NodeModels" RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+                                                <Binding Path="ChildrenSelector"  RelativeSource="{RelativeSource Mode=TemplatedParent}" />
                                             </MultiBinding>
                                         </sb:SplitButton.ItemsSource>-->
                                                 <sb:SplitButton.Content>
@@ -440,7 +420,6 @@
                                     Grid.ColumnSpan="2"
                                     Visibility="{TemplateBinding ItemsPresenterVisibility}" />
 
-
                                 <btns:PlusGeometryButton
                                     x:Name="PlusButton"
                                     Grid.Column="7"
@@ -464,8 +443,6 @@
                                                 <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
                                                     <EasingColorKeyFrame KeyTime="0:0:0.3" Value="{StaticResource SelectedBackgroundColor}" />
                                                 </ColorAnimationUsingKeyFrames>
-
-
                                             </Storyboard>
                                         </VisualState>
                                         <VisualState x:Name="Unselected" />
@@ -491,8 +468,6 @@
                                                 <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
                                                     <EasingColorKeyFrame KeyTime="0:0:0.3" Value="{c:Blue 2}" />
                                                 </ColorAnimationUsingKeyFrames>
-
-
                                             </Storyboard>
                                         </VisualState>
                                     </VisualStateGroup>
@@ -537,7 +512,7 @@
                                     <Storyboard TargetName="WrapPanel1">
                                         <DoubleAnimation To="1" Storyboard.TargetProperty="Opacity" Duration="0:0:0.2" />
                                 -->
-                                <!--<ObjectAnimationUsingKeyFrames  Duration="0:0:0" Storyboard.TargetProperty="Visibility" >
+                                <!--<ObjectAnimationUsingKeyFrames  Duration="0:0:0" Storyboard.TargetProperty="Visibility">
                                             <ObjectAnimationUsingKeyFrames.KeyFrames>
                                                 <DiscreteObjectKeyFrame Value="{x:Static Visibility.Visible}"></DiscreteObjectKeyFrame>
                                             </ObjectAnimationUsingKeyFrames.KeyFrames>
@@ -551,7 +526,7 @@
                                     <Storyboard TargetName="WrapPanel1">
                                         <DoubleAnimation BeginTime="0:0:0" Storyboard.TargetProperty="Opacity"  To="0.5" Duration="0:0:0.1" />
                                 -->
-                                <!--<ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetProperty="Visibility" BeginTime="0:0:0.1" >
+                                <!--<ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetProperty="Visibility" BeginTime="0:0:0.1">
                                             <ObjectAnimationUsingKeyFrames.KeyFrames>
                                                 <DiscreteObjectKeyFrame Value="{x:Static Visibility.Collapsed}"></DiscreteObjectKeyFrame>
                                             </ObjectAnimationUsingKeyFrames.KeyFrames>
@@ -635,8 +610,6 @@
                                     </Trigger.ExitActions>
                                 </Trigger>-->
 
-
-
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Trigger.EnterActions>
                                         <BeginStoryboard>
@@ -665,7 +638,6 @@
                                                             R="40" />
                                                     </ColorAnimation.To>
                                                 </ColorAnimation>
-
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </Trigger.EnterActions>
@@ -712,7 +684,6 @@
                                     </BeginStoryboard>
                                 </Trigger.ExitActions>
                             </Trigger>-->
-
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
@@ -725,18 +696,12 @@
                              Mode=FindAncestor,
                              AncestorType={x:Type TreeViewItem},
                              AncestorLevel=2}}"
-                    Value="False"/>
-
+                    Value="False" />
                 </MultiDataTrigger.Conditions>
                 <Setter Property="IsShowing"  Value="False" />
             </MultiDataTrigger>
         </Style.Triggers>-->
             </Style>
-
-
-
-
-
 
             <Style x:Key="Demo" TargetType="{x:Type trees:CustomTreeViewItem}">
                 <Setter Property="SnapsToDevicePixels" Value="true" />
@@ -816,7 +781,7 @@
                                       Margin="3,3,23,3"
                                       ContentSource="Header"
                                             VerticalAlignment="Stretch"
-                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>-->
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />-->
 
                                 <TextBox
                                     x:Name="PART_EditableTextBox"
@@ -836,9 +801,6 @@
                                     IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                     Placement="Bottom"
                                     PopupAnimation="Slide">
-
-
-
 
                                     <Grid
                                         x:Name="DropDown"
@@ -875,7 +837,7 @@
                                                     Content="{TemplateBinding Edit}"
                                                     ContentTemplate="{TemplateBinding EditTemplate}">
                                                     <!--<ContentControl.OpacityMask>
-                        <VisualBrush Visual="{Binding ElementName=PlusButton}"/>
+                        <VisualBrush Visual="{Binding ElementName=PlusButton}" />
                     </ContentControl.OpacityMask>-->
 
                                                     <FrameworkElement.Style>
@@ -931,11 +893,8 @@
                                                                 </Trigger>
                                                             </Style.Triggers>
                                                         </Style>
-
                                                     </FrameworkElement.Style>
                                                 </btns:GeometryToggleButton>
-
-
 
                                                 <!--<ToggleButton x:Name="PlusButton"
 
@@ -955,7 +914,6 @@
                                                                 </Trigger>
                                                             </Style.Triggers>
                                                         </Style>
-
                                                     </FrameworkElement.Style>
                                                 </ToggleButton>-->
 
@@ -1019,9 +977,4 @@
             </Style>
         </ResourceDictionary>
     </FrameworkElement.Resources>
-
-
-
-
-
 </UserControl>

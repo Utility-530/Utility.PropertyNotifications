@@ -10,4 +10,4 @@ using System.Windows.Markup;
                                               // app, or any theme specific resource dictionaries)
 )]
 [assembly: XmlnsPrefix("http://schemas.utility.com/hybrid", "hyb")]
-[assembly: XmlnsDefinition("http://schemas.utility.com/hybrid", "Utility.WPF.Controls.Hybrid")] 
+[assembly: XmlnsDefinition("http://schemas.utility.com/hybrid", "Utility.WPF.Controls.Hybrid")]

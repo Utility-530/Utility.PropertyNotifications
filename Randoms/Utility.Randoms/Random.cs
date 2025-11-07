@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Utility.Helpers;
+﻿using Utility.Helpers;
 
 namespace Utility.Randoms
 {
@@ -10,6 +8,7 @@ namespace Utility.Randoms
         {
             Random = random;
         }
+
         public System.Random Random { get; }
 
         public double Percent()
@@ -17,12 +16,10 @@ namespace Utility.Randoms
             return Random.NextPercent();
         }
 
-
         public bool Boolean()
         {
             return Random.NextBoolean();
         }
-
 
         public string Word(int length = 4)
         {
@@ -53,12 +50,13 @@ namespace Utility.Randoms
         {
             return Random.NextLevy(c, mu);
         }
+
         public string Name()
         {
             return Names.Random(Random);
         }
 
-        const string chars = "abcdefghijklmnopqrstuvwxyz";
+        private const string chars = "abcdefghijklmnopqrstuvwxyz";
 
         public static char AlphabetCharacter(int index)
         {

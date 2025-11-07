@@ -1,14 +1,12 @@
-﻿using Jonnidip;
+﻿using System.Collections.Generic;
+using Jonnidip;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Utility.Conversions.Json.Newtonsoft
 {
     public static class SettingsFactory
     {
-        static JsonSerializerSettings combined;
+        private static JsonSerializerSettings combined;
 
         public static JsonSerializerSettings Combined
         {
@@ -18,8 +16,8 @@ namespace Utility.Conversions.Json.Newtonsoft
                     return combined;
 
                 var _settings = new JsonSerializerSettings
-                { 
-                    TypeNameHandling = TypeNameHandling.All, 
+                {
+                    TypeNameHandling = TypeNameHandling.All,
                     CheckAdditionalContent = false
                 };
 
@@ -42,6 +40,5 @@ namespace Utility.Conversions.Json.Newtonsoft
                 }
             }
         }
-
     }
 }

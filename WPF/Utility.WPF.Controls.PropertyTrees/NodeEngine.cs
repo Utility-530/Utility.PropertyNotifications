@@ -2,26 +2,26 @@
 using System.Reactive.Linq;
 using System.Reflection;
 using Splat;
-using Utility.Reactives;
-using Utility.Keys;
-using Utility.Structs.Repos;
-using Utility.Interfaces.Exs;
 using Utility.Changes;
-using Utility.Interfaces;
 using Utility.Helpers;
 using Utility.Helpers.Generic;
-using Utility.Interfaces.NonGeneric;
-using Utility.PropertyNotifications;
-using Utility.PropertyDescriptors;
-using Utility.Observables;
-using Utility.Interfaces.Generic;
-using Utility.Trees.Abstractions;
+using Utility.Interfaces;
+using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
-using Utility.Extensions;
+using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
+using Utility.Keys;
+using Utility.Observables;
+using Utility.PropertyDescriptors;
+using Utility.PropertyNotifications;
+using Utility.Reactives;
+using Utility.Structs.Repos;
+using Utility.Trees.Abstractions;
 
 namespace Utility.WPF.Controls.PropertyTrees
 {
     public readonly record struct DirtyNode(string Property, INodeViewModel Node);
+
     public class NodeEngine : Disposable, INodeSource
     {
         public static string New = "new";
@@ -31,9 +31,9 @@ namespace Utility.WPF.Controls.PropertyTrees
         private Dictionary<string, string> dictionaryMethodNameKeys = [];
         private readonly ObservableCollection<KeyValuePair<string, PropertyChange>> dirtyNodes = [];
 
-        Lazy<IFilter> filter = new(() => Locator.Current.GetService<IFilter>());
-        Lazy<IExpander> expander = new(() => Locator.Current.GetService<IExpander>());
-        Lazy<IContext> context = new(() => Locator.Current.GetService<IContext>());
+        private Lazy<IFilter> filter = new(() => Locator.Current.GetService<IFilter>());
+        private Lazy<IExpander> expander = new(() => Locator.Current.GetService<IExpander>());
+        private Lazy<IContext> context = new(() => Locator.Current.GetService<IContext>());
 
         private readonly ObservableCollection<INodeViewModel> nodes = [];
 
@@ -73,7 +73,6 @@ namespace Utility.WPF.Controls.PropertyTrees
         {
             //return repository.MaxIndex(guid, v);
             throw new NotImplementedException();
-
         }
 
         public void Remove(INodeViewModel node)
@@ -108,8 +107,7 @@ namespace Utility.WPF.Controls.PropertyTrees
             if (Nodes.Any(a => (a as IGetKey).Key == (node as IGetKey).Key) == false)
             {
                 nodes.Add(node);
-                { 
-
+                {
                     if (filter.Value?.Filter(node) == false)
                     {
                         node.IsVisible = false;
@@ -124,7 +122,6 @@ namespace Utility.WPF.Controls.PropertyTrees
                 } //);
 
                 configure(node);
-
             }
 
             void Node_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -146,7 +143,6 @@ namespace Utility.WPF.Controls.PropertyTrees
             {
                 if ((node as IGetParent<IReadOnlyTree>).Parent?.Data() is ICollectionDescriptor d)
                 {
-
                 }
                 node.WithChangesTo(a => (a as IGetData).Data)
                 .Where(a => a is not string)
@@ -155,7 +151,6 @@ namespace Utility.WPF.Controls.PropertyTrees
                 {
                     if ((node as IGetParent<IReadOnlyTree>).Parent?.Data() is ICollectionDescriptor d)
                     {
-
                     }
                     //if (data is ISetNode iSetNode)
                     //{
@@ -166,7 +161,6 @@ namespace Utility.WPF.Controls.PropertyTrees
                         (node as ISetKey).Key = new GuidKey(guid.Guid);
                     }
 
-
                     if (data is IYieldItems ychildren)
                         ychildren.Items().Cast<IDescriptor>().ForEach(async d =>
                         {
@@ -174,15 +168,12 @@ namespace Utility.WPF.Controls.PropertyTrees
                             node.Add(newNode);
                             if (newNode.Data() is IGetName { Name: "BaseType" })
                             {
-
                             }
                             Add(newNode as INodeViewModel);
                         });
                     else
                     {
-
                     }
-
                 });
 
                 async void change(Change a)
@@ -213,7 +204,6 @@ namespace Utility.WPF.Controls.PropertyTrees
                                 }
                             }
                             throw new Exception("44c dd");
-
                         });
                     }
                 }
@@ -234,8 +224,6 @@ namespace Utility.WPF.Controls.PropertyTrees
         {
             throw new NotImplementedException();
         }
-
-
 
         public IObservable<INodeViewModel> FindChild(INodeViewModel node, Guid guid)
         {

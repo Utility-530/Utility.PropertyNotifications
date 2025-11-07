@@ -1,11 +1,11 @@
-﻿using Endless;
-using Microsoft.Xaml.Behaviors.Core;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using Endless;
+using Microsoft.Xaml.Behaviors.Core;
 using Utility.Helpers.Ex;
-using Utility.WPF.Demo.Common.Meta;
 using Utility.ServiceLocation;
+using Utility.WPF.Demo.Common.Meta;
 
 namespace Utility.WPF.Demo.Common.ViewModels
 {

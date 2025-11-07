@@ -1,20 +1,15 @@
-﻿using DryIoc.ImTools;
-using LambdaConverters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
+using DryIoc.ImTools;
 using Utility.Enums;
 
 namespace Utility.WPF.Converters
 {
-
     public enum AnyAll
     {
-
     }
 
     public class IfConverter : IMultiValueConverter
@@ -31,7 +26,6 @@ namespace Utility.WPF.Converters
             {
                 iQ = values.IndexOf(quantifier);
                 _quantifier = quantifier;
-
             }
 
             if (values.SingleOrDefault(a => a is IValueConverter) is IValueConverter converter)
@@ -68,7 +62,6 @@ namespace Utility.WPF.Converters
                     case Quantifier.All:
                         return list.All(a => a.Equals(comparison)) == true;
 
-
                     case Quantifier.Any:
                         return list.Any(a => a.Equals(comparison));
 
@@ -89,16 +82,13 @@ namespace Utility.WPF.Converters
                         //return list.All(a => a == comparison) == false;
                         throw new NotImplementedException();
 
-
                     case Quantifier.Many:
                         //return list.All(a => a == comparison) == false;
                         throw new NotImplementedException();
 
-
                     case Quantifier.Most:
                         //return list.All(a => a == comparison) == false;
                         throw new NotImplementedException();
-
 
                     case Quantifier.Several:
                         //return list.All(a => a == comparison) == false;
@@ -108,7 +98,6 @@ namespace Utility.WPF.Converters
                         throw new NotImplementedException();
                 }
             }
-
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

@@ -11,7 +11,6 @@ namespace Utility.Trees.Extensions
 {
     public static class Generic
     {
-
         public static void Foreach<T>(Func<T, IReadOnlyTree, int, T> action, IEnumerable collection, T parent, int level = 0)
         {
             foreach (IReadOnlyTree item in collection)
@@ -20,7 +19,6 @@ namespace Utility.Trees.Extensions
                 Foreach(action, item.Children, newTtem, ++level);
             }
         }
-
 
         public static int[] Index<T>(T node, Func<T, T?> getParent, Func<T, T, int> getChildIndex)
         {
@@ -78,7 +76,6 @@ namespace Utility.Trees.Extensions
                         //    yield return x;
                     });
             });
-          
         }
 
         public static void Visit<T>(this T tree, Func<T, IEnumerable<T>> children, Action<T> action)
@@ -142,8 +139,6 @@ namespace Utility.Trees.Extensions
 
             return null;
         }
-
-
 
         public static ITree<T>? Match<T>(this ITree<T> tree, T data)
         {

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -17,13 +13,11 @@ namespace Utility.WPF.Controls
         private TextBox EditBox;
         private Control SpacedBox;
         private Grid? Grid;
+
         public static readonly DependencyProperty GuidProperty = Register("Guid", typeof(Guid), typeof(GuidBox), new PropertyMetadata(Changed)),
             GuidAsStringProperty = Register("GuidAsString", typeof(string), typeof(GuidBox), new PropertyMetadata("00000000-0000-0000-0000-000000000000", Changed)),
             IsLowerCaseProperty = Register("IsLowerCase", typeof(bool), typeof(GuidBox), new PropertyMetadata(true, Changed)),
             IsReadOnlyProperty = Register("IsReadOnly", typeof(bool), typeof(GuidBox), new PropertyMetadata(true, IsReadOnlyChanged));
-
-
-
 
         private static void IsReadOnlyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -71,14 +65,11 @@ namespace Utility.WPF.Controls
             set { SetValue(IsReadOnlyProperty, value); }
         }
 
-
         public Guid Guid
         {
             get { return (Guid)GetValue(GuidProperty); }
             set { SetValue(GuidProperty, value); }
         }
-
-
 
         public bool IsLowerCase
         {
@@ -86,20 +77,17 @@ namespace Utility.WPF.Controls
             set { SetValue(IsLowerCaseProperty, value); }
         }
 
-
         public string GuidAsString
         {
             get { return (string)GetValue(GuidAsStringProperty); }
             set { SetValue(GuidAsStringProperty, value); }
         }
 
-
-        MenuItem lower, upper;
+        private MenuItem lower, upper;
         private Grid? guidBox;
 
         public override void OnApplyTemplate()
         {
-
             guidBox = GetTemplateChild("GuidGrid") as Grid;
             var items = guidBox.ContextMenu.Items;
             MenuItems(items);
@@ -165,7 +153,6 @@ namespace Utility.WPF.Controls
                         {
                             MenuItems(menuItem.Items);
                         }
-
                     }
                 }
             }
@@ -189,7 +176,6 @@ namespace Utility.WPF.Controls
             base.OnMouseLeave(e);
         }
     }
-
 
     [ValueConversion(typeof(bool), typeof(bool))]
     public class InvertBoolConverter : IValueConverter

@@ -1,11 +1,11 @@
-﻿using MaterialDesignThemes.Wpf;
-using System;
+﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using MaterialDesignThemes.Wpf;
 using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls

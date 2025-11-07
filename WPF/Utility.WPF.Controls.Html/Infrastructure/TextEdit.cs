@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using Utility.PropertyNotifications;
-
+﻿using System.Windows;
 
 namespace Utility.WPF.Controls.Html
 {
     internal class TextEdit
     {
-
-        static string? text;
+        private static string? text;
 
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.RegisterAttached(
@@ -31,7 +23,6 @@ namespace Utility.WPF.Controls.Html
                 //    .Subscribe(a => SetText(d as UIElement, text = a));
             }
         }
-
 
         public static string GetText(UIElement target) => (string)target.GetValue(TextProperty);
 

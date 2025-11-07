@@ -1,8 +1,8 @@
-﻿using Splat;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Splat;
 using Utility.Exceptions;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
@@ -46,7 +46,6 @@ namespace Utility.Models.Trees
                         if (count > a)
                             this.Errors.Add(new LimitExceededException(a, count - a));
                     });
-
                 });
         }
 
@@ -73,7 +72,6 @@ namespace Utility.Models.Trees
         {
             get => remove;
             set { this.remove = value; this.RaisePropertyReceived(value, null); }
-
         }
 
         public virtual IEnumerable Proliferation()

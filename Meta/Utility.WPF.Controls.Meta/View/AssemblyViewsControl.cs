@@ -34,7 +34,6 @@ namespace Utility.WPF.Controls.Meta
             //Connector.Connect(v, viewModel);
             yield return v;
 
-
             //static DualButtonControl CreateDualButtonControl(AssemblyType demoType)
             //{
             //    var dualButtonControl = new DualButtonControl
@@ -75,30 +74,30 @@ namespace Utility.WPF.Controls.Meta
             }
         }
 
-      //  class Connector
-       // {
-            //public static void Connect(DualButtonControl dualButtonControl/*, ViewModel viewModel*/)
-            //{
-            //    dualButtonControl
-            //        .Toggles()
-            //        .Select(size => Enum.Parse<AssemblyType>(size.Key.ToString()))
-            //        .Subscribe(demoType => viewModel.DemoType = demoType);
-            //}
+        //  class Connector
+        // {
+        //public static void Connect(DualButtonControl dualButtonControl/*, ViewModel viewModel*/)
+        //{
+        //    dualButtonControl
+        //        .Toggles()
+        //        .Select(size => Enum.Parse<AssemblyType>(size.Key.ToString()))
+        //        .Subscribe(demoType => viewModel.DemoType = demoType);
+        //}
 
-            //public static void Connect(AssemblyComboBox comboBox, ViewModel viewModel)
-            //{
-            //    viewModel
-            //        .WhenAnyValue(a => a.DemoType)
-            //        .Subscribe(a => comboBox.DemoType = a);
-            //}
+        //public static void Connect(AssemblyComboBox comboBox, ViewModel viewModel)
+        //{
+        //    viewModel
+        //        .WhenAnyValue(a => a.DemoType)
+        //        .Subscribe(a => comboBox.DemoType = a);
+        //}
 
-            //public static void Connect(ViewsMasterDetail detailControl, ViewModel viewModel)
-            //{
-            //    viewModel
-            //        .WhenAnyValue(a => a.DemoType)
-            //        .Subscribe(a => detailControl.DemoType = a);
-            //}
-      //  }
+        //public static void Connect(ViewsMasterDetail detailControl, ViewModel viewModel)
+        //{
+        //    viewModel
+        //        .WhenAnyValue(a => a.DemoType)
+        //        .Subscribe(a => detailControl.DemoType = a);
+        //}
+        //  }
 
         //class ViewModel : ReactiveObject
         //{

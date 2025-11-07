@@ -1,12 +1,10 @@
 ﻿/*Developed by (doiTTeam)=>doiTTeam.mail = devdoiTTeam@gmail.com*/
+
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Navigation;
 
 namespace DraggAnimatedPanel
 {
@@ -16,12 +14,15 @@ namespace DraggAnimatedPanel
     public partial class DraggAnimatedPanel
     {
         #region const drag
-        const double mouseDif = 2d;
-        const int mouseTimeDif = 25;
-        #endregion
+
+        private const double mouseDif = 2d;
+        private const int mouseTimeDif = 25;
+
+        #endregion const drag
 
         #region private
-        UIElement __draggedElement;
+
+        private UIElement __draggedElement;
 
         public UIElement _draggedElement
         {
@@ -31,11 +32,13 @@ namespace DraggAnimatedPanel
                 __draggedElement = value;
             }
         }
-        int _draggedIndex;
 
-        bool _firstScrollRequest = true;
-        ScrollViewer _scrollContainer;
-        ScrollViewer scrollViewer
+        private int _draggedIndex;
+
+        private bool _firstScrollRequest = true;
+        private ScrollViewer _scrollContainer;
+
+        private ScrollViewer scrollViewer
         {
             get
             {
@@ -47,19 +50,21 @@ namespace DraggAnimatedPanel
                 return _scrollContainer;
             }
         }
-        #endregion
+
+        #endregion private
 
         #region private drag
-        double _lastMousePosX;
-        double _lastMousePosY;
-        int _lastMouseMoveTime;
-        double _x;
-        double _y;
-        Rect _rectOnDrag;
-        #endregion
 
+        private double _lastMousePosX;
+        private double _lastMousePosY;
+        private int _lastMouseMoveTime;
+        private double _x;
+        private double _y;
+        private Rect _rectOnDrag;
 
-        void OnMouseMove(object sender, MouseEventArgs e)
+        #endregion private drag
+
+        private void OnMouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed && _draggedElement == null && !this.IsMouseCaptured)
                 StartDrag(e);
@@ -67,7 +72,7 @@ namespace DraggAnimatedPanel
                 OnDragOver(e);
         }
 
-        void OnDragOver(MouseEventArgs e)
+        private void OnDragOver(MouseEventArgs e)
         {
             Point mousePos = Mouse.GetPosition(this);
             double difX = mousePos.X - _lastMousePosX;
@@ -101,7 +106,7 @@ namespace DraggAnimatedPanel
             }
         }
 
-        void StartDrag(MouseEventArgs e)
+        private void StartDrag(MouseEventArgs e)
         {
             Point mousePos = Mouse.GetPosition(this);
             _draggedElement = GetChildThatHasMouseOver();
@@ -121,13 +126,13 @@ namespace DraggAnimatedPanel
             this.CaptureMouse();
         }
 
-        void OnMouseUp(object sender, MouseEventArgs e)
+        private void OnMouseUp(object sender, MouseEventArgs e)
         {
             if (this.IsMouseCaptured)
                 ReleaseMouseCapture();
         }
 
-        void SwapElement(double x, double y)
+        private void SwapElement(double x, double y)
         {
             int index = GetIndexFromPoint(x, y);
             if (index == _draggedIndex || index < 0)
@@ -139,7 +144,7 @@ namespace DraggAnimatedPanel
             if (SwapCommand != null && SwapCommand.CanExecute(parameter))
             {
                 SwapCommand.Execute(parameter);
-                _draggedElement = Children[index];              //this is bcause after changing the collection the element is other			
+                _draggedElement = Children[index];              //this is bcause after changing the collection the element is other
                 FillNewDraggedChild(_draggedElement);
                 _draggedIndex = index;
             }
@@ -147,7 +152,7 @@ namespace DraggAnimatedPanel
             this.InvalidateArrange();
         }
 
-        void FillNewDraggedChild(UIElement child)
+        private void FillNewDraggedChild(UIElement child)
         {
             if (child.RenderTransform as TransformGroup == null)
             {
@@ -160,12 +165,12 @@ namespace DraggAnimatedPanel
             AnimateTo(child, _x, _y, 0);            //need relocate the element
         }
 
-        void OnLostMouseCapture(object sender, MouseEventArgs e)
+        private void OnLostMouseCapture(object sender, MouseEventArgs e)
         {
             FinishDrag();
         }
 
-        void FinishDrag()
+        private void FinishDrag()
         {
             if (_draggedElement != null)
             {
@@ -175,7 +180,7 @@ namespace DraggAnimatedPanel
             }
         }
 
-        void DoScroll()
+        private void DoScroll()
         {
             if (scrollViewer != null)
             {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Utility.Structs;
 
@@ -70,5 +68,5 @@ public readonly struct Pin
             Array.Clear(_digits, 0, _digits.Length);
     }
 
-    public override string ToString() => new ('*', _digits?.Length ?? 0);
+    public override string ToString() => new('*', _digits?.Length ?? 0);
 }

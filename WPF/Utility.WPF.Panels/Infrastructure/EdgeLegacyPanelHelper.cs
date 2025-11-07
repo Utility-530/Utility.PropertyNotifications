@@ -119,7 +119,8 @@ namespace Utility.WPF.Demo.Panels
                         if (desiredHeight > 0) middleHeight.Add(child);
                         middleCount += heightCount;
                         break;
-                };
+                }
+                ;
             }
 
             bottomCount = Math.Max(bottomCount, Math.Max(SizerUtility.GetCount(bottomleftHeightCount), SizerUtility.GetCount(bottomrightHeightCount)));
@@ -470,7 +471,8 @@ namespace Utility.WPF.Demo.Panels
                         centerCount += widthCount;
                         middleCount += heightCount;
                         break;
-                };
+                }
+                ;
             }
 
             bottomCount = Math.Max(bottomCount, Math.Max(SizerUtility.GetCount(bottomleftHeightCount), SizerUtility.GetCount(bottomrightHeightCount)));

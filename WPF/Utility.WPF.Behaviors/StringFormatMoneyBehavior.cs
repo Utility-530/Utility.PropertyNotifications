@@ -1,9 +1,8 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using Microsoft.Xaml.Behaviors;
 using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Behaviors
@@ -75,11 +74,7 @@ namespace Utility.WPF.Behaviors
             };
 
             BindingOperations.SetBinding(textBox, TextBox.TextProperty, textBinding);
-
         }
-
-
-
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -140,7 +135,6 @@ namespace Utility.WPF.Behaviors
             }
         }
 
-
         protected override void OnDetaching()
         {
             base.OnDetaching();
@@ -162,6 +156,4 @@ namespace Utility.WPF.Behaviors
                 key == Key.Enter;
         }
     }
-    
-
 }

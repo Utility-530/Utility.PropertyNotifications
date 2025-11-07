@@ -10,7 +10,7 @@ namespace Utility.WPF.Demo.Adorners
     {
         public App()
         {
-               //Resolver.Instance.AutoRegister();
+            //Resolver.Instance.AutoRegister();
 
             new Window
             {

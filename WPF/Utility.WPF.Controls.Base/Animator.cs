@@ -124,7 +124,6 @@ namespace Utility.WPF.Controls.Base
 
         private void RunAnimation(bool expand)
         {
-
             var duration = AnimationDuration;
 
             var animation = new DoubleAnimation
@@ -147,5 +146,4 @@ namespace Utility.WPF.Controls.Base
             BeginAnimation(AnimatedValueProperty, animation);
         }
     }
-
 }

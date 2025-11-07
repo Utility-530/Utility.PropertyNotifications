@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 
@@ -13,9 +12,9 @@ namespace Utility.WPF.Panels.Infrastructure
         private readonly List<double> _rowHeights = new List<double>();
         private int _elementCount;
 
-        public Size ResultSize => 
-            _colWidths != null && _rowHeights.Any() ? 
-            new Size(_colWidths.Sum(), _rowHeights.Sum()) : 
+        public Size ResultSize =>
+            _colWidths != null && _rowHeights.Any() ?
+            new Size(_colWidths.Sum(), _rowHeights.Sum()) :
             new Size(0, 0);
 
         public void Calculate(Size availableSize, Size[] measures)
@@ -62,7 +61,7 @@ namespace Utility.WPF.Panels.Infrastructure
             {
                 var width = _colWidths.Sum();
                 if (!double.IsNaN(availableSize.Width) &&
-                    !double.IsInfinity(availableSize.Width) && 
+                    !double.IsInfinity(availableSize.Width) &&
                     availableSize.Width > width)
                 {
                     var dif = (availableSize.Width - width) / _columnCount;
@@ -99,8 +98,8 @@ namespace Utility.WPF.Panels.Infrastructure
 
         public Rect GetPosition(int index)
         {
-            var columnIndex = index%_columnCount;
-            var rowIndex = index/_columnCount;
+            var columnIndex = index % _columnCount;
+            var rowIndex = index / _columnCount;
             var x = 0d;
             for (int i = 0; i < columnIndex; i++)
             {
@@ -135,10 +134,9 @@ namespace Utility.WPF.Panels.Infrastructure
             if (row < 0) row = 0;
             if (col < 0) col = 0;
             if (col >= _columnCount) col = _columnCount - 1;
-            var result = row*_columnCount + col;
+            var result = row * _columnCount + col;
             if (result > _elementCount) result = _elementCount - 1;
             return result;
         }
-
     }
 }

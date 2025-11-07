@@ -96,8 +96,6 @@ public class Type
         return (bool)adornedElement.GetValue(IsRecursiveProperty);
     }
 
-
-
     //public static readonly DependencyProperty HighlightColourProperty = DependencyProperty.RegisterAttached(
     //    "HighlightColour", typeof(bool), typeof(System.Type), new FrameworkPropertyMetadata(false, OnChanged));
 
@@ -120,7 +118,7 @@ public class Type
 
     //    adornedElement.SetValue(HighlightColourProperty, value);
     //}
-    static readonly Guid guid = Guid.NewGuid();
+    private static readonly Guid guid = Guid.NewGuid();
 
     private static void OnChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
     {
@@ -132,13 +130,13 @@ public class Type
         if (adornedElement.IsLoaded)
         {
             AddAdorner(adornedElement, e);
-            if(GetIsRecursive(adornedElement))
+            if (GetIsRecursive(adornedElement))
             {
                 bool showDataContext = GetShowDataContext(adornedElement);
                 bool showDimensions = GetShowDimensions(adornedElement);
-                foreach(var child in adornedElement.Children<UIElement>())
-                {                   
-                    SetIsRecursive(child,true);
+                foreach (var child in adornedElement.Children<UIElement>())
+                {
+                    SetIsRecursive(child, true);
                     SetShowDataContext(child, showDataContext);
                     SetShowDimensions(child, showDimensions);
                 }

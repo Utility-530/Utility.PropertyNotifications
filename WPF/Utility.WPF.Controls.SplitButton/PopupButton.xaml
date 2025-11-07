@@ -3,12 +3,12 @@
                     xmlns:local="clr-namespace:Utility.WPF.Controls.SplitButtons">
 
     <Style TargetType="{x:Type local:PopupButton}">
-        <Setter Property="Background" Value="LightBlue"/>
-        <Setter Property="BorderBrush" Value="DarkBlue"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Padding" Value="10,5"/>
-        <Setter Property="PopupPlacement" Value="Top"/>
-        <Setter Property="StaysOpen" Value="False"/>
+        <Setter Property="Background" Value="LightBlue" />
+        <Setter Property="BorderBrush" Value="DarkBlue" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="10,5" />
+        <Setter Property="PopupPlacement" Value="Top" />
+        <Setter Property="StaysOpen" Value="False" />
 
         <Setter Property="Template">
             <Setter.Value>
@@ -22,10 +22,9 @@
                                     Padding="{TemplateBinding Padding}"
                                     IsChecked="{Binding IsPopupOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
 
-                                
-                            <ContentPresenter ContentSource="Header" 
-                                            HorizontalAlignment="Center" 
-                                            VerticalAlignment="Center"/>
+                            <ContentPresenter ContentSource="Header"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center" />
                         </ToggleButton>
 
                         <!-- Popup -->
@@ -46,7 +45,7 @@
 
                                 <ContentPresenter Content="{TemplateBinding Content}"
                                                 ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                Margin="10"/>
+                                                Margin="10" />
                             </Border>
                         </Popup>
                     </Grid>
@@ -56,10 +55,9 @@
     </Style>
 
     <!-- Drop Shadow Effect Resource -->
-    <DropShadowEffect x:Key="PopupDropShadowEffect" 
-                      BlurRadius="8" 
-                      ShadowDepth="2" 
-                      Opacity="0.3" 
-                      Color="Black"/>
-
+    <DropShadowEffect x:Key="PopupDropShadowEffect"
+                      BlurRadius="8"
+                      ShadowDepth="2"
+                      Opacity="0.3"
+                      Color="Black" />
 </ResourceDictionary>

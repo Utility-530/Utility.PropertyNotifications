@@ -4,7 +4,8 @@ namespace Utility.Meta
 {
     public class SystemAssembly : Assembly
     {
-        const string System = "<System>";
+        private const string System = "<System>";
+
         public override Type[] GetTypes() => Types;
 
         public static readonly Type[] Types = new[]{
@@ -24,9 +25,8 @@ namespace Utility.Meta
 
         public override string? FullName => System;
 
-        public override AssemblyName GetName() => new (System);
+        public override AssemblyName GetName() => new(System);
 
         public override string ToString() => System;
-
     }
 }

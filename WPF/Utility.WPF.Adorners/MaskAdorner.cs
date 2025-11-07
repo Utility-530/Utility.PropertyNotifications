@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -10,7 +9,6 @@ namespace Utility.WPF.Adorners;
 public class MaskAdorner : Adorner
 {
     private ICommand? command;
-
 
     public MaskAdorner(UIElement adornedElement, ICommand? command = null) : base(adornedElement)
     {
@@ -34,9 +32,6 @@ public class MaskAdorner : Adorner
             Rect adornedElementRect = new Rect(new Size(control.ActualWidth, control.ActualHeight));
             drawingContext.DrawRectangle(renderBrush, renderPen, adornedElementRect);
             control.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-
         }
     }
-
-
 }

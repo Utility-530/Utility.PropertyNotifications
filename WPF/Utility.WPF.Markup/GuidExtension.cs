@@ -8,7 +8,8 @@ namespace Utility.WPF.Markup
     {
         public string Value { get; set; }
 
-        public GuidExtension() { }
+        public GuidExtension()
+        { }
 
         public GuidExtension(string value)
         {

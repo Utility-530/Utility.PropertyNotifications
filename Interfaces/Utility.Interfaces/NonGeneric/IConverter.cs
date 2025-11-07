@@ -2,7 +2,6 @@
 {
     public interface IConverter
     {
-
     }
 
     public interface ITwoWayConverter : IConverter

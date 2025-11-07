@@ -38,14 +38,14 @@
         x:Key="Inverse"
         ValueFalse="1"
         ValueTrue="0.5" />
-    
+
     <converter:ColorConverter x:Key="InverseColorConverter" Inverse="True"></converter:ColorConverter>
 
     <Style x:Key="OutlinedDualButtonControl" TargetType="{x:Type controls:DualButtonControl}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:DualButtonControl}">
-                    <WrapPanel 
+                    <WrapPanel
                                Orientation="{Binding Orientation, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                         <Button
                             x:Name="EditButton"
@@ -57,11 +57,11 @@
                             Style="{DynamicResource MaterialDesignOutlinedButton}" />
 
                         <Button
-                            x:Name="Edit2Button"                            
-                            Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ButtonWidth}"                           
+                            x:Name="Edit2Button"
+                            Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ButtonWidth}"
                             BorderThickness="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static converter:BooleanToIntConverter.Instance}}"
                             Margin="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static converter:BooleanToIntInverseConverter.Instance}}"
-                            Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Alternate}"                     
+                            Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Alternate}"
                             BorderBrush="{TemplateBinding BorderBrush,  Converter={StaticResource InverseColorConverter}}"
                             Foreground="{TemplateBinding Foreground,  Converter={StaticResource InverseColorConverter}}"
                             Background="{TemplateBinding Background, Converter={StaticResource InverseColorConverter}}"

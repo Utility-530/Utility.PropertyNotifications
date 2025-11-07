@@ -12,9 +12,7 @@ using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.Trees
 {
-
-
-    static class CustomHelper
+    internal static class CustomHelper
     {
         public static T Load<T>(Uri uri, string key) where T : class
         {
@@ -51,7 +49,6 @@ namespace Utility.WPF.Controls.Trees
         {
             Style ??= CustomHelper.Load<Style>(new Uri($"/{typeof(ComboTreeView).Assembly.GetName().Name};component/Themes/ComboTreeViewItem.xaml", UriKind.RelativeOrAbsolute), "ComboTreeViewItem");
             ItemContainerStyle ??= CustomHelper.Load<Style>(new Uri($"/{typeof(ComboTreeView).Assembly.GetName().Name};component/Themes/CustomTreeViewItem.xaml", UriKind.RelativeOrAbsolute), "CustomTreeViewItem");
-
         }
     }
 
@@ -62,7 +59,6 @@ namespace Utility.WPF.Controls.Trees
             routingStrategy: RoutingStrategy.Bubble,
             handlerType: typeof(FinishEditRoutedEventHandler),
             ownerType: typeof(CustomTreeViewItem));
-
 
         public static readonly RoutedEvent ChangeEvent = EventManager.RegisterRoutedEvent(
           name: "Change",
@@ -90,8 +86,6 @@ namespace Utility.WPF.Controls.Trees
         public static readonly DependencyProperty IsReadOnlyProperty = ComboBox.IsReadOnlyProperty.AddOwner(typeof(CustomTreeViewItem));
         public static readonly DependencyProperty SelectionItemProperty = DependencyProperty.Register("SelectionItem", typeof(object), typeof(CustomTreeViewItem), new PropertyMetadata());
 
-
-
         static CustomTreeViewItem()
         {
             ToolTipService.IsEnabledProperty.OverrideMetadata(typeof(CustomTreeViewItem), new FrameworkPropertyMetadata(null, new CoerceValueCallback(CoerceToolTipIsEnabled)));
@@ -111,7 +105,6 @@ namespace Utility.WPF.Controls.Trees
 
         public CustomTreeViewItem()
         {
-
         }
 
         private void TreeView_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -137,12 +130,10 @@ namespace Utility.WPF.Controls.Trees
             if (this.GetTemplateChild("Decline_Button") is Button _button)
                 _button.Click += DeclineComboTreeViewItem_Click;
 
-
             if (this.GetTemplateChild("PlusButton") is Button pbutton)
                 pbutton.Click += AddComboTreeViewItem_Click;
             if (this.GetTemplateChild("MinusButton") is Button mbutton)
                 mbutton.Click += RemoveComboTreeViewItem_Click;
-
 
             //if (Style?.Resources["EditTemplate"] is DataTemplate dataTemplate)
             //    EditTemplate ??= dataTemplate;
@@ -165,6 +156,7 @@ namespace Utility.WPF.Controls.Trees
         {
             RaiseCustomRoutedEvent(true);
         }
+
         private void AddComboTreeViewItem_Click(object sender, RoutedEventArgs e)
         {
             RaiseCustomRoutedEvent(Utility.Changes.Type.Add);
@@ -176,8 +168,7 @@ namespace Utility.WPF.Controls.Trees
             RemoveCommand?.Execute(this);
         }
 
-
-        void RaiseCustomRoutedEvent(bool isAccepted)
+        private void RaiseCustomRoutedEvent(bool isAccepted)
         {
             EditRoutedEventArgs routedEventArgs = new(isAccepted, Edit, FinishEditEvent, this);
             RaiseEvent(routedEventArgs);
@@ -189,15 +180,11 @@ namespace Utility.WPF.Controls.Trees
             FinishEditCommand?.Execute(routedEventArgs);
         }
 
-        void RaiseCustomRoutedEvent(Utility.Changes.Type isAccepted)
+        private void RaiseCustomRoutedEvent(Utility.Changes.Type isAccepted)
         {
             ChangeRoutedEventArgs routedEventArgs = new(isAccepted, this.DataContext, ChangeEvent, this);
             RaiseEvent(routedEventArgs);
         }
-
-
-
-
 
         #region events
 
@@ -218,7 +205,6 @@ namespace Utility.WPF.Controls.Trees
             add { AddHandler(SelectionChangedEvent, value); }
             remove { RemoveHandler(SelectionChangedEvent, value); }
         }
-
 
         #endregion events
 
@@ -243,7 +229,7 @@ namespace Utility.WPF.Controls.Trees
         }
 
         /// <summary>
-        /// Used to allow custom binding for Selection. 
+        /// Used to allow custom binding for Selection.
         /// If Selection was set directly then no way to set it to child property of the selected item
         /// </summary>
         public object SelectionItem
@@ -278,30 +264,29 @@ namespace Utility.WPF.Controls.Trees
 
         #endregion properties
 
-
         protected override DependencyObject GetContainerForItemOverride()
         {
-            var item = new CustomTreeViewItem() { 
-                ItemContainerStyleSelector = ItemContainerStyleSelector, 
-                ItemContainerStyle = ItemContainerStyle, 
-                HeaderTemplateSelector = ItemTemplateSelector, 
-                TreeView = this.TreeView };
+            var item = new CustomTreeViewItem()
+            {
+                ItemContainerStyleSelector = ItemContainerStyleSelector,
+                ItemContainerStyle = ItemContainerStyle,
+                HeaderTemplateSelector = ItemTemplateSelector,
+                TreeView = this.TreeView
+            };
             item.Selected += (s, e) =>
             {
                 if (s is FrameworkElement { DataContext: { } dataContext } && SelectionItem != dataContext)
                 {
-                    var oldValue = SelectionItem;   
+                    var oldValue = SelectionItem;
                     SelectionItem = dataContext;
                     _selectionChanged(SelectionItem, oldValue);
                 }
             };
             item.Unselected += (s, e) =>
             {
-
             };
             item.OnLoaded(a =>
             {
-
             });
 
             item.MouseLeftButtonUp += (s, e) => OnMouseLeftButtonUp(e);
@@ -321,15 +306,12 @@ namespace Utility.WPF.Controls.Trees
 
         private void _selectionChanged(object newValue, object oldValue)
         {
-
             this.SetValue(IsDropDownOpenProperty, BooleanBoxes.FalseBox);
             this.RaiseEvent(new SelectionChangedEventArgs(SelectionChangedEvent, new[] { oldValue }, new[] { newValue }));
             //combo.Focus();
             this.ReleaseMouseCapture();
             this.Selection = newValue;
-
         }
-
 
         private static object CoerceIsDropDownOpen(DependencyObject d, object value)
         {
@@ -356,7 +338,6 @@ namespace Utility.WPF.Controls.Trees
         {
             Loaded += new RoutedEventHandler(OpenOnLoad);
         }
-
 
         private void OpenOnLoad(object sender, RoutedEventArgs e)
         {
@@ -509,8 +490,6 @@ namespace Utility.WPF.Controls.Trees
             //FocusItem(NewItemInfo(item, container), itemNavigateArgs);
         }
 
-
-
         private static void OnLostMouseCapture(object sender, MouseEventArgs e)
         {
             if (sender is not CustomTreeViewItem comboBox)
@@ -560,12 +539,10 @@ namespace Utility.WPF.Controls.Trees
             }
         }
 
-
         private void OnPopupClosed(object source, EventArgs e)
         {
             OnDropDownClosed(EventArgs.Empty);
         }
-
 
         /// <summary>
         /// Returns true if the ItemsHost is visually connected to the RootVisual of its PresentationSource.
@@ -596,10 +573,6 @@ namespace Utility.WPF.Controls.Trees
             //set { _cacheValid[(int)CacheBits.HasMouseEnteredItemsHost] = value; }
         }
 
-
-
-
-
         //internal TextBox EditableTextBoxSite
         //{
         //    get
@@ -617,7 +590,6 @@ namespace Utility.WPF.Controls.Trees
             RaiseClrEvent(DropDownOpenedKey, e);
         }
 
-
         /// <summary>
         ///
         /// </summary>
@@ -626,6 +598,7 @@ namespace Utility.WPF.Controls.Trees
         {
             RaiseClrEvent(DropDownClosedKey, e);
         }
+
         internal void RaiseClrEvent(EventPrivateKey key, EventArgs args)
         {
             //EventHandlersStore store = EventHandlersStore;
@@ -651,26 +624,23 @@ namespace Utility.WPF.Controls.Trees
         {
             add {/* EventHandlersStoreAdd(DropDownOpenedKey, value);*/ }
             remove { /*EventHandlersStoreRemove(DropDownOpenedKey, value);*/ }
-
         }
-        private static readonly EventPrivateKey DropDownOpenedKey = new EventPrivateKey();
 
+        private static readonly EventPrivateKey DropDownOpenedKey = new EventPrivateKey();
 
         public event EventHandler DropDownClosed
         {
             add {/* EventHandlersStoreAdd(DropDownOpenedKey, value);*/ }
             remove { /*EventHandlersStoreRemove(DropDownOpenedKey, value);*/ }
-
         }
-        private static readonly EventPrivateKey DropDownClosedKey = new EventPrivateKey();
 
+        private static readonly EventPrivateKey DropDownClosedKey = new EventPrivateKey();
     }
 
     public interface ISelection
     {
         void Select(object obj);
     }
-
 }
 
 namespace MS.Win32

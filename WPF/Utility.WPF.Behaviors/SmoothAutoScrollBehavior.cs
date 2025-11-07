@@ -1,24 +1,20 @@
-﻿using System.Collections;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Utility.WPF.Behaviors
 {
-    using Microsoft.Xaml.Behaviors;
     using System;
-    using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
     using System.Windows.Media.Animation;
-
+    using Microsoft.Xaml.Behaviors;
 
     public enum ScrollablePosition
     {
         Start, Selected, End,
         Middle
     }
-
 
     /// <summary>
     /// Uses ItemsControl's internal scrollviewer to move last item into view when items collection modified.
@@ -31,7 +27,6 @@ namespace Utility.WPF.Behaviors
         public static readonly DependencyProperty WithAnimationProperty =
             DependencyProperty.Register("WithAnimation", typeof(bool), typeof(SmoothAutoScrollBehavior), new PropertyMetadata(true));
 
-
         public static readonly DependencyProperty ScrollablePositionProperty =
             DependencyProperty.Register("ScrollablePosition", typeof(ScrollablePosition), typeof(SmoothAutoScrollBehavior),
                 new PropertyMetadata(ScrollablePosition.Selected));
@@ -40,18 +35,19 @@ namespace Utility.WPF.Behaviors
         private Storyboard? storyboard;
 
         #region properties
+
         public ScrollablePosition ScrollablePosition
         {
             get => (ScrollablePosition)GetValue(ScrollablePositionProperty);
             set => SetValue(ScrollablePositionProperty, value);
         }
 
-
         public bool WithAnimation
         {
             get => (bool)GetValue(WithAnimationProperty);
             set => SetValue(WithAnimationProperty, value);
         }
+
         #endregion properties
 
         protected override void OnAttached()
@@ -125,9 +121,11 @@ namespace Utility.WPF.Behaviors
                 case ScrollablePosition.Start:
                     position = 1;
                     break;
+
                 case ScrollablePosition.Middle:
                     position = this.AssociatedObject.Items.Count / 2d;
                     break;
+
                 case ScrollablePosition.Selected:
                     if (AssociatedObject is ListBox listBox)
                         position = listBox.SelectedIndex;
@@ -136,10 +134,10 @@ namespace Utility.WPF.Behaviors
                         throw new Exception("SDG$£B  FG5555");
                     }
                     break;
+
                 case ScrollablePosition.End:
                     position = this.AssociatedObject.Items.Count;
                     break;
-
             }
 
             await Task.Delay(300);
@@ -157,8 +155,6 @@ namespace Utility.WPF.Behaviors
 
         private static class Helper
         {
-
-
             public static Storyboard MakeScrollAnimation(ScrollViewer scrollViewer, double ratio, double offset)
             {
                 double toValue = scrollViewer.ScrollableHeight * ratio;
@@ -205,8 +201,6 @@ namespace Utility.WPF.Behaviors
             }
         }
     }
-
-
 
     /// <summary>
     ///   Based on the following link

@@ -8,7 +8,6 @@ using Utility.Observables.Generic;
 
 namespace Utility.Infrastructure
 {
-
     public class Store
     {
         private Dictionary<IEquatable, object> store = new();
@@ -28,6 +27,7 @@ namespace Utility.Infrastructure
                 store[key] = value;
             }
         }
+
         public static Store Instance { get; } = new Store();
     }
 
@@ -39,7 +39,6 @@ namespace Utility.Infrastructure
     {
         private readonly Guid guid;
         private IDisposable? disposable;
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoObject"/> class.
@@ -58,7 +57,6 @@ namespace Utility.Infrastructure
         [XmlIgnore]
         [Browsable(false)]
         public virtual bool HasChanged { get; set; }
-
 
         string IDataErrorInfo.this[string columnName] => Validate(columnName);
 
@@ -105,7 +103,6 @@ namespace Utility.Infrastructure
                     // Validation response
                 });
         }
-
 
         protected virtual string Validate(string? memberName)
         {

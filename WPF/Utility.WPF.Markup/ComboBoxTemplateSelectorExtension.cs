@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
-using System.Windows;
 using System.Windows.Media;
 
 namespace Utility.WPF.Markup
 {
     public class ComboBoxTemplateSelectorExtension : MarkupExtension
     {
-
         public DataTemplate? SelectedItemTemplate { get; set; }
         public DataTemplateSelector? SelectedItemTemplateSelector { get; set; }
         public DataTemplate? DropdownItemsTemplate { get; set; }
@@ -30,7 +25,6 @@ namespace Utility.WPF.Markup
 
     public class ComboBoxTemplateSelector : DataTemplateSelector
     {
-
         public DataTemplate? SelectedItemTemplate { get; set; }
         public DataTemplateSelector? SelectedItemTemplateSelector { get; set; }
         public DataTemplate? DropdownItemsTemplate { get; set; }
@@ -38,7 +32,6 @@ namespace Utility.WPF.Markup
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-
             var itemToCheck = container;
 
             // Search up the visual tree, stopping at either a ComboBox or

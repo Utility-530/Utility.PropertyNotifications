@@ -1,15 +1,12 @@
-﻿
+﻿using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Utility.Collections;
-using Utility.Models;
-using h = Utility.Enums.History;
-using System.Reactive.Disposables;
-using static System.Reactive.Linq.Observable;
-using Utility.Infrastructure;
 using Utility.Entities.Comms;
+using Utility.Infrastructure;
+using Utility.Models;
 using Utility.PropertyNotifications;
-using JulMar.Windows.Collections;
+using static System.Reactive.Linq.Observable;
 using Collection = Utility.Collections.Collection;
+using h = Utility.Enums.History;
 
 namespace Utility.Services.Deprecated
 {
@@ -19,7 +16,6 @@ namespace Utility.Services.Deprecated
 
         public History()
         {
-
         }
 
         public override Key Key => new(Guids.History, nameof(History), typeof(History));
@@ -74,7 +70,6 @@ namespace Utility.Services.Deprecated
             });
         }
 
-
         public void OnNext(HistoryRequest request)
         {
             //return Create<HistoryResponse>(observer =>
@@ -93,14 +88,11 @@ namespace Utility.Services.Deprecated
         }
     }
 
-
     public class HistoryViewModel : NotifyPropertyClass
     {
         public HistoryViewModel()
         {
         }
-
-
 
         private readonly Dictionary<h, Collection> dictionary = new() {
             { h.Future, new Collection() },
@@ -162,7 +154,8 @@ namespace Utility.Services.Deprecated
 
     public class HeaderedList
     {
-        public HeaderedList() { }
+        public HeaderedList()
+        { }
 
         public string Header { get; set; }
 

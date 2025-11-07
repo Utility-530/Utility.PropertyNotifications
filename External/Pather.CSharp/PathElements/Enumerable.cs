@@ -48,7 +48,6 @@ namespace Pather.CSharp.PathElements
                 if (list.Count > index)
                 {
                     list[index] = value;
-
                 }
                 else if (index == list.Count)
                 {
@@ -63,7 +62,6 @@ namespace Pather.CSharp.PathElements
             {
                 throw new Exception("sd");
             }
-
         }
     }
 }

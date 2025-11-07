@@ -1,8 +1,8 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Behaviors
 {
@@ -44,8 +44,6 @@ namespace Utility.WPF.Behaviors
 
             AssociatedObject.SelectionChanged += OnSelectorSelectedItemChanged;
         }
-
-
 
         protected override void OnDetaching()
         {

@@ -51,6 +51,7 @@ namespace Utility.WPF.Factorys
                     }
                 case FrameworkElement frameworkElement:
                     return frameworkElement;
+
                 case Brush solidColorBrush:
                     {
                         Viewbox viewBox = new();
@@ -66,6 +67,7 @@ namespace Utility.WPF.Factorys
                         StrokeThickness = 1,
                         Data = geometry
                     };
+
                 case Style { TargetType: var type } style:
                     {
                         if (type.GetConstructor(Type.EmptyTypes) is not null)
@@ -105,15 +107,15 @@ namespace Utility.WPF.Factorys
                         return new TextBlock { Text = converter.GetType().Name };
                     }
 
-
                 case double d:
                     return new TextBlock { Text = d.ToString() };
+
                 case ItemsPanelTemplate itemsPanelTemplate:
                     return new ListBox { ItemsSource = Array.CreateInstance(typeof(string), 5), ItemsPanel = itemsPanelTemplate };
+
                 default:
                     throw new Exception($"Unexpected type {value.GetType().Name} in {nameof(FrameworkElementConverter)}");
             }
         }
     }
-
 }

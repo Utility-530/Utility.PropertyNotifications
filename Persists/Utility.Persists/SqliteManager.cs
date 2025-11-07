@@ -1,9 +1,6 @@
-﻿using LanguageExt;
-using SQLite;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
@@ -11,6 +8,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using LanguageExt;
+using SQLite;
 using Utility.Helpers.Reflection;
 using Utility.Interfaces.Generic;
 using Utility.PropertyNotifications;
@@ -45,7 +44,7 @@ namespace Utility.Persists
         public static IDisposable ToManager<TCollection>(this TCollection observableCollection, Func<object, Guid> funcId, string? dbPath = null) where TCollection : IList, INotifyCollectionChanged
         {
             string path = "../../../Data/models.sqlite";
-            //string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);   
+            //string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             //string path = Path.Combine(userProfile, "Data", "models.sqlite");
 
             return new SqliteManager<TCollection>(dbPath ?? path, observableCollection, funcId).Subscribe(observableCollection.GetType().InnerType());
@@ -54,10 +53,10 @@ namespace Utility.Persists
 
     public class SqliteManager<TCollection>(string dbPath, TCollection collection, Func<object, Guid> funcId) where TCollection : IList
     {
-        const string extantItems = "SELECT * FROM '{0}' AS t LEFT JOIN (SELECT * from {1} WHERE Type = '{2}' AND Removed = '0') AS m ON t.Id = m.Id";
-        const string removedItems = "SELECT * FROM '{0}' AS t JOIN (SELECT * from {1} WHERE Type = '{2}' AND Removed != '0') AS m ON t.Id = m.Id";
+        private const string extantItems = "SELECT * FROM '{0}' AS t LEFT JOIN (SELECT * from {1} WHERE Type = '{2}' AND Removed = '0') AS m ON t.Id = m.Id";
+        private const string removedItems = "SELECT * FROM '{0}' AS t JOIN (SELECT * from {1} WHERE Type = '{2}' AND Removed != '0') AS m ON t.Id = m.Id";
 
-        List<DataType> types = new();
+        private List<DataType> types = new();
 
         public IDisposable Subscribe(Type type)
         {
@@ -96,20 +95,17 @@ namespace Utility.Persists
                         if (funcId(c) == funcId(item))
                         {
                             toRemove.Add(c);
-
                         }
                     }
                     if (toRemove.Contains(c) == false)
                     {
                         foreach (var item in items)
                         {
-
                             if (funcId(c) == funcId(item))
                             {
                                 flag = true;
                                 break;
                             }
-
                         }
 
                         if (flag == false)
@@ -140,7 +136,7 @@ namespace Utility.Persists
 
                 context.Post((a) =>
                 {
-                    if(collection.GetType().GetMethod(nameof(IAddRange<>.AddRange)) is MethodInfo methodInfo)
+                    if (collection.GetType().GetMethod(nameof(IAddRange<>.AddRange)) is MethodInfo methodInfo)
                     {
                         var itemType = methodInfo.GetParameters()[0].ParameterType.GetGenericArguments()[0];
                         var castMethod = typeof(Enumerable).GetMethod("Cast").MakeGenericMethod(itemType);
@@ -155,12 +151,12 @@ namespace Utility.Persists
 
                         methodInfo.Invoke(collection, new object[] { itemsToAdd });
                     }
-                    else 
+                    else
                         foreach (var item in toAdd.Except(toRemove))
                         {
                             collection.Add(item);
                         }
-                    foreach(var item in toRemove)
+                    foreach (var item in toRemove)
                     {
                         collection.Remove(item);
                     }
@@ -180,14 +176,12 @@ namespace Utility.Persists
                             {
                                 Task.Run(() => OnCollectionChanged(a, type));
                             });
-       
-                }, null);            
-            });      
+                }, null);
+            });
         }
 
         private void OnCollectionChanged(NotifyCollectionChangedEventArgs e, Type type)
         {
-
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 InsertBulk(e.NewItems, type);
@@ -213,7 +207,7 @@ namespace Utility.Persists
             using var conn = new SQLiteConnection(dbPath, true);
             conn.Update(item);
             var meta = conn.Find<Meta>(funcId(item));
-            if(meta==null)
+            if (meta == null)
             {
                 var typeString = TypeSerialization.TypeSerializer.Serialize(type);
                 var typeId = types.Single(a => a.Type == typeString).Id;
@@ -252,7 +246,6 @@ namespace Utility.Persists
         {
             DeleteBulk(new[] { item }, type);
             //conn.Delete(item);
-
         }
 
         private void DeleteBulk(IEnumerable items, Type type)
@@ -268,5 +261,4 @@ namespace Utility.Persists
             //conn.R(mapping, items);
         }
     }
-
 }

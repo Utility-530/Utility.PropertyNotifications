@@ -6,14 +6,11 @@
 // like the days and months;
 // they die and are reborn,
 // like the four seasons."
-// 
+//
 // - Sun Tsu,
 // "The Art of War"
 
-using System;
 using System.Diagnostics;
-using System.IO;
-using TheArtOfDev.HtmlRenderer.Core.Entities;
 
 namespace TheArtOfDev.HtmlRenderer.Demo.Common
 {
@@ -45,9 +42,6 @@ namespace TheArtOfDev.HtmlRenderer.Demo.Common
                        "<br/>Click me to change my <code>Text</code> property.";
             }
         }
-
-
-
 
         public static string RunSamplesPerformanceTest(Action<String> setHtmlDelegate)
         {

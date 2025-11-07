@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 
@@ -61,7 +60,7 @@ namespace Utility.WPF.Panels.Infrastructure
             void AdjustEmptySpace(Size availableSize)
             {
                 var height = rowHeights.Sum();
-                if (!double.IsNaN(availableSize.Height) && 
+                if (!double.IsNaN(availableSize.Height) &&
                     !double.IsInfinity(availableSize.Height) && availableSize.Height > height)
                 {
                     var dif = (availableSize.Height - height) / rowCount;

@@ -1,26 +1,25 @@
-﻿using RandomColorGenerator;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using RandomColorGenerator;
+using ReactiveUI;
 using Utility.WPF.Adorners;
 using Utility.WPF.Adorners.Infrastructure;
 using Utility.WPF.Helpers;
 using static Utility.WPF.Controls.Adorners.SettingsControl;
 using Type = Utility.WPF.Adorners.Type;
-using System.Reactive.Linq;
-using System.Reactive.Disposables;
 
 namespace Utility.WPF.Controls.Adorners
 {
     public class SettingsAdorner : FrameworkElementAdorner<SettingsControl>
     {
         private ControlColourer? controlColourer;
-
 
         private SettingsAdorner(FrameworkElement adornedElement) : base(adornedElement)
         {
@@ -38,8 +37,6 @@ namespace Utility.WPF.Controls.Adorners
             adornedElement.AddIfMissingAdorner(new SettingsControl());
             return settingsAdorner;
         }
-
-
 
         protected override IDisposable SetAdornedElement(SettingsControl settingsControl, FrameworkElement? adornedElement)
         {
@@ -151,7 +148,6 @@ namespace Utility.WPF.Controls.Adorners
                                        .WithOpacity(0.5);
                     }
                 }
-
             }
 
             public void Remove()

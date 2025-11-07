@@ -1,16 +1,16 @@
 ﻿<Application x:Class="Utility.WPF.Demo.Forms.App"
-            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-            xmlns:vm="clr-namespace:Utility.WPF.Demo.Forms.ViewModels"
-            xmlns:p="http://propertytools.org/wpf"
-            xmlns:un="clr-namespace:UnitsNet.Units;assembly=UnitsNet"
-            xmlns:view2="http://schemas.utility.com/hybrid"
-            xmlns:util="http://schemas.utility.com/markup"
-            xmlns:view11="clr-namespace:Utility.WPF.Demo.Forms.Controls"
-            xmlns:system="clr-namespace:System;assembly=netstandard"
-            xmlns:infra="clr-namespace:Utility.WPF.Demo.Forms.Infrastructure"
-            xmlns:view21="http://schemas.utility.com/dragablz"
-            StartupUri="MainWindow.xaml">
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:p="http://propertytools.org/wpf"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:view21="http://schemas.utility.com/dragablz"
+             xmlns:view2="http://schemas.utility.com/hybrid"
+             xmlns:util="http://schemas.utility.com/markup"
+             xmlns:system="clr-namespace:System;assembly=netstandard"
+             xmlns:un="clr-namespace:UnitsNet.Units;assembly=UnitsNet"
+             xmlns:view11="clr-namespace:Utility.WPF.Demo.Forms.Controls"
+             xmlns:infra="clr-namespace:Utility.WPF.Demo.Forms.Infrastructure"
+             xmlns:vm="clr-namespace:Utility.WPF.Demo.Forms.ViewModels"
+             StartupUri="MainWindow.xaml">
     <Application.Resources>
         <DataTemplate DataType="{x:Type vm:NotesViewModel}">
             <view2:MasterNotesControl MinHeight="300" MinWidth="400"

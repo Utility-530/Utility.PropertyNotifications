@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.Serialization;
 
-
 namespace Utility.Reactives
 {
     //https://github.com/neuecc/UniRx/blob/master/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveDictionary.cs
@@ -103,13 +102,19 @@ namespace Utility.Reactives
     {
         int Count { get; }
         TValue this[TKey index] { get; }
+
         bool ContainsKey(TKey key);
+
         bool TryGetValue(TKey key, out TValue value);
 
         IObservable<DictionaryAddEvent<TKey, TValue>> ObserveAdd();
+
         IObservable<int> ObserveCountChanged();
+
         IObservable<DictionaryRemoveEvent<TKey, TValue>> ObserveRemove();
+
         IObservable<DictionaryReplaceEvent<TKey, TValue>> ObserveReplace();
+
         IObservable<Unit> ObserveReset();
     }
 
@@ -123,10 +128,9 @@ namespace Utility.Reactives
 
     {
         [NonSerialized]
-        bool isDisposed = false;
+        private bool isDisposed = false;
 
-
-        readonly Dictionary<TKey, TValue> inner;
+        private readonly Dictionary<TKey, TValue> inner;
 
         public ReactiveDictionary()
         {
@@ -245,7 +249,7 @@ namespace Utility.Reactives
             return inner.GetEnumerator();
         }
 
-        void DisposeSubject<TSubject>(ref Subject<TSubject> subject)
+        private void DisposeSubject<TSubject>(ref Subject<TSubject> subject)
         {
             if (subject != null)
             {
@@ -287,13 +291,13 @@ namespace Utility.Reactives
             Dispose(true);
         }
 
-        #endregion
-
+        #endregion IDisposable Support
 
         #region Observe
 
         [NonSerialized]
-        Subject<int> countChanged = null;
+        private Subject<int> countChanged = null;
+
         public IObservable<int> ObserveCountChanged()
         {
             if (isDisposed) return Observable.Empty<int>();
@@ -301,7 +305,8 @@ namespace Utility.Reactives
         }
 
         [NonSerialized]
-        Subject<Unit> collectionReset = null;
+        private Subject<Unit> collectionReset = null;
+
         public IObservable<Unit> ObserveReset()
         {
             if (isDisposed) return Observable.Empty<Unit>();
@@ -309,7 +314,8 @@ namespace Utility.Reactives
         }
 
         [NonSerialized]
-        Subject<DictionaryAddEvent<TKey, TValue>> dictionaryAdd = null;
+        private Subject<DictionaryAddEvent<TKey, TValue>> dictionaryAdd = null;
+
         public IObservable<DictionaryAddEvent<TKey, TValue>> ObserveAdd()
         {
             if (isDisposed) return Observable.Empty<DictionaryAddEvent<TKey, TValue>>();
@@ -317,7 +323,8 @@ namespace Utility.Reactives
         }
 
         [NonSerialized]
-        Subject<DictionaryRemoveEvent<TKey, TValue>> dictionaryRemove = null;
+        private Subject<DictionaryRemoveEvent<TKey, TValue>> dictionaryRemove = null;
+
         public IObservable<DictionaryRemoveEvent<TKey, TValue>> ObserveRemove()
         {
             if (isDisposed) return Observable.Empty<DictionaryRemoveEvent<TKey, TValue>>();
@@ -325,14 +332,15 @@ namespace Utility.Reactives
         }
 
         [NonSerialized]
-        Subject<DictionaryReplaceEvent<TKey, TValue>> dictionaryReplace = null;
+        private Subject<DictionaryReplaceEvent<TKey, TValue>> dictionaryReplace = null;
+
         public IObservable<DictionaryReplaceEvent<TKey, TValue>> ObserveReplace()
         {
             if (isDisposed) return Observable.Empty<DictionaryReplaceEvent<TKey, TValue>>();
             return dictionaryReplace ?? (dictionaryReplace = new Subject<DictionaryReplaceEvent<TKey, TValue>>());
         }
 
-        #endregion
+        #endregion Observe
 
         #region implement explicit
 
@@ -348,7 +356,6 @@ namespace Utility.Reactives
                 this[(TKey)key] = (TValue)value;
             }
         }
-
 
         bool IDictionary.IsFixedSize
         {
@@ -398,7 +405,6 @@ namespace Utility.Reactives
             }
         }
 
-
         bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
         {
             get
@@ -438,7 +444,6 @@ namespace Utility.Reactives
             ((IDictionary)inner).CopyTo(array, index);
         }
 
-
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             ((ISerializable)inner).GetObjectData(info, context);
@@ -448,8 +453,6 @@ namespace Utility.Reactives
         {
             ((IDeserializationCallback)inner).OnDeserialization(sender);
         }
-
-
 
         void IDictionary.Remove(object key)
         {
@@ -501,7 +504,7 @@ namespace Utility.Reactives
             return ((IDictionary)inner).GetEnumerator();
         }
 
-        #endregion
+        #endregion implement explicit
     }
 
     public static partial class ReactiveDictionaryExtensions
@@ -512,10 +515,3 @@ namespace Utility.Reactives
         }
     }
 }
-
-
-
-
-
-
-

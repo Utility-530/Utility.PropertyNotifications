@@ -1,9 +1,9 @@
-﻿using Hardcodet.Wpf.DataBinding;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;
+using Hardcodet.Wpf.DataBinding;
 
 namespace Utility.WPF.Markup
 {
@@ -14,9 +14,8 @@ namespace Utility.WPF.Markup
         {
         }
 
-
         public static readonly DependencyProperty TypeProperty = DependencyProperty.RegisterAttached("Type", typeof(Type), typeof(NameOfExtension), new PropertyMetadata(null, PropertyChanged));
-        
+
         private static void PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             //.singleReplaySubject.OnNext(e.NewValue as Type);
@@ -36,7 +35,7 @@ namespace Utility.WPF.Markup
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            Type??= GetType(serviceProvider);
+            Type ??= GetType(serviceProvider);
 
             if (serviceProvider == null)
                 throw new ArgumentNullException(nameof(serviceProvider));
@@ -63,7 +62,7 @@ namespace Utility.WPF.Markup
 
         private Type? GetType(IServiceProvider serviceProvider)
         {
-            if(TryGetTargetItems(serviceProvider, out var targetObject, out var _))
+            if (TryGetTargetItems(serviceProvider, out var targetObject, out var _))
             {
                 return NameOfExtension.GetType(targetObject);
             }

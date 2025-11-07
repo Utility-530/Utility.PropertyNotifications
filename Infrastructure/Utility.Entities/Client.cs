@@ -1,7 +1,4 @@
 ﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Utility.Enums;
 
 namespace Utility.Entities
@@ -10,6 +7,7 @@ namespace Utility.Entities
     {
         [PrimaryKey]
         public Guid Guid { get; set; }
+
         [Unique]
         public string Name { get; set; }
 

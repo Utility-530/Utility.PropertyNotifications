@@ -1,7 +1,7 @@
-﻿using Cogs.Collections;
-using System.Reactive.Disposables;
+﻿using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
+using Cogs.Collections;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
@@ -53,7 +53,6 @@ namespace Utility.Models
 
         public IReadOnlyTree this[string key] => _factories[key].Value;
 
-
         public IObservable<IReadOnlyTree> Children(ITree node)
         {
             return Observable.Create<IReadOnlyTree>(observer =>
@@ -80,14 +79,13 @@ namespace Utility.Models
             });
         }
 
-
-        IObservable<IReadOnlyTree> activate(ITree node, Structs.Repos.Key? _key)
+        private IObservable<IReadOnlyTree> activate(ITree node, Structs.Repos.Key? _key)
         {
             return Observable.Create<IReadOnlyTree>(observer =>
             {
                 var _new = (IReadOnlyTree)DataActivator.Activate(_key);
                 (_new as ISetParent<IReadOnlyTree>).Parent = node;
-               
+
                 node.Add(_new);
                 (_new as ISetKey).Key = new GuidKey(_key.Value.Guid);
 

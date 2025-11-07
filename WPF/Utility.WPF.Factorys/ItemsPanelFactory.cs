@@ -1,13 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using Utility.Enums;
-using Utility.WPF.Panels;
 using PixelLab.Wpf;
-using System.Collections.Generic;
+using Utility.Enums;
 using Utility.Structs;
-using System.Linq;
+using Utility.WPF.Panels;
 
 namespace Utility.WPF.Factorys
 {
@@ -17,10 +16,9 @@ namespace Utility.WPF.Factorys
     public static class ItemsPanelFactory
     {
         public static ItemsPanelTemplate Template(IReadOnlyCollection<Dimension>? rows, IReadOnlyCollection<Dimension>? columns, Orientation? orientation, Arrangement? arrangement, Action<FrameworkElementFactory>? postAction = null)
-        { 
+        {
             return (arrangement, orientation) switch
             {
-
                 (Arrangement.Grid, _) =>
                                 CreateItemsPanelTemplate<GridEx>(factory =>
                                 {
@@ -39,7 +37,6 @@ namespace Utility.WPF.Factorys
                     factory.SetValue(UniformGrid.RowsProperty, rows?.Count ?? 2);
                     factory.SetValue(UniformGrid.ColumnsProperty, columns?.Count ?? 2);
                     postAction?.Invoke(factory);
-
                 }),
 
                 (Arrangement.TreeMap, _) => CreateItemsPanelTemplate<TreeMapPanel>(),
@@ -73,9 +70,7 @@ namespace Utility.WPF.Factorys
                 orientation ??= (Orientation)WrapPanel.OrientationProperty.DefaultMetadata.DefaultValue;
                 factory.SetValue(WrapPanel.OrientationProperty, orientation.Value);
                 postAction?.Invoke(factory);
-
             }
         }
     }
 }
-

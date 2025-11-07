@@ -4,10 +4,10 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Entities
 {
-
     public class Loan : Entity, IId<Guid>, IClone, IFactory, IGetAmount
     {
-        public Loan() { }
+        public Loan()
+        { }
 
         [Factory]
         public Loan(object obj)
@@ -51,7 +51,6 @@ namespace Utility.Entities
                 Limit = Limit,
                 InitialFee = InitialFee,
             };
-            
         }
 
         public object Create(object config)

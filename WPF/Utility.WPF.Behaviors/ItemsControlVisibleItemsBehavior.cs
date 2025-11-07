@@ -1,10 +1,10 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using Microsoft.Xaml.Behaviors;
 using Utility.WPF.Helpers;
 using Utility.WPF.Reactives;
 
@@ -82,7 +82,7 @@ namespace Utility.WPF.Behaviors
                     {
                         var (firstVisible, lastVisible) = a;
                         FirstIndex = firstVisible;
-                        LastIndex = lastVisible; 
+                        LastIndex = lastVisible;
 
                         Size = lastVisible - firstVisible + 1;
                     });

@@ -15,7 +15,6 @@
         <res:SharedResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-
     <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
         <Border
             x:Name="PART_ContentHost"
@@ -23,10 +22,7 @@
             Focusable="False" />
     </ControlTemplate>
 
-
     <sys:Double x:Key="MaxDropDownHeight">400.0</sys:Double>
-
-
 
     <Style
         x:Key="ComboTreeViewItem"
@@ -101,7 +97,6 @@
                             VerticalAlignment="Stretch"
                             ContentSource="Selection"
                             IsHitTestVisible="False" />
-
 
                         <TextBox
                             x:Name="PART_EditableTextBox"
@@ -209,10 +204,8 @@
                                                         </Trigger>
                                                     </Style.Triggers>
                                                 </Style>
-
                                             </FrameworkElement.Style>
                                         </btns:GeometryToggleButton>
-
 
                                         <WrapPanel
                                             Grid.Row="1"
@@ -273,8 +266,6 @@
         </Setter>
     </Style>
 
-
-
     <Style
         x:Key="PlusTreeViewItem"
         BasedOn="{StaticResource GenericTreeViewItem}"
@@ -307,7 +298,7 @@
                         Focusable="false"
                         ClickMode="Press"
                         IsChecked="{Binding IsDropDownOpen, Mode=TwoWay,
-              RelativeSource={RelativeSource TemplatedParent}}"/>-->
+              RelativeSource={RelativeSource TemplatedParent}}" />-->
 
                         <!--<ContentPresenter x:Name="PART_Header"
                                       IsHitTestVisible="False"
@@ -317,7 +308,7 @@
                                       ContentTemplate="{TemplateBinding SelectionTemplate}"
                                       ContentTemplateSelector="{TemplateBinding SelectionTemplateSelector}"
                                       VerticalAlignment="Stretch"
-                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>-->
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />-->
                         <Grid
                             x:Name="DropDown"
                             Grid.Row="0"
@@ -367,7 +358,6 @@
 
                                     <ScrollViewer>
 
-
                                         <ContentPresenter x:Name="content_control" ContentSource="Edit">
                                             <FrameworkElement.Style>
                                                 <Style TargetType="{x:Type ContentPresenter}">
@@ -404,7 +394,6 @@
 
                                     <Grid MinHeight="24">
 
-
                                         <btns:GeometryToggleButton
                                             x:Name="PlusButton"
                                             Grid.Row="1"
@@ -427,10 +416,8 @@
                                                         </Trigger>
                                                     </Style.Triggers>
                                                 </Style>
-
                                             </FrameworkElement.Style>
                                         </btns:GeometryToggleButton>
-
 
                                         <WrapPanel
                                             Grid.Row="1"
@@ -495,5 +482,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-
 </ResourceDictionary>

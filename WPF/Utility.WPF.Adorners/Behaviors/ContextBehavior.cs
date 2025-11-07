@@ -1,11 +1,11 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Microsoft.Xaml.Behaviors;
 using Utility.WPF.Adorners.Infrastructure;
 using Utility.WPF.Resources;
 
@@ -16,14 +16,12 @@ namespace Utility.WPF.Adorners
         public static readonly DependencyProperty AdornerPlacementProperty =
     DependencyProperty.Register("AdornerPlacement", typeof(AdornerPlacement), typeof(ContextBehavior), new PropertyMetadata());
 
-
         private DispatcherTimer closeAdornerTimer = new DispatcherTimer();
 
         public double CloseAdornerTimeOut { get; } = 2.0;
 
         public ContextBehavior()
         {
-
             closeAdornerTimer.Tick += new EventHandler(closeAdornerTimer_Tick);
             closeAdornerTimer.Interval = TimeSpan.FromSeconds(CloseAdornerTimeOut);
         }
@@ -55,7 +53,6 @@ namespace Utility.WPF.Adorners
 
         private void AssociatedObject_Loaded(object sender, RoutedEventArgs e)
         {
-
         }
 
         public AdornerPlacement AdornerPlacement
@@ -64,11 +61,8 @@ namespace Utility.WPF.Adorners
             set { SetValue(AdornerPlacementProperty, value); }
         }
 
-
-
         private FrameworkElement CreateElement()
         {
-
             //https://stackoverflow.com/questions/5664441/making-a-control-visible-to-hit-testing-but-transparent-to-dragdrop
             Grid grid = new() { Height = 16, Width = 16, Background = Brushes.Transparent };
 
@@ -83,25 +77,17 @@ namespace Utility.WPF.Adorners
 
         private void Grid_MouseLeave(object sender, MouseEventArgs e)
         {
-
             if (AssociatedObject.ContextMenu != null)
             {
                 if (AssociatedObject.ContextMenu.IsMouseOver == false)
                     closeAdornerTimer.Start();
             }
-
         }
-
-
 
         private void Grid_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             if (AssociatedObject.ContextMenu != null)
                 AssociatedObject.ContextMenu.IsOpen = true;
         }
-
-
-
     }
 }
-

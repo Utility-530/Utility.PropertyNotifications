@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using ReactiveUI;
-using Splat;
-using System;
+﻿using System;
 using System.IO;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Newtonsoft.Json;
+using ReactiveUI;
+using Splat;
 
 namespace Utility.WPF.SuspensionDriver
 {

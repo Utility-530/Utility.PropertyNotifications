@@ -2,12 +2,10 @@
 using System.Collections;
 using System.Linq;
 using System.Reactive.Linq;
+using Utility.Interfaces.NonGeneric.Data;
 using Utility.Persists;
 using Utility.Services;
-using Utility.Interfaces.NonGeneric.Data;
 using Utility.WPF.Demo.Common.ViewModels;
-using Utility.WPF.Helpers;
-using Utility.WPF.Meta;
 using Utility.WPF.ResourceDictionarys;
 
 namespace Utility.WPF.Demo.Hybrid.ViewModels
@@ -41,7 +39,7 @@ namespace Utility.WPF.Demo.Hybrid.ViewModels
                 .Subscribe(a =>
                 {
                     if (a.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
-                    a.Action ==  System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+                    a.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
                     {
                         foreach (var item in a.Items)
                         {

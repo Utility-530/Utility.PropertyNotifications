@@ -18,7 +18,7 @@ namespace CustomHelper
         /// </summary>
         public CustomTypeHelper()
         {
-            foreach (var property in GetCustomType().GetProperties()) 
+            foreach (var property in GetCustomType().GetProperties())
                 _customPropertyValues.Add(property.Name, null);
         }
 

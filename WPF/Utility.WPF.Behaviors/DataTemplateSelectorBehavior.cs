@@ -1,8 +1,5 @@
 ﻿#nullable enable
 
-using Evan.Wpf;
-using Microsoft.Xaml.Behaviors;
-using ReactiveUI;
 using System;
 using System.Collections;
 using System.Linq;
@@ -13,6 +10,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using Evan.Wpf;
+using Microsoft.Xaml.Behaviors;
+using ReactiveUI;
 using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Behaviors
@@ -150,6 +150,5 @@ namespace Utility.WPF.Behaviors
         }
 
         #endregion properties
-
     }
 }

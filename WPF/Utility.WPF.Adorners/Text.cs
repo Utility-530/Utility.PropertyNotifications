@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using System.Xml.Linq;
 
 public enum Place
 {
@@ -27,7 +26,6 @@ public class Text : Adorner
 
     public static readonly DependencyProperty GuidProperty =
         DependencyProperty.Register("Guid", typeof(Guid), typeof(Text));
-
 
     public string? text;
     public Dock? position;
@@ -79,7 +77,6 @@ public class Text : Adorner
         {
             AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(adornedElement);
 
-
             bool flag = false;
             foreach (var adorner in adornerLayer.GetAdorners(adornedElement) ?? Array.Empty<Adorner>())
             {
@@ -103,11 +100,10 @@ public class Text : Adorner
                     //text.position = (Dock?)adornedElement.GetValue(Text.PositionProperty);
                     //text.place = (Place?)adornedElement.GetValue(Text.PlaceProperty);
 
-
                     //adorner
-                    //adornerLayer.Add(new Text(adornedElement, 
+                    //adornerLayer.Add(new Text(adornedElement,
                     //    (string?)adornedElement.GetValue(Text.TextProperty),
-                    //    (Dock?)adornedElement.GetValue(Text.PositionProperty), 
+                    //    (Dock?)adornedElement.GetValue(Text.PositionProperty),
                     //    (Place?)adornedElement.GetValue(Text.PlaceProperty)));
                     //var text1 = adorner.GetValue(Text.TextProperty);
                     //var text2 = adornedElement.GetValue(Text.TextProperty);
@@ -117,8 +113,6 @@ public class Text : Adorner
                     //{
                     //    //adornerLayer.Remove(adorner);
                     //}
-
-
                 }
             }
             //InvalidateTextAdorners(adornerLayer, adornedElement);
@@ -130,7 +124,6 @@ public class Text : Adorner
                     (Place?)adornedElement.GetValue(PlaceProperty)));
             else
                 InvalidateTextAdorners(adornerLayer, adornedElement);
-
         }
 
         static void AdornedElement_Loaded(object sender, RoutedEventArgs e)
@@ -168,6 +161,7 @@ public class Text : Adorner
     #endregion Event Handlers
 
     #region Attached Property Getters and Setters
+
     public static string GetText(UIElement adornedElement)
     {
         if (adornedElement == null)
@@ -250,7 +244,6 @@ public class Text : Adorner
                 InvalidateTextAdorners(adornerLayer, adornedElement);
         }
     }
-
 
     /// <summary>
     ///   Draws the content of a <see cref="T:System.Windows.Media.DrawingContext"/> object during the render pass of a <see cref="T:Huan.Windows.Documents.Placeholder"/> element.
@@ -564,11 +557,9 @@ public class Text : Adorner
                     }
             }
         }
-
-
     }
 
-    double HeightDifference(FrameworkElement element, FormattedText formattedText)
+    private double HeightDifference(FrameworkElement element, FormattedText formattedText)
     {
         if (double.IsNaN(element.Height) || element.Height == 0)
         {
@@ -580,7 +571,7 @@ public class Text : Adorner
         return element.Height - formattedText.Height;
     }
 
-    double WidthDifference(FrameworkElement element, FormattedText formattedText)
+    private double WidthDifference(FrameworkElement element, FormattedText formattedText)
     {
         if (double.IsNaN(element.Width) || element.Width == 0)
         {
@@ -591,6 +582,7 @@ public class Text : Adorner
         }
         return element.Width - formattedText.Width;
     }
+
     /// <returns>
     ///   the computed text alignment of the adorned element.
     /// </returns>

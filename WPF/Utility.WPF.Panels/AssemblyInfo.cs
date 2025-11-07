@@ -12,4 +12,4 @@ using System.Windows.Markup;
 [assembly: XmlnsPrefix("http://schemas.utility.com/panels", "pnls")]
 [assembly: XmlnsDefinition("http://schemas.utility.com/panels", "Utility.WPF.Panels")]
 [assembly: XmlnsDefinition("http://schemas.utility.com/panels", "Auxide.Controls")]
-[assembly: XmlnsDefinition("http://schemas.utility.com/panels", "Utility.WPF.Demo.Panels")] 
+[assembly: XmlnsDefinition("http://schemas.utility.com/panels", "Utility.WPF.Demo.Panels")]

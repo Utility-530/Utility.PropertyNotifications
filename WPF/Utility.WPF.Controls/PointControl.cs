@@ -19,12 +19,10 @@ namespace Utility.WPF.Controls
             set { SetValue(YProperty, value); }
         }
 
-
         public double Y
         {
             get { return (double)GetValue(YProperty); }
             set { SetValue(YProperty, value); }
         }
-
     }
 }

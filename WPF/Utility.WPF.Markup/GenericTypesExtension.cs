@@ -45,5 +45,4 @@ namespace Utility.WPF.Markup
             return result;
         }
     }
-
 }

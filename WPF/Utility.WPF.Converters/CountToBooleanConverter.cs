@@ -1,15 +1,14 @@
-﻿using LanguageExt.ClassInstances.Const;
-using Soukoku.ExpressionParser;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Soukoku.ExpressionParser;
 using Utility.Helpers;
-using Utility.Helpers.Reflection;
 using Utility.Helpers.NonGeneric;
+using Utility.Helpers.Reflection;
 using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Converters
@@ -28,7 +27,7 @@ namespace Utility.WPF.Converters
             int param;
             if (value == null)
                 return FalseValue;
-            if (int.TryParse((parameter?? "0").ToString(), out param))
+            if (int.TryParse((parameter ?? "0").ToString(), out param))
             {
                 if (GetInt(value) is int i)
                     return lazy.Value.Evaluate($"{i}{Comparison}{param}").Value == "1" != Invert ? TrueValue : FalseValue;
@@ -101,7 +100,6 @@ namespace Utility.WPF.Converters
                          //'++', //preincrement,
                          //'--', //predecrement,
             };
-
 
         public object TrueValue { get; set; } = true;
         public object FalseValue { get; set; } = false;

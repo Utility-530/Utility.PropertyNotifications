@@ -12,20 +12,15 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.WPF.ResourceDictionarys
 {
-
-
     public record ResourceDictionaryKeyValue(DictionaryEntry Entry, ResourceDictionary ResourceDictionary) : IEquatable, IGetKey, IGetName
     {
-        public string Key => ResourceDictionary.Source?.ToString()?? Name;
+        public string Key => ResourceDictionary.Source?.ToString() ?? Name;
 
         public string Name => Entry.Key.ToString();
 
         //   private readonly Lazy<MasterDetailGrid> lazy = new(() => new MasterDetailGrid(ResourceDictionary.Cast<DictionaryEntry>().Select(a => new DataTemplateKeyValue(a)).ToArray()));
 
-
         //public override FrameworkElement Value => lazy.Value;
-
-
 
         public static IEnumerable<ResourceDictionaryKeyValue> ResourceViewTypes(Assembly assembly) =>
             assembly
@@ -36,7 +31,6 @@ namespace Utility.WPF.ResourceDictionarys
         //type.Name)!)
         .OrderBy(a => ToKey(a.Entry));
         //.ToDictionaryOnIndex()
-
 
         private static string ToKey(DictionaryEntry entry)
         {
@@ -80,7 +74,6 @@ namespace Utility.WPF.ResourceDictionarys
         //    }
         //    return tree;
         //}
-
 
         public static IEnumerable<ResourceDictionaryKeyValue>
             SelectResourceDictionaries(this Assembly assembly, Predicate<DictionaryEntry>? predicate = null, bool ignoreXamlReaderExceptions = false)
@@ -269,14 +262,13 @@ namespace Utility.WPF.ResourceDictionarys
             }
 
             return FindResource<T>(resourceDictionary.MergedDictionaries, resourceKey);
-           
-        }     
-        
+        }
+
         public static T? FindResource<T>(this IEnumerable<ResourceDictionary> resourceDictionaries, object resourceKey)
         {
-             return resourceDictionaries
-                                    .Select(dic => dic.FindResource<T>(resourceKey))
-                                    .FirstOrDefault(resource => resource is T);
+            return resourceDictionaries
+                                   .Select(dic => dic.FindResource<T>(resourceKey))
+                                   .FirstOrDefault(resource => resource is T);
         }
 
         #region Private Methods
@@ -295,4 +287,3 @@ namespace Utility.WPF.ResourceDictionarys
         #endregion Private Methods
     }
 }
-

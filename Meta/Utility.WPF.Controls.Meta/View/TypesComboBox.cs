@@ -1,8 +1,6 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using Utility.WPF.Controls.Lists;
 using Utility.WPF.Controls.Meta.ViewModels;
-using Utility.WPF.Meta;
 
 namespace Utility.WPF.Controls.Meta
 {

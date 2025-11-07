@@ -48,11 +48,9 @@ public class BaseFilterService<T> : IObserver<Func<T, bool>>, IFilterService<T>,
         return subject.Select(a => new Func<T, bool>(Execute)).Subscribe(observer.OnNext,
             e =>
             {
-
             },
             () =>
             {
-
             });
     }
 }

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using Utility.Helpers;
@@ -24,10 +21,8 @@ namespace Utility.WPF.Converters
                 var flags = EnumHelper.GetFlags(propertyType);
                 if (flags.Contains(PropertyType.GenericArgument1))
                     type = type.GetGenericArguments().FirstOrDefault() is Type gtype ? gtype : type;
-
                 else if (flags.Contains(PropertyType.GenericArgument2))
                     type = type.GetGenericArguments().Skip(1).FirstOrDefault() is Type gtype ? gtype : type;
-
 
                 if (flags.Contains(PropertyType.TopLevel))
                     return PropertyHelper.TopLevelPublicInstanceProperties(type).Select(a => a.Name).ToArray();
@@ -51,6 +46,5 @@ namespace Utility.WPF.Converters
         TopLevel,
         TopLevelAndGenericArgument1 = GenericArgument1 | TopLevel,
         TopLevelAndGenericArgument2 = GenericArgument2 | TopLevel,
-
     }
 }

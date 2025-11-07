@@ -1,17 +1,17 @@
-﻿using Dragablz;
-using Evan.Wpf;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Utility.WPF.Attached;
-using Utility.WPF.Helpers;
+using Dragablz;
+using Evan.Wpf;
+using ReactiveUI;
 using Utility.WPF.Abstract;
+using Utility.WPF.Attached;
 using Utility.WPF.Events;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Controls.Dragablz
 {

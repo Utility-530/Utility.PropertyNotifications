@@ -1,8 +1,5 @@
-﻿
-
-namespace Utility.Structs
+﻿namespace Utility.Structs
 {
-
     public readonly struct Odd
     {
         public Odd(Probability value) : this(PriceType.Bid, value)
@@ -18,7 +15,6 @@ namespace Utility.Structs
         public PriceType Type { get; }
 
         public Probability Value { get; }
-
 
         // User-defined conversion from Digit to double
         public static implicit operator double(Odd odd)
@@ -43,7 +39,6 @@ namespace Utility.Structs
         }
     }
 
-
     public static class OddExtension
     {
         public static bool IsOffer(this Odd odd) => odd.Type == Odd.PriceType.Offer;
@@ -58,5 +53,3 @@ namespace Utility.Structs
         public static decimal AdjustedPrice(this Odd odd) => odd - 1m;
     }
 }
-
-

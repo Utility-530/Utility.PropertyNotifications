@@ -10,17 +10,17 @@ namespace Utility.Models.Trees
     public class SetModel : ResolvableModel, /*ISet,*/ IValue, System.IObservable<ValueChanged>
     {
         private object value;
-        List<System.IObserver<ValueChanged>> list = new();
+        private List<System.IObserver<ValueChanged>> list = new();
         private List<ValueChanged> values = [];
 
         public object Value
         {
             get => value; set
             {
-
                 this.value = value;
             }
         }
+
         public override void AddDescendant(IReadOnlyTree node, int level)
         {
             if (node == null)
@@ -58,9 +58,8 @@ namespace Utility.Models.Trees
                         break;
                     }
             }
-
-
         }
+
         public override void SubtractDescendant(IReadOnlyTree @new, int level)
         {
             switch (@new)
@@ -85,8 +84,6 @@ namespace Utility.Models.Trees
                 s.OnNext(new ValueChanged(prop, Value));
             }
         }
-
-
 
         public IDisposable Subscribe(System.IObserver<ValueChanged> observer)
         {

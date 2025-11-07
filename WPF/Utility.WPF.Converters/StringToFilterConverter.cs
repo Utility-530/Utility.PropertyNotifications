@@ -2,7 +2,6 @@
 using System.Windows.Data;
 using Utility.Helpers.Reflection;
 
-
 namespace Utility.WPF.Converters
 {
     // Converts enumerable's to a distinct list of given property's (parameter)  value

@@ -15,16 +15,16 @@
                          VerticalAlignment="Center"
                          Width="{Binding ElementName=MainDockPanel, Path=ActualWidth}"
                         Foreground="Red" Minimum="0" Maximum="100" />
-                <ani:FadeControl x:Name="MainFadeControl" IsInvertFade="False" VerticalAlignment="Center" HorizontalAlignment="Right" 
-                                 AnimationTime="200" 
-                                 Reverse="True" >
+                <ani:FadeControl x:Name="MainFadeControl" IsInvertFade="False" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                 AnimationTime="200"
+                                 Reverse="True">
                     <Ellipse Fill="Red" Height="60" Width="60" Opacity="0.5" />
                 </ani:FadeControl>
             </Grid>
         </Border>
 
         <DockPanel>
-         
+
             <WrapPanel Orientation="Horizontal" DockPanel.Dock="Top">
                 <Button
                         Width="200"
@@ -55,14 +55,14 @@
                 DockPanel.Dock="Top">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <b:SetterAction PropertyName="Opacity" TargetObject="{Binding ElementName=BlueEllipse}" Value="0.1"/>
+                            <b:SetterAction PropertyName="Opacity" TargetObject="{Binding ElementName=BlueEllipse}" Value="0.1" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                     Hide Blue
                 </Button>
                 <Label>Click either Control (changes colour too) or Button To Animate</Label>
             </WrapPanel>
-            <UniformGrid >
+            <UniformGrid>
                 <Grid>
                     <ani:FadeControl x:Name="Fade1" AnimationTime="2000">
                         <!--<i:Interaction.Triggers>
@@ -91,7 +91,6 @@
                         </i:Interaction.Triggers>-->
 
                         <Ellipse x:Name="BlueEllipse" Fill="Blue" Height="200" Width="200" Opacity="0.5"></Ellipse>
-
                     </ani:FadeControl>
                     <TextBlock VerticalAlignment="Center" FontSize="16" HorizontalAlignment="Center">Click to change colour</TextBlock>
                 </Grid>
@@ -105,7 +104,7 @@
                     <TextBox x:Name="TextBox" Text="T E X T" FontSize="64" Opacity="0.5">
                         <i:Interaction.Triggers>
                             <i:PropertyChangedTrigger Binding="{Binding ElementName =TextBox, Path=Text}">
-                                <i:InvokeCommandAction Command="{Binding ElementName=FadeTextBox, Path=FadeCommand}"/>
+                                <i:InvokeCommandAction Command="{Binding ElementName=FadeTextBox, Path=FadeCommand}" />
                             </i:PropertyChangedTrigger>
                         </i:Interaction.Triggers>
                     </TextBox>

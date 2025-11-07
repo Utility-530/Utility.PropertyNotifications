@@ -1,12 +1,10 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
-using Utility.WPF.Behaviors;
-using System.Linq;
+using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Behaviors;
 
@@ -100,7 +98,6 @@ public class CallMethodAction : TriggerAction<DependencyObject>
                 {
                     args.Add(null);
                 }
- 
 
                 methodDescriptor.MethodInfo.Invoke(Target, args.ToArray());
             }
@@ -134,7 +131,7 @@ public class CallMethodAction : TriggerAction<DependencyObject>
             parameter.GetType();
         }
 
-        //return methodDescriptors.FirstOrDefault((methodDescriptor) => !methodDescriptor.HasParameters || parameter != null && methodDescriptor.SecondParameterType.IsAssignableFrom(parameter.GetType())) ?? 
+        //return methodDescriptors.FirstOrDefault((methodDescriptor) => !methodDescriptor.HasParameters || parameter != null && methodDescriptor.SecondParameterType.IsAssignableFrom(parameter.GetType())) ??
         return methodDescriptors.FirstOrDefault();
     }
 

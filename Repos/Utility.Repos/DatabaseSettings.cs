@@ -1,6 +1,5 @@
 ﻿namespace Utility.Repos
 {
-
     public partial class SqliteRepository
     {
         public record DatabaseDirectory(string Path);

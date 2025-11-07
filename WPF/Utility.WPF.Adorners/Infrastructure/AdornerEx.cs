@@ -24,14 +24,13 @@ namespace Utility.WPF.Adorners.Infrastructure
             DependencyProperty.RegisterAttached("IsEnabled", typeof(bool), typeof(AdornerEx),
                 new FrameworkPropertyMetadata(true, OnPropertyChanged));
 
-
         public static readonly DependencyProperty LastItemAdornerProperty =
             DependencyProperty.RegisterAttached("LastItemAdorner", typeof(ICommand), typeof(AdornerEx),
                 new FrameworkPropertyMetadata(null, LastItemAdornerChanged));
 
         private static void LastItemAdornerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if(e.NewValue is ICommand command)
+            if (e.NewValue is ICommand command)
             {
                 var adornerLayer = AdornerLayer.GetAdornerLayer(d as Visual);
                 if (adornerLayer != null)
@@ -39,7 +38,7 @@ namespace Utility.WPF.Adorners.Infrastructure
                     var adorner = new LastItemAdorner(d as ItemsControl, null) { Command = command };
                     adornerLayer.Add(adorner);
                 }
-                else if(d  is FrameworkElement { IsLoaded:false  } el)
+                else if (d is FrameworkElement { IsLoaded: false } el)
                 {
                     el.Loaded += (s, e) =>
                     {
@@ -49,7 +48,6 @@ namespace Utility.WPF.Adorners.Infrastructure
                     };
                 }
             }
-
         }
 
         /// <summary>
@@ -212,7 +210,6 @@ namespace Utility.WPF.Adorners.Infrastructure
             d.SetValue(AdornerProperty, value);
         }
 
-
         #endregion Dependency Properties Get And Set
 
         /// <summary>
@@ -312,11 +309,10 @@ namespace Utility.WPF.Adorners.Infrastructure
                 if (adorners.IndexOf(adorner) != -1)
                     return;
                 adorner.ConnectChildren(frameworkElement);
-                adornerLayer.Add(adorner);           
+                adornerLayer.Add(adorner);
             }
 
             frameworkElement.SetValue(AdornerProperty, adorner);
-
         }
 
         /// <summary>

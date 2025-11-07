@@ -1,6 +1,4 @@
-﻿using DryIoc;
-using Fasterflect;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,11 +11,10 @@ using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Trees.Connectors
 {
-
     public class ConnectionEngine
     {
-        ReplaySubject<RoutedEventArgs> _connectionMadeSubject = new(1);
-        bool flag;
+        private ReplaySubject<RoutedEventArgs> _connectionMadeSubject = new(1);
+        private bool flag;
 
         public IObservable<RoutedEventArgs> Watch(Position2D pos, FrameworkElement _element)
         {
@@ -35,7 +32,6 @@ namespace Utility.WPF.Trees.Connectors
 
             return _connectionMadeSubject;
         }
-
 
         public ConnectorAdorner Add(UIElement _element, Position2D? position = Position2D.All)
         {
@@ -64,7 +60,6 @@ namespace Utility.WPF.Trees.Connectors
 
                             if (connectionAdorner != null)
                             {
-
                                 _connectionMadeSubject.OnNext(connectionAdorner.Args);
                             }
                             else
@@ -78,7 +73,6 @@ namespace Utility.WPF.Trees.Connectors
                                         if (args.Position.HasValue)
                                         {
                                             Add(args.FrameworkElement, args.Position);
-
                                         }
                                         else
                                         {
@@ -107,11 +101,9 @@ namespace Utility.WPF.Trees.Connectors
                                         });
                                         _connectionMadeSubject.OnNext(sdd);
                                     }
-
                                 };
                                 adornerLayer.Add(connectionAdorner);
                                 e.Handled = true;
-
                             }
                         });
                         _connectionMadeSubject.OnNext(callBack);
@@ -121,11 +113,8 @@ namespace Utility.WPF.Trees.Connectors
                 adornerLayer.Add(adorner);
                 _element.RaiseEvent(new RoutedEventArgs(Ex.CleanEvent));
                 return adorner;
-
             }
             return null;
-
-
         }
 
         public void Remove(UIElement _element)
@@ -144,14 +133,12 @@ namespace Utility.WPF.Trees.Connectors
                                 if (adorner.IsMouseOver == false)
                                 {
                                     adornerLayer.Remove(adorner);
-
                                 }
                             });
                         }
                         else
                         {
                             adornerLayer.Remove(adorner);
-
                         }
                     }
             }
@@ -159,10 +146,10 @@ namespace Utility.WPF.Trees.Connectors
 
         //public IDisposable Subscribe(IObserver<ConnectionMadeEventArgs> observer)
         //{
-        //    return _connectionMadeSubject.Subscribe(observer);  
+        //    return _connectionMadeSubject.Subscribe(observer);
         //}
 
-        static FrameworkElement GetTreeView(DependencyObject element)
+        private static FrameworkElement GetTreeView(DependencyObject element)
         {
             while (element != null && element is not TreeView)
                 element = VisualTreeHelper.GetParent(element);
@@ -171,7 +158,7 @@ namespace Utility.WPF.Trees.Connectors
         }
 
         public static ConnectionEngine Instance { get; } = new();
+
         public static ConnectionEngine Create() => new();
     }
-
 }

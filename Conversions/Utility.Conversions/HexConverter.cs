@@ -6,8 +6,6 @@ namespace Utility.Conversions
     {
         private const string _hexaChars = "0123456789ABCDEF";
 
-
-
         public static string ToHexa(this byte[] bytes)
         {
             if (bytes == null)

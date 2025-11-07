@@ -64,9 +64,9 @@ namespace Utility.Structs
             return collection.AsEnumerable().GetEnumerator();
         }
 
-        public static explicit operator Index(int[] b) => new (b);
+        public static explicit operator Index(int[] b) => new(b);
 
-        public static explicit operator Index(string b) => new (ParseKeyToPath(b));
+        public static explicit operator Index(string b) => new(ParseKeyToPath(b));
 
         public override string ToString()
         {

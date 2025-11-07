@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 
 namespace Utility.Structs
 {
@@ -10,10 +6,8 @@ namespace Utility.Structs
     // https://en.wikipedia.org/wiki/Interval_graph
     // try https://www.nuget.org/packages/RangeTree/
 
-
     public class DateRangeCollection : Collection<DateRange>
     {
-
         //bool _merge;
 
         //public DateRangeCollection(bool merge)
@@ -51,7 +45,6 @@ namespace Utility.Structs
         //                    this.InsertItem(index, member);
         //                }
 
-
         //            }
         //        }
         //        else
@@ -66,8 +59,6 @@ namespace Utility.Structs
         //    return this.HasOverLapWith(member);
         //}
 
-
-
         //public DateRange[] GetOverlap(DateRange member)
         //{
         //    DateRange[] ts = null;
@@ -77,8 +68,6 @@ namespace Utility.Structs
         //        foreach (var x in this)
         //        {
         //            var y = x.GetOverLap(this);
-
-
 
         //        }
 
@@ -100,7 +89,6 @@ namespace Utility.Structs
 
         //            if (x.IsFullyWithin(member))
         //            {
-
         //                ts = new DateRange[2];
 
         //                ts[0] = new DateRange { Start = (x.Start - member.Start), End =;
@@ -115,9 +103,5 @@ namespace Utility.Structs
         //    return ts;
 
         //}
-
-
-
     }
-
 }

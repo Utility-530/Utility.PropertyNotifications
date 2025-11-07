@@ -1,12 +1,13 @@
-﻿using DynamicData;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using DynamicData;
+using ReactiveUI;
 using Utility.Reactives;
+
 //using Utility.Helpers.Ex;
 
 namespace Utility.Models.Filters
@@ -46,8 +47,6 @@ namespace Utility.Models.Filters
         }
 
         public override ReactiveProperty<string> Value { get; }
-
-
 
         public override void OnNext(IChangeSet<T> value)
         {

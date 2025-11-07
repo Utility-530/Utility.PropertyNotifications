@@ -14,10 +14,9 @@ namespace TypeSerialization
             _format = SerializationFormat.Values[(int)format];
         }
 
-        readonly Lazy<TypesCollection> _types;
-        readonly ConcurrentDictionary<string, Type> _deserializedGenerics = new();
-        readonly SerializationFormat _format;
-
+        private readonly Lazy<TypesCollection> _types;
+        private readonly ConcurrentDictionary<string, Type> _deserializedGenerics = new();
+        private readonly SerializationFormat _format;
 
         /// <summary>Converts the string representation of a type to an object type.</summary>
         /// <param name="value">A string like: "String", "Array(Int32)", "Dictionary(Int32-String)", ...</param>
@@ -28,7 +27,7 @@ namespace TypeSerialization
                 return null;
 
             if (value[value.Length - 1] != _format.Close)
-                return _types.Value.Simples.TryGetValue(value, out var simple) ? simple 
+                return _types.Value.Simples.TryGetValue(value, out var simple) ? simple
                     : TryConvert(value, simple);
 
             if (_deserializedGenerics.TryGetValue(value, out var type))
@@ -38,7 +37,6 @@ namespace TypeSerialization
 
             return type;
         }
-
 
         /// <summary>Converts the string representation of types to an array of object types.</summary>
         /// <param name="value">A string like: "Boolean-List(String)-Array(Nullable(Int32))".</param>
@@ -51,15 +49,15 @@ namespace TypeSerialization
             return ExtractTypeStrings(value, 0, value.Length).Select(Deserialize).ToArray();
         }
 
-
         public void Register(params Type[] types) => Register(types.AsEnumerable());
+
         public void Register(IEnumerable<Type> types)
         {
             foreach (var type in types)
                 _types.Value.Add(type);
         }
 
-        Type Parse(string str)
+        private Type Parse(string str)
         {
             var parts = TypeParts(str);
             var typeName = parts.First();
@@ -76,12 +74,12 @@ namespace TypeSerialization
             return TryConvert(typeName, type);
         }
 
-        static Type TryConvert(string typeName, Type? type)
+        private static Type TryConvert(string typeName, Type? type)
         {
             return type is not null ? type : Type.GetType(typeName) is Type _type ? _type : throw NotRegisteredException(typeName);
         }
 
-        List<string> TypeParts(string str)
+        private List<string> TypeParts(string str)
         {
             var result = new List<string>();
             var typeLen = str.IndexOf(_format.Open);
@@ -100,7 +98,7 @@ namespace TypeSerialization
             return result;
         }
 
-        IEnumerable<string> ExtractTypeStrings(string str, int start, int end)
+        private IEnumerable<string> ExtractTypeStrings(string str, int start, int end)
         {
             var openCount = 0;
 
@@ -121,7 +119,7 @@ namespace TypeSerialization
             yield return str.Substring(start, end - start);
         }
 
-        static KeyNotFoundException NotRegisteredException(string type) => new($"Type '{type}' not registered");
+        private static KeyNotFoundException NotRegisteredException(string type) => new($"Type '{type}' not registered");
     }
 
     internal class TypesCollection

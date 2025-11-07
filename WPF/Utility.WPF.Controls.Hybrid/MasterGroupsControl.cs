@@ -1,10 +1,10 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using ReactiveUI;
 using Utility.WPF.Attached;
 using Utility.WPF.Controls.Dragablz;
 using Utility.WPF.Controls.Master;

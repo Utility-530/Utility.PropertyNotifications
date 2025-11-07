@@ -11,5 +11,4 @@ public interface IRegister
     void UnregisterCurrent(Type? serviceType, string? contract = null);
 
     void UnregisterAll(Type? serviceType, string? contract = null);
-
 }

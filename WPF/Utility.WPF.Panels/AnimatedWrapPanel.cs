@@ -57,10 +57,10 @@ namespace Utility.WPF.Panels
 
             foreach (UIElement child in Children)
             {
-                if(child.RenderTransform is not TranslateTransform trans)
+                if (child.RenderTransform is not TranslateTransform trans)
                 {
                     child.RenderTransformOrigin = new Point(0, 0);
-                    child.RenderTransform = new TranslateTransform(); 
+                    child.RenderTransform = new TranslateTransform();
                 }
 
                 if (curX + child.DesiredSize.Width > finalSize.Width)

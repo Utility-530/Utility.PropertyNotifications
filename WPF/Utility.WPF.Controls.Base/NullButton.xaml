@@ -1,31 +1,28 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Utility.WPF.Controls.Base" 
+                    xmlns:local="clr-namespace:Utility.WPF.Controls.Base"
                     xmlns:res="http://schemas.utility.com/resourcedictionary">
 
     <!--<ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary  Source="/Utility.WPF.Geometries;component/Resources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    
     <Style TargetType="{x:Type local:NullButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="False">
-                <Setter Property="Content"  >
+                <Setter Property="Content">
                     <Setter.Value>
-                        <Path Stroke="Gray" StrokeThickness="2" Stretch="UniformToFill" Data="{StaticResource Null}"/>
+                        <Path Stroke="Gray" StrokeThickness="2" Stretch="UniformToFill" Data="{StaticResource Null}" />
                     </Setter.Value>
                 </Setter>
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Content"  >
+                <Setter Property="Content">
                     <Setter.Value>
-                        <Path Stroke="Gray" StrokeThickness="2"  Stretch="UniformToFill"  Data="{StaticResource NotNull}"/>
+                        <Path Stroke="Gray" StrokeThickness="2"  Stretch="UniformToFill"  Data="{StaticResource NotNull}" />
                     </Setter.Value>
                 </Setter>
             </Trigger>
         </Style.Triggers>
     </Style>-->
-
-    
 </ResourceDictionary>

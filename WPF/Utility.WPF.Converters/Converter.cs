@@ -9,12 +9,10 @@ using Utility.Helpers.Reflection;
 
 namespace Utility.WPF.Converters
 {
-
     public enum ConverterType
     {
         BooleanToVisibility
     }
-
 
     public class Converter : MarkupExtension, IValueConverter
     {
@@ -28,14 +26,12 @@ namespace Utility.WPF.Converters
 
         public Converter()
         {
-
         }
 
         public ConverterType? Value { get; }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-
             return (Value switch
             {
                 ConverterType.BooleanToVisibility => BooleanToVisibilityConverter.Instance,
@@ -47,7 +43,6 @@ namespace Utility.WPF.Converters
         {
             throw new NotImplementedException();
         }
-
 
         public IValueConverter Match(Type valueType, Type targetType)
         {
@@ -63,8 +58,6 @@ namespace Utility.WPF.Converters
         }
 
         public override object ProvideValue(IServiceProvider serviceProvider) => this;
-
-
     }
 
     public record ConverterSingleton(MemberInfo MemberInfo, ValueConversionAttribute ValueConversionAttribute)
@@ -83,5 +76,4 @@ namespace Utility.WPF.Converters
             }
         }
     }
-
 }

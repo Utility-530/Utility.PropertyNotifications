@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Collections;
-using Utility.PropertyDescriptors;
-using Utility.Interfaces.NonGeneric;
+﻿using System.Collections;
 using System.Collections.ObjectModel;
-using Utility.Trees.Abstractions;
 using Utility.Helpers.NonGeneric;
+using Utility.Interfaces.NonGeneric;
+using Utility.PropertyDescriptors;
+using Utility.Trees.Abstractions;
 using Utility.Trees.Decisions;
 
 namespace Utility.Nodes.WPF
@@ -25,13 +22,11 @@ namespace Utility.Nodes.WPF
                             //{
                             //    new TrueDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent == null), a => false)
                             //    {
-
                             //    },
                             //    new TrueDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent != null), a => a.Parent)
                             //    {
                             //        new TrueDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent == null), a => false)
                             //    {
-
                             //    },
                             //        new TrueDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent != null),a=>a.Parent)
                             //        {
@@ -90,7 +85,6 @@ namespace Utility.Nodes.WPF
                             new TrueDecisionTree(new Decision<string>(item => item == nameof(IList.Count)), a=> false),
                             new TrueDecisionTree(new Decision<string>(item => item == nameof(List<object>.Capacity)), a=> false)
                         }
-
                         }
                       }
                 };
@@ -98,13 +92,11 @@ namespace Utility.Nodes.WPF
 
         public bool Filter(object item)
         {
-
             Predicate.Reset();
             Predicate.Input = item;
             Predicate.Evaluate();
             return (bool)(Predicate.Backput ?? true);
         }
-
 
         public DecisionTree Predicate { get; set; }
 

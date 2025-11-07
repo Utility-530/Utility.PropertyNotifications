@@ -1,13 +1,8 @@
-﻿using ReactiveUI;
-using System;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
-using System.Windows;
 using System.Windows.Controls;
-using Tiny.Toolkits;
 using Utility.Meta;
 using Utility.Trees;
-using Utility.WPF.Controls.ComboBoxes;
 
 namespace Utility.WPF.Demo.ComboBoxes
 {
@@ -22,7 +17,6 @@ namespace Utility.WPF.Demo.ComboBoxes
             TypeSelector.Assemblies = new Assembly[] { Assembly.GetEntryAssembly(), typeof(Tree).Assembly };
             TypeSelector.Type = typeof(Tree);
 
-
             Type2Selector.Assemblies = new Assembly[] { typeof(Tree).Assembly, new SystemAssembly() };
             Type2Selector.Type = typeof(string);
             FileSelector.FileSystemInfo = new DirectoryInfo("O:\\Users\\ry33tal\\");
@@ -33,9 +27,4 @@ namespace Utility.WPF.Demo.ComboBoxes
 
         public static Assembly[] Assemblies => new[] { typeof(Utility.WPF.Demo.Data.Model.Character).Assembly };
     }
-
-
-
-
-
 }

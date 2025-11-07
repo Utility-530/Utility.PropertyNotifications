@@ -27,7 +27,6 @@ namespace Utility.WPF.Converters
                  defaultColour :
                  DependencyProperty.UnsetValue;
 
-
             return val is Color col ?
                 targetType == typeof(Brush) ?
                 new SolidColorBrush(Invert(col)) :
@@ -38,11 +37,9 @@ namespace Utility.WPF.Converters
             {
                 return Inverse ? col.Inverse() : col;
             }
-
         }
 
-
-        object IntToColor(object value)
+        private object IntToColor(object value)
         {
             if (value is Int32)
             {
@@ -65,8 +62,7 @@ namespace Utility.WPF.Converters
             return value;
         }
 
-
-        object StringToColor(object value)
+        private object StringToColor(object value)
         {
             if (value is string s)
             {
@@ -74,7 +70,6 @@ namespace Utility.WPF.Converters
             }
             return value;
         }
-
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -102,15 +97,14 @@ namespace Utility.WPF.Converters
             throw new Exception("£ $$$£c£");
         }
 
-
         private static String ToHex(System.Drawing.Color c)
     => $"#{c.R:X2}{c.G:X2}{c.B:X2}";
 
         private static String ToHex(Color c)
 => $"#{c.R:X2}{c.G:X2}{c.B:X2}";
+
         private static String ToRGB(System.Drawing.Color c)
             => $"RGB({c.R},{c.G},{c.B})";
-
 
         public static ColorConverter Instance { get; } = new ColorConverter();
     }

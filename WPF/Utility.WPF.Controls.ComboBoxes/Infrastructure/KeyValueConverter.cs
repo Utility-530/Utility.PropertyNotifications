@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows.Data;
 using Utility.Interfaces.NonGeneric;
 
@@ -21,14 +20,11 @@ namespace Utility.WPF.Controls.ComboBoxes
 
                 case IGetName name:
                     return name.Name;
+
                 case IGetKey keyValue:
-                    return keyValue.Key;   
- 
-
-
+                    return keyValue.Key;
             }
             return string.Empty;
-
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

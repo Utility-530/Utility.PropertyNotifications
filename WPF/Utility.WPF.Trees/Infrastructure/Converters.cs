@@ -1,11 +1,7 @@
-﻿using Microsoft.Xaml.Behaviors;
-using System.Collections;
-using System.Globalization;
+﻿using System.Collections;
 using System.Windows;
-using System.Windows.Data;
+using Microsoft.Xaml.Behaviors;
 using Utility.Interfaces.NonGeneric;
-using Utility.PropertyDescriptors;
-using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.WPF
 {
@@ -29,14 +25,13 @@ namespace Utility.Nodes.WPF
 
     public class AddObjectAction : TriggerAction<FrameworkElement>
     {
-
         protected override void Invoke(object parameter)
         {
-            if(parameter is Utility.WPF.EditRoutedEventArgs { IsAccepted:true, Edit:{ } instance } value)
+            if (parameter is Utility.WPF.EditRoutedEventArgs { IsAccepted: true, Edit: { } instance } value)
             {
                 var x = AssociatedObject;
                 ;
-                if(x.DataContext is IChildren descriptor )
+                if (x.DataContext is IChildren descriptor)
                 {
                     if (descriptor.Children is IList list)
                     {
@@ -44,7 +39,6 @@ namespace Utility.Nodes.WPF
                         //descriptor.OnNext(new System.ComponentModel.RefreshEventArgs(instance));
                     }
                 }
-
             }
         }
     }

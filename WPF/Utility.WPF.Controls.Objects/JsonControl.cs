@@ -1,15 +1,8 @@
 ﻿# nullable enable
-using Chronic;
-using Humanizer;
-using Microsoft.Xaml.Behaviors;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
-using ReactiveUI;
-using SourceChord.FluentWPF;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
@@ -20,6 +13,11 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using Humanizer;
+using Microsoft.Xaml.Behaviors;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
+using ReactiveUI;
 using Tiny.Toolkits;
 using Utility.Commands;
 using Utility.Conversions.Json.Newtonsoft;
@@ -29,11 +27,9 @@ using Utility.Helpers.Reflection;
 using Utility.Models;
 using Utility.WPF.Controls.Trees;
 using static LambdaConverters.ValueConverter;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Utility.WPF.Controls.Objects
 {
-
     public static class Commands
     {
         public static readonly RoutedCommand FooCommand = new RoutedCommand("Foo", typeof(JsonControl));
@@ -58,18 +54,19 @@ namespace Utility.WPF.Controls.Objects
     public partial class JsonControl : TreeView
     {
         public const string LabelPattern = "^([^$]+)";
+
         public static string RemoveMetaData(string str) => Regex.Match(str, LabelPattern).Groups[0].ToString();
 
         public static readonly DependencyProperty JsonProperty = DependencyProperty.Register(nameof(Json), typeof(string), typeof(JsonControl), new PropertyMetadata(null, Change2));
         public static readonly DependencyProperty ObjectProperty = DependencyProperty.Register(nameof(Object), typeof(JToken), typeof(JsonControl), new PropertyMetadata(null, Change));
         public static readonly DependencyProperty ValidationSchemaProperty = DependencyProperty.Register(nameof(ValidationSchema), typeof(JSchema), typeof(JsonControl), new PropertyMetadata(null, Change));
+
         //public static readonly DependencyProperty SchemaProperty = DependencyProperty.Register(nameof(Schema), typeof(Schema), typeof(JsonControl), new PropertyMetadata());
         public static readonly DependencyProperty ChangeValueCommandProperty = DependencyProperty.Register(nameof(ChangeValueCommand), typeof(ICommand), typeof(JsonControl), new PropertyMetadata());
+
         public static readonly DependencyProperty IsReadOnlyVisibleProperty = DependencyProperty.Register("IsReadOnlyVisible", typeof(bool), typeof(JsonControl), new PropertyMetadata(true));
         public static readonly DependencyProperty IsTypeVisibleProperty = DependencyProperty.Register("IsTypeVisible", typeof(bool), typeof(JsonControl), new PropertyMetadata(false));
         public static readonly DependencyProperty FallbackRootTypeProperty = DependencyProperty.Register("FallbackRootType", typeof(Type), typeof(JsonControl), new PropertyMetadata());
-
-
 
         public static readonly RoutedEvent ValueChangedEvent = EventManager.RegisterRoutedEvent(
             name: "ValueChanged",
@@ -77,11 +74,11 @@ namespace Utility.WPF.Controls.Objects
             handlerType: typeof(ValueChangedRoutedEventHandler),
             ownerType: typeof(CustomTreeViewItem));
 
-        private static void Change2(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+        private static void Change2(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        { }
 
         private static void Change(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-
         }
 
         static JsonControl()
@@ -95,7 +92,6 @@ namespace Utility.WPF.Controls.Objects
         {
             return new TreeListViewItem();
         }
-
 
         public JsonControl()
         {
@@ -125,14 +121,11 @@ namespace Utility.WPF.Controls.Objects
             e.Handled = true;
         }
 
-
-
-        static void OnFoo(object sender, RoutedEventArgs e)
+        private static void OnFoo(object sender, RoutedEventArgs e)
         {
             var jArray = (sender as Control).DataContext as JArray;
 
             JToken jToken = null;
-
 
             if (sender is TreeView { SelectedItem: TreeViewItem { DataContext: JObject jObject } })
             {
@@ -178,7 +171,7 @@ namespace Utility.WPF.Controls.Objects
             }
         }
 
-        static void OnCanFoo(object sender, CanExecuteRoutedEventArgs e)
+        private static void OnCanFoo(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = (sender as Control).DataContext is JArray { Count: >= 0 };
             e.Handled = true;
@@ -233,6 +226,7 @@ namespace Utility.WPF.Controls.Objects
             get { return (ICommand)GetValue(ChangeValueCommandProperty); }
             set { SetValue(ChangeValueCommandProperty, value); }
         }
+
         #endregion properties
 
         public override void OnApplyTemplate()
@@ -347,7 +341,6 @@ namespace Utility.WPF.Controls.Objects
                 }
                 else if (item is JValue { Parent: JProperty { Parent: { } _jObject, Name: { } propertyName } _parent, Type: { } jtype } jValue)
                 {
-
                     if (propertyName.Contains(MetadataConverter.IsReadonly))
                     {
                         return frameworkElement.FindResource("ReadOnlyTemplate") as DataTemplate;
@@ -416,14 +409,11 @@ namespace Utility.WPF.Controls.Objects
             }
         }
 
-
-
         public DataTemplate MissingTemplate { get; set; }
         public JSchema Schema { get; private set; }
 
         public static JsonObjectTypeTemplateSelector Instance { get; } = new();
     }
-
 
     public class Extensions
     {
@@ -442,7 +432,6 @@ namespace Utility.WPF.Controls.Objects
             Date,
             Time,
             Enum
-
         }
     }
 
@@ -474,9 +463,7 @@ namespace Utility.WPF.Controls.Objects
 
     #region converters
 
-
     public record JPropertyNewValue(object EventArgs, JToken JProperty, Type? EnumType = null);
-
 
     public class EventArgsConverter : IValueConverter
     {
@@ -560,7 +547,6 @@ namespace Utility.WPF.Controls.Objects
         }
     }
 
-
     public class DecimalEventArgsConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -621,7 +607,6 @@ namespace Utility.WPF.Controls.Objects
         }
     }
 
-
     public class ComplexPropertyMethodValueConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -636,7 +621,6 @@ namespace Utility.WPF.Controls.Objects
 
         public static ComplexPropertyMethodValueConverter Instance { get; } = new();
     }
-
 
     public class ComplexProperty2MethodValueConverter : IValueConverter
     {
@@ -670,6 +654,7 @@ namespace Utility.WPF.Controls.Objects
         });
 
         public static IValueConverter JArrayConverter { get; } = GetJArrayConverter();
+
         public static IValueConverter GetJArrayConverter()
         {
             List<JToken> collection = new();
@@ -682,7 +667,6 @@ namespace Utility.WPF.Controls.Objects
                 }
                 return new JEnumerable<JToken>();
             });
-
         }
 
         public static IValueConverter JArrayLengthConverter { get; } = Create<object, string>(jToken =>
@@ -730,7 +714,6 @@ namespace Utility.WPF.Controls.Objects
         public static JTokenConverter Instance { get; } = new();
     }
 
-
     public class ObjectVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -739,7 +722,6 @@ namespace Utility.WPF.Controls.Objects
             {
                 if (jObject.Parent == null)
                     return Visibility.Collapsed;
-
             }
             return Visibility.Visible;
         }
@@ -774,7 +756,6 @@ namespace Utility.WPF.Controls.Objects
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-
             if (values.SingleOrDefault(a => a is JValue) is JValue s)
             {
                 return new EnumViewModel(values.SingleOrDefault(a => a is Schema) as Schema, s);
@@ -835,6 +816,7 @@ namespace Utility.WPF.Controls.Objects
     internal class LabelConverter : IValueConverter
     {
         private double? value;
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value is string str ? JsonControl.RemoveMetaData(str).Humanize(LetterCasing.Title) : throw new Exception("sdf 332221``!");
@@ -848,12 +830,12 @@ namespace Utility.WPF.Controls.Objects
 
     internal class OneTimeConverter : IMultiValueConverter
     {
-        double? value;
+        private double? value;
+
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values[0] is double d && values[1] is double d1)
             {
-
                 if (this.value.HasValue)
                 {
                 }
@@ -889,6 +871,7 @@ namespace Utility.WPF.Controls.Objects
             return string.Empty;
         }
     }
+
     internal class DateTimeToNullConverter : ToNullConverter<DateTime>
     {
     }
@@ -897,6 +880,7 @@ namespace Utility.WPF.Controls.Objects
     {
         private T? value;
         private bool? isNotNull;
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (isNotNull.HasValue == false)
@@ -914,7 +898,6 @@ namespace Utility.WPF.Controls.Objects
                 }
                 return isNotNull;
             }
-
         }
 
         public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -990,8 +973,6 @@ namespace Utility.WPF.Controls.Objects
     {
         private JsonSchema jsonSchema;
 
-
-
         public object Convert(object[] value, Type targetType, object parameter, CultureInfo culture)
         {
             return DependencyProperty.UnsetValue;
@@ -999,19 +980,14 @@ namespace Utility.WPF.Controls.Objects
 
         public object[] ConvertBack(object value, Type[] targetType, object parameter, CultureInfo culture)
         {
-
             //if (value is string str)
             //{
             //    return new object[] { jsonSchema.Enumeration.ElementAt(jsonSchema.EnumerationNames.IndexOf(str)), jsonSchema };
             //}
 
-
             return new[] { DependencyProperty.UnsetValue };
         }
-
-
     }
-
 
     public class IndexConverter : IMultiValueConverter
     {
@@ -1056,7 +1032,6 @@ namespace Utility.WPF.Controls.Objects
         }
     }
 
-
     public class NullableToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -1069,7 +1044,7 @@ namespace Utility.WPF.Controls.Objects
             throw new NotImplementedException();
         }
 
-        static bool IsNullable<T>(T obj)
+        private static bool IsNullable<T>(T obj)
         {
             if (obj == null) return true; // obvious
             Type type = typeof(T);
@@ -1078,7 +1053,7 @@ namespace Utility.WPF.Controls.Objects
             return false; // value-type
         }
 
-        static bool IsNullable(object obj, Type? type = null)
+        private static bool IsNullable(object obj, Type? type = null)
         {
             if (obj == null) return true; // obvious
             if (!(type ??= obj.GetType()).IsValueType) return true; // ref-type
@@ -1099,7 +1074,6 @@ namespace Utility.WPF.Controls.Objects
             throw new NotImplementedException();
         }
     }
-
 
     public class GuidConverter : IValueConverter
     {
@@ -1159,7 +1133,6 @@ namespace Utility.WPF.Controls.Objects
         }
     }
 
-
     public class TimeConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -1180,7 +1153,6 @@ namespace Utility.WPF.Controls.Objects
             return value;
         }
     }
-
 
     #endregion converters
 }

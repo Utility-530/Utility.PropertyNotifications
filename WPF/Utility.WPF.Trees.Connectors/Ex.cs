@@ -1,24 +1,23 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Media;
 using Utility.Enums;
 
 namespace Utility.WPF.Trees.Connectors
 {
     public class Ex
     {
-
         public static readonly DependencyProperty PositionProperty =
             DependencyProperty.RegisterAttached("Position", typeof(Position2D), typeof(Ex), new PropertyMetadata(position_changed));
+
         public static readonly DependencyProperty IsConnectableProperty =
     DependencyProperty.RegisterAttached("IsConnectable", typeof(bool), typeof(Ex), new PropertyMetadata(is_connectable_changed));
 
         public static readonly DependencyProperty UsesCustomEventHandlerProperty =
     DependencyProperty.RegisterAttached("UsesCustomEventHandler", typeof(bool), typeof(Ex), new PropertyMetadata());
+
         public static readonly RoutedEvent ConnectionMadeEvent = EventManager.RegisterRoutedEvent("ConnectionMade", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(Ex));
         public static readonly RoutedEvent CleanEvent = EventManager.RegisterRoutedEvent("Clean", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(Ex));
-
 
         public static void AddConnectionMadeHandler(DependencyObject dependencyObject, RoutedEventHandler handler)
         {
@@ -26,6 +25,7 @@ namespace Utility.WPF.Trees.Connectors
                 return;
             uiElement.AddHandler(ConnectionMadeEvent, handler);
         }
+
         public static void RemoveConnectionMadeHandler(DependencyObject dependencyObject, RoutedEventHandler handler)
         {
             if (dependencyObject is not UIElement uiElement)
@@ -49,7 +49,6 @@ namespace Utility.WPF.Trees.Connectors
             uiElement.RemoveHandler(CleanEvent, handler);
         }
 
-
         public static Position2D GetPosition(UIElement element)
         {
             return (Position2D)element.GetValue(PositionProperty);
@@ -70,7 +69,6 @@ namespace Utility.WPF.Trees.Connectors
             element.SetValue(IsConnectableProperty, value);
         }
 
-
         public static bool GetUsesCustomEventHandler(UIElement element)
         {
             return (bool)element.GetValue(UsesCustomEventHandlerProperty);
@@ -80,7 +78,6 @@ namespace Utility.WPF.Trees.Connectors
         {
             element.SetValue(UsesCustomEventHandlerProperty, value);
         }
-
 
         private static void position_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -136,7 +133,6 @@ namespace Utility.WPF.Trees.Connectors
                                     throw new InvalidOperationException();
                             });
                     }
-
                 }
             }
         }
@@ -170,5 +166,4 @@ namespace Utility.WPF.Trees.Connectors
             }
         }
     }
-
 }

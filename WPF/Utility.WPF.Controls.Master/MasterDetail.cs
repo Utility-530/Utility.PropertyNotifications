@@ -5,15 +5,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.Interfaces.NonGeneric;
-using Utility.WPF.Abstract;
 using ItemsControl = System.Windows.Controls.ItemsControl;
 
 namespace Utility.WPF.Controls.Master
 {
-    using Evan.Wpf;
-    using ReactiveUI;
     using System.Reactive.Subjects;
     using System.Windows.Controls.Primitives;
+    using Evan.Wpf;
+    using ReactiveUI;
     using Utility.Reactives;
     using Utility.WPF.Abstract;
     using Utility.WPF.Controls.Base;
@@ -78,7 +77,7 @@ namespace Utility.WPF.Controls.Master
             //        {
             //            orientation.Orientation = (Orientation)(((int)first + 1) % ((int)Orientation.Vertical + 1));
             //        }
-                //});
+            //});
         }
 
         public override event SelectionChangedEventHandler SelectionChanged
@@ -96,7 +95,8 @@ namespace Utility.WPF.Controls.Master
                         break;
 
                     default: throw new ApplicationException($"Unexpected type, {Selector.GetType().Name}, for {nameof(Selector)} ");
-                };
+                }
+                ;
             }
 
             remove
@@ -112,7 +112,8 @@ namespace Utility.WPF.Controls.Master
                         break;
 
                     default: throw new ApplicationException($"Unexpected type, {Selector.GetType().Name}, for {nameof(Selector)} ");
-                };
+                }
+                ;
             }
         }
 
@@ -269,7 +270,7 @@ namespace Utility.WPF.Controls.Master
         {
             if (uiElement is HeaderedContentControl headeredContentControl)
             {
-                if(headeredContentControl.Content is FrameworkElement dependencyObject)
+                if (headeredContentControl.Content is FrameworkElement dependencyObject)
                 {
                     dependencyObject.DetachFromParent();
                 }

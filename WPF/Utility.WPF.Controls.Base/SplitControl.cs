@@ -9,7 +9,6 @@ namespace Utility.WPF.Controls.Base
         public static readonly DependencyProperty MovementProperty =
             DependencyProperty.Register("Movement", typeof(XYTraversal), typeof(SplitControl), new PropertyMetadata(XYTraversal.LeftToRight));
 
-
         static SplitControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(SplitControl), new FrameworkPropertyMetadata(typeof(SplitControl)));
@@ -17,11 +16,9 @@ namespace Utility.WPF.Controls.Base
 
         public SplitControl()
         {
-        
         }
 
         #region properties
-
 
         public XYTraversal Movement
         {
@@ -30,7 +27,5 @@ namespace Utility.WPF.Controls.Base
         }
 
         #endregion properties
-
-   
     }
 }

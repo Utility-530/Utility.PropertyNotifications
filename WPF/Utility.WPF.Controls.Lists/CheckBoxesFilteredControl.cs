@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows;
-using Utility.WPF.Helpers;
 using Utility.WPF.Abstract;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Controls.Lists
 {
-
     /// <summary>
     /// Goes inside CheckBoxesComboControl
     /// </summary>

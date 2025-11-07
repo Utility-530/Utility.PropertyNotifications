@@ -10,7 +10,5 @@ namespace Utility.Interfaces
 
     public interface IValueDescriptor : IDescriptor, IGet, ISet, IValue, ISetValue
     {
-
     }
-
 }

@@ -81,7 +81,6 @@ namespace Utility.WPF.Controls.Lists
         }
     }
 
-
     public class WidthConverter : IMultiValueConverter
     {
         //public object[] Convert(object value, Type[] targetType, object parameter, CultureInfo culture)
@@ -96,17 +95,12 @@ namespace Utility.WPF.Controls.Lists
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-
             return values[0];// 500.0;
         }
-
-
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
     }
-
 }
-

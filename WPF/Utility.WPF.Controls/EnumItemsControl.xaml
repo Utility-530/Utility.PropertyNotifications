@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:Utility.WPF.Controls"
-    xmlns:conv="http://schemas.utility.com/converters">
+    xmlns:conv="http://schemas.utility.com/converters"
+    xmlns:local="clr-namespace:Utility.WPF.Controls">
 
     <conv:ByteToColorConverter x:Key="ByteToColorConverter" />
 

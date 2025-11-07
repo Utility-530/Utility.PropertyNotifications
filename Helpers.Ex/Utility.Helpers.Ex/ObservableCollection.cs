@@ -12,7 +12,8 @@ namespace Utility.Helpers.Ex
 {
     public static class ObservableCollectionHelper
     {
-        const NotifyCollectionChangedAction all = NotifyCollectionChangedAction.Add | NotifyCollectionChangedAction.Remove | NotifyCollectionChangedAction.Replace | NotifyCollectionChangedAction.Move | NotifyCollectionChangedAction.Reset;
+        private const NotifyCollectionChangedAction all = NotifyCollectionChangedAction.Add | NotifyCollectionChangedAction.Remove | NotifyCollectionChangedAction.Replace | NotifyCollectionChangedAction.Move | NotifyCollectionChangedAction.Reset;
+
         public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> enumerable)
         {
             return enumerable is ObservableCollection<T> collection ? collection : new ObservableCollection<T>(enumerable);
@@ -27,7 +28,6 @@ namespace Utility.Helpers.Ex
                 .Select(a => a.EventArgs)
                 .Where(a => action.HasFlag(a.Action));
         }
-
 
         public static IObservable<NotifyCollectionChangedEventArgs> SelectExistingItemsAndChanges(this IEnumerable collection, NotifyCollectionChangedAction action = all)
         {
@@ -123,11 +123,9 @@ namespace Utility.Helpers.Ex
                         obs.Add(a);
                     else
                         scheduler.Schedule(() => obs.Add(a));
-
                 });
 
             return obs;
         }
-
     }
 }

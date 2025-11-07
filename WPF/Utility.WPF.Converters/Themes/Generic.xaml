@@ -4,5 +4,4 @@
 
     <converter:DescriptionConverter x:Key="DescriptionConverter" />
     <converter:DefaultConverter x:Key="DefaultConverter" />
-    
 </ResourceDictionary>

@@ -19,24 +19,20 @@
                             <RowDefinition Height="200"></RowDefinition>
                         </Grid.RowDefinitions>
 
-
                         <ctrl:DatePickerControl x:Name="DatePickerControl"
                                                 VerticalAlignment="Center"
                                                 Margin="24"
-                                                HorizontalAlignment="Right"/>
-
+                                                HorizontalAlignment="Right" />
 
                         <Grid Background="#FAFAFA"  x:Name="MonthGrid" Grid.Row="1" VerticalAlignment="Stretch">
-                                                 </Grid>
+                        </Grid>
 
                         <Viewbox Grid.Row="2">
-                            <btn:DualButtonControl Height="50"  x:Name="DualButtonControl" 
-                                                   Orientation="Horizontal" 
+                            <btn:DualButtonControl Height="50"  x:Name="DualButtonControl"
+                                                   Orientation="Horizontal"
                                                    Style="{StaticResource OutlinedDualButtonControl}" VerticalAlignment="Center"
                                                    Main="{x:Static ctrl:GridType.Grid}"
-                                                   Alternate="{x:Static ctrl:GridType.List}"
-                            >
-
+                                                   Alternate="{x:Static ctrl:GridType.List}">
                             </btn:DualButtonControl>
                         </Viewbox>
                     </Grid>
@@ -44,5 +40,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-
 </ResourceDictionary>

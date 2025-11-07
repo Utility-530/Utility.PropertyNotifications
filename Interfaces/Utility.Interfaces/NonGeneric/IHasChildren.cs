@@ -2,6 +2,6 @@
 {
     public interface IHasChildren
     {
-        public bool HasChildren { get; }    
+        public bool HasChildren { get; }
     }
 }

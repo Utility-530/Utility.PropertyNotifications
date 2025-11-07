@@ -1,6 +1,5 @@
 ﻿namespace Utility.Interfaces.Generic
 {
-
     public interface IConverter
     {
     }

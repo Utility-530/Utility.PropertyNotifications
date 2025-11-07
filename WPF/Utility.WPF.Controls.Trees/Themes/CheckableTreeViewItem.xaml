@@ -55,7 +55,6 @@
                                 x:Name="PART_CheckBox"
                                 Grid.Column="1"
                                 IsChecked="{Binding IsChecked, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
-
                         </Grid>
 
                         <ItemsPresenter
@@ -117,6 +116,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
 </ResourceDictionary>

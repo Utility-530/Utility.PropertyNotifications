@@ -31,7 +31,7 @@ namespace Utility.WPF.Demo.Meta
         public string Property { get; set; }
     }
 
-    public class ViewModelItemTemplateSelector:DataTemplateSelector
+    public class ViewModelItemTemplateSelector : DataTemplateSelector
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {

@@ -43,7 +43,6 @@ namespace Utility.Repos
         public List<Table> Tables { get; set; } = new();
         public List<Type> Types { get; set; } = new();
 
-
         private Task initialisationTask;
 
         public InMemoryRepository()
@@ -51,10 +50,7 @@ namespace Utility.Repos
             Initialise();
         }
 
-
-
         public IEquatable Key => new Key<InMemoryRepository>(Guids.InMemory);
-
 
         private void Initialise()
         {
@@ -80,7 +76,6 @@ namespace Utility.Repos
 
                 try
                 {
-
                     if (value is Key { Guid: Guid valueGuid, Name: var name } && valueGuid == guid)
                     {
                         if (single.Name != name)
@@ -92,7 +87,6 @@ namespace Utility.Repos
                         tables.Remove(single);
                         return;
                     }
-
 
                     if (single.Propertys == null)
                         single.Propertys = new();
@@ -116,7 +110,6 @@ namespace Utility.Repos
                 throw new Exception("676 ere 4323");
             }
         }
-
 
         public async Task<IEquatable[]> FindKeys(IEquatable key)
         {
@@ -166,7 +159,7 @@ namespace Utility.Repos
                         var guid = Guid.NewGuid();
 
                         try
-                        { 
+                        {
                             var newType = TryGetType();
                             if (newType == null)
                                 throw new Exception("d s3322 88");
@@ -197,9 +190,9 @@ namespace Utility.Repos
                 if (tables.Count != 0)
                     return null;
                 var types = Types.Where(t => t.Assembly == type.Assembly.FullName && t.Namespace == type.Namespace && t.Name == type.Name).ToList();
-        
+
                 if (types.Count == 0)
-                {               
+                {
                     var newType = new Type { Assembly = type.Assembly.FullName, Namespace = type.Namespace, Name = type.Name };
                     Types.Add(newType);
                     return newType;

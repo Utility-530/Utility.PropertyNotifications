@@ -34,8 +34,6 @@
     <!--<TabControl>
         <TabItem Header="Main">-->
 
-
-
     <DockPanel>
         <!--<Grid>
                     <Grid.ColumnDefinitions>
@@ -45,18 +43,17 @@
 
         <Viewbox Width="400"       DockPanel.Dock="Right">
 
-
-            <date:CalendarControl  x:Name="CalendarControl" 
-                                           ValueConverter="{StaticResource NoteConverter}" 
-                                           Grid.Column="1" DockPanel.Dock="Right"/>
+            <date:CalendarControl  x:Name="CalendarControl"
+                                           ValueConverter="{StaticResource NoteConverter}"
+                                           Grid.Column="1" DockPanel.Dock="Right" />
         </Viewbox>
         <materialDesign:ColorZone
-                        
+
                         Margin="8"
                         Padding="8"
                         materialDesign:ShadowAssist.ShadowDepth="Depth3"
                         CornerRadius="3"
-                  
+
                         Mode="PrimaryMid">
             <!--<Grid Grid.Column="0">
                         <Grid.RowDefinitions>
@@ -82,7 +79,7 @@
                                     ConverterParameter='>1',
                                     Converter={StaticResource CountToBooleanConverter}}"
                                     ItemsSource="{Binding Notes}"
-                                    SelectedIndex="{Binding SelectedIndex}" >
+                                    SelectedIndex="{Binding SelectedIndex}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="viewModel:NoteViewModel">
                                     <TextBlock Text="{Binding CreateTime, StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}'}"></TextBlock>
@@ -99,7 +96,7 @@
                             <materialDesign:ColorZone>
                                 <WrapPanel
                                             Background="Transparent"
-                                         
+
                                             Opacity="0.4"
                                             Orientation="Horizontal">
                                     <TextBlock Margin="4" Text="Date" />
@@ -111,7 +108,6 @@
                             </materialDesign:ColorZone>
                         </Expander>-->
 
-
                         <TextBox TextWrapping="Wrap"
                                              AcceptsReturn="True"
                                         MinWidth="20"
@@ -119,44 +115,39 @@
                                         Background="Transparent"
                                         FontSize="18"
                                         Text="{Binding Text, TargetNullValue='Text Here'}" />
-
                     </DockPanel>
                 </DataTemplate>
             </FrameworkElement.Resources>
 
-
             <Grid Height="1000">
-                <Viewbox >
+                <Viewbox>
 
-                    <!--<TextBlock Margin="10" 
+                    <!--<TextBlock Margin="10"
                                                HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"                         
+                                               VerticalAlignment="Center"
                                                Opacity="0.04"
                                                Text="{Binding ElementName=CalendarControl, Path=SelectedItem, StringFormat='{}{0:dd/MM/yyyy}'}" />-->
 
-
                     <anim:FadeControl x:Name="FadeControl" AnimationTime="1000" IsInvertFade="True" Reverse="True">
-                        <TextBlock Margin="10" 
+                        <TextBlock Margin="10"
                                                    x:Name="DateTextBlock"
                                                    HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"                         
+                                                   VerticalAlignment="Center"
                                                    Opacity="0.1"
-                                                   Text="{Binding ElementName=CalendarControl, Path=SelectedItem, StringFormat='{}{0:dd/MM/yyyy}'}" >
+                                                   Text="{Binding ElementName=CalendarControl, Path=SelectedItem, StringFormat='{}{0:dd/MM/yyyy}'}">
                                             <b:Interaction.Triggers>
                                                 <b:PropertyChangedTrigger Binding="{Binding ElementName =DateTextBlock, Path=Text}">
-                                                    <b:InvokeCommandAction Command="{Binding ElementName=FadeControl, Path=FadeCommand}"/>
+                                                    <b:InvokeCommandAction Command="{Binding ElementName=FadeControl, Path=FadeCommand}" />
                                                 </b:PropertyChangedTrigger>
                                             </b:Interaction.Triggers>
                         </TextBlock>
                     </anim:FadeControl>
-
                 </Viewbox>
                 <ContentControl
                                     Grid.Row="1"
                                     Background="Transparent"
                                     Content="{Binding ElementName=CalendarControl, Path=SelectedItem, Converter={StaticResource ValueConverter}}" />
             </Grid>
-
         </materialDesign:ColorZone>
 
         <!--</Border>-->
@@ -168,5 +159,4 @@
         <TabItem Header="Other">
         </TabItem>
     </TabControl>-->
-
 </Window>

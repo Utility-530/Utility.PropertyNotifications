@@ -1,11 +1,11 @@
-﻿using MintPlayer.ObservableCollection;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
+using MintPlayer.ObservableCollection;
+using ReactiveUI;
 using Utility.Helpers.Ex;
 using Utility.Models;
 using Utility.PropertyNotifications;

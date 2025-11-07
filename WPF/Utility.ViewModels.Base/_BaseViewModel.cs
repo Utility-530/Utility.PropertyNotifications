@@ -76,7 +76,7 @@
 
 //            return default;
 //        }
-        
+
 //        protected void Set(object value, [CallerMemberName] string? calledMemberName = null)
 //        {
 //            foreach (var observer in Observers)

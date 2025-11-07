@@ -13,5 +13,4 @@ namespace Utility.Interfaces
         public object? Value { get; }
         public object? PreviousValue { get; }
     }
-
 }

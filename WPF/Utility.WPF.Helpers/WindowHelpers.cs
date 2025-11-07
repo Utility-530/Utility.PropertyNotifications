@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
 using WpfScreenHelper;
 
@@ -24,6 +20,7 @@ namespace Utility.WPF.Helpers
             window.Width = area.Width;
             window.Height = area.Height;
         }
+
         public static void ToRight(this Window window)
         {
             // Find the leftmost screen
@@ -38,6 +35,5 @@ namespace Utility.WPF.Helpers
             window.Width = area.Width;
             window.Height = area.Height;
         }
-
     }
 }

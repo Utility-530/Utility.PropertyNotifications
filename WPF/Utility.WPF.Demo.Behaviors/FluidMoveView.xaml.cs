@@ -10,7 +10,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
 
-
 namespace Utility.WPF.Demo.Behaviors
 {
     /// <summary>
@@ -18,11 +17,11 @@ namespace Utility.WPF.Demo.Behaviors
     /// </summary>
     public partial class FluidMoveView : UserControl
     {
+        private DispatcherTimer _timer = new DispatcherTimer();
+        private List<StockItem> _items = new List<StockItem>();
+        private ObservableCollection<StockItem> _filteredItems = new ObservableCollection<StockItem>();
+        private ICollectionViewLiveShaping view;
 
-        DispatcherTimer _timer = new DispatcherTimer();
-        List<StockItem> _items = new List<StockItem>();
-        ObservableCollection<StockItem> _filteredItems = new ObservableCollection<StockItem>();
-        ICollectionViewLiveShaping view;
         public FluidMoveView()
         {
             InitializeComponent();
@@ -30,7 +29,6 @@ namespace Utility.WPF.Demo.Behaviors
             var rnd = new Random();
             string[] names = { "ABCD", "QTYD", "DHJD", "OIUI", "TRET", "AGSD", "YTJD", "MHHJ", "FRGD", "HDHE", "JAGH", "PERI" };
             Array.ForEach(names, s => _items.Add(new StockItem { Name = s }));
-
 
             view = (ICollectionViewLiveShaping)CollectionViewSource.GetDefaultView(_items);
             view.IsLiveSorting = true;
@@ -53,7 +51,7 @@ namespace Utility.WPF.Demo.Behaviors
                     foreach (var item in _items)
                     {
                         item.Value += (int)(rnd.NextDouble() * rnd.Next(-1, 2) * 10);
-                    }                
+                    }
                 }
                 Sort();
             };
@@ -77,7 +75,6 @@ namespace Utility.WPF.Demo.Behaviors
                     {
                     }
                 }
-
             }
 
             _timer.Start();
@@ -107,15 +104,15 @@ namespace Utility.WPF.Demo.Behaviors
         }
     }
 
-    class StockItem : INotifyPropertyChanged
+    internal class StockItem : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-        Stats stats = new();
-        int _value;
+
+        private Stats stats = new();
+        private int _value;
         private Task<Stat> pointsTask;
 
         public string Name { get; set; }
-
 
         public int? HolesPlayed
         {
@@ -141,8 +138,6 @@ namespace Utility.WPF.Demo.Behaviors
             }
         }
 
-
-
         public int Value
         {
             get { return _value; }
@@ -152,13 +147,12 @@ namespace Utility.WPF.Demo.Behaviors
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Value"));
             }
         }
-
     }
-
 
     public class Stats
     {
-        Random random = new();
+        private Random random = new();
+
         public async Task<Stat> FindOrCreateAsync(string v)
         {
             await Task.Delay(random.Next(0, 10000));
@@ -171,4 +165,3 @@ namespace Utility.WPF.Demo.Behaviors
         public int Value { get; } = 10;
     }
 }
-

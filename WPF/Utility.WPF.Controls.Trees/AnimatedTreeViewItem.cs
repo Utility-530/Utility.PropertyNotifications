@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Utility.Helpers.NonGeneric;
 
@@ -13,9 +10,8 @@ namespace Utility.WPF.Controls.Trees
     /// <summary>
     /// Based on AnimatedListBox
     /// </summary>
-    public partial class CustomTreeViewItem 
+    public partial class CustomTreeViewItem
     {
-
         public static readonly DependencyProperty ScrollToSelectedItemProperty =
             DependencyProperty.Register("ScrollToSelectedItem", typeof(bool), typeof(CustomTreeViewItem),
                 new PropertyMetadata(false));
@@ -26,14 +22,11 @@ namespace Utility.WPF.Controls.Trees
 
         #region PART holders
 
-
         public static readonly DependencyProperty SelectedIndexProperty = Selector.SelectedIndexProperty.AddOwner(typeof(CustomTreeViewItem));
-
 
         private AnimatedScrollViewer.AnimatedScrollViewer _scrollViewer;
 
         #endregion PART holders
-
 
         private void onApplyAnimatedTemplate()
         {
@@ -63,7 +56,7 @@ namespace Utility.WPF.Controls.Trees
         private void AnimatedListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var index = this.ItemsSource.IndexOf(a => a == e.AddedItems.Cast<object>().FirstOrDefault());
-            if(sender is CustomTreeViewItem item)
+            if (sender is CustomTreeViewItem item)
             {
                 item.SelectedIndex = index;
             }
@@ -96,14 +89,11 @@ namespace Utility.WPF.Controls.Trees
 
         #region ScrollToSelectedItem (DependencyProperty)
 
-
-
         public int SelectedIndex
         {
             get { return (int)GetValue(SelectedIndexProperty); }
             set { SetValue(SelectedIndexProperty, value); }
         }
-
 
         /// <summary>
         /// A description of the property.
@@ -113,7 +103,6 @@ namespace Utility.WPF.Controls.Trees
             get { return (bool)GetValue(ScrollToSelectedItemProperty); }
             set { SetValue(ScrollToSelectedItemProperty, value); }
         }
-
 
         #endregion ScrollToSelectedItem (DependencyProperty)
 
@@ -129,6 +118,5 @@ namespace Utility.WPF.Controls.Trees
         }
 
         #endregion SelectedIndexOffset (DependencyProperty)
-
     }
 }

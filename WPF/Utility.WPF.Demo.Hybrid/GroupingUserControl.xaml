@@ -18,7 +18,7 @@
                 <ComboBox Width="200" ItemsSource="{Binding CollectionViewModel.Properties}"
                           SelectedItem="{Binding Selected}">
                     <ComboBox.ItemTemplate>
-                        <DataTemplate >
+                        <DataTemplate>
                             <TextBlock Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"></TextBlock>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>

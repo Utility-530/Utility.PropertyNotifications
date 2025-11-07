@@ -1,5 +1,4 @@
-﻿using CsvHelper.Configuration.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -14,7 +13,6 @@ namespace Utility.WPF.Meta
 {
     public static class Helper
     {
-
         public const string DemoAppNameAppendage = "Demo";
 
         public static IEnumerable<FrameworkElementKeyValue> ViewTypes(this Assembly assembly) =>
@@ -24,13 +22,12 @@ namespace Utility.WPF.Meta
             let name = type.GetAttributePropertySafe<ViewAttribute, int?>(a => a.Index)?.ToString() + _name
             orderby name
             select new FrameworkElementKeyValue(_name, type);
-      
+
         public static IEnumerable<TypeKeyValue> Types(this Assembly assembly) =>
             from type in assembly.GetTypes()
             where type.ContainsGenericParameters == false
             where type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly).Any()
             select new TypeKeyValue(type.Name, type);
-
 
         public static IEnumerable<TypeKeyValue> TypesOf<T>(this Assembly assembly) =>
             from type in assembly.GetTypes()
@@ -67,6 +64,5 @@ namespace Utility.WPF.Meta
             if (source == null) throw new ArgumentNullException(nameof(source));
             return source.Select((item, index) => new KeyValuePair<int, TSource>(startIndex + index, item));
         }
-
     }
 }

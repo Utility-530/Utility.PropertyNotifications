@@ -1,5 +1,4 @@
-﻿using System;
-using Utility.Interfaces.NonGeneric;
+﻿using Utility.Interfaces.NonGeneric;
 using Utility.Observables.Generic;
 
 namespace Utility.Models

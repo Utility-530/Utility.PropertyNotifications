@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.WPF.Converters;
 using Utility.WPF.Factorys;
 using Utility.WPF.ResourceDictionarys;
 
@@ -52,13 +51,11 @@ public class CustomElementsGrid : MasterDetailGrid
     }
 }
 
-
 /// <summary>
 /// Master-Detail control for <see cref="UserControlsGrid"/> in <seet cref="UserControlsGrid.Assembly"></set>
 /// </summary>
 public class UserControlsGrid : CustomElementsGrid
 {
-
     public UserControlsGrid(Assembly? assembly = null) :
         base((assembly ?? Assembly.GetEntryAssembly()).ViewTypes().ToArray())
     {
@@ -71,7 +68,6 @@ public class ResourceDictionariesGrid : CustomElementsGrid
         base(ResourceDictionaryKeyValue.ResourceViewTypes(assembly ?? Assembly.GetEntryAssembly()).ToArray())
     {
     }
-
 }
 
 internal class ViewListBox : ListBox

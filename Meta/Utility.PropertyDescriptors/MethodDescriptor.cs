@@ -4,7 +4,7 @@ namespace Utility.PropertyDescriptors;
 
 internal class MethodDescriptor : MemberDescriptor, IMethodDescriptor
 {
-    Dictionary<int, object?> dictionary = new();
+    private Dictionary<int, object?> dictionary = new();
 
     private Lazy<Command> command;
     private readonly MethodInfo methodInfo;
@@ -40,7 +40,6 @@ internal class MethodDescriptor : MemberDescriptor, IMethodDescriptor
             dictionary[paramDescriptor.ParameterInfo.Position] = GetValue(paramDescriptor.ParameterInfo);
             yield return paramDescriptor;
         }
-
 
         static object? GetValue(ParameterInfo a)
         {

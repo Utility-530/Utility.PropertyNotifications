@@ -12,14 +12,14 @@
 
     <!--<DataTemplate DataType="{x:Type infra:PropertyData}">
         <UniformGrid Rows="1">
-            <ContentControl Content="{Binding Info}"/>
-            <ContentControl Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
+            <ContentControl Content="{Binding Info}" />
+            <ContentControl Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }" />
         </UniformGrid>
     </DataTemplate>-->
 
     <DataTemplate DataType="{x:Type refl:PropertyInfo}">
         <Grid>
-            <TextBlock Text="{Binding Name}" Grid.ColumnSpan="2"/>
+            <TextBlock Text="{Binding Name}" Grid.ColumnSpan="2" />
         </Grid>
     </DataTemplate>
 </res:AutoResourceDictionary>

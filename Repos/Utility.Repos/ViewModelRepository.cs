@@ -41,6 +41,7 @@ namespace Utility.Repos
         private PropertyInfo? propertyInfo;
 
         private ILiteCollection<BsonDocument> collection => liteDatabase.Value.GetCollection<BsonDocument>(settings.Type.Name);
+
         //private ILiteCollection<Type> typeCollection => liteDatabase.Value.GetCollection<Type>();
         private ILiteCollection<MetaData> metaDataCollection => liteDatabase.Value.GetCollection<MetaData>();
 
@@ -51,7 +52,6 @@ namespace Utility.Repos
             liteDatabase = new(() => new LiteDatabase(Path.Combine(settings.Path, "data.litedb")));
             _mapper = new() { SerializeNullValues = true, };
         }
-
 
         public Task<IEquatable[]> FindKeys(IEquatable key)
         {
@@ -67,7 +67,6 @@ namespace Utility.Repos
             List<MetaData> results = new();
 
             metaDataCollection.EnsureIndex(a => a.ParentId);
-
 
             var idMatchItems = metaDataCollection.Query()
                 .Where(a => a.ParentId == key.Guid)
@@ -133,18 +132,16 @@ namespace Utility.Repos
             //    //Name = key.Name,
             //    ParentId = key.Guid,
             //    Type = dbType
-            //    ValuePairs = 
+            //    ValuePairs =
             //};
 
             metaDataCollection.Upsert(metaData);
-
 
             BsonDocument document = _mapper.ToDocument(settings.Type, value);
             //document["_id"] = key.Guid;
             //document["Name"] = key.Name;
 
             var update = (object)collection.Upsert(document);
-
 
             //int? _typeId = default;
             //if (key.Type is System.Type type)
@@ -161,7 +158,6 @@ namespace Utility.Repos
             //}
 
             //document["Type"] = _typeId ?? throw new Exception("dfv dfsdsssss");
-
 
             //var update = collection.Upsert(document);
 

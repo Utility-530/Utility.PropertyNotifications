@@ -1,16 +1,16 @@
-﻿using System.Globalization;
-using System.Windows;
-//using static Controls.Infrastructure.ItemsPanelFactory;
-using Orientation = Utility.Enums.Orientation;
-using O = System.Windows.Controls.Orientation;
-using Arrangement = Utility.Enums.Arrangement;
-using System;
-using Utility.WPF.Factorys;
-using Utility.Structs;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Utility.Structs;
+using Utility.WPF.Factorys;
+using Arrangement = Utility.Enums.Arrangement;
+using O = System.Windows.Controls.Orientation;
+
+//using static Controls.Infrastructure.ItemsPanelFactory;
+using Orientation = Utility.Enums.Orientation;
 
 namespace Utility.WPF.Controls.Trees
 {
@@ -61,13 +61,11 @@ namespace Utility.WPF.Controls.Trees
                     }
                 }
 
-
                 return ItemsPanelFactory.Template(
                     rows,
                     columns,
                     orientation.HasValue ? orientation.Value : O.Vertical,
                     arrangement);
-
             }
             return DependencyProperty.UnsetValue;
         }
@@ -92,5 +90,4 @@ namespace Utility.WPF.Controls.Trees
 
         public record RowColumns(IReadOnlyCollection<Dimension> Rows, IReadOnlyCollection<Dimension> Columns);
     }
-
 }

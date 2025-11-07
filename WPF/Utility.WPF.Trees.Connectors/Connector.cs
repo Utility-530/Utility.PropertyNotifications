@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using Utility.Enums;
 
 namespace Utility.WPF.Trees.Connectors
@@ -16,7 +11,6 @@ namespace Utility.WPF.Trees.Connectors
         public Position2D Orientation { get; } = orientation;
 
         public abstract Rect Rect();
-
     }
 
     public class TopConnector(FrameworkElement element) : Connector(element, Position2D.Top)

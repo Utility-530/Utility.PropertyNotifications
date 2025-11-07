@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Animation;
-using UappUI.AppCode.Touch;
 
 namespace Utility.WPF.Demo.External
 {
@@ -21,7 +17,6 @@ namespace Utility.WPF.Demo.External
             DatesListBox.ItemsSource = dates;
             //Dates2ListBox.ItemsSource = dates;
         }
-
 
         //private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
         //{

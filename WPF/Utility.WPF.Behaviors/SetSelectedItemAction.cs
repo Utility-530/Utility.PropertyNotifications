@@ -1,15 +1,11 @@
-﻿
-using System.Reflection;
+﻿using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
-using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Behaviors
 {
-
     public class SetSelectedItemAction : SetterAction
     {
-
         public static readonly DependencyProperty ConverterProperty =
             DependencyProperty.Register("Converter", typeof(IValueConverter), typeof(SetSelectedItemAction), new PropertyMetadata());
 
@@ -39,8 +35,5 @@ namespace Utility.WPF.Behaviors
             get { return (IValueConverter)GetValue(ConverterProperty); }
             set { SetValue(ConverterProperty, value); }
         }
-
-
-
     }
 }

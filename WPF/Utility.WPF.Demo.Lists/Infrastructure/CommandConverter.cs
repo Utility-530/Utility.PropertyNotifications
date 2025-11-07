@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
 using Utility.WPF.Controls.Lists;
 using Utility.WPF.Models;
@@ -15,13 +11,12 @@ namespace Utility.WPF.Demo.Lists.Infrastructure
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value is CheckedRoutedEventArgs args)
+            if (value is CheckedRoutedEventArgs args)
             {
-                if(args.OriginalSource is CheckBoxesListControl c)
+                if (args.OriginalSource is CheckBoxesListControl c)
                 {
-                    foreach(var item in c.ItemsSource)
+                    foreach (var item in c.ItemsSource)
                     {
-
                     }
                 }
             }

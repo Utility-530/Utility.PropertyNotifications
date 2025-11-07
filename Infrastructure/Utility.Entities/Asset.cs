@@ -7,7 +7,8 @@ namespace Utility.Entities
 {
     public class Asset : Entity, IId<Guid>, IClone, IFactory
     {
-        public Asset() { }
+        public Asset()
+        { }
 
         [Factory]
         public Asset(object obj)
@@ -100,6 +101,4 @@ namespace Utility.Entities
             return new Asset(config);
         }
     }
-
-
 }

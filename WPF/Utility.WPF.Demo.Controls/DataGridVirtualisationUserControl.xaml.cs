@@ -1,12 +1,10 @@
-﻿using DynamicData;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Controls;
+using DynamicData;
+using ReactiveUI;
 using Utility.WPF.Demo.Controls;
-using Utility.WPF.Demo.Data.Factory;
-using Utility.WPF.Demo.Data.Model;
 
 namespace Utility.WPF.Demo.View
 {
@@ -19,9 +17,8 @@ namespace Utility.WPF.Demo.View
         {
             InitializeComponent();
 
- 
             var dc2 = new ProfileCollectionVirtualise(this.Behavior2.WhenAny(a => a.FirstIndex, b => (b.Sender.FirstIndex, b.Sender.LastIndex, b.Sender.Size))
-                .Select(a => new VirtualRequest(a.FirstIndex, a.Size +40))
+                .Select(a => new VirtualRequest(a.FirstIndex, a.Size + 40))
                 .Skip(1)
                 .StartWith(new VirtualRequest(0, 60)), initialSize: 1000);
 

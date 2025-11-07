@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:Utility.WPF.Controls"
-    xmlns:converter="http://schemas.utility.com/converters">
+    xmlns:converter="http://schemas.utility.com/converters"
+    xmlns:local="clr-namespace:Utility.WPF.Controls">
 
     <Style BasedOn="{StaticResource {x:Type ComboBox}}" TargetType="{x:Type local:ResourcePicker}">
         <Setter Property="SelectedIndex" Value="0" />
