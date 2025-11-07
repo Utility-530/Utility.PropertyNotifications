@@ -2,6 +2,5 @@
 {
     public interface IPermanent : ISave, ILoad
     {
-
     }
 }

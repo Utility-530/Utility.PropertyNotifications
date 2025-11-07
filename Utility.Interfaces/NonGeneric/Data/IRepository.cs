@@ -1,13 +1,10 @@
-﻿using System;
-
-
-namespace Utility.Interfaces.NonGeneric.Data
+﻿namespace Utility.Interfaces.NonGeneric.Data
 {
     public interface IRepository : IBasicRepository, IQuerySingleRepository, IQueryMultiRepository
     {
     }
 
-    public interface IBasicRepository: ISingleRepository, IMultiRepository
+    public interface IBasicRepository : ISingleRepository, IMultiRepository
     {
     }
 
@@ -23,9 +20,10 @@ namespace Utility.Interfaces.NonGeneric.Data
     {
     }
 
-    public interface IQuerySingleRepository: IFindBy, IAddBy, IUpdateBy, IRemoveBy
+    public interface IQuerySingleRepository : IFindBy, IAddBy, IUpdateBy, IRemoveBy
     {
     }
+
     public interface IQueryMultiRepository : IFindManyBy, IAddManyBy, IUpdateManyBy, IRemoveManyBy
     {
     }
@@ -34,7 +32,7 @@ namespace Utility.Interfaces.NonGeneric.Data
     {
     }
 
-    public interface IIdMultiRepository: IFindManyById, IRemoveManyById
+    public interface IIdMultiRepository : IFindManyById, IRemoveManyById
     {
     }
 }

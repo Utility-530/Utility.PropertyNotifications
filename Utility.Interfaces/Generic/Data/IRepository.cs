@@ -1,6 +1,5 @@
 ﻿namespace Utility.Interfaces.Generic.Data
 {
-
     public interface IRepository<T, TQuery, TQueryResult> : IBasicRepository<T, TQueryResult>, IQuerySingleRepository<T, TQuery, TQueryResult>, IQueryMultiRepository<T, TQuery, TQueryResult>
     {
     }
@@ -9,12 +8,11 @@
     {
     }
 
-
     public interface IIdRepository<TId, TQueryResult> : IIdSingleRepository<TId, TQueryResult>, IIdMultiRepository<TId, TQueryResult>
     {
     }
 
-    public interface ISingleRepository<T, TQueryResult> : IFind<T, TQueryResult>, IAdd<T, TQueryResult>, IUpdate<T, TQueryResult>, IRemove<T, TQueryResult> 
+    public interface ISingleRepository<T, TQueryResult> : IFind<T, TQueryResult>, IAdd<T, TQueryResult>, IUpdate<T, TQueryResult>, IRemove<T, TQueryResult>
     {
     }
 
@@ -29,7 +27,6 @@
     public interface IQueryMultiRepository<T, TQuery, TQueryResult> : IFindManyBy<TQuery, TQueryResult>, IAddManyBy<TQuery, TQueryResult>, IUpdateManyBy<TQuery, TQueryResult>, IRemoveManyBy<TQuery, TQueryResult>
     {
     }
-
 
     public interface IIdSingleRepository<TId, TQueryResult> : IFindById<TId, TQueryResult>, IRemoveById<TId, TQueryResult>
     {

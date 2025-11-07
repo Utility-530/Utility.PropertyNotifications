@@ -6,5 +6,4 @@ namespace Utility.Interfaces.NonGeneric
     {
         IEnumerable Proliferation();
     }
-
 }

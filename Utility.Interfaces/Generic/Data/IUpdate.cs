@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Utility.Interfaces.Generic.Data
 {
@@ -11,8 +10,8 @@ namespace Utility.Interfaces.Generic.Data
     public interface IUpdateMany<T, TQueryResult>
     {
         TQueryResult UpdateMany(IEnumerable<T> items);
-    }  
-    
+    }
+
     public interface IUpdateBy<TQuery, TQueryResult>
     {
         TQueryResult UpdateBy(TQuery query);
@@ -22,5 +21,4 @@ namespace Utility.Interfaces.Generic.Data
     {
         TQueryResult UpdateManyBy(TQuery query);
     }
-
 }

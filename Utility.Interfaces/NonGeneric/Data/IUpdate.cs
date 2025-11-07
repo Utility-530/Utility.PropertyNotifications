@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 
 namespace Utility.Interfaces.NonGeneric.Data
 {
     public interface IUpdate
     {
         object Update(object item);
-
     }
 
     public interface IUpdateBy
@@ -17,8 +15,8 @@ namespace Utility.Interfaces.NonGeneric.Data
     public interface IUpdateMany
     {
         IEnumerable UpdateMany(IEnumerable items);
-    }  
-    
+    }
+
     public interface IUpdateManyBy
     {
         IEnumerable UpdateManyBy(IQuery query);

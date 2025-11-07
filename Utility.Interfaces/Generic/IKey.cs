@@ -7,5 +7,4 @@ namespace Utility.Interfaces.Generic
     {
         T Key { get; }
     }
-
 }

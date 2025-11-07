@@ -2,6 +2,6 @@
 {
     public interface IAdd
     {
-        void Add(object instance);  
-    }   
+        void Add(object instance);
+    }
 }

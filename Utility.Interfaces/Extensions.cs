@@ -15,11 +15,13 @@ namespace Utility.Interfaces
         public static void SetParent<T>(this ISetParent<T> setParent, T parent) => setParent.Parent = parent;
 
         public static object Data(this IGetData getKey) => getKey.Data;
+
         public static T Data<T>(this IGetData getKey) => (T)getKey.Data;
 
         public static void SetData(this ISetData setParent, object parent) => setParent.Data = parent;
 
         public static object Value(this IGetValue getKey) => getKey.Value;
+
         public static T Value<T>(this IGetValue getKey) => (T)getKey.Value;
 
         public static void SetValue(this ISetValue setParent, object parent) => setParent.Value = parent;

@@ -1,9 +1,7 @@
-﻿
-namespace Utility.Interfaces.NonGeneric.Data
+﻿namespace Utility.Interfaces.NonGeneric.Data
 {
     public interface IQueryResult : IResult
     {
-
     }
 
     public interface IResult

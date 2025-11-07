@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Utility.Interfaces.NonGeneric
+﻿namespace Utility.Interfaces.NonGeneric
 {
     public interface IAttach
     {

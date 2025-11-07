@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Reflection;
 
 namespace Utility.Interfaces
 {
@@ -22,5 +21,4 @@ namespace Utility.Interfaces
 
         public object? Value { get; }
     }
-
 }

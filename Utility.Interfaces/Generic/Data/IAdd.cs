@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Utility.Interfaces.Generic.Data
 {
@@ -7,10 +6,11 @@ namespace Utility.Interfaces.Generic.Data
     {
         TQueryResult Add(T item);
     }
+
     public interface IAddMany<T, TQueryResult>
     {
         TQueryResult AddMany(IEnumerable<T> items);
-    }  
+    }
 
     public interface IAddBy<TQuery, TQueryResult>
     {

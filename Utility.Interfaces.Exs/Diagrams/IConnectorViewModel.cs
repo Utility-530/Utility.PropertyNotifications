@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using Utility.Enums;
@@ -15,7 +14,7 @@ namespace Utility.Interfaces.Exs.Diagrams
     {
         bool IsConnected { get; set; }
         bool IsInput { get; set; }
-        INodeViewModel Node { get; set; }        
+        INodeViewModel Node { get; set; }
         IReadOnlyCollection<IConnectionViewModel> Connections { get; }
         PointF Anchor { get; set; }
         IO Flow { get; }

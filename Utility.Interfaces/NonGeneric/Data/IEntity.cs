@@ -6,6 +6,5 @@ namespace Utility.Interfaces.NonGeneric.Data
     {
         DateTime Addition { get; set; }
         DateTime LastUpdate { get; set; }
-
     }
 }

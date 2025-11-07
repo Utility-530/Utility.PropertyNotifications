@@ -4,5 +4,4 @@
     {
         R Evaluator(T t);
     }
-
 }

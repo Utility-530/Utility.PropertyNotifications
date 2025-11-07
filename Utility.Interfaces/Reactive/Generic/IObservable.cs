@@ -9,6 +9,5 @@ namespace Utility.Interfaces.Reactive.Generic
         IEnumerable<IObserver<T>> Observers { get; }
 
         IDisposable Subscribe(IObserver<T> value);
-
     }
 }

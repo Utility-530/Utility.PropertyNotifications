@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 
 namespace Utility.Interfaces.NonGeneric.Data
 {
     public interface IAdd
     {
         object Add(object item);
-    }  
-    
+    }
 
     public interface IAddBy
     {
@@ -18,7 +15,8 @@ namespace Utility.Interfaces.NonGeneric.Data
     public interface IAddMany
     {
         IEnumerable AddMany(IEnumerable items);
-    }   
+    }
+
     public interface IAddManyBy
     {
         IEnumerable AddManyBy(IQuery query);

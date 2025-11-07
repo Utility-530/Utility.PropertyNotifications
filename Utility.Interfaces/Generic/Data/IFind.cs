@@ -22,7 +22,6 @@ namespace Utility.Interfaces.Generic.Data
         TQueryResult FindManyBy(TQuery query);
     }
 
-
     public interface IFindById<TId, TQueryResult>
     {
         TQueryResult FindById(TId id);
@@ -32,5 +31,4 @@ namespace Utility.Interfaces.Generic.Data
     {
         TQueryResult FindManyById(IEnumerable<TId> items);
     }
-
 }

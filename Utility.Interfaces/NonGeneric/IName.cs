@@ -7,12 +7,10 @@
     public interface IGetName
     {
         string Name { get; }
-
     }
 
     public interface ISetName
     {
         string Name { set; }
-
     }
 }

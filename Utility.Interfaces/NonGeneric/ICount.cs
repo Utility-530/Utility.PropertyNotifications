@@ -1,5 +1,4 @@
-﻿
-namespace Utility.Interfaces.NonGeneric
+﻿namespace Utility.Interfaces.NonGeneric
 {
     public interface ICount
     {

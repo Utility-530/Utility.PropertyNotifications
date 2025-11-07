@@ -8,7 +8,9 @@ namespace Utility.Interfaces.Exs
         void Connect<TParam, TParam2>()
             where TParam : IParameter
             where TParam2 : IParameter;
+
         void Observe<TParam>(IObservable<object> observable) where TParam : IParameter;
+
         void ReactTo<TParam, TOutput>(IObserver<TOutput> observer) where TParam : IParameter;
     }
 }
