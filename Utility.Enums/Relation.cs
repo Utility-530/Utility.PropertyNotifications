@@ -1,5 +1,4 @@
-﻿
-namespace Utility.Enums
+﻿namespace Utility.Enums
 {
     public enum Relation
     {

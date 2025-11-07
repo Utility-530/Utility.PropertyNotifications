@@ -33,10 +33,10 @@ namespace Utility.Enums
         [Quantity("m²", "m²", "km²", "ft²", "in²", "acre", "ha")]
         Area,
 
-        [Quantity("m³", "cm³","L", "mL", "ft³", "in³")]
+        [Quantity("m³", "cm³", "L", "mL", "ft³", "in³")]
         Volume,
 
-        [Quantity("m/s","km/h", "mph", "ft/s")]
+        [Quantity("m/s", "km/h", "mph", "ft/s")]
         Speed,
 
         [Quantity("m/s²", "ft/s²", "g")]
@@ -128,7 +128,7 @@ namespace Utility.Enums
         [Quantity("mol/m³", "mol/m³", "mol/L", "mol/dm³")]
         Concentration,
 
-        [Quantity( "Bq", "Ci")]
+        [Quantity("Bq", "Ci")]
         Radioactivity,
 
         [Quantity("Gy", "rad")]
@@ -147,7 +147,6 @@ namespace Utility.Enums
         [Quantity("%")]
         Percentage,
 
-
         // --- Information & Data ---
         [Quantity("bit", "byte", "B", "kB", "MB", "GB", "TB")]
         Information,
@@ -157,9 +156,5 @@ namespace Utility.Enums
 
         [Quantity("byte", "kB", "MB", "GB", "TB")]
         StorageCapacity,
-
-
     }
-
-
 }

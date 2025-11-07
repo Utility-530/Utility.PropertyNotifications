@@ -4,8 +4,8 @@ namespace Utility.Enums.Attributes
 {
     public class TimeSpanAttribute(string name, double interval) : Attribute
     {
-        static readonly Lazy<Type> type = new(() => typeof(TimeSpan));
-        readonly Lazy<TimeSpan> timeSpan = new(() => (TimeSpan)type.Value.GetMethod(name).Invoke(null, [interval]));
+        private static readonly Lazy<Type> type = new(() => typeof(TimeSpan));
+        private readonly Lazy<TimeSpan> timeSpan = new(() => (TimeSpan)type.Value.GetMethod(name).Invoke(null, [interval]));
 
         public string Name { get; } = name;
         public double Interval { get; } = interval;

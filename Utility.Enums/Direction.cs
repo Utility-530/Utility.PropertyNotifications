@@ -24,7 +24,7 @@
         Left = 1,
         Right = 2,
 
-        All = Left | Right 
+        All = Left | Right
     }
 
     [System.Flags]
@@ -46,7 +46,6 @@
         All = Front | Back
     }
 
-
     [System.Flags]
     public enum XYDirection : byte
     {
@@ -55,7 +54,7 @@
         Right = 2,
         Up = 16,
         Down = 32,
-        All = Left | Right  | Up | Down
+        All = Left | Right | Up | Down
     }
 
     [System.Flags]
@@ -66,7 +65,7 @@
         Back = 8,
         Up = 16,
         Down = 32,
-        All =  Front | Back | Up | Down
+        All = Front | Back | Up | Down
     }
 
     [System.Flags]
@@ -77,6 +76,6 @@
         Right = 2,
         Front = 4,
         Back = 8,
-        All = Left | Right | Front | Back 
+        All = Left | Right | Front | Back
     }
 }

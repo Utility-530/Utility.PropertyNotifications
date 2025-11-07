@@ -2,7 +2,6 @@
 using System.Linq;
 using Utility.Enums.Attributes;
 
-
 namespace Utility.Enums
 {
     /// <summary>
@@ -70,9 +69,7 @@ namespace Utility.Enums
 
         [TimeSpan("FromDays", 3650000)]
         Eon = 19,
-
     }
-
 
     /// <summary>
     /// Extension methods for working with time intervals
@@ -119,7 +116,5 @@ namespace Utility.Enums
             TimeInterval.Hour => "h",
             _ => interval.ToString()
         };
-
-
     }
 }

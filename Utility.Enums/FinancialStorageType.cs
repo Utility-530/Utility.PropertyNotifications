@@ -1,5 +1,4 @@
-﻿
-namespace Utility.Enums
+﻿namespace Utility.Enums
 {
     public enum FinancialStorageType
     {
@@ -14,5 +13,4 @@ namespace Utility.Enums
         OffshoreAccount,    // Held in a foreign financial institution
         InsurancePolicy     // Embedded within an insurance product (e.g., cash value life insurance)
     }
-
 }
