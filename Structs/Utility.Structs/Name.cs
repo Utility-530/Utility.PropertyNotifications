@@ -2,7 +2,7 @@
 
 namespace Utility.Structs
 {
-    public struct Name
+    public readonly ref struct Name
     {
         public ReadOnlySpan<char> Value { get; }
 
@@ -12,8 +12,8 @@ namespace Utility.Structs
 
         public Name(ReadOnlySpan<char> value, int position)
         {
-            Value = value;
-            Order = position;
+            this.Value = value;
+            this.Order = position;
         }
 
         public int Order { get; }
