@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Utility.Observables.Generic;
 using Utility.WPF.Controls.Lists;
 using Utility.WPF.Reactives;
 
