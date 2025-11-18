@@ -28,7 +28,7 @@ namespace Utility.WPF.Controls.Trees
 
         #endregion PART holders
 
-        private void onApplyAnimatedTemplate()
+        private void animated_onApplyTemplate()
         {
             base.OnApplyTemplate();
 

@@ -6,13 +6,33 @@ namespace Utility.WPF.Controls.Trees
 {
     public class CustomTreeView : TreeView
     {
+        public static readonly DependencyProperty SelectedItemTemplateSelectorProperty =
+    DependencyProperty.Register(nameof(SelectedItemTemplateSelector), typeof(DataTemplateSelector), typeof(CustomTreeView), new PropertyMetadata());
+
+
+
+        public StyleSelector SelectedItemStyleSelector
+        {
+            get { return (StyleSelector)GetValue(SelectedItemStyleSelectorProperty); }
+            set { SetValue(SelectedItemStyleSelectorProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SelectedItemStyleSelector.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectedItemStyleSelectorProperty =
+            DependencyProperty.Register(nameof(SelectedItemStyleSelector), typeof(StyleSelector), typeof(CustomTreeView), new PropertyMetadata());
+
+
+
+
         protected override DependencyObject GetContainerForItemOverride()
         {
             return new CustomTreeViewItem()
             {
                 ItemContainerStyleSelector = ItemContainerStyleSelector,
                 ItemContainerStyle = ItemContainerStyle,
-                HeaderTemplateSelector = ItemTemplateSelector,
+                SelectedItemTemplateSelector = SelectedItemTemplateSelector,
+                ItemTemplateSelector = ItemTemplateSelector,
+                SelectedItemStyleSelector = SelectedItemStyleSelector,
                 TreeView = this
             };
         }
@@ -53,6 +73,14 @@ namespace Utility.WPF.Controls.Trees
         {
             add { AddHandler(HierarchyMouseUpEvent, value); }
             remove { RemoveHandler(HierarchyMouseUpEvent, value); }
+        }
+
+
+
+        public DataTemplateSelector SelectedItemTemplateSelector
+        {
+            get { return (DataTemplateSelector)GetValue(SelectedItemTemplateSelectorProperty); }
+            set { SetValue(SelectedItemTemplateSelectorProperty, value); }
         }
     }
 }

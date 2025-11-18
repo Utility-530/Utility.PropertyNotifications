@@ -19,7 +19,11 @@
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/SelectedHorizontalStyle.xaml" />
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CheckableTreeViewItem.xaml" />
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomHasItemsStyle.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/TabStyle.xaml" />
+
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Dragablz.Controls/Themes/Generic.xaml" />
 
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/TreeListView.xaml" />
+  
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

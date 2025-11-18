@@ -33,7 +33,7 @@ namespace Utility.WPF.Controls.Trees
             set { SetValue(FooterTemplateSelectorProperty, value); }
         }
 
-        private void apply_template()
+        private void selectedHorizontal_onApplyTemplate()
         {
             var acb = this.GetTemplateChild("EditPresenter") as ContentPresenter;
             if (acb == null)

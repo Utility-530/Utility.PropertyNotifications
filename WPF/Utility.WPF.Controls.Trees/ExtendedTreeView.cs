@@ -7,7 +7,7 @@ namespace Utility.WPF.Controls.Trees
     {
         public static readonly DependencyProperty IsCheckedProperty = DependencyProperty.Register("IsChecked", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata(false));
 
-        public void _OnApplyTemplate()
+        public void extended_OnApplyTemplate()
         {
             MouseLeftButtonUp += (s, e) => OnMouseLeftButtonUp(s);
             if (GetTemplateChild("PART_CheckBox") is CheckBox checkBox)

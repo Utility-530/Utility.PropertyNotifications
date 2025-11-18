@@ -123,7 +123,7 @@
         <Setter Property="Padding" Value="1,0,0,0" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}" />
-        <Setter Property="ItemsPanelTemplate" Value="{Binding ItemsPanelTemplate}" />
+        <!--<Setter Property="ItemsPanelTemplate" Value="{Binding ItemsPanelTemplate}" />-->
         <Setter Property="Rows" Value="{Binding Rows}" />
         <Setter Property="Columns" Value="{Binding Columns}" />
         <Setter Property="Errors" Value="{Binding Errors}" />
