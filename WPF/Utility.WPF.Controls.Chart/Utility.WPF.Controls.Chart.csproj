@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OxyPlot.Wpf" Version="2.1.0" />
+    <PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
     <PackageReference Include="Splat.Drawing" Version="14.2.8" />
   </ItemGroup>
 
