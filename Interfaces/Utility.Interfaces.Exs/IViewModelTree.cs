@@ -56,7 +56,7 @@ namespace Utility.Interfaces.Exs
 
     public interface IIsValueSaved
     {
-        bool IsValueSaved { get; set; }
+        bool DoesValueRequireSaving { get; set; }
     }
 
     public interface IHeight
