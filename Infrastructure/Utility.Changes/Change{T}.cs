@@ -32,6 +32,7 @@ namespace Utility.Changes
         public static Change<T> Add(T NewItem) => new(NewItem, default, Changes.Type.Add);
         public static Change<T> Remove(T NewItem) => new(NewItem, default, Changes.Type.Remove);
         public static Change<T> Update(T NewItem, T OldItem) => new(NewItem, OldItem, Changes.Type.Update);
+        public static Change<T> Reset() => new(default, default, Changes.Type.Reset);
     }
 
     public readonly record struct TreeChange<T>(T NewItem, T? OldItem, Type Type, int Level)
