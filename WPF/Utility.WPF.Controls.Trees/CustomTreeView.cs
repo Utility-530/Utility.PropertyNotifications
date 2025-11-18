@@ -32,7 +32,6 @@ namespace Utility.WPF.Controls.Trees
                 ItemContainerStyle = ItemContainerStyle,
                 SelectedItemTemplateSelector = SelectedItemTemplateSelector,
                 ItemTemplateSelector = ItemTemplateSelector,
-                SelectedItemStyleSelector = SelectedItemStyleSelector,
                 TreeView = this
             };
         }

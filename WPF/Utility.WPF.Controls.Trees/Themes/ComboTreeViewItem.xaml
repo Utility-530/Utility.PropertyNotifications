@@ -36,7 +36,7 @@
             </DataTemplate>
         </Style.Resources>
 
-        <Setter Property="SelectedItem" Value="{Binding SelectionItem, RelativeSource={RelativeSource Mode=Self}}" />
+        <Setter Property="SelectedItem" Value="{Binding SelectedItem, RelativeSource={RelativeSource Mode=Self}}" />
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
@@ -305,8 +305,8 @@
                                       Width="200"
                                       Margin="3,3,23,3"
                                       Content="{TemplateBinding Selection}"
-                                      ContentTemplate="{TemplateBinding SelectionTemplate}"
-                                      ContentTemplateSelector="{TemplateBinding SelectionTemplateSelector}"
+                                      ContentTemplate="{TemplateBinding SelectedItemTemplate}"
+                                      ContentTemplateSelector="{TemplateBinding SelectedItemTemplateSelector}"
                                       VerticalAlignment="Stretch"
                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />-->
                         <Grid
