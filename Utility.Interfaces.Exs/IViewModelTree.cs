@@ -14,20 +14,41 @@ namespace Utility.Interfaces.Exs
         IName,
         IIsChildrenRefreshed,
         IIsActive,
-        IArrangement, IRows, IColumns, IIsAugmentable, IErrors, IConnectorPosition, IDataTemplate, IItemsPanelTemplate, ITitle, IIsContentVisible,
+        IArrangement, IRows, IColumns, IIsAugmentable, IErrors, IConnectorPosition, IDataTemplate,
+        ISelectedItemTemplate, IItemsPanelTemplate, ITitle, IIsContentVisible,
         IGetGuid,
         IIsReadOnly,
         ILocation,
         IGetIsSingular,
         IIsChildrenTracked,
         IIsValueTracked,
+        IDoesValueRequireLoading,
+        IIsValueSaved,
         IIsValueLoaded,
-        IIsValueSaved
+        IAreChildrenLoaded,
+        IAreChildrenTracked
     //IHeight,
     //IWidth
     {
     }
 
+    public interface ISelectedItemTemplate
+    {
+        string SelectedItemTemplate { get; set; }
+    }
+
+    public interface IDoesValueRequireLoading
+    {
+        bool DoesValueRequireLoading { get; set; }
+    }
+    public interface IAreChildrenLoaded
+    {
+        bool AreChildrenLoaded { get; set; }
+    }
+    public interface IAreChildrenTracked
+    {
+        bool AreChildrenTracked { get; set; }
+    }
     public interface IIsValueLoaded
     {
         bool IsValueLoaded { get; set; }
