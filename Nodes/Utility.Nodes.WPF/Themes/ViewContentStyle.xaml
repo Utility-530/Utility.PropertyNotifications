@@ -20,7 +20,6 @@
         x:Key="ViewContentStyle"
         BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}"
         TargetType="{x:Type trees:CustomTreeViewItem}">
-        <Setter Property="Header" Value="{Binding Data}" />
         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
         <Setter Property="IsEditable" Value="False" />
         <Setter Property="ToolTip" Value="{Binding Key}" />

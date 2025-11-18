@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Reflection;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Helpers;
 using Utility.Helpers.Reflection;
@@ -12,9 +12,10 @@ namespace Utility.Nodes.WPF
         public SerialiserSource()
         {
 
-            Serialiser = new JsonSerializer() {
+            Serialiser = new JsonSerializer()
+            {
                 TypeNameHandling = TypeNameHandling.All,
-                CheckAdditionalContent = false,          
+                CheckAdditionalContent = false,
             };
 
             Serialiser.Converters.Add(new StringEnumConverter());
@@ -27,6 +28,16 @@ namespace Utility.Nodes.WPF
 
     public class NodeConverter : JsonConverter<NodeViewModel>
     {
+        static readonly string[] properties = [ nameof(NodeViewModel.Key),
+                nameof(NodeViewModel.IsExpanded),
+                nameof(NodeViewModel.Rows),
+                nameof(NodeViewModel.Columns),
+                nameof(NodeViewModel.Row),
+                nameof(NodeViewModel.Column),
+                nameof(NodeViewModel.Arrangement),
+                nameof(NodeViewModel.Orientation),
+            ];
+
         public override bool CanRead => base.CanRead;
 
         public override NodeViewModel? ReadJson(JsonReader reader, Type objectType, NodeViewModel? existingValue, bool hasExistingValue, JsonSerializer serializer)
@@ -36,46 +47,27 @@ namespace Utility.Nodes.WPF
 
         public override void WriteJson(JsonWriter writer, NodeViewModel value, JsonSerializer serializer)
         {
-            // Begin object
             writer.WriteStartObject();
 
-            writer.WritePropertyName("$type");
-            writer.WriteValue(value.GetType().AsString());
+            var type = value.GetType();
 
-            writer.WritePropertyName("Key");
-            JToken.FromObject(value.Key).WriteTo(writer);
+            var filterProperties = type
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(a => properties.Contains(a.Name));
 
-            writer.WritePropertyName("IsExpanded");
-            writer.WriteValue(value.IsExpanded);
+            writer.WritePropertyName(MetadataConverter.Type);
+            writer.WriteValue(type.AsString());
 
-            writer.WritePropertyName("Rows");
-            JToken.FromObject(value.Rows).WriteTo(writer);
-
-            writer.WritePropertyName("Columns");
-            JToken.FromObject(value.Columns).WriteTo(writer);
-
-            writer.WritePropertyName("Row");
-            writer.WriteValue(value.Row);
-
-            writer.WritePropertyName("Column");
-            writer.WriteValue(value.Column);
-
-            writer.WritePropertyName("Arrangement");
-            writer.WriteValue(value.Arrangement);
-
-            writer.WritePropertyName("Orientation");
-            writer.WriteValue(value.Orientation);
+         
+            foreach (var prop in filterProperties)
+            {
+                MetadataConverter.Process(prop, value, writer, serializer);
 
 
-            writer.WritePropertyName($"$isenum");
-            serializer.Serialize(writer, new[] { nameof(NodeViewModel.Arrangement), nameof(NodeViewModel.Orientation) });
 
-            writer.WritePropertyName($"$isreadonly");
-            serializer.Serialize(writer, new[] { nameof(NodeViewModel.Key) });
-
+            }
             writer.WriteEndObject();
         }
 
-     
     }
 }

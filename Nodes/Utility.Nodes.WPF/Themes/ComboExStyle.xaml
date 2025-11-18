@@ -41,7 +41,7 @@
                 </att:InteractivityTemplate>
             </Setter.Value>
         </att:InteractivitySetter>
-        <Setter Property="Selection" Value="{Binding Current, Mode=TwoWay}" />
+        <Setter Property="SelectedItem" Value="{Binding Current, Mode=TwoWay}" />
     </Style>
 
 </ResourceDictionary>
