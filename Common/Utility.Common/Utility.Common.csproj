@@ -11,6 +11,10 @@
 	  <None Remove="Infrastructure\**" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="ReactiveUI" Version="22.2.1" />
+	</ItemGroup>
+
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
