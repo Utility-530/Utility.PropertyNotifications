@@ -5,18 +5,16 @@ namespace Utility.Models.Templates
     using System.Windows;
     using System.Windows.Controls;
     using Utility.Interfaces.Exs;
-    using Utility.Models.Trees;
     using Utility.WPF.Helpers;
 
-    public class ModelTemplateSelector : DataTemplateSelector
+    public class SelectedItemTemplateSelector : DataTemplateSelector
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (item is null)
-            {
-                return Templates.Instance["NullTemplate"] as DataTemplate;
-            }
-            if (item is IDataTemplate { DataTemplate: { } _template })
+            if(item is null)
+                return Templates.Instance["NullTemplate"] as DataTemplate ?? throw new Exception("ff3vcfdf3");
+
+            if (item is ISelectedItemTemplate { SelectedItemTemplate: { } _template })
             {
                 if (FindTemplate(_template) is { } value)
                 {

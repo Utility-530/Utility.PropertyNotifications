@@ -81,6 +81,12 @@
         ItemsSource="{Binding Children}">
         <TextBlock Text="{Binding Name}" />
     </HierarchicalDataTemplate>
+    <HierarchicalDataTemplate
+        x:Key="InvisibleTemplate"
+        DataType="{x:Type nodes:NodeViewModel}"
+        ItemsSource="{Binding Children}">
+        <!--<TextBlock Text="{Binding Name}" />-->
+    </HierarchicalDataTemplate>
 
     <HierarchicalDataTemplate
         DataType="{x:Type inf:DataFilesModel}"
@@ -364,12 +370,34 @@
             Text="{Binding Exception.Message}" />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type model:ProliferationModel}">
+        <list:CustomSelector
+         x:Name="CustomSelector"
+         Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"
+         Height="400"
+         Edit="{Binding Converter={StaticResource NewObjectConverter}, Mode=OneWay}"
+         IsGrid="True"
+         ItemsHeight="500"
+         ItemsWidth="300"
+         RemoveCommand="{markup:Command Remove}"
+         SelectedItem="{Binding Current, Mode=TwoWay}">
+            <!--  Edit="{Binding Edit,Mode=TwoWay}">  -->
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="FinishEdit">
+                    <beh:SetterAction
+                     Converter="{StaticResource FinishEditConverter}"
+                     PropertyName="Add"
+                     TargetObject="{Binding}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </list:CustomSelector>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type inf:ListModel}">
         <list:CustomSelector
             x:Name="CustomSelector"
             Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"
             Height="400"
-            CheckedPropertyName="IsRhPositive"
             Edit="{Binding Converter={StaticResource NewObjectConverter}, Mode=OneWay}"
             IsGrid="True"
             ItemsHeight="500"
@@ -388,7 +416,14 @@
             </i:Interaction.Triggers>
         </list:CustomSelector>
     </DataTemplate>
-
+    <!--<DataTemplate x:Key="InitialTemplate" DataType="{x:Type nodes:NodeViewModel}">
+        <Grid>
+            <TextBlock
+                MinWidth="60"
+                Background="AliceBlue"
+                Text="init" />
+        </Grid>
+    </DataTemplate>-->
     <DataTemplate x:Key="ReadOnlyStringTemplate" DataType="{x:Type nodes:NodeViewModel}">
         <Grid>
             <TextBlock
@@ -397,6 +432,32 @@
                 Text="{Binding Value}" />
         </Grid>
     </DataTemplate>
+    <!--<DataTemplate x:Key="TabTemplate" DataType="{x:Type nodes:NodeViewModel}">
+        <Grid>
+            <TextBlock
+                MinWidth="60"
+                Background="AliceBlue"
+                Text="{Binding Name}" />
+        </Grid>
+    </DataTemplate>-->
+    <DataTemplate x:Key="NullTemplate" DataType="{x:Type nodes:NodeViewModel}">
+        <Grid>
+            <TextBlock
+                MinWidth="60"
+                Background="AliceBlue"
+                Text="Null" />
+        </Grid>
+    </DataTemplate>
+    <!--<DataTemplate x:Key="EllipseTemplate" DataType="{x:Type nodes:NodeViewModel}">
+        <Grid Height="100" Width="100" Background="Aqua">
+            
+        </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="DefaultSelectedItemTemplate" DataType="{x:Type nodes:NodeViewModel}">
+        <Grid Height="100" Width="100" Background="Maroon">
+            
+        </Grid>
+    </DataTemplate>-->
 
     <DataTemplate x:Key="HtmlEditor" DataType="{x:Type nodes:NodeViewModel}">
         <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
