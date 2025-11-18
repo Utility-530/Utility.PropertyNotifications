@@ -158,8 +158,8 @@ namespace Utility.WPF.Controls.Base
                 //observer.OnCompleted();
                 return dis;
             })
-            .ObserveOnDispatcher()
-            .SubscribeOnDispatcher();
+            .ObserveOn(SynchronizationContextScheduler.Instance)
+            .SubscribeOn(SynchronizationContextScheduler.Instance);
         }
 
         protected IObservable<FrameworkElement> SelectFramworkElements()
@@ -176,15 +176,15 @@ namespace Utility.WPF.Controls.Base
                             .Subscribe(a =>
                             {
                                 var t = dependencyObject
-                                .FindChildren<FrameworkElement>()
+                                .ChildrenOfType<FrameworkElement>()
                                 .ToArray();
                                 observer.OnNext(t);
                             });
                     })
-                         .ObserveOnDispatcher()
-                         .SubscribeOnDispatcher()
-                         .ToReplaySubject(1)
-                         .SelectMany();
+                    .ObserveOn(SynchronizationContextScheduler.Instance)
+                    .SubscribeOn(SynchronizationContextScheduler.Instance)
+                    .ToReplaySubject(1)
+                    .SelectMany();
                 }
             }
             return Observable

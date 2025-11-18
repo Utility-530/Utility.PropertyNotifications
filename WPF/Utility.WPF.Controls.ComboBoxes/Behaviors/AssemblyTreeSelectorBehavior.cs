@@ -5,13 +5,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Newtonsoft.Json;
-using ReactiveUI;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Extensions;
 using Utility.WPF.Factorys;
 using Utility.WPF.ResourceDictionarys;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
@@ -93,10 +93,10 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         protected override void OnAttached()
         {
-            AssociatedObject.WhenAnyValue(a => a.SelectedItems)
+            AssociatedObject.Observe(a => a.SelectedItems)
                 .Subscribe(a => SelectedItemsChanged(a));
 
-            AssociatedObject.WhenAnyValue(a => a.SelectedNode)
+            AssociatedObject.Observe(a => a.SelectedNode)
                 .Subscribe(a => SelectedNodeChanged(a));
 
             if (Assemblies is { } assemblies && FrameworkElementKind is { } kind)

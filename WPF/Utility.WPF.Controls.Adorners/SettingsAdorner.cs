@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using RandomColorGenerator;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 using Utility.WPF.Adorners;
 using Utility.WPF.Adorners.Infrastructure;
 using Utility.WPF.Helpers;
@@ -43,7 +43,7 @@ namespace Utility.WPF.Controls.Adorners
             adornedElement.SetValue(Type.ShowDataContextProperty, true);
 
             var disposable = settingsControl
-                           .WhenAnyValue(a => a.SelectedDock)
+                           .Observe(a => a.SelectedDock)
                            .Subscribe(dock =>
                            {
                                adornedElement.SetValue(Text.PositionProperty, dock);

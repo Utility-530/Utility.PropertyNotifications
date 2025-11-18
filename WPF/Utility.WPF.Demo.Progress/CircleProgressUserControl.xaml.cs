@@ -16,7 +16,7 @@ namespace Utility.WPF.Demo.Progress
 
             Observable
                 .Interval(TimeSpan.FromSeconds(0.1))
-                .ObserveOnDispatcher()
+                .ObserveOn(SynchronizationContextScheduler.Instance)
                 .Subscribe(a =>
                 {
                     ProgressCircle.Value = a % 90;

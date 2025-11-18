@@ -18,7 +18,7 @@ namespace Utility.WPF.Converters
             Type type = value.GetType();
             if (parameter is PropertyType propertyType)
             {
-                var flags = EnumHelper.GetFlags(propertyType);
+                var flags = EnumHelper.SeparateFlags(propertyType);
                 if (flags.Contains(PropertyType.GenericArgument1))
                     type = type.GetGenericArguments().FirstOrDefault() is Type gtype ? gtype : type;
                 else if (flags.Contains(PropertyType.GenericArgument2))

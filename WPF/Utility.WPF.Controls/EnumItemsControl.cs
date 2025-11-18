@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Evan.Wpf;
 using MintPlayer.ObservableCollection;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 using Utility.Commands;
 using Utility.Enums;
 using Utility.Helpers;
@@ -17,6 +17,7 @@ using Utility.PropertyNotifications;
 using Utility.WPF.Attached;
 using Utility.WPF.Controls.Base;
 using Utility.WPF.Helpers;
+using Utility.Reactives;
 
 namespace Utility.WPF.Controls
 {
@@ -56,18 +57,18 @@ namespace Utility.WPF.Controls
 
             ItemsSource = items;
 
-            this.WhenAnyValue(a => a.Enum)
-                .WhereNotNull()
+            this.Observe(a => a.Enum)
+                .WhereIsNotNull()
                 .Subscribe(e =>
                 {
                     Value = (Enum)System.Enum.ToObject(e, 0);
                 });
 
-            this.WhenAnyValue(a => a.Enum)
-                .WhereNotNull()
+            this.Observe(a => a.Enum)
+                .WhereIsNotNull()
                 .Select(a => new EnumType(a, null))
-                .Merge(this.WhenAnyValue(a => a.Value).WhereNotNull().Where(a => a != internalValue).Select(a => new EnumType(a.GetType(), a)))
-                .CombineLatest(this.WhenAnyValue(a => a.IsReadOnly))
+                .Merge(this.Observe(a => a.Value).WhereIsNotNull().Where(a => a != internalValue).Select(a => new EnumType(a.GetType(), a)))
+                .CombineLatest(this.Observe(a => a.IsReadOnly))
                 .Select(a => BuildFromEnum(a.First.Type, a.First.Value, a.Second))
                 .Subscribe(enums =>
                 {
@@ -78,7 +79,7 @@ namespace Utility.WPF.Controls
 
                     foreach (var item in enums)
                     {
-                        item.Command.Subscribe(e =>
+                        item.Subscribe(e =>
                         {
                             if (IsMultiSelect == false)
                             {
@@ -104,7 +105,7 @@ namespace Utility.WPF.Controls
             {
                 return System.Enum.GetValues(t)
                     .Cast<Enum>()
-                    .Select(e => new EnumItem(e, ReactiveCommand.Create(() => e), isReadOnly)
+                    .Select(e => new EnumItem(e, isReadOnly)
                     {
                         IsChecked = Value?.Equals(e) == true
                     })
@@ -146,20 +147,20 @@ namespace Utility.WPF.Controls
 
         #endregion properties
 
-        public class EnumItem : NotifyPropertyClass, IIsReadOnly
+        public class EnumItem : NotifyPropertyClass, IIsReadOnly, IObservable<Enum>
         {
             private bool isChecked;
-
-            public EnumItem(Enum @enum, ReactiveCommand<Unit, Enum> command, bool isReadOnly)
+            SingleReplaySubject<Enum> replaySubject = new();
+            public EnumItem(Enum @enum, bool isReadOnly)
             {
                 Enum = @enum;
-                Command = command;
+                Command = new Command(()=> replaySubject.OnNext(@enum));
                 IsReadOnly = isReadOnly;
             }
 
             public Enum Enum { get; }
 
-            public ReactiveCommand<Unit, Enum> Command { get; }
+            public ICommand Command { get; }
             public bool IsReadOnly { get; set; }
 
             public bool IsChecked
@@ -169,6 +170,11 @@ namespace Utility.WPF.Controls
                     isChecked = value;
                     this.RaisePropertyChanged();
                 }
+            }
+
+            public IDisposable Subscribe(IObserver<Enum> observer)
+            {
+                return replaySubject.Subscribe(observer);
             }
         }
     }

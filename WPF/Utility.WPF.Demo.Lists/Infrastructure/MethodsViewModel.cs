@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using ReactiveUI;
+using Utility.Commands;
 using Utility.Helpers.Reflection;
 using Utility.WPF.Demo.Common.ViewModels;
 using _Model = Utility.WPF.Demo.Buttons.Infrastructure.Model;
@@ -17,7 +17,7 @@ namespace Utility.WPF.Demo.Lists.Infrastructure
 
                 TypeHelper.GetInstanceMethods(instance.GetType())
                 .Select(m => (m.GetDescription(), new Func<object?>(() => m.Invoke(instance, Array.Empty<object>()))))
-                .Select(a => new ButtonViewModel(a.Item1, ReactiveCommand.Create(() => { _ = a.Item2(); }))));
+                .Select(a => new ButtonViewModel(a.Item1, new Command(() => { _ = a.Item2(); }))));
         }
 
         public ObservableCollection<ButtonViewModel> Data { get; }

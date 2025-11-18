@@ -4,13 +4,14 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 using Utility.Collections;
 using Utility.Enums;
 using Utility.Helpers;
 using Utility.WPF.Helpers;
 using static Evan.Wpf.DependencyHelper;
 using Visibility = System.Windows.Visibility;
+using Utility.Reactives;
 
 namespace Utility.WPF.Controls.Buttons
 {
@@ -41,7 +42,7 @@ namespace Utility.WPF.Controls.Buttons
 
             map = new() { { Direction.Left, LeftButton }, { Direction.Right, RightButton }, { Direction.Down, DownButton }, { Direction.Up, UpButton } };
 
-            this.WhenAnyValue(a => a.Enabled)
+            this.Observe(a => a.Enabled)
                 .Select(a => EnumHelper.SeparateFlags((Direction)a))
                 .Subscribe(a =>
                 {
@@ -51,7 +52,7 @@ namespace Utility.WPF.Controls.Buttons
                     }
                 });
 
-            this.WhenAnyValue(a => a.Visible)
+            this.Observe(a => a.Visible)
              .Select(a => EnumHelper.SeparateFlags((Direction)a))
                 .Subscribe(a =>
                 {
@@ -188,16 +189,16 @@ namespace Utility.WPF.Controls.Buttons
                 m.Value.Click += (s, e) => { Value_Click(Map[(Button)s]); e.Handled = true; };
             }
 
-            this.WhenAnyValue(a => a.Visible)
-                .WhereNotNull()
+            this.Observe(a => a.Visible)
+                .WhereIsNotNull()
                 .Subscribe(LastChanged);
 
-            this.WhenAnyValue(a => a.Enabled)
-                .WhereNotNull()
+            this.Observe(a => a.Enabled)
+                .WhereIsNotNull()
                 .Subscribe(EnableChanged);
 
-            this.WhenAnyValue(a => a.Visible)
-                .WhereNotNull()
+            this.Observe(a => a.Visible)
+                .WhereIsNotNull()
                 .Subscribe(VisibleChanged);
 
             base.OnApplyTemplate();

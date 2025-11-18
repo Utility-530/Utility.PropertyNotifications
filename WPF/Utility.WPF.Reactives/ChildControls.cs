@@ -28,8 +28,8 @@ public static class ChildControls
             //observer.OnCompleted();
             return dis;
         })
-        .ObserveOnDispatcher()
-        .SubscribeOnDispatcher();
+        .ObserveOn(SynchronizationContextScheduler.Instance)
+        .SubscribeOn(SynchronizationContextScheduler.Instance);
     }
 
     private static IObservable<IEnumerable<FrameworkElement>> ControlsOnLoad(this FrameworkElement dependencyObject)
@@ -50,9 +50,9 @@ public static class ChildControls
                             observer.OnNext(t);
                         });
                 })
-                     .ObserveOnDispatcher()
-                     .SubscribeOnDispatcher()
-                     .ToReplaySubject(1);
+                .ObserveOn(SynchronizationContextScheduler.Instance)
+                .SubscribeOn(SynchronizationContextScheduler.Instance)
+                .ToReplaySubject(1);
             }
         }
         return System.Reactive.Linq

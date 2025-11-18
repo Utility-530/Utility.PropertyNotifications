@@ -4,7 +4,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
-using ReactiveUI;
 using Utility.Interfaces.NonGeneric;
 using Utility.WPF.Controls.ComboBoxes;
 using Utility.WPF.Helpers;
@@ -107,9 +106,9 @@ namespace Utility.WPF.Controls.FileSystem
 
         public FileBrowser()
         {
-            this.WhenAnyValue(a => a.Filter)
+            this.Observe(a => a.Filter)
                 .Subscribe(a => { fileBrowserCommand.Filter = a; });
-            this.WhenAnyValue(a => a.Extension)
+            this.Observe(a => a.Extension)
                 .Subscribe(a => { fileBrowserCommand.Extension = a; });
         }
 

@@ -8,7 +8,7 @@ using System.Windows.Media.Animation;
 using Endless;
 using Evan.Wpf;
 using Microsoft.Xaml.Behaviors;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 using Utility.Enums;
 using Utility.WPF.Abstract;
 using Utility.WPF.Controls.Base;
@@ -57,11 +57,11 @@ namespace Utility.WPF.Controls.Master
 
         public MasterControl()
         {
-            this.WhenAnyValue(a => a.DataContext)
+            this.Observe(a => a.DataContext)
                 .Subscribe(a =>
                 {
                 });
-            this.WhenAnyValue(a => a.ItemsSource)
+            this.Observe(a => a.ItemsSource)
                 .Subscribe(a =>
                 {
                 });
@@ -113,7 +113,7 @@ namespace Utility.WPF.Controls.Master
                 buttonEnable = buttons.Single(a => a.Name == "ButtonEnable");
                 buttonDisable = buttons.Single(a => a.Name == "ButtonDisable");
 
-                this.WhenAnyValue(a => a.ButtonTypes).Subscribe(buttonType =>
+                this.Observe(a => a.ButtonTypes).Subscribe(buttonType =>
                  {
                      buttonAdd.Visibility = buttonType.HasFlag(ButtonType.Add) ? Visibility.Visible : Visibility.Collapsed;
                      buttonRemove.Visibility = buttonType.HasFlag(ButtonType.Remove) ? Visibility.Visible : Visibility.Collapsed;

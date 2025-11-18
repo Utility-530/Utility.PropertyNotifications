@@ -29,7 +29,7 @@ namespace Utility.WPF.Demo.Controls
                 .ToObservableChangeSet(a => a.Key)
                 .Sort(ComparerHelper.By<PassFail, string>(a => a.Key))
                 .Top(10)
-                .ObserveOnDispatcher()
+                .ObserveOn(SynchronizationContextScheduler.Instance)
                 .Bind(out a)
                 .Subscribe(ss =>
                 {

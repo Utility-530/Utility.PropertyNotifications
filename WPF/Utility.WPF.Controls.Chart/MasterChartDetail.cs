@@ -5,12 +5,10 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using DynamicData;
 using Evan.Wpf;
-using ReactiveUI;
+using Utility.Reactives;
 using Utility.WPF.Abstract;
 using Utility.WPF.Controls.Master;
-using Utility.WPF.Helpers;
 using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.Chart
@@ -25,15 +23,14 @@ namespace Utility.WPF.Controls.Chart
         {
             var content = new OxyChart();
 
-            this.WhenAnyValue(a => a.DataKey)
-                .WhereNotNull()
+            this.Observe(a => a.DataKey)
                 .Subscribe(a =>
                 {
                     content.DataKey = a;
                 });
 
-            this.WhenAnyValue(a => a.IdKey)
-                .WhereNotNull()
+            this.Observe(a => a.IdKey)
+                .WhereIsNotNull()
                 .Subscribe(a =>
                 {
                     //selector.Key = a;
@@ -71,16 +68,17 @@ namespace Utility.WPF.Controls.Chart
 
             IObservable<IReadOnlyCollection<object>> Collections(ICheckedSelector selector)
             {
-                return this.WhenAnyValue(a => a.IdKey)
-                             .Select(prop =>
-                                    selector.SelectCheckedAndUnCheckedItems()
-                                        .WhereNotNull()
-                                        .Select(a => a.AsObservableChangeSet(c => c.obj.GetType().GetProperty(prop ?? IdHelper.GetIdProperty(c.obj.GetType())).GetValue(c.obj)))
-                                        .SelectMany(a => a))
-                             .Switch()
-                             .Filter(a => a.isChecked)
-                             .Transform(a => a.obj)
-                             .ToCollection();
+                return Observable.Empty<IReadOnlyCollection<object>>();
+                //return this.Observe(a => a.IdKey)
+                //             .Select(prop =>
+                //                    selector.SelectCheckedAndUnCheckedItems()
+                //                        .WhereIsNotNull()
+                //                        .Select(a => a.AsObservableChangeSet(c => c.obj.GetType().GetProperty(prop ?? IdHelper.GetIdProperty(c.obj.GetType())).GetValue(c.obj)))
+                //                        .SelectMany(a => a))
+                //             .Switch()
+                //             .Filter(a => a.isChecked)
+                //             .Transform(a => a.obj)
+                //             .ToCollection();
             }
         }
 

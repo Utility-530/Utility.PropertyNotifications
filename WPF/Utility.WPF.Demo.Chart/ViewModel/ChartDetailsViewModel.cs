@@ -29,7 +29,6 @@ namespace Utility.WPF.Chart.Demo.ViewModels
                 .Select((a, i) =>
                             new KeyValuePair<Character, DateTimePoint>(a, new DateTimePoint(DateTime.Now, 1d / (i + 1) + random.NextDouble())))
                 .ToObservableChangeSet(100)
-                .ObserveOnDispatcher()
                 .GroupOn(a => a.Key)
                 .Transform(aa =>
                 {

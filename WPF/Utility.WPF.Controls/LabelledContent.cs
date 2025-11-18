@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls
 {
@@ -52,12 +52,12 @@ namespace Utility.WPF.Controls
             //Binding parentBinding = bindingExpression.ParentBinding;
             //textBox2.SetBinding(TextBox.TextProperty, parentBinding);
 
-            this.WhenAnyValue(a => a.Hint)
-                .BindTo(hintBox, a => a.Text);
+            this.Observe(a => a.Hint)
+                .Subscribe(a => hintBox.Text = a);
 
-            this.WhenAnyValue(a => a.HintColor)
+            this.Observe(a => a.HintColor)
                 .Select(a => new SolidColorBrush { Color = a })
-                .BindTo(hintBox, a => a.Foreground);
+                   .Subscribe(a => hintBox.Foreground = a);
 
             //if (Header != null)
             //    label.Content = Header;

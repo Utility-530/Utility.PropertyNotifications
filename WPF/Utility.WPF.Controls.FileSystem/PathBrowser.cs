@@ -5,12 +5,14 @@ using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 using Utility.WPF.Controls.FileSystem.Infrastructure;
 using Button = System.Windows.Controls.Button;
 using Control = System.Windows.Controls.Control;
 using Label = System.Windows.Controls.Label;
 using TextBox = System.Windows.Controls.TextBox;
+using Utility.Commands;
+using Utility.Reactives;
 
 namespace Utility.WPF.Controls.FileSystem
 {
@@ -33,14 +35,14 @@ namespace Utility.WPF.Controls.FileSystem
                     (ContentControlOne ?? throw new NullReferenceException("ContentControlOne is null")).Content = content;
                 });
 
-            SetPath = ReactiveCommand.Create<string>(pathChanges.OnNext);
+            SetPath = new Command<string>(pathChanges.OnNext);
 
             pathChanges
-                .WhereNotNull()
+                .WhereIsNotNull()
                 .DistinctUntilChanged()
                 .CombineLatest(applyTemplateSubject, (a, b) => a)
                 .WithLatestFrom(contentChanges)
-                .SubscribeOnDispatcher()
+                .SubscribeOn(SynchronizationContextScheduler.Instance)
                 .Subscribe(a =>
                 {
                     Dispatcher.Invoke(() =>
@@ -118,7 +120,7 @@ namespace Utility.WPF.Controls.FileSystem
 
         public PathBrowser()
         {
-            SetPath = ReactiveCommand.Create<string>(pathChanges.OnNext);
+            SetPath = new Command<string>(pathChanges.OnNext);
             Command.TextChanged += Command_TextChanged;
         }
 

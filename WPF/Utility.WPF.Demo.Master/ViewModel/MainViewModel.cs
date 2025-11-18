@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Windows.Input;
+using Utility.Commands;
 using Utility.EventArguments;
 
 namespace Utility.WPF.Demo.Master.ViewModels
@@ -10,7 +11,7 @@ namespace Utility.WPF.Demo.Master.ViewModels
         public MainViewModel()
         {
             Rows = new ObservableCollection<RowViewModel> { new RowViewModel(), new RowViewModel(), };
-            ChangeCommand = ReactiveUI.ReactiveCommand.Create<object, Unit>((a) =>
+            ChangeCommand = new Command<object>((a) =>
             {
                 switch (a)
                 {
@@ -24,7 +25,6 @@ namespace Utility.WPF.Demo.Master.ViewModels
                     default:
                         break;
                 }
-                return Unit.Default;
             });
         }
 

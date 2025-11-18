@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows.Media;
 using ReactiveUI;
+using Utility.Commands;
 using static Utility.WPF.Controls.Chart.ViewModels.MultiTimeModel;
 
 namespace Utility.WPF.Chart.Demo.ViewModels
@@ -22,11 +23,10 @@ namespace Utility.WPF.Chart.Demo.ViewModels
             Id = id;
             Color = color;
             Data = data;
-            Command = ReactiveUI.ReactiveCommand.Create<object, object>(a =>
+            Command = new Command<object>(a =>
             {
                 IsChecked = !IsChecked;
                 this.RaisePropertyChanged(nameof(IsChecked));
-                return a;
             });
         }
 

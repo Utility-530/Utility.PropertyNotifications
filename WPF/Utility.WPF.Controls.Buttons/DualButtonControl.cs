@@ -3,7 +3,7 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.Buttons
 {
@@ -18,11 +18,11 @@ namespace Utility.WPF.Controls.Buttons
 
         public DualButtonControl()
         {
-            this.WhenAnyValue(a => a.Value, a => a.Main, a => a.Alternate)
-                .Where(a => a.Item2 != null && a.Item3 != null)
+            this.Observe(a => a.Value).CombineLatest(this.Observe(a => a.Main), this.Observe(a => a.Alternate))
+                .Where(a => a.Second != null && a.Third != null)
                 .Subscribe(b =>
                 {
-                    Change(b.Item1);
+                    Change(b.First);
                 });
         }
 

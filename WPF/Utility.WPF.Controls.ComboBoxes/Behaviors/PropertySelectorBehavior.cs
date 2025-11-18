@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using ReactiveUI;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Extensions;
@@ -52,7 +51,7 @@ namespace Utility.WPF.Controls.ComboBoxes
         {
             //AssociatedObject.SelectedItemTemplateSelector = CustomItemTemplateSelector.Instance;
 
-            AssociatedObject.WhenAnyValue(a => a.SelectedNode)
+            AssociatedObject.Observe(a => a.SelectedNode)
                 .OfType<IGetValue>()
                 .Select(a => a.Value)
                 .Subscribe(a =>

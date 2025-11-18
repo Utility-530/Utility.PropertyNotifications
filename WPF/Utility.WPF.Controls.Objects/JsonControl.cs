@@ -17,7 +17,6 @@ using Humanizer;
 using Microsoft.Xaml.Behaviors;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
-using ReactiveUI;
 using Tiny.Toolkits;
 using Utility.Commands;
 using Utility.Conversions.Json.Newtonsoft;
@@ -27,6 +26,8 @@ using Utility.Helpers.Reflection;
 using Utility.Models;
 using Utility.WPF.Controls.Trees;
 using static LambdaConverters.ValueConverter;
+using Utility.WPF.Reactives;
+using Utility.Reactives;
 
 namespace Utility.WPF.Controls.Objects
 {
@@ -233,9 +234,9 @@ namespace Utility.WPF.Controls.Objects
         {
             this.ItemsSource = new[] { convert("{}") };
 
-            this.WhenAnyValue(a => a.Object).WhereNotNull()
-                .Merge(this.WhenAnyValue(a => a.Json).WhereNotNull().Where(a => Regex.Replace(a, @"\s+", "") != "{}").Select(convert))
-                .Merge(this.WhenAnyValue(a => a.FallbackRootType).WhereNotNull().Select(convertType))
+            this.Observe(a => a.Object).WhereIsNotNull()
+                .Merge(this.Observe(a => a.Json).WhereIsNotNull().Where(a => Regex.Replace(a, @"\s+", "") != "{}").Select(convert))
+                .Merge(this.Observe(a => a.FallbackRootType).WhereIsNotNull().Select(convertType))
                 .Subscribe(a =>
                 {
                     this.Load(a, this);

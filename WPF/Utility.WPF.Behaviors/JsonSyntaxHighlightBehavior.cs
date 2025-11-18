@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
-using DynamicData;
 using Evan.Wpf;
 using Microsoft.Xaml.Behaviors;
 

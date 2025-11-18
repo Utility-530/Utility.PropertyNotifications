@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
-using ReactiveUI;
+using Utility.Reactives;
 
 namespace Utility.WPF.Controls.Buttons
 {
@@ -24,7 +24,7 @@ namespace Utility.WPF.Controls.Buttons
         public EnumToggleButton()
         {
             enumSubject
-                .WhereNotNull()
+                .WhereIsNotNull()
                 .Subscribe(c =>
                 {
                     if (c.Length > 0)

@@ -18,7 +18,7 @@ namespace Utility.WPF.Demo.Animation
 
                                                         .Select(a => (a * 0.05 * 100) % 101)
 
-                .ObserveOnDispatcher()
+                .ObserveOn(SynchronizationContextScheduler.Instance)
                 .Subscribe(a =>
                 {
                     MainProgressBar.Value = a;
@@ -31,10 +31,12 @@ namespace Utility.WPF.Demo.Animation
             var interval = Observable
                 .Interval(TimeSpan.FromSeconds(3));
 
-            interval.ObserveOnDispatcher().Subscribe(a =>
-            {
-                FadeText.FadeCommand.Execute(default);
-            });
+            interval
+                .ObserveOn(SynchronizationContextScheduler.Instance)
+                .Subscribe(a =>
+                {
+                    FadeText.FadeCommand.Execute(default);
+                });
         }
     }
 }

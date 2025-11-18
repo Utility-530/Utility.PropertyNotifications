@@ -12,9 +12,10 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using Evan.Wpf;
 using Microsoft.Xaml.Behaviors;
-using ReactiveUI;
 using Utility.Observables.Generic;
+using Utility.Reactives;
 using Utility.WPF.Helpers;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Behaviors
 {
@@ -47,10 +48,10 @@ namespace Utility.WPF.Behaviors
             FormatAssociatedObject(AssociatedObject);
 
             _ = AssociatedObject
-                .WhenAnyValue(a => a.SelectedItem)
+                .Observe(a => a.SelectedItem)
                 .DistinctUntilChanged()
-                .WhereNotNull()
-                .CombineLatest(AssociatedObject.WhenAnyValue(a => a.ItemsSource).WhereNotNull())
+                .WhereIsNotNull()
+                .CombineLatest(AssociatedObject.Observe(a => a.ItemsSource).WhereIsNotNull())
                 .Subscribe(c =>
                 {
                     var (dicEntry, enumerable) = c;
@@ -62,8 +63,8 @@ namespace Utility.WPF.Behaviors
                 .DisposeWith(disposable);
 
             _ = AssociatedObject
-                .WhenAnyValue(a => a.SelectedValue)
-                .WhereNotNull()
+                .Observe(a => a.SelectedValue)
+                .WhereIsNotNull()
                 .DistinctUntilChanged()
                 .Subscribe(c =>
                 {
@@ -78,9 +79,9 @@ namespace Utility.WPF.Behaviors
                 })
                 .DisposeWith(disposable);
 
-            _ = this.WhenAnyValue(a => a.Type)
-                .Merge(this.WhenAnyValue(a => a.Object).Select(a => a?.GetType()))
-                .WhereNotNull()
+            _ = this.Observe(a => a.Type)
+                .Merge(this.Observe(a => a.Object).Select(a => a?.GetType()))
+                .WhereIsNotNull()
                 .Select(type =>
                 {
                     return type.DefaultDataTemplates().Concat(type.CustomDataTemplates(this.AssociatedObject.Resources)).ToArray();

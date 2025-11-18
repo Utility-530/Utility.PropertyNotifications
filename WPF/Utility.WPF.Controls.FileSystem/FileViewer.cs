@@ -6,7 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using MaterialDesignExtensions.Controls;
 using Microsoft.Xaml.Behaviors.Core;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.FileSystem
 {
@@ -32,7 +32,7 @@ namespace Utility.WPF.Controls.FileSystem
             openFileControl = GetTemplateChild("OpenFileControl1") as OpenFileControl ?? throw new NullReferenceException("OpenFileControl1");
             contentControl = GetTemplateChild("ContentControl1") as ContentControl ?? throw new NullReferenceException("ContentControl1");
 
-            this.WhenAnyValue(v => v.Directory)
+            this.Observe(v => v.Directory)
                 .Subscribe(directory =>
             {
                 openFileControl.CurrentDirectory = directory;

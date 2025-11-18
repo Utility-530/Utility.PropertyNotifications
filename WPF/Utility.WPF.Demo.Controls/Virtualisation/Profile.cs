@@ -6,27 +6,27 @@ using System.Reactive.Linq;
 using BFF.DataVirtualizingCollection.DataVirtualizingCollection;
 using DynamicData;
 using Endless;
-using ReactiveUI;
+using Utility.Common.Helpers;
+using Utility.PropertyNotifications;
 using Utility.WPF.Demo.Data.Factory;
 using Utility.WPF.Demo.Data.Model;
-using VirtualisationHelper = Utility.Helpers.Ex.VirtualisationHelper;
 
 namespace Utility.WPF.Demo.Controls
 {
-    public class ProfileCollectionVirtualise1 : ReactiveObject
+    public class ProfileCollectionVirtualise1 : NotifyPropertyClass
     {
         private int val = 1;
-        private readonly ObservableAsPropertyHelper<IList<Profile>> profiles;
+        private IList<Profile> profiles;
 
         public ProfileCollectionVirtualise1()
         {
-            profiles = this.WhenAnyValue(a => a.Value).Select(GetProfiles).ToProperty(this, a => a.Profiles);
+            _ = this.WithChangesTo(a => a.Value).Select(GetProfiles).Subscribe(a => Profiles = a);
 
             IList<Profile> GetProfiles(int i)
             {
                 var ProfilePool = ProfileFactory.BuildPool();
                 return DataVirtualizingCollectionBuilder
-                    .Build<Profile>(i, RxApp.MainThreadScheduler)
+                    .Build<Profile>(i, ReactiveUI.RxApp.MainThreadScheduler)
                  .NonPreloading()
                  .Hoarding()
                  .NonTaskBasedFetchers(
@@ -45,9 +45,9 @@ namespace Utility.WPF.Demo.Controls
             }
         }
 
-        public IList<Profile> Profiles => profiles.Value;
+        public IList<Profile> Profiles { get => profiles; set => this.RaisePropertyChanged(ref profiles, value); }
 
-        public int Value { get => val; set => this.RaiseAndSetIfChanged(ref val, value); }
+        public int Value { get => val; set => this.RaisePropertyChanged(ref val, value); }
     }
 
     public class ProfileCollectionVirtualiseLimited

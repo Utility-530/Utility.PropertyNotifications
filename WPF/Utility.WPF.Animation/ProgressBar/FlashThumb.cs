@@ -5,7 +5,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using ReactiveUI;
+using Utility.Commands;
 
 namespace Utility.WPF.Animation
 {
@@ -98,7 +98,7 @@ namespace Utility.WPF.Animation
 
         public FlashThumb()
         {
-            Flash = ReactiveCommand.Create(() =>
+            Flash = new Command(() =>
             {
                 Repeat = false;
             });

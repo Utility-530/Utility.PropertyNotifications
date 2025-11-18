@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Evan.Wpf;
-using ReactiveUI;
+using Utility.Commands;
 using static Utility.WPF.Controls.Buttons.SwitchControl;
 
 namespace Utility.WPF.Controls.Buttons
@@ -14,7 +14,7 @@ namespace Utility.WPF.Controls.Buttons
     {
         public delegate void ToggleEventHandler(object sender, ToggleEventArgs size);
 
-        private readonly ReactiveCommand<object, object> setValueCommand;
+        private readonly ICommand setValueCommand;
         protected ButtonBase EditButton;
 
         public static readonly DependencyProperty ToolTipTextProperty =
@@ -41,19 +41,17 @@ namespace Utility.WPF.Controls.Buttons
 
         public SwitchControl()
         {
-            setValueCommand = ReactiveCommand.Create<object, object>(a => a);
+            setValueCommand = new Command<object>(a =>
+            {
+                Value = Main.Equals(a);
+                RaiseToggleEvent(Value ? Main : Alternate, Value);
+            });
             //KeyValue = ValueToKey();
         }
 
         public override void OnApplyTemplate()
         {
             EditButton = GetTemplateChild("EditButton") as ButtonBase;
-
-            setValueCommand.DistinctUntilChanged().Subscribe(a =>
-            {
-                Value = Main.Equals(a);
-                RaiseToggleEvent(Value ? Main : Alternate, Value);
-            });
             base.OnApplyTemplate();
         }
 

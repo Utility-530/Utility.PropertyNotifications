@@ -33,7 +33,7 @@ namespace Utility.WPF.Demo.Controls
        Finance.Sectors
          .ToObservable(Scheduler.Default)
          .ToObservableChangeSet()
-         .ObserveOnDispatcher()
+         .ObserveOn(SynchronizationContextScheduler.Instance)
             .DisposeMany()
          .Bind(out sectors)
          .Subscribe(_ =>

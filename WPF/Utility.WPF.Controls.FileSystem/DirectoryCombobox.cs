@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.FileSystem
 {
@@ -23,11 +23,11 @@ namespace Utility.WPF.Controls.FileSystem
         {
             SelectedIndex = 0;
 
-            this.WhenAnyValue(a => a.ConnectionDirectory)
+            this.Observe(a => a.ConnectionDirectory)
                 .Where(a => a != null)
                 .Select(a => new DirectoryInfo(a))
                 .Where(a => a != null)
-                .CombineLatest(this.WhenAnyValue(a => a.FileFilter))
+                .CombineLatest(this.Observe(a => a.FileFilter))
                 .Subscribe(a =>
                 {
                     try

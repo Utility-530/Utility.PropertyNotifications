@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls
 {
@@ -52,8 +52,8 @@ namespace Utility.WPF.Controls
 
         public CollapseBox() : base()
         {
-            this.WhenAnyValue(a => a.Content)
-                .WithLatestFrom(this.WhenAnyValue(a => a.ExpandedContent))
+            this.Observe(a => a.Content)
+                .WithLatestFrom(this.Observe(a => a.ExpandedContent))
                 .Subscribe(a =>
             {
                 if (a.Second == null && a.First != null)

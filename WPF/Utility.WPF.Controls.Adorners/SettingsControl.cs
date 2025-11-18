@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 using Utility.WPF.Behaviors;
 
 namespace Utility.WPF.Controls.Adorners
@@ -56,7 +56,7 @@ namespace Utility.WPF.Controls.Adorners
         {
             MenuItemButtonGroupBehavior? behavior = GetTemplateChild("MenuItemButtonGroupBehavior") as MenuItemButtonGroupBehavior;
             behavior
-                .WhenAnyValue(a => a.SelectedItem)
+                .Observe(a => a.SelectedItem)
                 .Subscribe(a =>
                 {
                     if (a is null)

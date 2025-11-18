@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Evan.Wpf;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 using Utility.WPF.Behaviors;
 using Utility.WPF.Controls.Base;
 
@@ -25,7 +25,7 @@ namespace Utility.WPF.Controls.Hybrid
 
         public MeasurementsControl()
         {
-            this.WhenAnyValue(a => a.DisplayMemberPath).CombineLatest(this.WhenAnyValue(a => a.DisplayKeyPath))
+            this.Observe(a => a.DisplayMemberPath).CombineLatest(this.Observe(a => a.DisplayKeyPath))
                  .Subscribe(a =>
                  {
                      var xx = new NumbersControl

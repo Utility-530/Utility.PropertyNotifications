@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Dragablz;
 using Evan.Wpf;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 using Utility.WPF.Abstract;
 using Utility.WPF.Attached;
 using Utility.WPF.Events;
@@ -86,13 +86,13 @@ namespace Utility.WPF.Controls.Dragablz
             }
 
             item?
-                .WhenAny(a => a.IsSelected, (a) => a)
+                .Observe(a => a.IsSelected)
                 .Skip(1)
-                .ObserveOnDispatcher()
-                .SubscribeOnDispatcher()
+                .ObserveOn(SynchronizationContextScheduler.Instance)
+                .SubscribeOn(SynchronizationContextScheduler.Instance)
                 .Subscribe(a =>
                 {
-                    if (a.Value == false)
+                    if (a == false)
                     {
                         return;
                     }
@@ -121,13 +121,12 @@ namespace Utility.WPF.Controls.Dragablz
                     }
                     SelectedItem = selected.Cast<DragablzItem>().Select(a => a.Content).SingleOrDefault();
                     SelectedIndex = index;
-                    RaiseEvent(new SelectionChangedEventArgs(SelectionChangedEvent, selected, new[] { a.Sender.Content }));
+                    //RaiseEvent(new SelectionChangedEventArgs(SelectionChangedEvent, selected, new[] { a.Sender.Content }));
                 });
 
             Ex.Observable<bool>(a => a == item, a => a.Name == nameof(Ex.IsChecked))
-                  //.Skip(1)
-                  .ObserveOnDispatcher()
-                  .SubscribeOnDispatcher()
+                .ObserveOn(SynchronizationContextScheduler.Instance)
+                .SubscribeOn(SynchronizationContextScheduler.Instance)
                   .Subscribe(a =>
                   {
                       var items = Items.OfType<object>().Select(a => ItemContainerGenerator.ContainerFromItem(a)).Cast<DragablzItem>().ToArray();

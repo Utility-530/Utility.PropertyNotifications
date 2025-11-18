@@ -13,7 +13,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\Utility.Globals\Utility.Globals.csproj" />
     <ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
-    <ProjectReference Include="..\Utility.Singletons\Utility.Singletons.csproj" />
     <ProjectReference Include="..\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
     <ProjectReference Include="..\Utility.WPF.Reactives\Utility.WPF.Reactives.csproj" />
   </ItemGroup>

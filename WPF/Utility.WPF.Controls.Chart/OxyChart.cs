@@ -16,8 +16,9 @@ namespace Utility.WPF.Controls.Chart
 {
     using System.Windows.Controls;
     using Evan.Wpf;
-    using ReactiveUI;
+    using Utility.Reactives;
     using Utility.WPF.Controls.Chart.ViewModels;
+    using Utility.WPF.Reactives;
     using static Utility.WPF.Controls.Chart.ViewModels.MultiTimeModel;
 
     public class OxyChart : Control, IItemsSource
@@ -55,16 +56,15 @@ namespace Utility.WPF.Controls.Chart
 
             modelSubject
                 .CombineLatest(
-                this.WhenAnyValue(a => a.ItemsSource)
-                .WhereNotNull()
+                this.Observe(a => a.ItemsSource)
+                .WhereIsNotNull()
                 .Select(cc =>
                 {
                     return cc;
                 }),
-                   this.WhenAnyValue(a => a.DataKey),
-                   this.WhenAnyValue(a => a.DataConverter),
-                this.WhenAnyValue(a => a.Id).Where(id => id != null))
-                .ObserveOnDispatcher()
+                   this.Observe(a => a.DataKey),
+                   this.Observe(a => a.DataConverter),
+                this.Observe(a => a.Id).Where(id => id != null))
                 .Subscribe(combination =>
                 {
                     Combine(combination.First, combination.Second, combination.Third, combination.Fourth, combination.Fifth);

@@ -7,9 +7,9 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using DynamicData.Binding;
 using Utility.Helpers.NonGeneric;
 using Utility.Helpers.Reflection;
+using Utility.Reactives;
 using Utility.WPF.Factorys;
 using Arrangement = Utility.Enums.Arrangement;
 using Orientation = System.Windows.Controls.Orientation;
@@ -37,7 +37,7 @@ namespace Utility.WPF.Attached
             if (d is ItemsControl itemsControl)
             {
                 DataTemplate originalTemplate = itemsControl.ItemTemplate;
-                _ = itemsControl.Items.ObserveCollectionChanges().Select(a => itemsControl.Items.Count)
+                _ = itemsControl.Items.Changes().Select(a => itemsControl.Items.Count)
                     .Subscribe(count =>
                     {
                         if (count == 1)

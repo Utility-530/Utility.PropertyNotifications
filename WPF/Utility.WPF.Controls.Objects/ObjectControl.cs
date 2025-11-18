@@ -74,7 +74,7 @@ namespace Utility.WPF.Controls.Objects
                                 .Pipe(a => (a.Keys.Cast<object>().Any() ? Visibility.Visible : Visibility.Collapsed, a))
                         })
                     .ToObservable()
-                    .ObserveOnDispatcher()
+                    .ObserveOn(SynchronizationContextScheduler.Instance)
                     .Subscribe(a =>
                     {
                         var (visibility, content) = a;

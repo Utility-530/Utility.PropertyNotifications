@@ -2,7 +2,8 @@
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using Microsoft.Xaml.Behaviors;
-using ReactiveUI;
+using Utility.Reactives;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Behaviors
 {
@@ -15,7 +16,7 @@ namespace Utility.WPF.Behaviors
         {
             object? checkedContent = null;
             base.OnAttached();
-            ConfigureContent(AssociatedObject, this.WhenAnyValue(a => a.UnCheckedContent), checkedContent);
+            ConfigureContent(AssociatedObject, this.Observe(a => a.UnCheckedContent), checkedContent);
         }
 
         public object UnCheckedContent
@@ -27,7 +28,7 @@ namespace Utility.WPF.Behaviors
         public static void ConfigureContent(ToggleButton toggleButton, IObservable<object> uncheckedContentObservable, object? checkedContent)
         {
             object? uncheckedContent = null;
-            uncheckedContentObservable.WhereNotNull().Subscribe(a =>
+            uncheckedContentObservable.WhereIsNotNull().Subscribe(a =>
             {
                 uncheckedContent = a;
                 if (checkedContent == null)

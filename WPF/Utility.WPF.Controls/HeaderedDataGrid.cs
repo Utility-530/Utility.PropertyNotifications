@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using Evan.Wpf;
-using ReactiveUI;
+using Utility.Reactives;
 using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls
@@ -18,7 +18,7 @@ namespace Utility.WPF.Controls
         {
             return showCountInHeader
                 .CombineLatest(
-                headeredItemsControl.WhenAnyValue(a => a.Header).WhereNotNull().DistinctUntilChanged(), headeredItemsControl.Counts())
+                headeredItemsControl.Observe(a => a.Header).WhereIsNotNull().DistinctUntilChanged(), headeredItemsControl.Counts())
                 .Select(abc =>
                 {
                     if (abc.First == false)
@@ -51,11 +51,11 @@ namespace Utility.WPF.Controls
         public HeaderedDataGrid()
         {
             HeaderedItemsControlEx
-                .HeaderChanges(this, this.WhenAnyValue(a => a.ShowCountInHeader))
+                .HeaderChanges(this, this.Observe(a => a.ShowCountInHeader))
                 .Buffer(TimeSpan.FromSeconds(0.4))
                 .Select(a => a.LastOrDefault())
-                .WhereNotNull()
-                .ObserveOnDispatcher()
+                .WhereIsNotNull()
+                .ObserveOn(SynchronizationContextScheduler.Instance)
                 .Subscribe(a => Header = a);
         }
 

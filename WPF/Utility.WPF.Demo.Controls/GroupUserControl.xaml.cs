@@ -113,7 +113,7 @@ namespace Utility.WPF.Demo.Controls
                 static ReadOnlyObservableCollection<Stock> CollectStocks(IObservable<IChangeSet<Stock, string>> changeSet)
                 {
                     changeSet
-                        .ObserveOnDispatcher()
+                        .ObserveOn(SynchronizationContextScheduler.Instance)
                         .Bind(out var data)
                         .Subscribe();
 

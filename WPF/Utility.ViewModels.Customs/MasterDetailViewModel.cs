@@ -6,10 +6,11 @@ using Utility.Common.Contract;
 using Utility.Enums;
 using Utility.EventArguments;
 using Utility.Interfaces.NonGeneric.Data;
+using Utility.PropertyNotifications;
 
 namespace Utility.ViewModels
 {
-    public abstract class MasterDetailViewModel : ReactiveObject
+    public abstract class MasterDetailViewModel : NotifyPropertyClass
     {
         protected readonly ICollectionService service;
         protected IRepository repository;

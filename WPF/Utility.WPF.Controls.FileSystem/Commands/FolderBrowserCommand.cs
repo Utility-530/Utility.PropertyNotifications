@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Windows.Forms;
-using ReactiveUI;
+using Utility.Reactives;
 
 namespace Utility.WPF.Controls.FileSystem
 {
@@ -19,9 +19,10 @@ namespace Utility.WPF.Controls.FileSystem
                     return Observable.Return(
                    OpenDialog(string.Empty, string.Empty))
                 .Where(output => output.result ?? false)
-                .ObserveOnDispatcher()
+                .ObserveOn(SynchronizationContextScheduler.Instance)
                 .Select(output => output.path)
-                .WhereNotNull().Subscribe(obs);
+                .WhereIsNotNull()
+                .Subscribe(obs);
                 });
             return new Func<IObservable<string>>(() => obs);
         }

@@ -5,7 +5,6 @@ using System.Reactive.Linq;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using deniszykov.TypeConversion;
-using ReactiveUI;
 using Utility.WPF.Abstract;
 
 namespace Utility.WPF.Reactives
@@ -96,13 +95,13 @@ namespace Utility.WPF.Reactives
                 .FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>
                     (a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
                 .Select(a => selector.SelectedValue).StartWith(selector.SelectedValue)
-                .WhereNotNull();
+                .Where(a => a != null);
 
         public static IObservable<T> ToSelectedValueChanges<T>(this Selector selector) =>
             selector.ValueChanges().Cast<T>();
 
         public static IObservable<T?> ItemChanges<T>(this Selector selector)
-        { 
+        {
             var conversionProvider = new TypeConversionProvider();
             // If using ComboBoxItems
             var comboBoxItems =

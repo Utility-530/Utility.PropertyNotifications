@@ -13,7 +13,7 @@
         <ResourceDictionary>
             <system:String x:Key="Partition">QuickStart</system:String>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Utility.WPF.Controls.Trees;component/Dragablz.Controls/Themes/Generic.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/Utility.WPF.Controls.Trees;component/Dragablz.Controls/Themes/Generic.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

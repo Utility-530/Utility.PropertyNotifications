@@ -2,9 +2,11 @@
 using System.Reactive.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ReactiveUI;
+using Utility.Commands;
 using Utility.Enums;
 using Utility.EventArguments;
+using Utility.Nodes;
+using Utility.PropertyNotifications;
 using Utility.ViewModels;
 using Utility.ViewModels.Customs.Infrastructure;
 using Utility.WPF.Demo.Data.Factory;
@@ -24,11 +26,11 @@ namespace Utility.WPF.Demo.Hybrid
         }
     }
 
-    public class GroupingViewModel : ReactiveObject
+    public class GroupingViewModel : NotifyPropertyClass
     {
         private static string InitialPropertyName = nameof(Stock.Sector);
         private ClassProperty selected;
-        private ReactiveCommand<CollectionItemEventArgs, ClassProperty?> command;
+        private ICommand command;
 
         public GroupingViewModel()
         {
@@ -36,27 +38,27 @@ namespace Utility.WPF.Demo.Hybrid
             CollectionViewModel = new(StockObservableFactory.GenerateChangeSet(), aa, InitialPropertyName);
             selected = CollectionViewModel.Properties.First();
 
-            this.WhenAnyValue(a => a.Selected)
+            this.WithChangesTo(a => a.Selected)
                 .Select(a => (ClassProperty?)a)
                 .Subscribe(CollectionViewModel);
 
-            command = ReactiveCommand.Create<CollectionItemEventArgs, ClassProperty?>((a) =>
+            command = new Command<CollectionItemEventArgs>((a) =>
             {
                 if (a is { EventType: EventType.Enable })
-                    return Selected;
+                    CollectionViewModel.OnNext(Selected);
                 if (a is { EventType: EventType.Disable })
-                    return null;
+                    CollectionViewModel.OnNext(null);
                 else
                     throw new System.Exception("dfs33 33");
             });
 
-            command.Subscribe(CollectionViewModel);
+
         }
 
         public CollectionGroupViewModel<Stock, string> CollectionViewModel { get; }
 
         public ICommand Command => command;
 
-        public ClassProperty Selected { get => selected; set => this.RaiseAndSetIfChanged(ref selected, value); }
+        public ClassProperty Selected { get => selected; set => this.RaisePropertyChanged(ref selected, value); }
     }
 }

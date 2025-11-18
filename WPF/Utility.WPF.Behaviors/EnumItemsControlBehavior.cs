@@ -13,8 +13,9 @@ using System.Windows.Controls;
 using Endless;
 using Evan.Wpf;
 using Microsoft.Xaml.Behaviors;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 using Utility.Observables.Generic;
+using Utility.Reactives;
 
 namespace Utility.WPF.Behaviors
 {
@@ -49,16 +50,16 @@ namespace Utility.WPF.Behaviors
             FormatAssociatedObject(AssociatedObject);
 
             //this
-            //    .WhenAnyValue(a => a.SelectedEnum)
+            //    .Observe(a => a.SelectedEnum)
             //    .DistinctUntilChanged()
             //    .WhereNotNull()
-            //    .CombineLatest(AssociatedObject.WhenAnyValue(a => a.ItemsSource).WhereNotNull())
+            //    .CombineLatest(AssociatedObject.Observe(a => a.ItemsSource).WhereNotNull())
             //    .Subscribe(c => AssociatedObject.SetValue(Selector.SelectedIndexProperty, Index(c.First, c.Second)))
             //    .DisposeWith(disposable);
 
             this
-                .WhenAnyValue(a => a.EnumFilterCollection)
-                .WhereNotNull()
+                .Observe(a => a.EnumFilterCollection)
+                .WhereIsNotNull()
                 .Select(ToEnumMembers)
                 .Select(AppendNullOptionAndToArray)
                 .Subscribe(itemsSourceSubject.OnNext)

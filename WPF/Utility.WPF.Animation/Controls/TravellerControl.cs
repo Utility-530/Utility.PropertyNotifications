@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using Utility.Commands;
 using Utility.WPF.Animation.Infrastructure;
 using Utility.WPF.Animations.Helpers;
 
@@ -42,7 +43,7 @@ namespace Utility.WPF.Animation
 
         public TravellerControl()
         {
-            RunCommand = ReactiveUI.ReactiveCommand.Create(() =>
+            RunCommand = new Command(() =>
             {
                 try
                 {

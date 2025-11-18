@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Evan.Wpf;
-using ReactiveUI;
 using Utility.Helpers.NonGeneric;
+using Utility.Reactives;
 using Utility.WPF.Abstract;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.Base
 {
@@ -82,8 +84,8 @@ namespace Utility.WPF.Controls.Base
             if (Content is Selector selector)
             {
                 selector
-                    .WhenAnyValue(c => c.ItemsSource)
-                    .WhereNotNull()
+                    .Observe(c => c.ItemsSource)
+                    .WhereIsNotNull()
                     .Subscribe(itemsSource => { ItemsSource ??= itemsSource; });
                 selector.SelectionChanged += (_, e) =>
                 {
@@ -92,12 +94,13 @@ namespace Utility.WPF.Controls.Base
                 };
                 SetValue(CountProperty, selector.ItemsSource?.Count() ?? 0);
             }
-            else if (Content is ISelector iSelector)
+            else if (Content is ISelector iSelector and DependencyObject prop)
             {
-                iSelector
-                    .WhenAnyValue(c => c.ItemsSource)
-                    .WhereNotNull()
-                    .Subscribe(itemsSource => { ItemsSource ??= itemsSource; });
+                prop
+                    .Observe(ItemsControl.ItemsSourceProperty)
+                    .WhereIsNotNull()
+                    .Cast<DependencyPropertyChangedEventArgs>()
+                    .Subscribe(itemsSource => { ItemsSource ??= (IEnumerable)itemsSource.NewValue; });
                 iSelector.SelectionChanged += (_, e) =>
                 {
                     RaiseEvent(new SelectionChangedEventArgs(SelectionChangedEvent, e.RemovedItems, e.AddedItems));
@@ -142,8 +145,8 @@ namespace Utility.WPF.Controls.Base
             }
             Count = ItemsSource?.Count() ?? 0;
 
-            this.WhenAnyValue(a => a.ItemsSource)
-                .WhereNotNull()
+            this.Observe(a => a.ItemsSource)
+                .WhereIsNotNull()
                 .Subscribe(a =>
                 {
                     if (Content is ItemsControl itemsControl)

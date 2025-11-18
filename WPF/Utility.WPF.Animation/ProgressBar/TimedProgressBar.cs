@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using Utility.Commands;
 
 namespace Utility.WPF.Animation
 {
@@ -83,7 +84,7 @@ namespace Utility.WPF.Animation
 
         public TimedProgressBar()
         {
-            Flash = ReactiveUI.ReactiveCommand.Create(() =>
+            Flash = new Command(() =>
             {
                 Repeat = false;
             });

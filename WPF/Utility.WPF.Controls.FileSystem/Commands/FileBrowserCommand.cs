@@ -6,7 +6,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using Microsoft.Win32;
-using ReactiveUI;
+using Utility.Reactives;
 
 namespace Utility.WPF.Controls.FileSystem
 {
@@ -35,9 +35,9 @@ namespace Utility.WPF.Controls.FileSystem
             var obs = filter.CombineLatest(extension, multiSelectChanges, (b, c, d) => OpenDialog(b, c, d))
                 .Take(1)
             .Where(output => output.result ?? false)
-            .ObserveOnDispatcher()
+            .ObserveOn(SynchronizationContextScheduler.Instance)
             .SelectMany(output => output.path.ToObservable())
-            .WhereNotNull();
+            .WhereIsNotNull();
             return new Func<IObservable<string>>(() => obs);
         }
 

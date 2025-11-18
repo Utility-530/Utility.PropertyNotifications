@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Windows;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 using Utility.WPF.Controls.Dragablz;
 
 namespace Utility.WPF.Controls.Hybrid
@@ -21,8 +21,8 @@ DependencyProperty.Register("CommandPath", typeof(string), typeof(ResourceDictio
         public ResourceDictionariesControl()
         {
             ButtonTypes = ButtonType.None;
-            this.WhenAnyValue(a => a.ItemsSource)
-           .CombineLatest(this.WhenAnyValue(a => a.DisplayMemberPath), this.WhenAnyValue(a => a.IsCheckedPath), this.WhenAnyValue(a => a.CommandPath))
+            this.Observe(a => a.ItemsSource)
+           .CombineLatest(this.Observe(a => a.DisplayMemberPath), this.Observe(a => a.IsCheckedPath), this.Observe(a => a.CommandPath))
            .Subscribe(a =>
            {
                var (itemsSource, display, isChecked, commandPath) = a;

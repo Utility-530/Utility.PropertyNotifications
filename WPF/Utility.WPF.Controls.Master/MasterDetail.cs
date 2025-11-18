@@ -12,7 +12,6 @@ namespace Utility.WPF.Controls.Master
     using System.Reactive.Subjects;
     using System.Windows.Controls.Primitives;
     using Evan.Wpf;
-    using ReactiveUI;
     using Utility.Reactives;
     using Utility.WPF.Abstract;
     using Utility.WPF.Controls.Base;
@@ -39,11 +38,12 @@ namespace Utility.WPF.Controls.Master
 
         public ReadOnlyMasterDetail()
         {
+
             _ = this
-                .WhenAnyValue(a => a.Content)
-                .WhereNotNull()
+                .Observe(a => a.Content)
+                .WhereIsNotNull()
                 .Select(a => this.Selector)
-                .WhereNotNull()
+                .WhereIsNotNull()
                 .CombineLatest(dataContextSubject)
                 .Subscribe(c =>
                 {
@@ -52,14 +52,14 @@ namespace Utility.WPF.Controls.Master
                 });
 
             TransformObservable = ObservableHelper.ToReplaySubject(Transform(
-                this.WhenAnyValue(a => a.Selector)
-                    .WhereNotNull()
-                    .ObserveOnDispatcher()
+                this.Observe(a => a.Content)
+                    .WhereIsNotNull()                
+                    .Cast<Control>()
                     .Select(SelectFromMaster)
                     .Switch(),
-                this.WhenAnyValue(a => a.Converter),
-                this.WhenAnyValue(a => a.ConverterParameter),
-                this.WhenAnyValue(a => a.PropertyKey)));
+                this.Observe(a => a.Converter),
+                this.Observe(a => a.ConverterParameter),
+                this.Observe(a => a.PropertyKey)));
 
             _ = TransformObservable
                 .Select(a => a.New)
@@ -309,7 +309,6 @@ namespace Utility.WPF.Controls.Master
         {
             return collectionViewModel
                 .CombineLatest(dataConversions, converterParameters, dataKeys)
-                .ObserveOnDispatcher()
                 .Scan(default(TransformProduct), (a, b) =>
                 {
                     var (selected, converter, converterParameter, dataKey) = b;

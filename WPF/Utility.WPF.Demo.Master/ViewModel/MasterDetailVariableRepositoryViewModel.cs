@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Reactive;
-using ReactiveUI;
+using System.Windows.Input;
+using Utility.Commands;
 using Utility.Interfaces.NonGeneric.Data;
 using Utility.Persists;
+using Utility.PropertyNotifications;
 using Utility.WPF.Demo.Common.ViewModels;
 using Utility.WPF.Demo.Master.Infrastructure;
 
@@ -12,10 +14,10 @@ namespace Utility.WPF.Demo.Master.ViewModels
     {
         public MasterDetailVariableRepositoryViewModel() : base()
         {
-            this.WhenAnyValue(a => a.DatabaseService)
+            this.WithChangesTo(a => a.DatabaseService)
                 .Subscribe(a => { service.OnNext(new(a)); });
 
-            ChangeRepositoryCommand = ReactiveCommand.Create<bool, Unit>((a) =>
+            ChangeRepositoryCommand = new Command<bool>((a) =>
             {
                 if (DatabaseService is LiteDbRepository service)
                 {
@@ -24,12 +26,11 @@ namespace Utility.WPF.Demo.Master.ViewModels
                 else
                     DatabaseService = new LiteDbRepository(new(typeof(ReactiveFields), nameof(ReactiveFields.Id)));
 
-                return Unit.Default;
             });
         }
 
-        public ReactiveCommand<bool, Unit> ChangeRepositoryCommand { get; }
+        public ICommand ChangeRepositoryCommand { get; }
 
-        public IRepository DatabaseService { get => repository; private set => this.RaiseAndSetIfChanged(ref repository, value); }
+        public IRepository DatabaseService { get => repository; private set => this.RaisePropertyChanged(ref repository, value); }
     }
 }

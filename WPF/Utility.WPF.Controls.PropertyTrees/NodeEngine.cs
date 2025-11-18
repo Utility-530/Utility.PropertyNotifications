@@ -239,6 +239,21 @@ namespace Utility.WPF.Controls.PropertyTrees
         {
             throw new NotImplementedException();
         }
+
+        public void Remove(Predicate<INodeViewModel> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IObservable<INodeViewModel> Roots()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CanRemove(INodeViewModel nodeViewModel)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class MethodValue

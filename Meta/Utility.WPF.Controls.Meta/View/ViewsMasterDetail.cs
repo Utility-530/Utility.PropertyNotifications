@@ -13,6 +13,7 @@ using Utility.WPF.Attached;
 using Utility.WPF.Controls.Base;
 using Utility.WPF.Controls.Master;
 using Utility.WPF.Meta;
+using Utility.WPF.Reactives;
 using Utility.WPF.ResourceDictionarys;
 
 namespace Utility.WPF.Controls.Meta
@@ -35,27 +36,9 @@ namespace Utility.WPF.Controls.Meta
             Movement = XYTraversal.RightToLeft;
             this.SetValue(Ex.ReverseProperty, true);
             this.SetValue(Ex.IndentProperty, new GridLength(250));
-            var listBox = new ViewTypeItemListBox();
-
-            Content = listBox;
+       
             UseDataContext = true;
-            _ = this.WhenAnyValue(a => a.Assembly)
-                    .WhereNotNull()
-                    .CombineLatest(this.WhenAnyValue(a => a.AssemblyType).Where(a => a != AssemblyType.Default))
-                    .Select(a =>
-                    {
-                        return a.Second switch
-                        {
-                            AssemblyType.UserControl => (IEnumerable)a.First.ViewTypes().ToArray(),
-                            AssemblyType.ResourceDictionary => (IEnumerable)ResourceDictionaryKeyValue.ResourceViewTypes(a.First).ToArray(),
-                            _ => throw new Exception("FDGS££Fff"),
-                        };
-                    })
-                    .Subscribe(pairs =>
-                    {
-                        listBox.ItemsSource = pairs;
-                        listBox.SelectedIndex = 0;
-                    });
+          
 
             Header = CreateDetail();
 
@@ -102,6 +85,30 @@ namespace Utility.WPF.Controls.Meta
                     return contentControl;
                 }
             }
+        }
+
+        public override void OnApplyTemplate()
+        {
+            var listBox = new ViewTypeItemListBox();
+            Content = listBox;
+
+            _ = this.Observe(a => a.Assembly)
+                    .CombineLatest(this.Observe(a => a.AssemblyType).Where(a => a != AssemblyType.Default))
+                    .Select(a =>
+                    {
+                        return a.Second switch
+                        {
+                            AssemblyType.UserControl => (IEnumerable)a.First.ViewTypes().ToArray(),
+                            AssemblyType.ResourceDictionary => (IEnumerable)ResourceDictionaryKeyValue.ResourceViewTypes(a.First).ToArray(),
+                            _ => throw new Exception("FDGS££Fff"),
+                        };
+                    })
+                    .Subscribe(pairs =>
+                    {
+                        listBox.ItemsSource = pairs;
+                        listBox.SelectedIndex = 0;
+                    });
+            base.OnApplyTemplate();
         }
 
         public Assembly Assembly

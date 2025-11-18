@@ -8,7 +8,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Markup;
-using ReactiveUI;
 using Utility.Commands;
 using Utility.Helpers.Reflection;
 using Utility.WPF.Abstract;
@@ -132,7 +131,7 @@ namespace Utility.WPF.Markup
                 disposable?.Dispose();
                 disposable =
                    DependencyObjectHelper.Observe(frameworkElement, FrameworkElement.DataContextProperty)
-                    .WhereNotNull()
+                    .Where(a => a != null)
                     .Select(context => (context, context.GetType().GetProperty(commandName)))
                     .Subscribe(a =>
                     {

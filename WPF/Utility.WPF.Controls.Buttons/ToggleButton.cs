@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 using Utility.WPF.Behaviors;
 
 namespace Utility.WPF.Controls.Buttons
@@ -11,7 +11,7 @@ namespace Utility.WPF.Controls.Buttons
         public ToggleButton()
         {
             object? checkedContent = null;
-            ToggleButtonContentBehavior.ConfigureContent(this, this.WhenAnyValue(a => a.UnCheckedContent), checkedContent);
+            ToggleButtonContentBehavior.ConfigureContent(this, this.Observe(a => a.UnCheckedContent), checkedContent);
         }
 
         public object UnCheckedContent
@@ -28,7 +28,7 @@ namespace Utility.WPF.Controls.Buttons
         public RadioButton()
         {
             object? checkedContent = null;
-            ToggleButtonContentBehavior.ConfigureContent(this, this.WhenAnyValue(a => a.UnCheckedContent), checkedContent);
+            ToggleButtonContentBehavior.ConfigureContent(this, this.Observe(a => a.UnCheckedContent), checkedContent);
         }
 
         public object UnCheckedContent

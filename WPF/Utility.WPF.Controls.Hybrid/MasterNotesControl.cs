@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Windows;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 using Utility.WPF.Controls.Dragablz;
+using Utility.Reactives;
 
 namespace Utility.WPF.Controls.Hybrid
 {
@@ -26,9 +27,9 @@ namespace Utility.WPF.Controls.Hybrid
                 ItemsSource = ItemsSource
             };
 
-            this.WhenAnyValue(a => a.ItemsSource)
-                .WhereNotNull()
-                .CombineLatest(this.WhenAnyValue(a => a.DisplayMemberPath))
+            this.Observe(a => a.ItemsSource)
+                .WhereIsNotNull()
+                .CombineLatest(this.Observe(a => a.DisplayMemberPath))
                 .Subscribe(a =>
                 {
                     Dispatcher.InvokeAsync(() =>

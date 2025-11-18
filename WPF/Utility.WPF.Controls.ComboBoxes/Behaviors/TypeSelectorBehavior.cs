@@ -6,7 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using ReactiveUI;
 using Utility.Interfaces;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes.Ex;
@@ -52,7 +51,8 @@ namespace Utility.WPF.Controls.ComboBoxes
                     e.Cancel = true;
                 }
             };
-            this.AssociatedObject.WhenAnyValue(a => a.SelectedNode)
+            this.AssociatedObject
+                .Observe(a => a.SelectedNode)
                 .OfType<IGetValue>()
                 .Select(a => a.Value)
                 .Subscribe(a =>

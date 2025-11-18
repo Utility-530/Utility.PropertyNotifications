@@ -54,7 +54,7 @@ namespace Utility.WPF.Demo.Common.ViewModels
             {
                 IsChecked = !IsChecked;
                 tickChanges.OnNext(new TickChange(Text!, IsChecked));
-                //this.WhenAnyValue(a => a.Text).Select(a => a != null)
+                //this.Observe(a => a.Text).Select(a => a != null)
             });
             return command;
         }

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Utility.Commands;
 using Utility.EventArguments;
 using Utility.WPF.Demo.Data.Factory;
 
@@ -24,7 +25,7 @@ namespace Utility.WPF.Demo.Master.View
 
         public IEnumerable Data { get; } = Factory.BuildCollection().ToArray();
 
-        public ICommand ChangeCommand { get; } = ReactiveUI.ReactiveCommand.Create<CollectionEventArgs>(a =>
+        public ICommand ChangeCommand { get; } = new Command<CollectionEventArgs>(a =>
          {
          });
     }

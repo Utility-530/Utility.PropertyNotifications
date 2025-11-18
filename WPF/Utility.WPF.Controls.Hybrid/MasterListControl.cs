@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Reactive.Linq;
 using System.Windows;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 using Utility.WPF.Controls.Dragablz;
 using Utility.WPF.Controls.Master;
 
@@ -25,13 +25,13 @@ namespace Utility.WPF.Controls.Hybrid
             RemoveOrder = RemoveOrder.Selected;
             ButtonTypes = ButtonType.Add | ButtonType.Remove;
 
-            this.WhenAnyValue(a => a.ItemsSource)
+            this.Observe(a => a.ItemsSource)
                 .StartWith(default(IEnumerable))
            .CombineLatest(
-           this.WhenAnyValue(a => a.DisplayMemberPath),
-           this.WhenAnyValue(a => a.IsCheckedPath),
-           this.WhenAnyValue(a => a.CommandPath),
-           this.WhenAnyValue(a => a.IsRefreshablePath)
+           this.Observe(a => a.DisplayMemberPath),
+           this.Observe(a => a.IsCheckedPath),
+           this.Observe(a => a.CommandPath),
+           this.Observe(a => a.IsRefreshablePath)
            )
            .Subscribe(a =>
            {

@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Microsoft.Xaml.Behaviors;
-using ReactiveUI;
 using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Behaviors
@@ -85,7 +84,7 @@ namespace Utility.WPF.Behaviors
         private static IObservable<MenuItem[]> CheckableSubMenuItems(ItemsControl menuItem)
         {
             return menuItem
-                .WhenAnyValue(a => a.Items)
+                .Observe(a => a.Items)
                 .CombineLatest(menuItem.ItemContainerGenerator.ContainersGeneratedChanges(), (a, b) => a)
                 .Select(items =>
                 {

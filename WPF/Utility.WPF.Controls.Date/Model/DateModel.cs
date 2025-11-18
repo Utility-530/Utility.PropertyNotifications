@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using ReactiveUI;
+using System.Reactive.Linq;
+using Utility.PropertyNotifications;
 using Utility.WPF.Controls.Date.Helper;
 
 namespace Utility.WPF.Controls.Date.Model
 {
-    public abstract class DateModel : ReactiveObject
+    public abstract class DateModel : NotifyPropertyClass
     {
         private int year, month, day;
         protected readonly ComparableModel<DateTime> comparableModel = new();
@@ -14,7 +15,8 @@ namespace Utility.WPF.Controls.Date.Model
         protected DateModel()
         {
             Current = DateTime.Now;
-            this.WhenAnyValue(a => a.Year, a => a.Month)
+            this.WithChangesTo(a => a.Year)
+                .CombineLatest(this.WithChangesTo(a => a.Month))
                .Subscribe(_ => RefreshDays());
         }
 
@@ -23,13 +25,13 @@ namespace Utility.WPF.Controls.Date.Model
         public int Year
         {
             get => year;
-            set => this.RaiseAndSetIfChanged(ref year, value);
+            set => this.RaisePropertyChanged(ref year, value);
         }
 
         public int Month
         {
             get => month;
-            set => this.RaiseAndSetIfChanged(ref month, value);
+            set => this.RaisePropertyChanged(ref month, value);
         }
 
         public DateTime Current

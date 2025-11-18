@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Fasterflect;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 using Utility.WPF.Controls.Base;
 using Utility.WPF.Helpers;
 
@@ -30,7 +30,7 @@ namespace Utility.WPF.Controls.Lists
         public ButtonsControl()
         {
             this
-                .WhenAnyValue(a => a.SelectedValue)
+                .Observe(a => a.SelectedValue)
                 .Subscribe(a => Output = a);
         }
 

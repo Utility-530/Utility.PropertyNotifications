@@ -5,8 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using LanguageExt;
-using ReactiveUI;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
@@ -52,7 +50,7 @@ namespace Utility.WPF.Controls.ComboBoxes
         {
             this.AssociatedObject.SelectedItemTemplateSelector = CustomItemTemplateSelector.Instance;
 
-            this.AssociatedObject.WhenAnyValue(a => a.SelectedNode)
+            this.AssociatedObject.Observe(a => a.SelectedNode)
                 .Subscribe(a =>
                 {
                     if (a is DirectoryModel tree)

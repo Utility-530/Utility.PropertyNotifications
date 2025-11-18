@@ -6,7 +6,7 @@ using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ReactiveUI;
+using Utility.Commands;
 
 namespace Utility.WPF.Controls
 {
@@ -58,14 +58,19 @@ namespace Utility.WPF.Controls
 
         public SkipControl()
         {
-            var nextCommand = ReactiveCommand.Create<Unit>(a => CanMoveToNextChanges.OnNext(true));
-            var previousCommand = ReactiveCommand.Create<Unit>(a => CanMoveToPreviousChanges.OnNext(true));
+            var nextCommand = new Command<object>(a =>
+            {
+                CanMoveToNextChanges.OnNext(true);
+
+            });
+            var previousCommand = new Command<Unit>(a => CanMoveToPreviousChanges.OnNext(true));
             this.SetValue(NextCommandProperty, nextCommand);
             this.SetValue(PreviousCommandProperty, previousCommand);
 
-            (nextCommand as ReactiveCommand<Unit, Unit>).Select(_ => Utility.Enums.Direction.Front).Merge(previousCommand.Select(_ => Utility.Enums.Direction.Back)).Subscribe(direction =>
+            CanMoveToNextChanges.Merge(CanMoveToPreviousChanges).Subscribe(direction =>
              {
-                 this.Dispatcher.InvokeAsync(() => RaiseSkipEvent(direction), System.Windows.Threading.DispatcherPriority.Background, default(System.Threading.CancellationToken));
+                 this.Dispatcher.InvokeAsync(() => 
+                 RaiseSkipEvent(direction ? Utility.Enums.Direction.Front : Utility.Enums.Direction.Back), System.Windows.Threading.DispatcherPriority.Background);
              });
         }
 

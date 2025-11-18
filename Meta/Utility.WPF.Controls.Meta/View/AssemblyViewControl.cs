@@ -10,6 +10,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.WPF.Controls.Buttons;
 using Utility.WPF.Factorys;
 using Utility.WPF.Meta;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.Meta
 {
@@ -70,7 +71,7 @@ namespace Utility.WPF.Controls.Meta
             {
                 var viewsDetailControl = new ViewsMasterDetail { Assembly = assembly };
                 comboBox
-                    .WhenAnyValue(ass => ass.Value)
+                    .Observe(ass => ass.Value)
                     .Subscribe(type =>
                     {
                         viewsDetailControl.AssemblyType = (AssemblyType)comboBox.ValueToKey();

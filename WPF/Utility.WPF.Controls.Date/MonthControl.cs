@@ -5,8 +5,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 using Utility.WPF.Helpers;
+using Utility.Reactives;
 
 namespace Utility.WPF.Controls.Date;
 
@@ -98,8 +99,8 @@ public class DayListBox : ListBox
             throw new System.Exception("s fdsd  77ffs");
         t.ApplyTemplate();
         var dayControl = t.ChildOfType<DayControl>();
-        _ = this.WhenAnyValue(a => a.ValueConverter)
-            .WhereNotNull()
+        _ = this.Observe(a => a.ValueConverter)
+            .WhereIsNotNull()
             .Take(1)
             .Subscribe(a => dayControl.Content = a.Convert(item, null, null, null));
         base.PrepareContainerForItemOverride(element, item);

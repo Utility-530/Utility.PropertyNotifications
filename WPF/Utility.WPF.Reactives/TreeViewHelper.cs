@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ReactiveUI;
 using Utility.Changes;
 using Utility.Observables.Generic;
 using Utility.WPF.Helpers;
@@ -58,7 +57,7 @@ namespace Utility.WPF.Reactives
                 .FromEventPattern<RoutedPropertyChangedEventHandler<object>, object>
                 (a => selector.SelectedItemChanged += a, a => selector.SelectedItemChanged -= a)
                 .StartWith(selector.SelectedItem)
-                .WhereNotNull();
+                .Where(a => a != null);
         }
 
         public static IObservable<T> FindRecursiveAsync<T>(this ItemsControl treeView, object instance) where T : Control

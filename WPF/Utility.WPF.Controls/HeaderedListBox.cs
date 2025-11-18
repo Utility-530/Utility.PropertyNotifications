@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using ReactiveUI;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls
 {
@@ -21,7 +21,7 @@ namespace Utility.WPF.Controls
 
         public HeaderedListBox()
         {
-            HeaderedItemsControlEx.HeaderChanges(this, this.WhenAnyValue(a => a.ShowCountInHeader))
+            HeaderedItemsControlEx.HeaderChanges(this, this.Observe(a => a.ShowCountInHeader))
             .Subscribe(a => Header = a);
         }
 

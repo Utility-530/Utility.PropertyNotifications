@@ -4,10 +4,10 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
-using ReactiveUI;
 using Utility.WPF.Attached;
 using Utility.WPF.Controls.Dragablz;
 using Utility.WPF.Controls.Master;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.Hybrid
 {
@@ -41,9 +41,9 @@ namespace Utility.WPF.Controls.Hybrid
                 IsReadOnlyPath = IsReadOnlyPath
             };
 
-            this.WhenAnyValue(a => a.ItemsSource)
+            this.Observe(a => a.ItemsSource)
                 .Skip(1)
-                .CombineLatest(this.WhenAnyValue(a => a.DisplayMemberPath), this.WhenAnyValue(a => a.IsReadOnlyPath))
+                .CombineLatest(this.Observe(a => a.DisplayMemberPath), this.Observe(a => a.IsReadOnlyPath))
                      .Subscribe(a =>
                      {
                          var (itemsSource, memberPath, readOnlyPath) = a;

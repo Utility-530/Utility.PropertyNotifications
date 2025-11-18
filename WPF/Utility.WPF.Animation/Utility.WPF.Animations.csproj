@@ -47,6 +47,7 @@
 	</Target>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
 		<ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
 		<ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />
 	</ItemGroup>

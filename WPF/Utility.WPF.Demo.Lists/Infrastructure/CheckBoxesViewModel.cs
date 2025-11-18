@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Windows.Input;
 using DynamicData;
 using ReactiveUI;
+using Utility.Commands;
 using Utility.Models.Filters;
 using Utility.Services.Deprecated;
 using Utility.ViewModels;
@@ -43,9 +44,9 @@ namespace Utility.WPF.Demo.Lists.Infrastructure
 
             var changeSet = filters.Select(a => (ViewModel<Filter>)new CheckContentViewModel(a, a.Header, false)).ToObservable().ToObservableChangeSet();
             FilterCollectionViewModel = new(changeSet, filterService, default);
-            Command = ReactiveCommand.Create<object, object>(a =>
+            Command = new Command<object>(a =>
             {
-                return a;
+               
             });
         }
 

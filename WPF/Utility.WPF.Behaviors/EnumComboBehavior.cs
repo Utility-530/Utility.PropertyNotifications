@@ -4,18 +4,20 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using DynamicData;
 using Evan.Wpf;
 using Microsoft.Xaml.Behaviors;
-using ReactiveUI;
 using Utility.Commands;
-using Utility.Helpers;
+using Utility.Helpers.Generic;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
+using Utility.Observables.Generic;
 using Utility.PropertyNotifications;
+using Utility.Reactives;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Behaviors
 {
@@ -48,12 +50,12 @@ namespace Utility.WPF.Behaviors
                 Value = (Enum)System.Enum.ToObject(Value?.GetType() ?? Enum as Type, 0);
             });
 
-            this.WhenAnyValue(a => a.Enum)
-                .WhereNotNull()
+            this.Observe(a => a.Enum)
+                .WhereIsNotNull()
                 .Select(a => Nullable.GetUnderlyingType(a) is Type type ? type : a)
                 .Select(a => new EnumType(a, null))
-                .Merge(this.WhenAnyValue(a => a.Value).WhereNotNull().Where(a => a != internalValue).Select(a => new EnumType(a.GetType(), a)))
-                .CombineLatest(this.WhenAnyValue(a => a.IsReadOnly))
+                .Merge(this.Observe(a => a.Value).WhereIsNotNull().Where(a => a != internalValue).Select(a => new EnumType(a.GetType(), a)))
+                .CombineLatest(this.Observe(a => a.IsReadOnly))
                 .Select(a => BuildFromEnum(a.First.Type, a.First.Value, a.Second))
                 .Subscribe(enums =>
                 {
@@ -68,7 +70,7 @@ namespace Utility.WPF.Behaviors
                         if (item.IsChecked)
                             AssociatedObject.SelectedIndex = enums.IndexOf(item);
 
-                        item.Command.Subscribe(e =>
+                        item.Subscribe(e =>
                         {
                             if (IsMultiSelect == false)
                             {
@@ -91,8 +93,8 @@ namespace Utility.WPF.Behaviors
                     }
                 });
 
-            this.WhenAnyValue(a => a.Enum)
-                .WhereNotNull()
+            this.Observe(a => a.Enum)
+                .WhereIsNotNull()
                 .Subscribe(e =>
                 {
                     Value = (Enum)System.Enum.ToObject(e, 0);
@@ -102,14 +104,14 @@ namespace Utility.WPF.Behaviors
             {
                 return System.Enum.GetValues(t)
                     .Cast<Enum>()
-                    .Select(e => new EnumItem(e, ReactiveCommand.Create(() => e), isReadOnly)
+                    .Select(e => new EnumItem(e, isReadOnly)
                     {
                         IsChecked = Value?.Equals(e) == true
                     })
                     .ToArray();
             }
 
-            AssociatedObject.WhenAnyValue(a => a.SelectedItem)
+            AssociatedObject.Observe(a => a.SelectedItem)
                 .Subscribe(a =>
                 {
                     if (a is EnumItem enumItem)
@@ -162,14 +164,14 @@ namespace Utility.WPF.Behaviors
 
         #endregion properties
 
-        public class EnumItem : NotifyPropertyClass, IGetValue<Enum>, IIsReadOnly
+        public class EnumItem : NotifyPropertyClass, IGetValue<Enum>, IIsReadOnly, IObservable<Enum>
         {
             private bool isChecked;
-
-            public EnumItem(Enum @enum, ReactiveCommand<Unit, Enum> command, bool isReadOnly)
+            ReplaySubject<Enum> replay = new(1);
+            public EnumItem(Enum @enum, bool isReadOnly)
             {
                 Value = @enum;
-                Command = command;
+                Command = new Command(()=> replay.OnNext(@enum));
                 //IsReadOnly = isReadOnly;
             }
 
@@ -177,7 +179,7 @@ namespace Utility.WPF.Behaviors
 
             object IGetValue.Value => Value;
 
-            public ReactiveCommand<Unit, Enum> Command { get; }
+            public ICommand Command { get; }
 
             public bool IsChecked
             {
@@ -193,6 +195,11 @@ namespace Utility.WPF.Behaviors
             public override string ToString()
             {
                 return Value.ToString();
+            }
+
+            public IDisposable Subscribe(IObserver<Enum> observer)
+            {
+                return replay.Subscribe(observer);
             }
         }
     }
