@@ -10,6 +10,7 @@ using DynamicData;
 using DynamicData.PLinq;
 using ReactiveUI;
 using Utility.Models;
+using Utility.Observables.Generic;
 using Utility.Services.Deprecated;
 using Utility.ViewModels.Customs.Infrastructure;
 
