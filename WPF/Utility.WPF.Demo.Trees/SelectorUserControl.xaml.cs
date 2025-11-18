@@ -54,21 +54,21 @@ namespace Utility.WPF.Demo.Trees
 
                 static async Task<NodeVM> create()
                 {
-                    NodeVM root = new NodeVM(new StringRootModel { Name = "Big Daddy Root", Value = "a" });
+                    NodeVM root = new StringRootModel { Name = "Big Daddy Root", Value = "a" };
 
                     int branches = 0;
                     int subBranches = 0;
 
                     for (int i = 0; i < 2; ++i)
                     {
-                        ITree _child = await root.ToTree(new StringModel { Name = "Branch " + ++branches, Value = "as" });
+                        ITree _child =new StringModel { Name = "Branch " + ++branches, Value = "as" };
                         root.Add(_child);
                         for (int j = 0; j < 3; ++j)
                         {
-                            ITree gchild = await _child.ToTree(new StringModel { Name = "Sub-Branch " + ++subBranches, Value = "aee" });
+                            ITree gchild = new StringModel { Name = "Sub-Branch " + ++subBranches, Value = "aee" };
                             _child.Add(gchild);
                             for (int k = 0; k < 2; ++k)
-                                gchild.Add(await gchild.ToTree(new StringModel { Name = "Leaf", Value = "ewa" }));
+                                gchild.Add(new StringModel { Name = "Leaf", Value = "ewa" });
                         }
                     }
 
@@ -93,7 +93,7 @@ namespace Utility.WPF.Demo.Trees
     {
         public override Style SelectStyle(object item, DependencyObject container)
         {
-            if (item is INodeViewModel { Data: IRoot data })
+            if (item is IRoot )
             {
                 return RootStyle;
             }

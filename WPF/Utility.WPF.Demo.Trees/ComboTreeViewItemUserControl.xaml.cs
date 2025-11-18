@@ -26,7 +26,7 @@ namespace Utility.WPF.Demo.Trees
                 ItemContainerStyle = this.Resources["CustomTreeViewItem"] as Style,
                 TreeView = treeView,
                 ItemsSource = this.Resources["Characters"] as IEnumerable,
-                Selection = new Binding { Path = new PropertyPath("Data") }
+                SelectedItem = new Binding { Path = new PropertyPath("Data") }
             };
             parent.FinishEdit += Parent_Add;
 

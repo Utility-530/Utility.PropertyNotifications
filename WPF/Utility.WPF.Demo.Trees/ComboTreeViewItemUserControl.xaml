@@ -760,7 +760,7 @@
                                 <!--<ContentPresenter x:Name="ContentSite"
                             IsHitTestVisible="False"
                             Content="{TemplateBinding Selection}"
-                            ContentTemplate="{TemplateBinding SelectionTemplate}"
+                            ContentTemplate="{TemplateBinding SelectedItemTemplate}"
                             ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                             Margin="3,3,23,3"
                             VerticalAlignment="Stretch"
