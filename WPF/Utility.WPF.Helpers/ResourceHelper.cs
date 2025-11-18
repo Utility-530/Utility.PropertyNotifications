@@ -27,15 +27,8 @@ namespace Utility.WPF.Helpers
         {
             if (!string.IsNullOrEmpty(key) && Application.Current != null)
             {
-                object obj = Application.Current.TryFindResource(key);
-                if (obj is TTarget)
-                {
-                    return (TTarget)obj;
-                }
-
-                return default;
+                return Application.Current.TryFindResource(key) is TTarget ? (TTarget)Application.Current.TryFindResource(key) : default;
             }
-
             return default;
         }
 
@@ -47,24 +40,17 @@ namespace Utility.WPF.Helpers
                     return element.TryFindResource(key) is TTarget target ? target : default;
                 return FindResource<TTarget>(key);
             }
-
             return default;
         }
 
         public static DataTemplate? FindTemplate(DataTemplateKey key)
         {
-            if (Application.Current != null)
-            {
-                object obj = Application.Current.TryFindResource(key);
-                if (obj is DataTemplate)
-                {
-                    return (DataTemplate)obj;
-                }
+            return Application.Current?.TryFindResource(key) is DataTemplate template ? template : default;
+        }
 
-                return default;
-            }
-
-            return default;
+        public static DataTemplate? FindTemplate(string key)
+        {
+            return Application.Current?.TryFindResource(key) is DataTemplate template ? template : default;
         }
 
         public static DataTemplate? FindTemplate(this DependencyObject dependencyObject, DataTemplateKey key)
