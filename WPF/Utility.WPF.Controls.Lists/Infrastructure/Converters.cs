@@ -33,7 +33,7 @@ namespace Utility.WPF.Controls.Lists
                 }
                 else
                 {
-                    throw new NotImplementedException("dv33 322lk2");
+                    return values[1] ?? throw new NotImplementedException("dv33 322lk2");
                 }
             }
             return DependencyProperty.UnsetValue;
@@ -50,6 +50,8 @@ namespace Utility.WPF.Controls.Lists
 
         private static object create(Type _type)
         {
+            if (_type.IsAbstract)
+                return new object();
             return ActivateAnything.Activate.New(_type);
         }
 
