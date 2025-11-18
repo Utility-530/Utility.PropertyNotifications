@@ -46,76 +46,80 @@ namespace Utility.Conversions.Json.Newtonsoft
 
             writer.WritePropertyName(Type);
             writer.WriteValue(type.AsString());
-            List<string> list = new();
             foreach (var prop in properties)
             {
-                StringBuilder stringBuilder = new();
-                var x = prop.GetCustomAttributes();
-                if (x.Any(a => a is JsonIgnoreAttribute or System.Text.Json.Serialization.JsonIgnoreAttribute))
-                {
-                    continue;
-                }
-                if (prop.CanRead == false)
-                {
-                    continue;
-                }
-                var propName = prop.Name;
-                stringBuilder.Append(propName);
-                object propValue = null;
-                try
-                {
-                    propValue = prop.GetValue(value);
-                }
-                catch (Exception ex)
-                {
-                    propValue = ex.Message;
-                }
-
-                // Write metadata about whether the property is readonly (no setter or private setter)
-                bool isReadOnly = !prop.CanWrite || prop.SetMethod == null || !prop.SetMethod.IsPublic || x.Any(a => a is ReadOnlyAttribute { IsReadOnly: true });
-                if (isReadOnly)
-                {
-                    stringBuilder.AppendLine(IsReadonly);
-                }
-
-                if (prop.PropertyType == typeof(IntPtr))
-                {
-                }
-                else if (x.OfType<DataTypeAttribute>().SingleOrDefault() is { DataType: { } dataType })
-                {
-                    stringBuilder.AppendLine($"{Type}:{dataType}");
-                    writer.WritePropertyName(stringBuilder.ToString());
-                    writer.WriteValue(propValue);
-                }
-                else if (prop.PropertyType.IsEnum)
-                {
-                    stringBuilder.AppendLine(IsEnum);
-                    writer.WritePropertyName(stringBuilder.ToString());
-                    serializer.Serialize(writer, propValue);
-                }
-                else if (prop.PropertyType.FullName == "System.Windows.Point" || prop.PropertyType.FullName == "System.Windows.Media.Color")
-                {
-                    writer.WritePropertyName(stringBuilder.ToString());
-                    serializer.Serialize(writer, propValue);
-                }
-                else if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
-                {
-                    if (propValue == null)
-                    {
-                        var _type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
-                        stringBuilder.AppendLine($"{Type}:{_type.Name}");
-                    }
-                    writer.WritePropertyName(stringBuilder.ToString());
-                    writer.WriteValue(propValue);
-                }
-                else
-                {
-                    writer.WritePropertyName(stringBuilder.ToString());
-
-                    serializer.Serialize(writer, propValue);
-                }
+                Process(prop, value, writer, serializer);
             }
             writer.WriteEndObject();
+        }
+
+        public static void Process(PropertyInfo prop, object value, JsonWriter writer, JsonSerializer serializer)
+        {
+            StringBuilder stringBuilder = new();
+            var x = prop.GetCustomAttributes();
+            if (x.Any(a => a is JsonIgnoreAttribute or System.Text.Json.Serialization.JsonIgnoreAttribute))
+            {
+                return;
+            }
+            if (prop.CanRead == false)
+            {
+                return;
+            }
+            var propName = prop.Name;
+            stringBuilder.Append(propName);
+            object propValue = null;
+            try
+            {
+                propValue = prop.GetValue(value);
+            }
+            catch (Exception ex)
+            {
+                propValue = ex.Message;
+            }
+
+            // Write metadata about whether the property is readonly (no setter or private setter)
+            bool isReadOnly = !prop.CanWrite || prop.SetMethod == null || !prop.SetMethod.IsPublic || x.Any(a => a is ReadOnlyAttribute { IsReadOnly: true });
+            if (isReadOnly)
+            {
+                stringBuilder.AppendLine(IsReadonly);
+            }
+
+            if (prop.PropertyType == typeof(IntPtr))
+            {
+            }
+            else if (x.OfType<DataTypeAttribute>().SingleOrDefault() is { DataType: { } dataType })
+            {
+                stringBuilder.AppendLine($"{Type}:{dataType}");
+                writer.WritePropertyName(stringBuilder.ToString());
+                writer.WriteValue(propValue);
+            }
+            else if (prop.PropertyType.IsEnum)
+            {
+                stringBuilder.AppendLine(IsEnum);
+                writer.WritePropertyName(stringBuilder.ToString());
+                serializer.Serialize(writer, propValue);
+            }
+            else if (prop.PropertyType.FullName == "System.Windows.Point" || prop.PropertyType.FullName == "System.Windows.Media.Color")
+            {
+                writer.WritePropertyName(stringBuilder.ToString());
+                serializer.Serialize(writer, propValue);
+            }
+            else if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
+            {
+                if (propValue == null)
+                {
+                    var _type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+                    stringBuilder.AppendLine($"{Type}:{_type.Name}");
+                }
+                writer.WritePropertyName(stringBuilder.ToString());
+                writer.WriteValue(propValue);
+            }
+            else
+            {
+                writer.WritePropertyName(stringBuilder.ToString());
+
+                serializer.Serialize(writer, propValue);
+            }
         }
     }
 }
