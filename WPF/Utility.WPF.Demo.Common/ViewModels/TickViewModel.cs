@@ -4,7 +4,8 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using ReactiveUI;
+using Utility.Commands;
+using Utility.PropertyNotifications;
 
 namespace Utility.WPF.Demo.Common.ViewModels
 {
@@ -17,7 +18,7 @@ namespace Utility.WPF.Demo.Common.ViewModels
         public bool IsChecked;
     }
 
-    public class TickViewModel : ReactiveObject, IObservable<TickChange>, IEquatable<TickViewModel>
+    public class TickViewModel : NotifyPropertyClass, IObservable<TickChange>, IEquatable<TickViewModel>
     {
         private readonly ReplaySubject<TickChange> tickChanges = new();
         private bool isChecked;
@@ -36,7 +37,7 @@ namespace Utility.WPF.Demo.Common.ViewModels
 
         public Guid Id { get; init; }
 
-        public bool IsChecked { get => isChecked; set => this.RaiseAndSetIfChanged(ref isChecked, value); }
+        public bool IsChecked { get => isChecked; set => this.RaisePropertyChanged(ref isChecked, value); }
 
         public string Text { get; init; }
 
@@ -49,11 +50,12 @@ namespace Utility.WPF.Demo.Common.ViewModels
 
         private ICommand CreateCommand()
         {
-            var command = ReactiveCommand.Create(() =>
+            var command = new Command(() =>
             {
                 IsChecked = !IsChecked;
                 tickChanges.OnNext(new TickChange(Text!, IsChecked));
-            }, this.WhenAnyValue(a => a.Text).Select(a => a != null));
+                //this.WhenAnyValue(a => a.Text).Select(a => a != null)
+            });
             return command;
         }
 

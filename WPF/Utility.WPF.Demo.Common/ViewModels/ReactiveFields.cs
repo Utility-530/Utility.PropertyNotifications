@@ -1,9 +1,9 @@
 ﻿using System;
-using ReactiveUI;
+using Utility.PropertyNotifications;
 
 namespace Utility.WPF.Demo.Common.ViewModels
 {
-    public class ReactiveFields : ReactiveObject, IEquatable<ReactiveFields>
+    public class ReactiveFields : NotifyPropertyClass, IEquatable<ReactiveFields>
     {
         private string name;
         private string surname;
@@ -11,10 +11,10 @@ namespace Utility.WPF.Demo.Common.ViewModels
         private string phoneNumber;
 
         public Guid Id { get; set; }
-        public string Name { get => name; set => this.RaiseAndSetIfChanged(ref name, value); }
-        public string Surname { get => surname; set => this.RaiseAndSetIfChanged(ref surname, value); }
-        public int Age { get => age; set => this.RaiseAndSetIfChanged(ref age, value); }
-        public string PhoneNumber { get => phoneNumber; set => this.RaiseAndSetIfChanged(ref phoneNumber, value); }
+        public string Name { get => name; set => this.RaisePropertyChanged(ref name, value); }
+        public string Surname { get => surname; set => this.RaisePropertyChanged(ref surname, value); }
+        public int Age { get => age; set => this.RaisePropertyChanged(ref age, value); }
+        public string PhoneNumber { get => phoneNumber; set => this.RaisePropertyChanged(ref phoneNumber, value); }
 
         public override bool Equals(object obj)
         {

@@ -1,8 +1,8 @@
-﻿using ReactiveUI;
+﻿using Utility.PropertyNotifications;
 
 namespace Utility.WPF.Demo.Common.ViewModels
 {
-    public class NoteViewModel : ReactiveObject
+    public class NoteViewModel : NotifyPropertyClass
     {
         private string text;
 
@@ -11,6 +11,6 @@ namespace Utility.WPF.Demo.Common.ViewModels
             Text = text;
         }
 
-        public string Text { get => text; set => this.RaiseAndSetIfChanged(ref text, value); }
+        public string Text { get => text; set => this.RaisePropertyChanged(ref text, value); }
     }
 }
