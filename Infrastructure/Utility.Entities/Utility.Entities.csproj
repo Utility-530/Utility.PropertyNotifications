@@ -10,7 +10,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-		<PackageReference Include="sqlite-net-base" Version="1.8.116" />
+		<PackageReference Include="sqlite-net-base" Version="1.9.172" />
 		<PackageReference Include="System.Text.Json" Version="9.0.9" />
 	</ItemGroup>
 
