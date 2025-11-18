@@ -7,21 +7,22 @@ namespace Utility.Interfaces.Exs
     public interface INodeSource : IDisposable
     {
         string New { get; }
-        IReadOnlyCollection<INodeViewModel> Nodes { get; }
 
-        void Remove(INodeViewModel node);
+        IReadOnlyCollection<INodeViewModel> Nodes { get; }
 
         void Add(INodeViewModel node);
 
-        IObservable<INodeViewModel?> Single(string v);
+        void Remove(Predicate<INodeViewModel> predicate);
 
-        //void Save();
+        IObservable<INodeViewModel?> Single(string v);
 
         IObservable<INodeViewModel> Create(string name, Guid guid, Func<string, object> modelFactory);
 
         IObservable<INodeViewModel> FindChild(INodeViewModel node, Guid guid);
 
-        void RemoveBy(Predicate<INodeViewModel> predicate);
+        IObservable<INodeViewModel> Roots();
+
+        bool CanRemove(INodeViewModel nodeViewModel);
 
         IObservable<INodeViewModel> Selections { get; }
     }
