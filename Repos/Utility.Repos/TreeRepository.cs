@@ -245,10 +245,14 @@ namespace Utility.Repos
 
                         if (table_name != null)
                             setName(table.Guid, table_name);
+                        else
+                        {
+                        }
 
                         selections.Add(new(table.Guid, table.Parent, type, table.Name, table._Index, table.Removed));
                     }
                     observer.OnNext(selections);
+                    observer.OnCompleted();
                 });
             });
         }
@@ -528,7 +532,7 @@ namespace Utility.Repos
                         }
 
                         connection.Insert(new Relationships { Guid = guid, Name = name, TypeId = typeId, Added = DateTime.Now, _Index = index });
-
+                        setName(guid, name);
                         observer.OnNext(new Key(guid, default, type, name, index, null));
                     }
                     else
@@ -559,7 +563,15 @@ namespace Utility.Repos
 
         public DateTime Remove(Guid guid)
         {
-            var table_name = getName(guid);
+            string table_name;
+            // need to check if removing a root since getName will return wrong value for root values
+            var x = connection.FindWithQuery<Relationships>($"SELECT * FROM {nameof(Relationships)} WHERE {nameof(Relationships.Guid)} = ?", guid);
+            if(x != null)
+            {
+                table_name = nameof(Relationships);
+            }
+            else
+                table_name = getName(guid);
             var _date = DateTime.Now;
             string cmd = $"UPDATE '{table_name}' SET Removed = '{date(_date)}' WHERE Guid = '{guid}'";
             connection.Execute(cmd);
