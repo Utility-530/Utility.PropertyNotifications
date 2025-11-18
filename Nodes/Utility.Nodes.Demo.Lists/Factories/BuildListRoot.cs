@@ -25,7 +25,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 new Model(() =>
                 [
                     new Model(() => [new CommandModel<OpenSettingsEvent> { Name = Settings }])
-                    { 
+                    {
                          Name = controls,
                          Orientation = Enums.Orientation.Horizontal
                     },

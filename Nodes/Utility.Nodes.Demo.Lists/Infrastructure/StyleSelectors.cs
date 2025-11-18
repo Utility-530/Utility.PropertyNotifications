@@ -7,7 +7,7 @@ using StyleSelector = System.Windows.Controls.StyleSelector;
 
 namespace Utility.Nodes.Demo.Lists
 {
-    public class ComboContainerStyleSelector : StyleSelector
+    public class ContainerStyleSelector : StyleSelector
     {
         public override Style SelectStyle(object item, DependencyObject container)
         {
@@ -15,15 +15,11 @@ namespace Utility.Nodes.Demo.Lists
 
             return item switch
             {
-                ISelectable => ComboStyle,
-                //IData { Data: IRoot } => BreadcrumbRootStyle,
-                //IData { Data: IBreadCrumb } when parent?.Style == BreadcrumbStyle => SelectableStyle,
-                //IData { Data: IBreadCrumb } => BreadcrumbStyle,
                 _ => DefaultStyle ?? base.SelectStyle(item, container),
             };
         }
 
         public Style DefaultStyle { get; set; }
-        public Style ComboStyle { get; set; }
+
     }
 }

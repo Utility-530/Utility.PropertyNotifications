@@ -11,28 +11,25 @@ using Utility.PropertyDescriptors;
 
 namespace Utility.Nodes.Demo.Lists
 {
-    internal class CustomDataTemplateSelector: DataTemplateSelector
+    internal class CustomDataTemplateSelector : DataTemplateSelector
     {
-
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if(item is IGetName { Name: nameof(Factories.NodeMethodFactory.BuildListRoot)})
+            if (item is IGetName { Name: nameof(Factories.NodeMethodFactory.BuildListRoot) })
             {
                 return MasterTemplate ?? DefaultTemplate;
             }
             return DefaultTemplate;
         }
+
         public DataTemplate DefaultTemplate { get; set; }
         public DataTemplate MasterTemplate { get; set; }
-
-
-
     }
-
 
     public class ContainerTemplateSelector : DataTemplateSelector
     {
-        Models.Templates.ModelTemplateSelector ModelTemplateSelector = new();
+        private Models.Templates.ModelTemplateSelector ModelTemplateSelector = new();
+
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             return item switch
@@ -44,5 +41,4 @@ namespace Utility.Nodes.Demo.Lists
             };
         }
     }
-
 }

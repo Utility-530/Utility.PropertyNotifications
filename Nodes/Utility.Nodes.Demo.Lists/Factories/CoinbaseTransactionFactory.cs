@@ -54,7 +54,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     }
                     if (addition is ListModel { } listModel)
                     {
-                        listModel.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a, guid: guid);
+                        listModel.ReactTo<ListCollectionViewReturnParam, IEnumerable>(setAction: (a) => listModel.Collection = a, guid: guid);
                         listModel.Observe<SelectionParam>(guid);
                     }
                     //if (addition is StringModel { Name: summary } summaryModel)

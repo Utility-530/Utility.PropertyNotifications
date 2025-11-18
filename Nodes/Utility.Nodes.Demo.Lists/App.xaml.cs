@@ -32,6 +32,7 @@ namespace Utility.Nodes.Demo.Lists
     public partial class App : Application
     {
         public const string DatabasePath = "O:\\Users\\rytal\\Data\\models.sqlite";
+
         protected override void OnStartup(StartupEventArgs e)
         {
             CurrentMutable.RegisterLazySingleton(() => new ContainerModel());
@@ -76,7 +77,6 @@ namespace Utility.Nodes.Demo.Lists
             register.Register<IPlaybackEngine>(() => new PlaybackEngine());
         }
 
-
         private static void showPlayback()
         {
             //var sswindow = new Window();
@@ -97,16 +97,16 @@ namespace Utility.Nodes.Demo.Lists
                 Content = new Image { Source = bmi, Stretch = Stretch.UniformToFill }
             };
             sswindow.Content = slashscreen;
-            var window = new Window() { Content = Locator.Current.GetService<ContainerModel>() };
+            var window = new Window()
+            {
+                Content = Locator.Current.GetService<ContainerModel>(),
+                ContentTemplate = Utility.WPF.Helpers.ResourceHelper.FindTemplate("MasterTemplate")
+            };
             slashscreen.Finished += (s, e) =>
             {
                 window.Show();
                 sswindow.Close();
             };
         }
-
-
     }
-
-
 }

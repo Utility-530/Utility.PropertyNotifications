@@ -63,9 +63,11 @@ namespace Utility.Nodes.Demo.Lists.Services
         private void update(Interfaces.Exs.Diagrams.INodeViewModel x)
         {
             x.SetIsSelected(true);
+            if (container.Count > 1)
+                container.RemoveAt(container.Count - 1);
             container.Current = x;
-            if (container.Contains(x) == false)
-                container.Add(x);
+            //if (container.Contains(x) == false)
+            //    container.Add(x);
             container.RaisePropertyChanged(nameof(Current));
         }
     }

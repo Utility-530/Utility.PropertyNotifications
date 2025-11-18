@@ -32,24 +32,23 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Dragablz" Version="0.0.3.234" />
-	  <PackageReference Include="MaterialDesignThemes" Version="5.2.2-ci998" />
-	  <PackageReference Include="RazorLight" Version="2.3.1" />
+		<PackageReference Include="MaterialDesignThemes" Version="5.2.2-ci998" />
+		<PackageReference Include="RazorLight" Version="2.3.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Reference Include="Syncfusion.Data.WPF">
-	    <HintPath>O:\Syncfusion\Essential Studio\WPF\18.1.0.42\Assemblies\4.6\Syncfusion.Data.WPF.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Syncfusion.SfChart.WPF">
-	    <HintPath>O:\Syncfusion\Essential Studio\WPF\18.1.0.42\Assemblies\4.6\Syncfusion.SfChart.WPF.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Syncfusion.SfGrid.WPF">
-	    <HintPath>O:\Syncfusion\Essential Studio\WPF\18.1.0.42\Assemblies\4.6\Syncfusion.SfGrid.WPF.dll</HintPath>
-	  </Reference>
+		<Reference Include="Syncfusion.Data.WPF">
+			<HintPath>O:\Syncfusion\Essential Studio\WPF\18.1.0.42\Assemblies\4.6\Syncfusion.Data.WPF.dll</HintPath>
+		</Reference>
+		<Reference Include="Syncfusion.SfChart.WPF">
+			<HintPath>O:\Syncfusion\Essential Studio\WPF\18.1.0.42\Assemblies\4.6\Syncfusion.SfChart.WPF.dll</HintPath>
+		</Reference>
+		<Reference Include="Syncfusion.SfGrid.WPF">
+			<HintPath>O:\Syncfusion\Essential Studio\WPF\18.1.0.42\Assemblies\4.6\Syncfusion.SfGrid.WPF.dll</HintPath>
+		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Resource Include="Assets\shuttle.png" />
+		<Resource Include="Assets\shuttle.png" />
 	</ItemGroup>
 </Project>
