@@ -13,3 +13,4 @@ using System.Windows.Markup;
 [assembly: XmlnsDefinition("http://schemas.utility.com/panels", "Utility.WPF.Panels")]
 [assembly: XmlnsDefinition("http://schemas.utility.com/panels", "Auxide.Controls")]
 [assembly: XmlnsDefinition("http://schemas.utility.com/panels", "Utility.WPF.Demo.Panels")]
+[assembly: XmlnsDefinition("http://schemas.utility.com/panels", "WpfAutoGrid")]
