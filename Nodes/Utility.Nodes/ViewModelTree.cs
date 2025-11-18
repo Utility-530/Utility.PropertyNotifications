@@ -37,6 +37,7 @@ namespace Utility.Nodes
         private bool? isContentVisible = true;
         private Position2D connectorPosition = Position2D.None;
         private string dataTemplate;
+        private string selectedItemTemplate;
         private string itemsPanelTemplate;
         private string title;
         private PointF location;
@@ -251,6 +252,13 @@ namespace Utility.Nodes
             set => this.RaisePropertyReceived(ref this.dataTemplate, value);
         }
 
+        [FieldName(nameof(selectedItemTemplate))]
+        public string SelectedItemTemplate
+        {
+            get { RaisePropertyCalled(dataTemplate); return selectedItemTemplate; }
+            set => this.RaisePropertyReceived(ref this.selectedItemTemplate, value);
+        }
+
         [FieldName(nameof(itemsPanelTemplate))]
         public string ItemsPanelTemplate
         {
@@ -281,8 +289,11 @@ namespace Utility.Nodes
         }
 
         public bool IsValueTracked { get; set; } = true;
-        public bool IsValueSaved { get; set; }
+        public bool DoesValueRequireSaving { get; set; }
+        public bool DoesValueRequireLoading { get; set; }
         public bool IsValueLoaded { get; set; }
+        public bool AreChildrenLoaded { get; set; }
+        public bool AreChildrenTracked { get; set; }
 
         public bool Sort(object? o = null)
         {

@@ -1,8 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using DynamicData.Binding;
 using Utility.Changes;
+using Utility.Observables.Generic;
+using Utility.Reactives;
 
 namespace Utility.Nodes.Common
 {
@@ -52,15 +53,10 @@ namespace Utility.Nodes.Common
                     {
                         dis?.Dispose();
                         dis = collection
-                                .ObserveCollectionChanges()
+                                .Changes()
                                 .Subscribe(a =>
                                 {
-                                    if (a.EventArgs.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-                                        foreach (var x in a.EventArgs.NewItems)
-                                            observer.OnNext(new Change(x, null, Changes.Type.Add));
-                                    if (a.EventArgs.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-                                        foreach (var x in a.EventArgs.OldItems)
-                                            observer.OnNext(new Change(x, null, Changes.Type.Remove));
+                                    observer.OnNext(a);
                                 }).DisposeWith(composite);
                     }
                 }).DisposeWith(composite);

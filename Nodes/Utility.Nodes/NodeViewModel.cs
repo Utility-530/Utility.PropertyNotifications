@@ -56,7 +56,7 @@ namespace Utility.Nodes
 
         public override Task<ITree> ToTree(object? value)
         {
-            throw new Exception("sdsdfdsd");
+            throw new Exception("ToTree is obsolete");
             var node = new NodeViewModel(value)
             {
                 Parent = this,
