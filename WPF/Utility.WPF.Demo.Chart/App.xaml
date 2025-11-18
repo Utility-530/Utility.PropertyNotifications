@@ -3,7 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:external="http://schemas.utility.com/external"
-    xmlns:demo="clr-namespace:Utility.WPF.Chart.Demo.ViewModels"
+    xmlns:demo="clr-namespace:Utility.WPF.Chart.Demo.ViewModels" 
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     StartupUri="MainWindow.xaml">
 
     <Application.Resources>
@@ -23,14 +24,21 @@
 
                 <ResourceDictionary Source="/Utility.WPF.Demo.Data;component/Themes/Generic.xaml" />
 
-                <!--<ResourceDictionary Source="pack://application:,,,/Utility.WPF.Interactive.Controls;component/Themes/Generic.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Utility.WPF.Controls;component/DataTemplate/TypeObjectDataTemplate.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Utility.WPF.Controls;component/Themes/Generic.xaml" />-->
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <!-- Use BundledTheme to choose Light or Dark -->
+                <materialDesign:BundledTheme BaseTheme="Light"
+                                 PrimaryColor="Grey"
+                                 SecondaryColor="Lime" />
 
+                <!-- Core MD‑3 styles -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+
+                <!-- Color palette -->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Grey.xaml" />
+
+                <!-- Any other additional MD resource dictionaries -->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
+
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
