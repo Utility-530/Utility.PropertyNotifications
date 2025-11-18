@@ -6,6 +6,7 @@ using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Models.Trees;
+using Utility.Observables.Generic;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
 using Utility.Trees.Abstractions;
