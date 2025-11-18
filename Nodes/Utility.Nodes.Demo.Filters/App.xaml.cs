@@ -12,6 +12,7 @@ using Utility.Nodes;
 using Utility.Nodes.Meta;
 using Utility.Repos;
 using Utility.ServiceLocation;
+using Utility.Services.Meta;
 
 namespace Utility.Trees.Demo.Filters
 {
@@ -35,6 +36,17 @@ namespace Utility.Trees.Demo.Filters
 
             JsonConvert.DefaultSettings = () => settings;
 
+            var window = new Window
+            {
+                ContentTemplate = FindResource("ContainerTemplate") as DataTemplate,
+            };
+            MethodCache
+                .Instance[nameof(NodeMethodFactory.BuildCollectionRoot)]
+                .Subscribe(a =>
+                {
+                    window.Content = a;
+                });
+            window.Show();
             base.OnStartup(e);
         }
 

@@ -25,10 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="StringTypeEnumConverter.Newtonsoft" Version="1.1.4" />
   </ItemGroup>
 

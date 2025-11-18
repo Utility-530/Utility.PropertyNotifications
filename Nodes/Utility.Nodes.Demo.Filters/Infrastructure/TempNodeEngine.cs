@@ -130,7 +130,17 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
             throw new NotImplementedException();
         }
 
-        public void RemoveBy(Predicate<INodeViewModel> predicate)
+        public void Remove(Predicate<INodeViewModel> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IObservable<INodeViewModel> Roots()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CanRemove(INodeViewModel nodeViewModel)
         {
             throw new NotImplementedException();
         }
