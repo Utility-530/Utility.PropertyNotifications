@@ -1,6 +1,4 @@
-﻿using DynamicData;
-using Fasterflect;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -12,6 +10,7 @@ using Utility.Extensions;
 using Utility.Helpers;
 using Utility.Helpers.Generic;
 using Utility.Helpers.NonGeneric;
+using Utility.Interfaces;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
@@ -23,9 +22,8 @@ using Utility.PropertyNotifications;
 using Utility.Reactives;
 using Utility.ServiceLocation;
 using Utility.Services.Meta;
-using Utility.Interfaces;
-
 using CompositeDisposable = Utility.Observables.CompositeDisposable;
+using Key = Utility.Structs.Repos.Key;
 
 namespace Utility.Nodes.Meta
 {
@@ -33,18 +31,8 @@ namespace Utility.Nodes.Meta
 
     public class NodeEngine : INodeSource, IDisposable
     {
-        private const string ERROR_KEY_NOT_FOUND = "Key not found: dde33443 21";
-        private const string ERROR_INVALID_GUID = "Invalid GUID format: sd ddsdfdfsd";
-        private const string ERROR_INVALID_DIRTY_MODEL = "Expected CollectionModel<DirtyModel>: DSF 64333";
-
-        private static readonly string[] TRACKED_PROPERTIES = [
-            nameof(NodeViewModel.IsSelected),
-            nameof(NodeViewModel.IsExpanded),
-            nameof(NodeViewModel.Orientation),
-            nameof(NodeViewModel.Order),
-            nameof(NodeViewModel.Arrangement),
-            nameof(NodeViewModel.Current)
-        ];
+        private const string ERROR_KEY_NOT_FOUND = "Key not found";
+        private const string ERROR_INVALID_GUID = "Invalid GUID format";
 
         public static string New => "new";
         public static readonly string Key = nameof(NodeEngine);
@@ -57,40 +45,41 @@ namespace Utility.Nodes.Meta
         private readonly ChangeTracker _changeTracker;
         private readonly DataTracker _dataInitialiser;
 
-        private readonly Lazy<IFilter> _filter;
-        private readonly Lazy<IExpander> _expander;
+
         private readonly Lazy<ITreeRepository> _repository;
+        private readonly Predicate<INodeViewModel>? proliferate;
+
+        // nodes which already came with keys and therefore are not part of this engines repository
+        HashSet<Key> keys = new();
+        HashSet<Key> roots = new();
 
         private bool _disposed;
 
-        public NodeEngine(ITreeRepository? treeRepo = null)
+        public NodeEngine(ITreeRepository? treeRepo = null, Predicate<INodeViewModel>? proliferate = null)
         {
             _changeTracker = new(this);
 
-            _filter = new(() => Globals.Resolver.Resolve<IFilter>());
-            _expander = new(() => Globals.Resolver.Resolve<IExpander>());
             var repo = treeRepo ?? Globals.Resolver.Resolve<ITreeRepository>() ?? throw new Exception("££SXXX");
             _repository = new(() => repo);
             _dataInitialiser = new(repo, new NodeInterface(this));
+            this.proliferate = proliferate;
         }
 
         public Guid Guid { get; } = Guid.NewGuid();
         public IReadOnlyCollection<INodeViewModel> Nodes => _nodes;
         string INodeSource.New => New;
         public IObservable<INodeViewModel> Selections => _selections;
-        //public IObservable<DirtyModel> Dirty => _dirty;
 
-        public void Remove(INodeViewModel node)
+        public void Remove(Predicate<INodeViewModel> predicate)
         {
             ObjectDisposedException.ThrowIf(_disposed, nameof(NodeEngine));
-            _nodes.Remove(node);
-            _repository.Value.Remove((GuidKey)node.Key());
-        }
+            var node = _nodes.SingleOrDefault(a => predicate(a));
 
-        public void RemoveBy(Predicate<INodeViewModel> predicate)
-        {
-            ObjectDisposedException.ThrowIf(_disposed, nameof(NodeEngine));
-            _nodes.RemoveBy(predicate);
+            if (CanRemove(node))
+            {
+                _nodes.Remove(node);
+                _repository.Value.Remove((GuidKey)node.Key());
+            }
         }
 
         public void Add(INodeViewModel node)
@@ -99,10 +88,13 @@ namespace Utility.Nodes.Meta
 
             if (shouldIgnoreNode(node)) return;
 
-            if (node.Key() is null)
+            if (node.Key() is null && node.Parent()?.Key() != null)
             {
                 handleNodeWithoutKey(node);
                 return;
+            }
+            else
+            {
             }
 
             if (nodeAlreadyExists(node)) return;
@@ -126,7 +118,7 @@ namespace Utility.Nodes.Meta
 
             int countSiblingNodesWithSameName(INodeViewModel node)
             {
-                return node.Parent().Children.Count(child => ((INodeViewModel)child).Name() == node.Name());
+                return node.Parent()?.Children.Count(child => ((INodeViewModel)child).Name() == node.Name()) ?? 0;
             }
             bool nodeAlreadyExists(INodeViewModel node)
             {
@@ -139,15 +131,22 @@ namespace Utility.Nodes.Meta
 
                 _dataInitialiser
                     .Load(node)
-                    .Subscribe(loadedNode =>
+                    .Subscribe(_ =>
                     {
-                        _dataInitialiser.Track(node);
-                        if (loadedNode.IsChildrenTracked)
-                            setupChildrenTracking(loadedNode);
-                        else
-                        {
-                        }
-                        setupExpansionHandling(loadedNode);
+                        if (node.AreChildrenTracked == false)
+                            _dataInitialiser.Track(node);
+
+                        if (node.AreChildrenLoaded == false)
+                            if (proliferate == null || proliferate(node))
+                            {
+                                if (node.IsChildrenTracked)
+                                    setupChildrenTracking(node);
+                                else
+                                {
+                                }
+                                setupExpansionHandling(node);
+                                node.AreChildrenLoaded = true;
+                            }
                     })
                     .DisposeWith(_compositeDisposable);
 
@@ -180,21 +179,23 @@ namespace Utility.Nodes.Meta
                         return Observable.Create<INodeViewModel>(observer =>
                         {
                             CompositeDisposable disposables = new();
+
                             if (node is IYieldItems _yieldItems)
                             {
                                 processYieldItems(_yieldItems, observer)
-                                .DisposeWith(disposables);
+                                    .DisposeWith(disposables);
                             }
                             if (node is IProliferation yieldItems)
                             {
                                 return _repository.Value
-                                    .Find((GuidKey)node.Key())
-                                    .Subscribe(
-                                        key => processKey(node, key, observer, ref childIndex),
-                                        observer.OnError,
-                                        () => { }
-                                              ).DisposeWith(disposables);
+                                            .Find((GuidKey)node.Key())
+                                            .Subscribe(
+                                                key => processKey(node, key, observer, ref childIndex),
+                                                observer.OnError,
+                                                () => { }
+                                                ).DisposeWith(disposables);
                             }
+
                             return disposables;
                         });
 
@@ -243,8 +244,9 @@ namespace Utility.Nodes.Meta
                                     .Find((GuidKey)parent.Key(), child.Name(), type: GetNodeType(child), index: index)
                                     .Subscribe(key =>
                                     {
-                                        if (key == null)
+                                        if (key.HasValue == false)
                                             throw new Exception("Key is null");
+                                        keys.Add(key.Value);
 
                                         var existingNode = _nodes.SingleOrDefault(a => a.Key() == key.Value.Guid.ToString());
                                         if (existingNode != null)
@@ -263,6 +265,11 @@ namespace Utility.Nodes.Meta
                     }
                 }
             }
+        }
+
+        public bool CanRemove(INodeViewModel nodeViewModel)
+        {
+            return keys.Any(k => k.Guid == ((GuidKey)nodeViewModel.Key()));
         }
 
         private IObservable<INodeViewModel> findInRepository(INodeViewModel node, Guid guid)
@@ -330,6 +337,9 @@ namespace Utility.Nodes.Meta
         {
             return Observable.Create<INodeViewModel>(observer =>
             {
+                if (key.HasValue == false)
+                    throw new Exception("Key is null");
+                keys.Add(key.Value);
                 validateKey(key);
 
                 var newNode = (INodeViewModel)DataActivator.Activate(key);
@@ -380,14 +390,19 @@ namespace Utility.Nodes.Meta
                 }
 
                 var node = createNewNode(name, guid, modelFactory);
-                observer.OnNext(node);
+
 
                 return _repository
                        .Value
                        .InsertRoot(guid, name, GetNodeType(node))
-                       .Subscribe(_ =>
+                       .Subscribe(key =>
                         {
+                            if (key.HasValue == false)
+                                throw new Exception("Key is null");
+                            keys.Add(key.Value);
+
                             Add(node);
+                            observer.OnNext(node);
                             observer.OnCompleted();
                         });
             });
@@ -398,6 +413,45 @@ namespace Utility.Nodes.Meta
                 data.Key = new GuidKey(guid);
                 return (INodeViewModel)data;
             }
+        }
+
+        public IObservable<INodeViewModel> Roots()
+        {
+            return Observable.Create<INodeViewModel>(observer =>
+            {
+                return _repository
+                       .Value
+                       .SelectKeys()
+                       .Subscribe(keys =>
+                       {
+                           foreach (var key in keys)
+                           {
+                               if (key == default)
+                                   throw new Exception("Key is null");
+                               this.keys.Add(key);
+                               this.roots.Add(key);
+                               var existingNode = _nodes.SingleOrDefault(a => a.Key() == key.Guid.ToString());
+                               if (existingNode != null)
+                               {
+                                   // if current value set then already created
+                               }
+                               else if (key.Removed.HasValue)
+                               {
+
+                               }
+                               else
+                               {
+                                   var child = (INodeViewModel)DataActivator.Activate(key);
+                                   validateKey(key);
+                                   child.SetKey(new GuidKey(key.Guid));
+                                   Add(child);
+                                   observer.OnNext(child);
+                               }
+                           }
+                       }, () => observer.OnCompleted());
+            });
+
+
         }
 
         #region Private Methods

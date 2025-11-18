@@ -8,7 +8,6 @@ using Utility.Helpers.Reflection;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
-using Utility.Keys;
 using Utility.Models;
 using Utility.Models.Trees;
 using Utility.ServiceLocation;
@@ -20,7 +19,7 @@ namespace Utility.Nodes.Meta
     {
         // needs to be a property in case INodeSource changes
         protected INodeSource nodeSource => Globals.Resolver.Resolve<INodeSource>();
-
+        protected IServiceResolver serviceResolver => Globals.Resolver.Resolve<IServiceResolver>();
         public IEnumerable<Method> Create(object config) => this.GetType().InstantMethods().Where(a => a.Name != nameof(Create)).Select(a => new Method(a, this));
     }
 

@@ -40,8 +40,7 @@ namespace Utility.Nodes.Meta
                 {
                     throw new Exception("  333 sdsdf");
                 }
-                engine.RemoveBy(c =>
-
+                engine.Remove(c =>
                 {
                     if (c is IKey key)
                     {
@@ -57,12 +56,18 @@ namespace Utility.Nodes.Meta
                     throw new Exception("44c dd");
 
                 });
+                if (engine.CanRemove(node))
+                {
+                    repository.Value.Remove((GuidKey)node.Key());
+                }
+                else
+                {
 
-                repository.Value.Remove((GuidKey)node.Key());
+                }
             }
             else if (a is Change { Type: Changes.Type.Update, Value: INodeViewModel newValue, OldValue: INodeViewModel oldValue })
             {
-                engine.RemoveBy(c =>
+                engine.Remove(c =>
                 {
                     if (c is IKey key)
                     {
