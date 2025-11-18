@@ -36,12 +36,12 @@ namespace Utility.Nodes.Demo.Directory
                 Style= this.Resources["ComboExStyle"] as Style, 
                 ItemContainerStyle= this.Resources["DefaultStyle"] as Style, 
                 EditTemplate = this.Resources["EditTemplate"] as DataTemplate,
-                SelectionTemplate = this.Resources["SelectionTemplate"] as DataTemplate,
+                SelectedItemTemplate = this.Resources["SelectedItemTemplate"] as DataTemplate,
                 TreeView = treeView
                 //Selection = new Binding("SelectionItem.Data") { RelativeSource= RelativeSource.Self, Converter= new DataConverter()  }
             };
 
-            parent.SetBinding(ItemsControl.DataContextProperty, new Binding("Selection") { Source = Locator.Current.GetService<MainViewModel>(), Mode=BindingMode.OneWay });
+            parent.SetBinding(ItemsControl.DataContextProperty, new Binding("SelectedItem") { Source = Locator.Current.GetService<MainViewModel>(), Mode=BindingMode.OneWay });
 
             parent.FinishEdit += Parent_Add;
 

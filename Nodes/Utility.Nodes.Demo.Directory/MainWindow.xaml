@@ -101,7 +101,7 @@
             </DataTemplate>
 
 
-            <DataTemplate x:Key="SelectionTemplate" DataType="{x:Type m:DataFileModel}">
+            <DataTemplate x:Key="SelectedItemTemplate" DataType="{x:Type m:DataFileModel}">
                 <WrapPanel Background="LightBlue" MinWidth="100">
                     
                     <TextBlock Text="{Binding Alias}"
@@ -199,12 +199,12 @@
             <Style x:Key="ComboExStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource ComboTreeViewItem}">
                 <Setter Property="Edit" Value="{Binding Data, Converter={StaticResource NewObjectConverter}}"></Setter>
                 <Setter Property="ItemsSource" Value="{Binding Children}"></Setter>
-                <Setter Property="Selection" Value="{Binding Path=SelectionItem.Data, RelativeSource={RelativeSource Mode=Self}}"/>
+                <Setter Property="SelectedItem" Value="{Binding Path=SelectionItem.Data, RelativeSource={RelativeSource Mode=Self}}"/>
             </Style>
 
 
             <Style x:Key="DefaultStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}">
-                <Setter Property="Header" Value="{Binding Data}"/>
+                <!--<Setter Property="Header" Value="{Binding Data}"/>-->
                 <Setter Property="ToolTip" Value="{Binding Key}"></Setter>
             
             </Style>
