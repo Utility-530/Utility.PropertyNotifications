@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using DynamicData;
+using Utility.Observables.Generic;
 
-namespace Utility.Helpers.Ex
+namespace Utility.Common.Helpers
 {
     public static class ObservableChangeSetHelper
     {

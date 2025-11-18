@@ -7,7 +7,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using DynamicData;
 
-namespace Utility.Helpers.Ex
+namespace Utility.Common.Helpers
 {
     public static class VirtualisationHelper
     {
@@ -80,7 +80,7 @@ namespace Utility.Helpers.Ex
         /// <param name="sampleDuration"></param>
         /// <param name="scheduler"></param>
         /// <returns></returns>
-        private static IObservable<T> SampleFirst<T>(
+        public static IObservable<T> SampleFirst<T>(
     this IObservable<T> source,
     TimeSpan sampleDuration,
     IScheduler? scheduler = null)

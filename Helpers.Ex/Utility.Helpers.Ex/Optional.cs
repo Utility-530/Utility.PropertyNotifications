@@ -2,7 +2,6 @@
 using System.Reactive.Linq;
 using Optional;
 using Optional.Unsafe;
-using ReactiveUI;
 
 namespace Utility.Helpers.Ex
 {
@@ -20,7 +19,7 @@ namespace Utility.Helpers.Ex
 
         public static IObservable<T> WhereIsNotNull<T>(this IObservable<Option<T, Exception>> ex)
         {
-            return ex.Select(a => a.ValueOrDefault()).WhereNotNull();
+            return ex.Select(a => a.ValueOrDefault()).Where(a => a is not null);
         }
     }
 }
