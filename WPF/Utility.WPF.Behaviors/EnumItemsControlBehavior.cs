@@ -14,6 +14,7 @@ using Endless;
 using Evan.Wpf;
 using Microsoft.Xaml.Behaviors;
 using ReactiveUI;
+using Utility.Observables.Generic;
 
 namespace Utility.WPF.Behaviors
 {

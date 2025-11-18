@@ -17,6 +17,7 @@ using Endless;
 using Evan.Wpf;
 using Microsoft.Xaml.Behaviors;
 using ReactiveUI;
+using Utility.Observables.Generic;
 using static Utility.WPF.Behaviors.EnumSelectorBehavior;
 
 namespace Utility.WPF.Behaviors

@@ -13,6 +13,7 @@ using System.Windows.Data;
 using Evan.Wpf;
 using Microsoft.Xaml.Behaviors;
 using ReactiveUI;
+using Utility.Observables.Generic;
 using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Behaviors
