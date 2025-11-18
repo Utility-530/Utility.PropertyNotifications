@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using DynamicData.Kernel;
 
 namespace Utility.Reactives
 {
@@ -196,13 +196,32 @@ namespace Utility.Reactives
             return Build(fca, ts, scheduler);
         }
 
-        private static IObservable<T> Build<T>(Func<IObserver<T>, Action> fca, TimeSpan ts, IScheduler scheduler = null, params IDisposable[] disposable)
+        private static IObservable<T> Build<T>(
+            Func<IObserver<T>, Action> fca,               // produces an Action that pushes a value
+            TimeSpan ts,
+            IScheduler scheduler = null,
+            params IDisposable[] disposable)
         {
             return Observable.Create<T>(observer =>
             {
-                fca(observer)();
-                scheduler = scheduler ?? TaskPoolScheduler.Default;
-                return new System.Reactive.Disposables.CompositeDisposable(disposable.Concat(new[] { scheduler.ScheduleRecurringAction(ts, fca(observer)) }));
+                // initial push
+                var push = fca(observer);
+                push();
+
+                // scheduler fallback
+                scheduler ??= TaskPoolScheduler.Default;
+
+                // schedule periodic push
+                var periodic = scheduler.SchedulePeriodic(
+                    Unit.Default,
+                    ts,
+                    _ =>
+                    {
+                        push();
+                        return Unit.Default;
+                    });
+
+                return new CompositeDisposable(disposable.Concat([periodic]));
             });
         }
     }
