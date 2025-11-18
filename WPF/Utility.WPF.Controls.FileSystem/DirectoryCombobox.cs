@@ -42,9 +42,10 @@ namespace Utility.WPF.Controls.FileSystem
                     }
                 });
 
-            this.Events()
-                .SelectionChanged
-                .SelectMany(a => a.AddedItems.Cast<string>())
+            Observable
+                .FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>
+                (a => this.SelectionChanged += a, a => this.SelectionChanged -= a)
+                .SelectMany(a => a.EventArgs.AddedItems.Cast<string>())
                 .Where(a => a != null && IsValidPath(a))
                 .Select(a => new FileInfo(a))
                 .Subscribe(fileInfo =>
