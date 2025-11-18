@@ -586,7 +586,7 @@ namespace Utility.Models.Trees
             this.IsRemovable = true;
             this.IsReplicable = true;
             this.IsValueSaved = true;
-            this.IsValueLoaded = true;
+            this.DoesValueRequireLoading = true;
         }
 
         public virtual string TableName

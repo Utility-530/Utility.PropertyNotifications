@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
-using DynamicData;
 using Newtonsoft.Json;
 using Utility.Collections;
 using Utility.Helpers.NonGeneric;
