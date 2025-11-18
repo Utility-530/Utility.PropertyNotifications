@@ -8,23 +8,23 @@ namespace Utility.Collections
     {
         public static SynchronizationContext Context { get; set; } = SynchronizationContext.Current;
 
-        public ThreadSafeObservableCollection(IEnumerable<T> collection) : base(collection)
+        public ThreadSafeObservableCollection(IEnumerable<T>? collection = null) : base(collection ?? Array.Empty<T>())
         {
             if (Context == null)
                 Context ??= SynchronizationContext.Current ?? Locator.Current.GetService<IContext>().UI ?? throw new Exception("1DVS sdddsd");
         }
 
-        public ThreadSafeObservableCollection(List<T> list) : base(list)
-        {
-            if (Context == null)
-                Context ??= SynchronizationContext.Current ?? Locator.Current.GetService<IContext>().UI ?? throw new Exception("2DVS sdddsd");
-        }
+        //public ThreadSafeObservableCollection(List<T> list) : base(list)
+        //{
+        //    if (Context == null)
+        //        Context ??= SynchronizationContext.Current ?? Locator.Current.GetService<IContext>().UI ?? throw new Exception("2DVS sdddsd");
+        //}
 
-        public ThreadSafeObservableCollection() : base()
-        {
-            if (Context == null)
-                Context ??= SynchronizationContext.Current ?? Locator.Current.GetService<IContext>().UI ?? throw new Exception("DVS sdddsd");
-        }
+        //public ThreadSafeObservableCollection() : base()
+        //{
+        //    if (Context == null)
+        //        Context ??= SynchronizationContext.Current ?? Locator.Current.GetService<IContext>().UI ?? throw new Exception("DVS sdddsd");
+        //}
 
         #region Collection Events
 
