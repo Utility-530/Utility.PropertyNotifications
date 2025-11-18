@@ -60,15 +60,32 @@ namespace Utility.Models
         }
     }
 
-    public class ProliferationModel : NodeViewModel, IProliferation, IKey, IName
+    public class ProliferationModel : NodeViewModel, IProliferation, IKey, IName, IAttach<IReadOnlyTree>
     {
+        private readonly Action<NodeViewModel>? attach;
+        private readonly Func<Model>? proliferation;
+
         public ProliferationModel()
+            : this(null, null)
+        {
+        }   
+
+        public ProliferationModel(Action<NodeViewModel>? attach = null, Func<Model>? proliferation = null)
             : base()
         {
+            this.attach = attach;
+            this.proliferation = proliferation;
         }
 
-        public IEnumerable Proliferation()
+        public void Attach(IReadOnlyTree value)
         {
+            attach?.Invoke(this);
+        }
+
+        public virtual IEnumerable Proliferation()
+        {
+            if (proliferation is not null)
+                yield return proliferation.Invoke();
             yield break;
         }
     }
