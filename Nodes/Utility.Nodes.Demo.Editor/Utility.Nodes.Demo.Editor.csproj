@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
@@ -48,6 +48,7 @@
     <ProjectReference Include="..\..\Conversions\Utility.Json.Newtonsoft\Utility.Conversions.Json.Newtonsoft.csproj" />
     <ProjectReference Include="..\..\Models\Utility.Models.Diagrams\Utility.Models.Diagrams.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Objects\Utility.WPF.Controls.Objects.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Trees\Utility.WPF.Trees.csproj" />
     <ProjectReference Include="..\Utility.Models.Templates\Utility.Models.Templates.csproj" />   
     <ProjectReference Include="..\Utility.Nodes.WPF\Utility.Nodes.WPF.csproj" />

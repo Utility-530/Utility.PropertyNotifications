@@ -1,22 +1,27 @@
-﻿using System.IO;
-using Utility.Interfaces.Exs.Diagrams;
-using Utility.Models;
-using Utility.Models.Trees;
-using Utility.Nodes.Meta;
-using Utility.Repos;
+﻿using Utility.Interfaces.Exs.Diagrams;
 using Utility.Services.Meta;
+using System.Reactive.Linq;
+using Utility.Changes;
+using Utility.Interfaces.Exs;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
-    public record ComboServiceInputParam() : Param<ComboService>(nameof(ComboService.Change), "dataFileModel");
-    public record ComboServiceOutputParam() : Param<ComboService>(nameof(ComboService.Change));
+    public record ComboServiceInputParam() : Param<ComboService>(nameof(ComboService.Generate), "nodeSource");
+    public record ComboServiceOutputParam() : Param<ComboService>(nameof(ComboService.Generate));
 
     public class ComboService
     {
-        public static IObservable<INodeViewModel> Change(DataFileModel dataFileModel)
+        public static IObservable<Change<INodeViewModel>> Generate(INodeSource nodeSource)
         {
-            return new NodeEngine(new TreeRepository(Path.Combine(dataFileModel.FilePath, dataFileModel.FileName + ".sqlite")))
-                .Create(dataFileModel.TableName, dataFileModel.Guid, s => new ProliferationModel() { Name = s });
-        }      
+            return Observable.Create<Change<INodeViewModel>>(observer =>
+            {
+                observer.OnNext(Change<INodeViewModel>.Reset());
+                return nodeSource.Roots().Subscribe(root =>
+                {
+                    observer.OnNext(Change<INodeViewModel>.Add(root));
+
+                }, () => observer.OnCompleted());
+            });
+        }
     }
 }
