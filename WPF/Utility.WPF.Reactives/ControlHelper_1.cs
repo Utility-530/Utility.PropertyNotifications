@@ -34,9 +34,8 @@ namespace Utility.WPF.Reactives
 
         public static IObservable<bool> Toggles(this ToggleButton toggleButton, bool defaultValue = false)
         {
-            return toggleButton.Events()
-                .Checked.Select(a => true).Merge(toggleButton.Events()
-                .Unchecked.Select(a => false))
+            return Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(a => toggleButton.Checked += a, a => toggleButton.Checked -= a).Select(a => true)
+                .Merge(Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(a => toggleButton.Unchecked += a, a => toggleButton.Unchecked -= a).Select(a => false))
                 .StartWith(toggleButton.IsChecked ?? defaultValue);
         }
 

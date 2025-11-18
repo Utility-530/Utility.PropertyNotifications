@@ -102,28 +102,31 @@ namespace Utility.WPF.Reactives
             selector.ValueChanges().Cast<T>();
 
         public static IObservable<T?> ItemChanges<T>(this Selector selector)
-        {
-            var selectionChanged = selector.Events().SelectionChanged;
+        { 
             var conversionProvider = new TypeConversionProvider();
             // If using ComboBoxItems
-            var comboBoxItems = selectionChanged
-          .SelectMany(a => a.AddedItems.OfType<ContentControl>())
-          .StartWith(selector.SelectedItem as ContentControl)
-          .Where(a => a != null)
-          .Select(a => NewMethod2(a?.Content))
-            .Where(a => a?.Equals(default(T)) == false);
+            var comboBoxItems =
+                  Observable
+                .FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>(a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
+                .SelectMany(a => a.EventArgs.AddedItems.OfType<ContentControl>())
+                .StartWith(selector.SelectedItem as ContentControl)
+                .Where(a => a != null)
+                .Select(a => NewMethod2(a?.Content))
+                .Where(a => a?.Equals(default(T)) == false);
 
             // If using type directly
-            var directItems = selectionChanged
-          .SelectMany(a => a.AddedItems.OfType<T>())
-          .StartWith(NewMethod(selector.SelectedItem))
-          .Where(a => a?.Equals(default(T)) == false);
+            var directItems = Observable
+                .FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>(a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
+                .SelectMany(a => a.EventArgs.AddedItems.OfType<T>())
+                .StartWith(NewMethod(selector.SelectedItem))
+                .Where(a => a?.Equals(default(T)) == false);
 
             // If using type indirectly
-            var indirectItems = selectionChanged
-          .SelectMany(a => a.AddedItems.Cast<object>().Select(a => conversionProvider.TryConvert(a, out T t2) ? t2 : default))
-          .StartWith(NewMethod2(selector.SelectedItem))
-          .Where(a => a?.Equals(default(T)) == false);
+            var indirectItems = Observable
+                .FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>(a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
+                .SelectMany(a => a.EventArgs.AddedItems.Cast<object>().Select(a => conversionProvider.TryConvert(a, out T t2) ? t2 : default))
+                .StartWith(NewMethod2(selector.SelectedItem))
+                .Where(a => a?.Equals(default(T)) == false);
 
             var c = comboBoxItems.Amb(directItems).Amb(indirectItems);
 
