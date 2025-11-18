@@ -31,7 +31,7 @@ internal class CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeader
         }
         else
         {
-            foreach (Descriptor descriptor in descriptors)
+            foreach (IDescriptor descriptor in descriptors)
             {
                 yield return descriptor;
             }

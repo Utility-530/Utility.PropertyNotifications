@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive;
 using Utility.Helpers.NonGeneric;
+using Utility.Interfaces.NonGeneric;
 using Utility.Meta;
 
 namespace Utility.PropertyDescriptors
@@ -92,7 +93,9 @@ namespace Utility.PropertyDescriptors
 
         public IEnumerable Proliferation()
         {
-            yield return Activator.CreateInstance(ElementType)!;
+            var instance = Activator.CreateInstance(ElementType)!;
+            int i = (descriptors.LastOrDefault().Value.Index) + 1;
+            yield return next(instance, ElementType, Type, i);
         }
 
         private IEnumerable<IDescriptor> addFromInstance()
@@ -102,7 +105,7 @@ namespace Utility.PropertyDescriptors
                 if (descriptors.Any(a => a.Value.Item == item) == false)
                 {
                     int i = (descriptors.LastOrDefault().Value.Index) + 1;
-                    yield return next(item, item.GetType(), Type, Changes.Type.Add, i);
+                    yield return next(item, item.GetType(), Type, i);
                 }
                 else
                 {
@@ -128,15 +131,15 @@ namespace Utility.PropertyDescriptors
                 return false;
             }
 
-            IDescriptor next(object item, Type type, Type parentType, Changes.Type changeType, int i, bool refresh = false, DateTime? removed = null)
-            {
-                var descriptor = DescriptorConverter.ToDescriptor(item, new RootDescriptor(type, parentType, type.Name + $" [{i}]"));
-                descriptor.Parent = this;
-                descriptors.Add(descriptor, (item, i));
-                if (refresh)
-                    descriptor.Initialise();
-                return descriptor;
-            }
+        }
+         IDescriptor next(object item, Type type, Type parentType, int i, bool refresh = false, DateTime? removed = null)
+        {
+            var descriptor = DescriptorConverter.ToDescriptor(item, new RootDescriptor(type, parentType, type.Name + $" [{i}]"));
+            descriptor.Parent = this;
+            descriptors.Add(descriptor, (item, i));
+            if (refresh)
+                descriptor.Initialise();
+            return descriptor;
         }
     }
 }
