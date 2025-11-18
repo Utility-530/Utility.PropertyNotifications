@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using Utility.Changes;
 using Utility.Interfaces.Generic;
+using Utility.Observables.Generic;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
 using Utility.Trees.Abstractions;

@@ -96,9 +96,9 @@ namespace Utility.Trees
 
             if (data is ITree tree)
             {
-                m_items.Add(tree);
                 if ((tree as IGetParent<IReadOnlyTree>).Parent == null)
                     (tree as ISetParent<IReadOnlyTree>).Parent = this;
+                m_items.Add(tree);
                 return;
             }
             if (data is IEnumerable treeCollection)

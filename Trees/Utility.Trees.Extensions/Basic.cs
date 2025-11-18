@@ -7,6 +7,7 @@
     using Utility.Changes;
     using Utility.Interfaces.Generic;
     using Utility.Interfaces.NonGeneric;
+    using Utility.Observables.Generic;
     using Utility.Reactives;
     using Utility.Trees;
     using Utility.Trees.Abstractions;

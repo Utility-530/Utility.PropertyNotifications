@@ -1,10 +1,9 @@
-﻿using ReactiveUI;
-using System;
+﻿using System;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using Utility.WPF.Nodes;
+using Utility.Reactives;
 
 namespace Utility.WPF.Nodes
 {
@@ -53,7 +52,7 @@ namespace Utility.WPF.Nodes
                 .FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>
                 (a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
                 .Select(a => selector.SelectedValue).StartWith(selector.SelectedValue)
-                .WhereNotNull();
+                .WhereIsNotNull();
         }
 
         public static IObservable<object> SelectedItemChanges(this TreeView selector)
@@ -63,7 +62,7 @@ namespace Utility.WPF.Nodes
                 .FromEventPattern<RoutedPropertyChangedEventHandler<object>, object>
                 (a => selector.SelectedItemChanged += a, a => selector.SelectedItemChanged -= a)
                 .StartWith(selector.SelectedItem)
-                .WhereNotNull();
+                .WhereIsNotNull();
         }
     }
 }
