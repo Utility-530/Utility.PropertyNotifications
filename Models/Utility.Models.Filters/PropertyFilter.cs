@@ -10,6 +10,7 @@ using System.Reactive.Subjects;
 using System.Reflection;
 using DynamicData;
 using ReactiveUI;
+using Utility.Observables.Generic;
 using Utility.Reactives;
 
 namespace Utility.Models.Filters
@@ -25,7 +26,7 @@ namespace Utility.Models.Filters
     {
         private readonly PropertyInfo propertyInfo;
         private readonly IConnectableObservable<Unit> selections;
-        private readonly Subject<IChangeSet<T>> subjects = new();
+        private readonly System.Reactive.Subjects.Subject<IChangeSet<T>> subjects = new();
         private readonly ReadOnlyObservableCollection<object> collection;
 
         public PropertyFilter(string property) : this(typeof(T)
@@ -54,7 +55,7 @@ namespace Utility.Models.Filters
             return propertyInfo.GetValue(value).Equals(Value.Value);
         }
 
-        public override ReactiveProperty<object> Value { get; }
+        public override ReactiveUI.ReactiveProperty<object> Value { get; }
 
         public IEnumerable Values => collection;
 

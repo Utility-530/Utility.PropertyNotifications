@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using DynamicData;
 using ReactiveUI;
-using Utility.Reactives;
 
 namespace Utility.Models.Filters
 {

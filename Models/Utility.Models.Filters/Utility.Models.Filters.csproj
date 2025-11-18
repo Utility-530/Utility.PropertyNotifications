@@ -5,6 +5,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="ReactiveUI" Version="22.2.1" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <ProjectReference Include="..\..\Reactives\Utility.Reactives\Utility.Reactives.csproj" />

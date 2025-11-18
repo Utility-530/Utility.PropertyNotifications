@@ -8,8 +8,6 @@ using DynamicData;
 using ReactiveUI;
 using Utility.Reactives;
 
-//using Utility.Helpers.Ex;
-
 namespace Utility.Models.Filters
 {
     public class StringMatchFilter<T> : SubjectFilter<T>
@@ -46,7 +44,7 @@ namespace Utility.Models.Filters
             return array.Any(a => a.Invoke((T)value, Value.Value));
         }
 
-        public override ReactiveProperty<string> Value { get; }
+        public override ReactiveUI.ReactiveProperty<string> Value { get; }
 
         public override void OnNext(IChangeSet<T> value)
         {
