@@ -24,7 +24,11 @@ namespace Utility.WPF.Attached
         private List<Behavior> _behaviors;
         private List<TriggerBase> _triggers;
 
+
+#pragma warning disable CS0108 
+        // needs to be this way
         public List<TriggerBase> Triggers => _triggers ??= [];
+#pragma warning restore CS0108 
 
         public List<Behavior> Behaviors => _behaviors ??= [];
 

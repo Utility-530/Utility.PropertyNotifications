@@ -73,7 +73,7 @@ namespace Utility.ViewModels
             Key = key;
         }
 
-        public string Key { get; }
+        public virtual string Key { get; }
 
         //public Settings Settings { get; set; }
 
@@ -226,7 +226,7 @@ namespace Utility.ViewModels
                     .FirstOrDefault(a => a.Name == name) as PropertyChange<T>;
         }
 
-        public void OnCompleted()
+        public virtual void OnCompleted()
         {
             throw new NotImplementedException("sd33f2 vff");
         }

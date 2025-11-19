@@ -49,6 +49,7 @@ public class GroupViewModel<T, TKey, TGroupKey> : ViewModel
 
 public class GroupViewModel<T, TGroupKey> : ViewModel
 {
+    private readonly IGroup<T, TGroupKey> group;
     private int count;
     private IReadOnlyCollection<T> collection;
 
@@ -67,9 +68,10 @@ public class GroupViewModel<T, TGroupKey> : ViewModel
             {
             })
             .DisposeWith(disposer);
+        this.group = group;
     }
 
-    public TGroupKey Key { get; private set; }
+    public override string Key => group.GroupKey.ToString();
 
     public override int Count => count;
 

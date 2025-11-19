@@ -51,7 +51,7 @@
 
                         Margin="8"
                         Padding="8"
-                        materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                        materialDesign:ElevationAssist.Elevation="Dp3"
                         CornerRadius="3"
 
                         Mode="PrimaryMid">

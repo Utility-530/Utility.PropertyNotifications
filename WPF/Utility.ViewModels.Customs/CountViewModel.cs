@@ -16,6 +16,10 @@ public class CountViewModel : ViewModel, IObserver<IChangeSet>
     {
         Model.SetValue(Model.GetValue() + value.Adds - value.Removes);
     }
+
+    public override void OnCompleted()
+    {
+    }
 }
 
 //public class FilteredCountViewModel<T> : ReactiveObject

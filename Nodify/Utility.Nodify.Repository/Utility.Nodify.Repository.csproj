@@ -6,9 +6,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="sqlite-net-base" Version="1.8.116" />
-	</ItemGroup>
-	<ItemGroup>
 	  <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
 	  <ProjectReference Include="..\..\Models\Utility.Models.Diagrams\Utility.Models.Diagrams.csproj" />
 	  <ProjectReference Include="..\Utility.Nodify.Base\Utility.Nodify.Base.csproj" />

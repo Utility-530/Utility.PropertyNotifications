@@ -6,7 +6,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Nodes;
 using Utility.Reactives;
 using Utility.ServiceLocation;
-using Utility.Extensions;
+using Utility.Interfaces;
 using Utility.Trees.Abstractions;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Enums;

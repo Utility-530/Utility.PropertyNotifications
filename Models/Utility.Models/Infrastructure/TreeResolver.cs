@@ -57,8 +57,6 @@ namespace Utility.Models
         {
             return Observable.Create<IReadOnlyTree>(observer =>
             {
-                int i = 0, j = 0;
-                bool flag = false;
                 List<IReadOnlyTree> nodes = [node];
                 observer.OnNext(node);
                 return repository.FindRecursive((GuidKey)(node as IGetKey).Key)

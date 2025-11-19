@@ -24,8 +24,5 @@
     <ProjectReference Include="..\Utility.Nodes.Meta\Utility.Nodes.Meta.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="StringTypeEnumConverter.Newtonsoft" Version="1.1.4" />
-  </ItemGroup>
 
 </Project>

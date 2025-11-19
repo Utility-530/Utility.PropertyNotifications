@@ -20,7 +20,6 @@
 		<PackageReference Include="DevZest.WpfDocking.Net60" Version="3.0.0" />
 		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.72.0" />
 		<!--<PackageReference Include="DryIoc" Version="5.4.0" />-->
-		<PackageReference Include="SpicyTaco.AutoGrid" Version="1.2.29" />
 	</ItemGroup>
 
 </Project>

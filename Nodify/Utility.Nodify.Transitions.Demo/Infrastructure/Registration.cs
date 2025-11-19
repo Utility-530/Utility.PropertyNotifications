@@ -1,6 +1,5 @@
 ﻿using DryIoc;
 using Splat;
-using System.Reactive.Concurrency;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
@@ -10,14 +9,12 @@ using Utility.Models.Diagrams;
 using Utility.Nodes;
 using Utility.Nodify.Base.Abstractions;
 using Utility.Nodify.Engine;
-using Utility.Nodify.Engine.Infrastructure;
 using Utility.Nodify.Generator.Services;
 using Utility.Nodify.Repository;
 using Utility.Repos;
 using Utility.ServiceLocation;
 using Utility.Services;
 using Utility.Simulation;
-using Utility.Trees.Abstractions;
 
 namespace Utility.Nodify.Transitions.Demo.Infrastructure
 {
@@ -28,7 +25,6 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
             const string sqliteName = "O:\\source\\repos\\Utility\\Nodes\\Utility.Nodes.Demo.Editor\\Data\\first_7.sqlite";
             const string diagramKey = "Master";
 
-            register.Register<IScheduler>(DispatcherScheduler.Current);
             register.Register(() => new PlayBackViewModel());
             register.Register(() => new HistoryViewModel());
             register.Register(() => new MasterPlayViewModel());

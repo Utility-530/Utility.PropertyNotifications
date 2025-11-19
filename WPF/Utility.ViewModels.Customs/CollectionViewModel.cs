@@ -52,6 +52,10 @@ public class CollectionViewModel<T> : ViewModel, IObserver<IChangeSet<T>>
     {
         changeSet.OnNext(value);
     }
+
+    public override void OnCompleted()
+    {
+    }
 }
 
 //public class CollectionViewModel<T, TKey> : CollectionViewModel
@@ -139,15 +143,6 @@ public class CollectionGroupViewModel<T, TKey> : ViewModel, IObserver<ClassPrope
     public override Property Model => throw new NotImplementedException();
     //public override Model Model { get; }
 
-    public void OnCompleted()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void OnError(Exception error)
-    {
-        throw new NotImplementedException();
-    }
 
     public void OnNext(ClassProperty? value)
     {
@@ -233,15 +228,6 @@ public class CollectionGroupViewModel<T> : ViewModel, IObserver<Dictionary<strin
 
     //public IReadOnlyCollection<ClassProperty> Properties => viewModel.Properties;
 
-    public void OnCompleted()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void OnError(Exception error)
-    {
-        throw new NotImplementedException();
-    }
 
     public void OnNext(ClassProperty value)
     {

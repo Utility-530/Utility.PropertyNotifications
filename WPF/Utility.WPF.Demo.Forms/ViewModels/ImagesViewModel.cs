@@ -105,15 +105,6 @@ namespace Utility.WPF.Demo.Forms.ViewModels
 
         //ReplaySubject<WebUrlResponse> subject = new(1);
         //ReplaySubject<WebUrlRequest> subject1 = new(1);
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
 
         //public void OnNext(WebUrlResponse value)
         //{

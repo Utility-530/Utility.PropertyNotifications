@@ -21,12 +21,12 @@ namespace Utility.Nodify.Operations
 
         public ISerialise FromString(string str)
         {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
             BinaryFormatter formatter = new();
             byte[] bytes = Convert.FromBase64String(str);
 
             using (MemoryStream stream = new MemoryStream(bytes))
             {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 var x = formatter.Deserialize(stream);
                 return new BinaryOperation((Func<double, double, double>)x);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
@@ -35,11 +35,11 @@ namespace Utility.Nodify.Operations
 
         public override string ToString()
         {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
             BinaryFormatter formatter = new();
             var memoryStream = new MemoryStream();
             using (memoryStream)
             {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 formatter.Serialize(memoryStream, this._func);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
             }

@@ -99,10 +99,10 @@
             </FrameworkElement.Resources>
             <FrameworkElement.Triggers>
                 <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                    <BeginStoryboard Name="BeginStoryboard" Storyboard="{StaticResource StoryboardOnLoaded}" />
+                    <BeginStoryboard Name="BeginStoryboard1" Storyboard="{StaticResource StoryboardOnLoaded}" />
                 </EventTrigger>
                 <EventTrigger RoutedEvent="FrameworkElement.Unloaded">
-                    <StopStoryboard BeginStoryboardName="BeginStoryboard" />
+                    <StopStoryboard BeginStoryboardName="BeginStoryboard1" />
                 </EventTrigger>
             </FrameworkElement.Triggers>
             <hc:TransitioningContentControl>

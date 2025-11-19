@@ -6,8 +6,6 @@ namespace Utility.WPF.Behaviors
 {
     public class SetSelectedItemAction : SetterAction
     {
-        public static readonly DependencyProperty ConverterProperty =
-            DependencyProperty.Register("Converter", typeof(IValueConverter), typeof(SetSelectedItemAction), new PropertyMetadata());
 
         protected override void Invoke(object parameter)
         {
@@ -28,12 +26,6 @@ namespace Utility.WPF.Behaviors
             object target = TargetObject ?? AssociatedObject;
             PropertyInfo propertyInfo = target.GetType().GetProperty(PropertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.InvokeMethod);
             propertyInfo.SetValue(target, value);
-        }
-
-        public IValueConverter Converter
-        {
-            get { return (IValueConverter)GetValue(ConverterProperty); }
-            set { SetValue(ConverterProperty, value); }
-        }
+        }  
     }
 }

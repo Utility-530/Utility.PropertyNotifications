@@ -14,7 +14,6 @@ namespace Utility.WPF.Controls.FileSystem
     public class FileComboBrowser : FileBrowser<ComboBoxTreeView>
     {
         private FileSelectorBehavior behavior = new();
-        protected readonly FileBrowserCommand fileBrowserCommand = new();
 
         public FileComboBrowser()
         {

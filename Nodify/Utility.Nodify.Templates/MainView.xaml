@@ -2,10 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Utility.Nodify.Demo"                 
                     xmlns:res="http://schemas.utility.com/resourcedictionary"
-                    xmlns:st="http://schemas.spicytaco.io/"
                     xmlns:nodify="https://miroiu.github.io/nodify"
                     xmlns:vm="clr-namespace:Utility.Nodify.ViewModels;assembly=Utility.Nodify.ViewModels"
-                    xmlns:core="clr-namespace:Utility.Nodify.Core;assembly=Utility.Nodify.Base">
+                    xmlns:core="clr-namespace:Utility.Nodify.Core;assembly=Utility.Nodify.Base" 
+                    xmlns:st="http://schemas.utility.com/panels">
 
 
     <ResourceDictionary.MergedDictionaries>
