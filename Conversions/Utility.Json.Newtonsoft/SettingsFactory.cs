@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Jonnidip;
 using Newtonsoft.Json;
 
 namespace Utility.Conversions.Json.Newtonsoft

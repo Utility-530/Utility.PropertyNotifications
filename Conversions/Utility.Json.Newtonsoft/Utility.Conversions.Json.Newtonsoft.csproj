@@ -3,11 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 	  <LangVersion>latest</LangVersion>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-	  <PackageReference Include="StringTypeEnumConverter.Newtonsoft" Version="1.1.4" />
 	  <PackageReference Include="System.Text.Json" Version="9.0.9" />
   </ItemGroup>
 
