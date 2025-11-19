@@ -85,7 +85,7 @@
 
         private EqualityComparer<T>? _Comparer;
 
-        public EqualityComparer<T> Comparer
+        public virtual EqualityComparer<T> EqualityComparer
         {
             get => _Comparer ??= EqualityComparer<T>.Default;
             private set => _Comparer = value;
@@ -142,8 +142,8 @@
             if (!AllowDuplicates)
                 collection =
                   collection
-                  .Distinct(Comparer)
-                  .Where(item => !Items.Contains(item, Comparer))
+                  .Distinct(EqualityComparer)
+                  .Where(item => !Items.Contains(item, EqualityComparer))
                   .ToList();
 
             if (collection is ICollection<T> countable)
@@ -383,7 +383,7 @@
             if (!AllowDuplicates)
                 collection =
                   collection
-                  .Distinct(Comparer)
+                  .Distinct(EqualityComparer)
                   .ToList();
 
             if (collection is ICollection<T> countable)
@@ -529,7 +529,7 @@
                     return;
             }
             else
-              if (Items.Contains(item, Comparer))
+              if (Items.Contains(item, EqualityComparer))
                 return;
 
             CheckReentrancy();
