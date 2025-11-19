@@ -47,14 +47,14 @@ namespace Utility.WPF.Controls.Meta.ViewModels
         {
             FreeSqlFactory.InitialiseSQLite();
 
-            //demoTypeViewModel = OutputNode<FilteredCustomCheckBoxesViewModel>.Create(() =>
-            //{
-            //    //var assemblies = Helper.FindAssemblies().Select(a => new AssemblyKeyValue(a.Item1));
-            //    //var filters = new Filter[] { new StringMatchFilter(), /*new AssemblyTypeFilter()*/ };
+            demoTypeViewModel = OutputNode<FilteredCustomCheckBoxesViewModel>.Create(() =>
+            {
+                var assemblies = Helper.FindAssemblies().Select(a => new KeyValue(a.Item1.FullName));
+                var filters = new Filter[] { new StringMatchFilter<string>(), /*new AssemblyTypeFilter()*/ };
 
-            //    return UpdateAndCreate(assemblies, filters, deselectSubject);
+                return UpdateAndCreate(assemblies, filters, deselectSubject);
 
-            //});
+            });
         }
     }
 
