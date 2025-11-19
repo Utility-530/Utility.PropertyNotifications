@@ -289,6 +289,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelLab.Core", "..\Externa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelLab.Common", "..\External\PixelLab\PixelLab.Common\PixelLab.Common.csproj", "{56921C53-7498-9B27-F428-BDBCB7069B0C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leepfrog.WpfFramework", "..\External\Leepfrog.WpfFramework\Leepfrog.WpfFramework.csproj", "{56D2319C-9AE8-0FEB-1B51-7655E27107CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumSourceConverter", "..\External\EnumSourceConverter\EnumSourceConverter\EnumSourceConverter.csproj", "{B7E34253-4BE2-F013-04C5-445B63977F9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -843,6 +847,14 @@ Global
 		{56921C53-7498-9B27-F428-BDBCB7069B0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56921C53-7498-9B27-F428-BDBCB7069B0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56921C53-7498-9B27-F428-BDBCB7069B0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56D2319C-9AE8-0FEB-1B51-7655E27107CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56D2319C-9AE8-0FEB-1B51-7655E27107CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56D2319C-9AE8-0FEB-1B51-7655E27107CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56D2319C-9AE8-0FEB-1B51-7655E27107CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7E34253-4BE2-F013-04C5-445B63977F9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7E34253-4BE2-F013-04C5-445B63977F9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7E34253-4BE2-F013-04C5-445B63977F9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7E34253-4BE2-F013-04C5-445B63977F9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -986,6 +998,8 @@ Global
 		{66BCFED1-1970-7AA2-CB24-5CC0E8D36ED0} = {993A1800-4787-40F0-9536-057493541BBB}
 		{CF4CB542-BBEB-FA04-AEBA-F51B5370CAFB} = {993A1800-4787-40F0-9536-057493541BBB}
 		{56921C53-7498-9B27-F428-BDBCB7069B0C} = {993A1800-4787-40F0-9536-057493541BBB}
+		{56D2319C-9AE8-0FEB-1B51-7655E27107CF} = {993A1800-4787-40F0-9536-057493541BBB}
+		{B7E34253-4BE2-F013-04C5-445B63977F9B} = {993A1800-4787-40F0-9536-057493541BBB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D60CFCE-498F-4A6D-9B9B-5546561C117E}
