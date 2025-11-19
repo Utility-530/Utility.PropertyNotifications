@@ -23,7 +23,6 @@ internal class ReferenceDescriptor(Descriptor Descriptor, object Instance) : Mem
             if (Descriptor.PropertyType.IsAssignableTo(typeof(IEnumerable)) && Descriptor.PropertyType.IsAssignableTo(typeof(string)) == false && this.CollectionItemPropertyType is Type _elementType)
             {
                 var enumerable = (IEnumerable?)Activator.CreateInstance(Descriptor.PropertyType);
-                var collectionDescriptor = new CollectionDescriptor(Descriptor, _elementType, enumerable) { Parent = this, Input = [], Output = [] };
                 var collectionDescriptor = new CollectionDescriptor(Descriptor, _elementType, enumerable) { Parent = this, Input = [], Output = [], IsProliferable = true };
                 if (i++ > 0)
                 {
@@ -44,13 +43,11 @@ internal class ReferenceDescriptor(Descriptor Descriptor, object Instance) : Mem
         }
         if (Instance is IEnumerable _enumerable && Instance is not string s && Instance.GetType() is Type _type && _type.ElementType() is Type elementType)
         {
-            int i = 0;
-            yield return new CollectionDescriptor(Descriptor, elementType, _enumerable) { Parent = this, Input = [], Output = [] };
             yield return new CollectionDescriptor(Descriptor, elementType, _enumerable) { Parent = this, Input = [], Output = [], IsProliferable = true };
         }
     }
 
-    public int Count => TypeDescriptor.GetProperties(Instance).Count;
+    public override int Count => TypeDescriptor.GetProperties(Instance).Count;
 
     public object Instance { get; } = Instance;
 

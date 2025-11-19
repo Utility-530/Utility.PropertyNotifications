@@ -22,7 +22,7 @@ public abstract class MemberDescriptor : NodeViewModel, IDescriptor, IIsReadOnly
         isProliferable = false;
     }
 
-    public virtual string Name => Descriptor.Name;
+    public override string Name => Descriptor.Name;
     public virtual Type ParentType => Descriptor.ComponentType;
     public virtual Type Type => Descriptor.PropertyType;
 
@@ -57,12 +57,6 @@ public abstract class MemberDescriptor : NodeViewModel, IDescriptor, IIsReadOnly
 
     public virtual void Finalise(object? item = null)
     {
-    }
-
-    public Task<object> AsyncClone()
-    {
-        //return Task.FromResult<object>(this with { });
-        throw new NotImplementedException();
     }
 
     public override sealed string ToString()

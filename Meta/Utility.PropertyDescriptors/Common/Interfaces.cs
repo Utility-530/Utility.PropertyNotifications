@@ -15,7 +15,7 @@
 
     public interface IMethodDescriptor : IDescriptor
     {
-        object? this[int key] { get; set; }
+        object? Parameter(int key);
 
         void Invoke();
     }

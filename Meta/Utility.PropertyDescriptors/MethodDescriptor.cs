@@ -16,10 +16,9 @@ internal class MethodDescriptor : MemberDescriptor, IMethodDescriptor
         this.instance = instance;
     }
 
-    public object? this[int key]
+    public object? Parameter(int key)
     {
-        get { return dictionary[key]; }
-        set { dictionary[key] = value; }
+        return dictionary[key]; 
     }
 
     public void Invoke()
