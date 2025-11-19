@@ -1,0 +1,42 @@
+<Project>
+
+  <!-- ============================================= -->
+  <!--     GLOBAL BUILD PERFORMANCE OPTIMIZATION     -->
+  <!-- ============================================= -->
+
+
+  <!--<PropertyGroup>
+
+    --><!-- Completely disable compiler warnings --><!--
+    <WarningLevel>0</WarningLevel> 
+	<WarningsAsErrors>CS0108;CS0114</WarningsAsErrors>
+	<NoWarn>$(NoWarn);NETSDK1187;NETSDK1187</NoWarn>
+    --><!-- Don't run analyzers --><!--
+    <RunAnalyzers>false</RunAnalyzers>
+    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+    <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
+  </PropertyGroup>-->
+
+	<PropertyGroup>
+		<NoWarn>NETSDK1187;CS8600;CS8601;CS8602;CS8603;CS8604;CS8618;CS8769;CS8625;CS8622;CS8765;CS8767</NoWarn>
+		<WarningLevel>4</WarningLevel>
+		<WarningsAsErrors>CS0108;CS0114</WarningsAsErrors>
+		<RunAnalyzers>false</RunAnalyzers>
+		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+		<RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
+	</PropertyGroup>
+	
+  <!-- ============================================= -->
+  <!--     CENTRALIZED ANALYZER PACKAGE REFERENCES    -->
+  <!-- ============================================= -->
+  <ItemGroup>
+    <!-- Add your analyzers here -->
+    <!-- Example: -->
+    <!--<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0" PrivateAssets="all" />-->
+    <!--<PackageReference Include="StyleCop.Analyzers" Version="1.2.0" PrivateAssets="all" />-->
+  </ItemGroup>
+
+
+
+
+</Project>

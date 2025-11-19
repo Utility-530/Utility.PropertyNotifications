@@ -1,0 +1,11 @@
+root = true
+
+# Turn off expensive rules (huge build speedup)
+dotnet_diagnostic.CA1062.severity = none   # null check validation
+dotnet_diagnostic.CA2000.severity = none   # disposable leaks (slow dataflow)
+dotnet_diagnostic.CA2012.severity = none   # value task safety
+dotnet_diagnostic.CA2213.severity = none   # dispose ownership
+dotnet_diagnostic.CA1835.severity = none   # memory-optimized APIs
+dotnet_diagnostic.CA1848.severity = none   # logging message templates
+dotnet_diagnostic.CA1846.severity = none   # allocate arrays
+dotnet_diagnostic.CA1812.severity = none   # never instantiated classes
