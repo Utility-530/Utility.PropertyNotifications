@@ -38,6 +38,7 @@ namespace Utility.Nodes.Demo.Editor
         public const string Commands = nameof(Commands);
         public const string Settings = nameof(Settings);
         public const string controls = nameof(controls);
+        public const string Files = nameof(Files);
         public const string list = nameof(list);
 
         public static readonly Guid settingsRootGuid = Guid.Parse("a743505d-128c-466f-afdb-d7dd97e37a08");
@@ -54,7 +55,12 @@ namespace Utility.Nodes.Demo.Editor
                 [
                     new Model(() =>
                     [
-                        new DataFilesModel { Name = nameof(DataFilesModel) },
+                        new Model(proliferation: () => new Model<string>(){ Name = "File", DataTemplate ="StringTemplate", SelectedItemTemplate="StringTemplate" })
+                        {
+                            Name = nameof(Files),
+                            IsProliferable = true,
+                            DataTemplate = "InvisibleTemplate"
+                        },
                         new Model(() => [new CommandModel<SaveEvent> { Name = Save }, new CommandModel<RefreshEvent> { Name = Refresh }, new CommandModel<RunEvent> { Name = Run }],
                         attach: n => {
                             n.Orientation = Enums.Orientation.Horizontal; })
@@ -62,11 +68,11 @@ namespace Utility.Nodes.Demo.Editor
                        }
                     ], addition:a=>
                     {
-                        if(a is DataFilesModel dfm)
+                        if(a is Model { Name:  nameof(Files)} dfm)
                         {
                             dfm.WhenReceivedFrom(a => a.Current, includeNulls: false)
-                            .OfType<DataFileModel>()
-                            .Observe<EngineServiceInputParam, DataFileModel>();
+                            .OfType<Model<string>>()
+                            .Observe<EngineServiceInputParam, Model<string>>();
                         }
                     })
                     {
@@ -99,6 +105,7 @@ namespace Utility.Nodes.Demo.Editor
                     })
                     {
                         Name = Slave,
+                        IsProliferable = true
                     }])
                 {
                     Name = s,

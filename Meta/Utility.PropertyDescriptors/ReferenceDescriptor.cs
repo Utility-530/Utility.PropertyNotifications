@@ -24,6 +24,7 @@ internal class ReferenceDescriptor(Descriptor Descriptor, object Instance) : Mem
             {
                 var enumerable = (IEnumerable?)Activator.CreateInstance(Descriptor.PropertyType);
                 var collectionDescriptor = new CollectionDescriptor(Descriptor, _elementType, enumerable) { Parent = this, Input = [], Output = [] };
+                var collectionDescriptor = new CollectionDescriptor(Descriptor, _elementType, enumerable) { Parent = this, Input = [], Output = [], IsProliferable = true };
                 if (i++ > 0)
                 {
                     yield break;
@@ -45,6 +46,7 @@ internal class ReferenceDescriptor(Descriptor Descriptor, object Instance) : Mem
         {
             int i = 0;
             yield return new CollectionDescriptor(Descriptor, elementType, _enumerable) { Parent = this, Input = [], Output = [] };
+            yield return new CollectionDescriptor(Descriptor, elementType, _enumerable) { Parent = this, Input = [], Output = [], IsProliferable = true };
         }
     }
 

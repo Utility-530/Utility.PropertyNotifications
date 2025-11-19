@@ -577,41 +577,6 @@ namespace Utility.Models.Trees
         public FileModel File { get; set; }
     }
 
-    public readonly record struct DataFile(string TableName, string FileName, string FilePath);
-
-    public class DataFileModel : Model<DataFile>
-    {
-        public DataFileModel()
-        {
-            this.IsRemovable = true;
-            this.IsReplicable = true;
-            this.DoesValueRequireSaving = true;
-            this.DoesValueRequireLoading = true;
-        }
-
-        public virtual string TableName
-        {
-            get => ((DataFile)this.Value).TableName;
-            set { this.Value = (Get() with { TableName = value }); }
-        }
-
-        public virtual string FileName
-        {
-            get => ((DataFile)this.Value).FileName;
-            set { this.Value = (Get() with { FileName = value }); }
-        }
-
-        public virtual string FilePath
-        {
-            get => ((DataFile)this.Value).FilePath;
-            set { this.Value = (Get() with { FilePath = value }); }
-        }
-
-        public override object Clone()
-        {
-            return new DataFileModel { Name = Name, Value = Value };
-        }
-    }
 
     public class ThroughPutModel : Model<string>
     {

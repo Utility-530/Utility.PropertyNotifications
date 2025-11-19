@@ -121,13 +121,6 @@ namespace Utility.Nodes.Meta
                 s => new Model(() => [new NodePropertyRootModel { Name = "npm" }], attach: n => n.IsExpanded = true) { Name = s });
         }
 
-        public IObservable<INodeViewModel> BuildComboRoot()
-        {
-            return nodeSource.Create(combo,
-                subGuid,
-                s => new DataFilesModel { Name = s });
-        }
-
         public IObservable<INodeViewModel> BuildTransformersRoot()
         {
             return nodeSource.Create(transformers,

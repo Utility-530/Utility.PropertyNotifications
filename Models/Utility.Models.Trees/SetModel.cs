@@ -13,14 +13,6 @@ namespace Utility.Models.Trees
         private List<System.IObserver<ValueChanged>> list = new();
         private List<ValueChanged> values = [];
 
-        public object Value
-        {
-            get => value; set
-            {
-                this.value = value;
-            }
-        }
-
         public override void AddDescendant(IReadOnlyTree node, int level)
         {
             if (node == null)

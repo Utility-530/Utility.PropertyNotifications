@@ -5,21 +5,17 @@ using Utility.Enums;
 using Utility.Helpers.Generic;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
-using Utility.PropertyNotifications;
 
 namespace Utility.Nodes
 {
-    public class ConnectorViewModel : NotifyPropertyClass, IValueConnectorViewModel, IValue, IType
+    public class ConnectorViewModel : ViewModelTree, IValueConnectorViewModel, IValue, IType
     {
         private ThreadSafeObservableCollection<IConnectionViewModel> connections = [];
         private INodeViewModel _node = default!;
 
-        private string? _title;
-        private object data;
         private bool _isConnected;
         private bool _isInput;
         private PointF _anchor;
-        private object value;
 
         public ConnectorViewModel()
         {
@@ -41,40 +37,27 @@ namespace Utility.Nodes
             });
         }
 
-        public Guid Guid { get; set; }
-
         public Type Type => Data is ParameterInfo parameterInfo ?
             parameterInfo.ParameterType :
             Data is PropertyInfo propertyInfo ? propertyInfo.PropertyType :
             throw new Exception("ds322d 11");
 
-        public string? Key
-        {
-            get => _title;
-            set => RaisePropertyChanged(ref _title, value);
-        }
 
-        public object Data
-        {
-            get => data;
-            set => RaisePropertyChanged(ref data, value);
-        }
+        //public object Value
+        //{
+        //    get => this.value;
+        //    set
+        //    {
+        //        if (value?.Equals(default) == true && this.value?.Equals(default) == true)
+        //            return;
+        //        if (value?.Equals(this.value) == true)
+        //            return;
 
-        public object Value
-        {
-            get => this.value;
-            set
-            {
-                if (value?.Equals(default) == true && this.value?.Equals(default) == true)
-                    return;
-                if (value?.Equals(this.value) == true)
-                    return;
-
-                var _previousValue = this.value;
-                this.value = value;
-                RaisePropertyChanged(_previousValue, value, nameof(Value));
-            }
-        }
+        //        var _previousValue = this.value;
+        //        this.value = value;
+        //        RaisePropertyChanged(_previousValue, value, nameof(Value));
+        //    }
+        //}
 
         public bool IsConnected
         {

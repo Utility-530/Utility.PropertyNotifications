@@ -50,6 +50,7 @@ namespace Utility.Nodes
         public event Action? Closed;
 
         public bool isEnabled = true;
+        protected bool isProliferable = true;
 
         public ViewModelTree()
         {
@@ -288,12 +289,18 @@ namespace Utility.Nodes
             set => this.RaisePropertyReceived(ref this.isChildrenRefreshed, value);
         }
 
-        public bool IsValueTracked { get; set; } = true;
+        public bool ShouldValueBeTracked { get; set; } = true;
         public bool DoesValueRequireSaving { get; set; }
         public bool DoesValueRequireLoading { get; set; }
         public bool IsValueLoaded { get; set; }
         public bool AreChildrenLoaded { get; set; }
         public bool AreChildrenTracked { get; set; }
+        public bool IsProliferable
+        {
+            get { RaisePropertyCalled(isProliferable); return isProliferable; }
+            set => this.RaisePropertyReceived(ref this.isProliferable, value);
+        }
+
 
         public bool Sort(object? o = null)
         {
@@ -339,6 +346,7 @@ namespace Utility.Nodes
                 case nameof(Title): title = value as string; break;
                 case nameof(Value): this.value = value; break;
                 case nameof(IsEnabled): this.isEnabled = (bool)value; break;
+                case nameof(SelectedItemTemplate): this.selectedItemTemplate = (string)value; break;
                 default: throw new ArgumentException($"Unknown field: {name}");
             }
             RaisePropertyChanged(name);
@@ -377,6 +385,7 @@ namespace Utility.Nodes
                 nameof(Title) => title,
                 nameof(Value) => value,
                 nameof(IsEnabled) => isEnabled,
+                nameof(SelectedItemTemplate) => selectedItemTemplate,
                 _ => throw new ArgumentException($"Unknown field: {name}")
             };
         }

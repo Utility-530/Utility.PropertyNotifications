@@ -1,27 +1,20 @@
 ﻿using System.Globalization;
-using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 using Utility.PropertyDescriptors;
-using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.NonGeneric;
 using Utility.Meta;
 using Utility.Models;
 using Utility.Models.Trees;
-using Utility.Trees.Abstractions;
 using Utility.WPF;
 using Utility.WPF.Controls.ComboBoxes;
-using Utility.Interfaces.Exs;
 using System.Text.RegularExpressions;
-using System.IO;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.Exs.Diagrams;
-using System.Collections;
 
 namespace Utility.Nodes.WPF
 {
-
     public class FinishEditConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -46,12 +39,12 @@ namespace Utility.Nodes.WPF
             if (value is ChangeRoutedEventArgs { Type: Changes.Type.Add, Instance: INodeViewModel nObject } args)
             {
                 args.Handled = true;
-                if (nObject is  DataFileModel model  && nObject is IGetParent<INodeViewModel> { Parent: DataFilesModel { Children: { } collection } dModels })
+                if (nObject is Model<string> model  && nObject is IGetParent<INodeViewModel> { Parent: ListModel { Children: { } collection } dModels })
                 {
                     //var alias = toFileName(dModels, model);
-                    var newName = StringExtensions.IncrementSuffixNumber(model.TableName);
+                    var newName = StringExtensions.IncrementSuffixNumber(model.Get());
                     //var filePath = Utility.Helpers.PathHelper.ChangeFilename(model.FilePath, alias);
-                    return new DataFileModel { Name = newName, FileName = model.FileName, FilePath = model.FilePath, TableName = newName };
+                    return new Model<string> { Name = newName, Value = model.Value };
                 }
                 throw new NotImplementedException("V FDF$3");
             }

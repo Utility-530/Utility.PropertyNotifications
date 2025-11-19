@@ -22,7 +22,7 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class ListModel : Model<IId<Guid>>, IGetType, IProliferation
+    public class ListModel : Model<IId<Guid>>, IGetType
     {
         private Type type;
         private IEnumerable collection;
@@ -34,6 +34,7 @@ namespace Utility.Models.Trees
         {
             this.type = type;
             IsAugmentable = true;
+            IsProliferable = true;
             Orientation = Enums.Orientation.Vertical;
             this.WithChangesTo(a => a.Limit)
                 .Subscribe(a =>
@@ -74,7 +75,7 @@ namespace Utility.Models.Trees
             set { this.remove = value; this.RaisePropertyReceived(value, null); }
         }
 
-        public virtual IEnumerable Proliferation()
+        public override IEnumerable Proliferation()
         {
             var factory = Locator.Current.GetService<IFactory<IId<Guid>>>();
             return new IId<Guid>[] { factory.Create(type) };

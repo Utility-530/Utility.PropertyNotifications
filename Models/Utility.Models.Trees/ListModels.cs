@@ -16,18 +16,6 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Models.Trees
 {
-    public class DataFilesModel : ListModel<DataFileModel>, ISelectable
-    {
-        public DataFilesModel()
-        {
-        }
-
-        public override IEnumerable Proliferation()
-        {
-            yield return new DataFileModel { Name = "datafile", FilePath = Path.Combine(Utility.Constants.DefaultDataPath, "Models"), FileName = "New", TableName = "Model" };
-        }
-    }
-
     public class SelectionsModel : ListModel<SelectionModel>
     {
         public SelectionsModel()

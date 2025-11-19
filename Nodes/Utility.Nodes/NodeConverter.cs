@@ -12,6 +12,7 @@ using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
 using Utility.Structs;
+using Utility.ServiceLocation;
 
 namespace Utility.Nodes
 {
@@ -164,7 +165,7 @@ namespace Utility.Nodes
             if (jObject.ContainsKey("Current"))
             {
                 var key = new GuidKey(Guid.Parse(jObject["Current"].ToString()));
-                ((INodeSource)Utility.Globals.Resolver.Resolve(typeof(INodeSource))).Single(key).Subscribe(current =>
+                (Utility.Globals.Resolver.Resolve<INodeSource>()).Single(key).Subscribe(current =>
                 {
                     //node.Current = current;
                     node.Set(current, nameof(ViewModelTree.Current));

@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using Utility.Helpers;
 using Utility.Helpers.Reflection;
+using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes;
@@ -60,57 +61,61 @@ namespace Utility.Models
         }
     }
 
-    public class ProliferationModel : NodeViewModel, IProliferation, IKey, IName, IAttach<IReadOnlyTree>
-    {
-        private readonly Action<NodeViewModel>? attach;
-        private readonly Func<Model>? proliferation;
+    //public class ProliferationModel : NodeViewModel, IProliferation, IKey, IName, IAttach<IReadOnlyTree>
+    //{
+    //    private readonly Action<NodeViewModel>? attach;
+    //    private readonly Func<Model>? proliferation;
 
-        public ProliferationModel()
-            : this(null, null)
-        {
-        }   
+    //    public ProliferationModel()
+    //        : this(null, null)
+    //    {
+    //    }   
 
-        public ProliferationModel(Action<NodeViewModel>? attach = null, Func<Model>? proliferation = null)
-            : base()
-        {
-            this.attach = attach;
-            this.proliferation = proliferation;
-        }
+    //    public ProliferationModel(Action<NodeViewModel>? attach = null, Func<Model>? proliferation = null)
+    //        : base()
+    //    {
+    //        this.attach = attach;
+    //        this.proliferation = proliferation;
+    //    }
 
-        public void Attach(IReadOnlyTree value)
-        {
-            attach?.Invoke(this);
-        }
+    //    public void Attach(IReadOnlyTree value)
+    //    {
+    //        attach?.Invoke(this);
+    //    }
 
-        public virtual IEnumerable Proliferation()
-        {
-            if (proliferation is not null)
-                yield return proliferation.Invoke();
-            yield break;
-        }
-    }
+    //    public virtual IEnumerable Proliferation()
+    //    {
+    //        if (proliferation is not null)
+    //            yield return proliferation.Invoke();
+    //        yield break;
+    //    }
+    //}
 
-    public class Model : NodeViewModel, IClone, IYieldItems, IKey, IName, IAttach<IReadOnlyTree>
+    public class Model : NodeViewModel, IClone, IYieldItems, IKey, IName, IAttach<IReadOnlyTree>, IProliferation
     {
         protected readonly Func<IEnumerable<IReadOnlyTree>>? childrenLambda;
         private readonly Action<IReadOnlyTree>? addition;
+        private readonly Func<Model>? proliferation;
         private readonly Action<IReadOnlyTree>? attach;
 
         public virtual Version Version { get; set; } = new();
-        private bool isInitialised = false;
 
-        public Model(Func<IEnumerable<IReadOnlyTree>>? childrenLambda = null, Action<IReadOnlyTree>? addition = null, Action<Model>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true)
+        public Model()
+        {
+            Initialise();
+        }
+
+        public Model(Func<IEnumerable<IReadOnlyTree>>? childrenLambda = null, Action<IReadOnlyTree>? addition = null, Action<Model>? attach = null, Func<Model>? proliferation = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : this()
         {
             this.childrenLambda = childrenLambda;
+            this.isProliferable = childrenLambda == null;
             this.addition = addition;
+            this.proliferation = proliferation;
             this.attach = new Action<IReadOnlyTree>(a => attach?.Invoke((Model)a));
-            Initialise();
         }
 
         public virtual void Initialise()
         {
-            isInitialised = true;
-
             this.WhenReceivedFrom(a => a.Current, includeNulls: true)
                 .Skip(1)
                 .Subscribe(a =>
@@ -250,10 +255,6 @@ namespace Utility.Models
             {
                 //ignore
             }
-            else if (a is ProliferationModel)
-            {
-                //ignore
-            }
             else
             {
                 throw new Exception("Ds453 ddd");
@@ -280,6 +281,13 @@ namespace Utility.Models
             var instance = ActivateAnything.Activate.New(this.GetType()) as Model;
             instance.Name = Name;
             return instance;
+        }
+
+        public virtual IEnumerable Proliferation()
+        {
+            if (proliferation is not null)
+                yield return proliferation.Invoke();
+            yield break;
         }
 
         public virtual void Attach(IReadOnlyTree value)

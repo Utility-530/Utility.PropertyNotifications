@@ -19,6 +19,7 @@ public abstract class MemberDescriptor : NodeViewModel, IDescriptor, IIsReadOnly
         Descriptor = descriptor;
         Input = new ObservableCollection<IConnectorViewModel>();
         Output = new ObservableCollection<IConnectorViewModel>();
+        isProliferable = false;
     }
 
     public virtual string Name => Descriptor.Name;

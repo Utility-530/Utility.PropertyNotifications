@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Utility.Helpers;
 using Utility.Interfaces.Exs;
+using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Nodes.Meta;
 using Utility.Repos;
@@ -13,13 +14,12 @@ namespace Utility.Nodes.Demo.Filters.Services
 
     public class EngineService
     {
-        static Dictionary<Guid, NodeEngine> dictionary = new();
+        private static readonly Dictionary<Guid, NodeEngine> dictionary = [];
 
-
-        public static INodeSource Change(DataFileModel dataFileModel)
+        public static INodeSource Change(Model<string> dataFileModel)
         {
             var engine = dictionary.Get(dataFileModel.Guid, a =>
-            new NodeEngine(new TreeRepository(Path.Combine(dataFileModel.FilePath, dataFileModel.FileName + ".sqlite")))
+            new NodeEngine(new TreeRepository(Path.Combine(dataFileModel.Value + ".sqlite")))
             );
             return engine;
         }

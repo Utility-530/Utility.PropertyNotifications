@@ -7,20 +7,9 @@ namespace Utility.Nodes
     public class ConnectionViewModel : ViewModelTree, IConnectionViewModel
     {
         private IConnectorViewModel _output = default!, _input = default!;
-        private string _title = string.Empty;
 
         public ConnectionViewModel()
         {
-        }
-
-        public Guid Guid { get; set; }
-
-        public string Key { get => new { Guid, string.Empty }.ToString(); set => throw new NotSupportedException("Key is read-only and generated from Id."); }
-
-        public string Title
-        {
-            get => _title;
-            set => RaisePropertyChanged(ref _title, value);
         }
 
         public IConnectorViewModel Input
@@ -43,7 +32,6 @@ namespace Utility.Nodes
                 });
         }
 
-        public object Data { get; set; }
 
         public bool IsDirectionForward { get; set; }
     }

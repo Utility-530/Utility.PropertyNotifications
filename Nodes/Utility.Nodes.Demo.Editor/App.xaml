@@ -10,7 +10,6 @@
     xmlns:btns="http://schemas.utility.com/buttons"
     xmlns:controls="http://schemas.utility.com"
     xmlns:ct="http://schemas.utility.com/trees"
-    xmlns:filters="clr-namespace:Utility.Nodes.WPF;assembly=Utility.WPF.Trees"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:inf="clr-namespace:Utility.Nodes.Meta;assembly=Utility.Nodes.Meta"
@@ -50,23 +49,13 @@
                 <!--<Setter Property="Selection" Value="{Binding SelectedItem}" />-->
                 <Setter Property="EditTemplate">
                     <Setter.Value>
-                        <DataTemplate DataType="{x:Type trees:DataFileModel}">
+                        <DataTemplate DataType="{x:Type node:NodeViewModel}">
                             <StackPanel>
                                 <controls:LabelledContent Header="FilePath" Hint="Unnecessary">
                                     <Viewbox Height="20">
-                                        <TextBox  Width="200" Text="{Binding FilePath}" HorizontalAlignment="Stretch"/>
+                                        <TextBox  Width="200" Text="{Binding Value}" HorizontalAlignment="Stretch"/>
                                     </Viewbox>
-                                </controls:LabelledContent>
-                                <controls:LabelledContent Header="FileName" Hint="Unnecessary">
-                                    <Viewbox  Height="20" HorizontalAlignment="Stretch">
-                                        <TextBox  Width="200" Text="{Binding FileName}" />
-                                    </Viewbox>
-                                </controls:LabelledContent>
-                                <controls:LabelledContent Header="TableName" Hint="Unnecessary">
-                                    <Viewbox  Height="20" HorizontalAlignment="Stretch">
-                                        <TextBox  Width="200" Text="{Binding TableName}" />
-                                    </Viewbox>
-                                </controls:LabelledContent>
+                                </controls:LabelledContent>  
                             </StackPanel>
                         </DataTemplate>
                     </Setter.Value>
@@ -119,7 +108,7 @@
                 <Setter Property="ct:TreeTabHelper.RemoveItemCallback" Value="{Binding Source={x:Static Application.Current}, Path='Remove'}"></Setter>
                 <Setter Property="ct:TreeTabHelper.Edit">
                     <Setter.Value>
-                        <models:ProliferationModel Name="new"  DataTemplate = "TabStyle"/>
+                        <models:Model Name="new"  DataTemplate = "TabStyle" IsProliferable="True"/>
                     </Setter.Value>
                 </Setter>
                 <Setter Property="ct:TreeTabHelper.EditTemplate">

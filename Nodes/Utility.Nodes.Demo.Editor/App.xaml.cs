@@ -104,7 +104,7 @@ namespace Utility.Nodes.Demo.Editor
         private static void initialiseGlobals(IRegister register)
         {
             register.Register<IServiceResolver>(() => new ServiceResolver());
-            register.Register<INodeSource>(() => new NodeEngine(proliferate: a => (a.Parent() as IGetName)?.Name != NodeMethodFactory.Slave));
+            register.Register<INodeSource>(() => new NodeEngine(childrenTracking: a => (a.Parent() as IGetName)?.Name != NodeMethodFactory.Slave));
             register.Register<ITreeRepository>(() => new TreeRepository("../../../Data"));
             register.Register<IPlaybackEngine>(() => new PlaybackEngine());
         }

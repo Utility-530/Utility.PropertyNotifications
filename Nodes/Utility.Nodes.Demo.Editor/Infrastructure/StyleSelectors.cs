@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Models.Templates;
 using Utility.Models.Trees;
@@ -17,10 +18,10 @@ namespace Utility.Nodes.Demo.Editor
 
             return item switch
             {
-                DataFilesModel => ComboStyle,
+                NodeViewModel { Name: NodeMethodFactory.Files } => ComboStyle,
                 NodeViewModel { Name: NodeMethodFactory.Slave } => TableStyle,
                 NodeViewModel { DataTemplate: "TabStyle" } => TabStyle,
-                DataFileModel => DefaultStyle,
+                NodeViewModel<string> { } => DefaultStyle,
                 MemberDescriptor => Utility.WPF.Trees.StyleSelector.Instance.SelectStyle(item, container),
                 Model => DefaultStyle,
                 _ => base.SelectStyle(item, container),
@@ -55,6 +56,10 @@ namespace Utility.Nodes.Demo.Editor
         Models.Templates.ModelTemplateSelector ModelTemplateSelector = new();
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
+            if(item is IGetName name && name.Name=="Files")
+            {
+
+            }
             return item switch
             {
                 MemberDescriptor => Utility.WPF.Trees.DataTemplateSelector.Instance.SelectTemplate(item, container),
@@ -76,7 +81,6 @@ namespace Utility.Nodes.Demo.Editor
                 null => ModelTemplateSelector.SelectTemplate(item, container),
                 Model => ModelTemplateSelector.SelectTemplate(item, container),
                 MemberDescriptor => Utility.WPF.Trees.DataTemplateSelector.Instance.SelectTemplate(item, container),
-                ProliferationModel => ModelTemplateSelector.SelectTemplate(item, container),
                 _ => throw new Exception("DVS")
             };
         }

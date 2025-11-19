@@ -47,7 +47,7 @@ namespace Utility.Nodes.Meta
 
 
         private readonly Lazy<ITreeRepository> _repository;
-        private readonly Predicate<INodeViewModel>? proliferate;
+        private readonly Predicate<INodeViewModel>? childrenTracking;
 
         // nodes which already came with keys and therefore are not part of this engines repository
         HashSet<Key> keys = new();
@@ -55,14 +55,14 @@ namespace Utility.Nodes.Meta
 
         private bool _disposed;
 
-        public NodeEngine(ITreeRepository? treeRepo = null, Predicate<INodeViewModel>? proliferate = null)
+        public NodeEngine(ITreeRepository? treeRepo = null, Predicate<INodeViewModel>? childrenTracking = null)
         {
             _changeTracker = new(this);
 
             var repo = treeRepo ?? Globals.Resolver.Resolve<ITreeRepository>() ?? throw new Exception("££SXXX");
             _repository = new(() => repo);
             _dataInitialiser = new(repo, new NodeInterface(this));
-            this.proliferate = proliferate;
+            this.childrenTracking = childrenTracking;
         }
 
         public Guid Guid { get; } = Guid.NewGuid();
@@ -133,19 +133,14 @@ namespace Utility.Nodes.Meta
                     .Load(node)
                     .Subscribe(_ =>
                     {
-                        if (node.AreChildrenTracked == false)
-                            _dataInitialiser.Track(node);
+                        //if (node.IsValueTracked == false)
+                        _dataInitialiser.Track(node);
 
                         if (node.AreChildrenLoaded == false)
-                            if (proliferate == null || proliferate(node))
+                            if (childrenTracking == null || childrenTracking(node))
                             {
-                                if (node.IsChildrenTracked)
-                                    setupChildrenTracking(node);
-                                else
-                                {
-                                }
-                                setupExpansionHandling(node);
-                                node.AreChildrenLoaded = true;
+                                setupChildrenTracking(node);
+                                setupExpansionHandling(node);                     
                             }
                     })
                     .DisposeWith(_compositeDisposable);
@@ -170,7 +165,7 @@ namespace Utility.Nodes.Meta
                         .Where(isExpanded => isExpanded)
                         .Take(1)
                         .SelectMany(_ => loadChildren(node))
-                        .Subscribe(child => node.Add(child))
+                        .Subscribe(child => node.Add(child), () => node.AreChildrenLoaded = true)
                         .DisposeWith(_compositeDisposable);
 
                     IObservable<INodeViewModel> loadChildren(INodeViewModel node)
@@ -180,19 +175,19 @@ namespace Utility.Nodes.Meta
                         {
                             CompositeDisposable disposables = new();
 
-                            if (node is IYieldItems _yieldItems)
+                            if (node is IYieldItems yieldItems)
                             {
-                                processYieldItems(_yieldItems, observer)
+                                processYieldItems(yieldItems, observer)
                                     .DisposeWith(disposables);
                             }
-                            if (node is IProliferation yieldItems)
+                            if (node.IsProliferable)
                             {
                                 return _repository.Value
                                             .Find((GuidKey)node.Key())
                                             .Subscribe(
                                                 key => processKey(node, key, observer, ref childIndex),
                                                 observer.OnError,
-                                                () => { }
+                                                () => { observer.OnCompleted(); }
                                                 ).DisposeWith(disposables);
                             }
 
@@ -444,6 +439,7 @@ namespace Utility.Nodes.Meta
                                    var child = (INodeViewModel)DataActivator.Activate(key);
                                    validateKey(key);
                                    child.SetKey(new GuidKey(key.Guid));
+                                   child.IsProliferable = true;
                                    Add(child);
                                    observer.OnNext(child);
                                }

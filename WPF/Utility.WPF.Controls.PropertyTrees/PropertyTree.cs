@@ -5,7 +5,7 @@ using Splat;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Nodes;
-using Utility.Nodes.WPF;
+using Utility.WPF.Trees;
 using Utility.PropertyDescriptors;
 using Utility.WPF.Controls.Trees;
 using Utility.WPF.Templates;
@@ -40,7 +40,7 @@ namespace Utility.WPF.Controls.PropertyTrees
             Style dynamicStyle = new(typeof(CustomTreeView)) { };
             //TODO : replace
             //dynamicStyle.Setters.Add(new Setter(TreeView.ItemTemplateSelectorProperty, Utility.Nodes.WPF.DataTemplateSelector.Instance));
-            dynamicStyle.Setters.Add(new Setter(TreeView.ItemContainerStyleSelectorProperty, Utility.Nodes.WPF.StyleSelector.Instance));
+            dynamicStyle.Setters.Add(new Setter(TreeView.ItemContainerStyleSelectorProperty, Utility.WPF.Trees.StyleSelector.Instance));
 
             StyleProperty.OverrideMetadata(typeof(PropertyTree), new FrameworkPropertyMetadata(dynamicStyle));
         }
@@ -69,7 +69,7 @@ namespace Utility.WPF.Controls.PropertyTrees
 
             //Locator.CurrentMutable.RegisterConstant<IContext>(new Context());
             Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
-            Locator.CurrentMutable.RegisterConstant<IExpander>(Utility.Nodes.WPF.Expander.Instance);
+            Locator.CurrentMutable.RegisterConstant<IExpander>(Utility.WPF.Trees.Expander.Instance);
             Locator.CurrentMutable.RegisterConstant<System.Windows.Controls.DataTemplateSelector>(CustomDataTemplateSelector.Instance);
         }
 

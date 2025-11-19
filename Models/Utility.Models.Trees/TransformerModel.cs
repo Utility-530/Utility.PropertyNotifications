@@ -39,7 +39,7 @@ namespace Utility.Models.Trees
         }
 
         [JsonIgnore]
-        public ThroughPutModel Output
+        public ThroughPutModel Outputs
         {
             get => _output;
             set
@@ -66,7 +66,7 @@ namespace Utility.Models.Trees
                     .Where(a => a != null)
                     .Subscribe(method =>
                     {
-                        this.WithChangesTo(a => a.Output)
+                        this.WithChangesTo(a => a.Outputs)
                         .Where(a => a != null)
                         .Subscribe(a =>
                         {
@@ -97,7 +97,7 @@ namespace Utility.Models.Trees
             switch (a.ToString())
             {
                 case inputs: Inputs = a as InputsModel; break;
-                case output: Output = a as ThroughPutModel; break;
+                case output: Outputs = a as ThroughPutModel; break;
                 case converter: Converter = a as ConverterModel; break;
                 default: throw new ArgumentOutOfRangeException("ds 33` 33kfl.. ");
             }

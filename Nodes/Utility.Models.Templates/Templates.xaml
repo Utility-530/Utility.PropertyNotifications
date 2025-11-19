@@ -88,11 +88,11 @@
         <!--<TextBlock Text="{Binding Name}" />-->
     </HierarchicalDataTemplate>
 
-    <HierarchicalDataTemplate
+    <!--<HierarchicalDataTemplate
         DataType="{x:Type inf:DataFilesModel}"
         ItemsSource="{Binding Children}">
         <TextBlock Text="{Binding Name}" />
-    </HierarchicalDataTemplate>
+    </HierarchicalDataTemplate>-->
 
     <DataTemplate x:Key="IndexTemplate" DataType="{x:Type nodes:NodeViewModel}">
         <xc:IntegerUpDown Value="{Binding Value}" />
@@ -370,7 +370,7 @@
             Text="{Binding Exception.Message}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type model:ProliferationModel}">
+    <DataTemplate x:Key="ProliferationTemplate">
         <list:CustomSelector
          x:Name="CustomSelector"
          Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"
@@ -430,6 +430,12 @@
                 MinWidth="60"
                 Background="AliceBlue"
                 Text="{Binding Value}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="StringTemplate" DataType="{x:Type nodes:NodeViewModel}">
+        <Grid>
+            <TextBox MinWidth="60" Text="{Binding Value}" />
         </Grid>
     </DataTemplate>
     <!--<DataTemplate x:Key="TabTemplate" DataType="{x:Type nodes:NodeViewModel}">
@@ -541,76 +547,7 @@
         <Setter Property="Width" Value="60" />
     </Style>
 
-    <DataTemplate x:Shared="false" DataType="{x:Type inf:DataFileModel}">
-        <Grid Name="rootElement" Background="#DCDCDC">
-            <Grid.Resources>
-                <Style TargetType="{x:Type TextBox}">
-                    <Setter Property="Margin" Value="10,5,10,0" />
-                </Style>
-            </Grid.Resources>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <!--<Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>-->
-
-
-            <TextBlock
-                Name="nameLabel"
-                Grid.Column="0"
-                Style="{StaticResource inlineText}">
-                File Path
-            </TextBlock>
-
-
-            <TextBlock
-                Name="txtAddress"
-                Grid.Row="2"
-                Grid.Column="1"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Bottom"
-                FontWeight="DemiBold"
-                Text="{Binding FilePath}" />
-
-            <TextBlock
-                Name="aliasLabel"
-                Grid.Column="2"
-                Style="{StaticResource inlineText}">
-                File Name
-            </TextBlock>
-            <TextBlock
-                Name="txtName"
-                Grid.Column="3"
-                Width="50"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Bottom"
-                FontWeight="DemiBold"
-                Text="{Binding FileName}" />
-            <TextBlock
-                Name="alia3sLabel"
-                Grid.Column="4"
-                Style="{StaticResource inlineText}">
-                Model Name
-            </TextBlock>
-            <TextBlock
-                Name="txtName2"
-                Grid.Column="5"
-                Width="100"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Bottom"
-                FontWeight="DemiBold"
-                Text="{Binding TableName}" />
-        </Grid>
-    </DataTemplate>
-
+    
 
 
     <DataTemplate x:Key="DirectoryEditor" DataType="{x:Type nodes:NodeViewModel}">
