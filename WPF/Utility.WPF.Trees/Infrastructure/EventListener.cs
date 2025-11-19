@@ -1,7 +1,10 @@
-﻿using Utility.Interfaces.NonGeneric;
+﻿using Utility;
+using Utility.Interfaces.NonGeneric;
+using Utility.Nodes;
 using Utility.Reactives;
+using Utility.WPF.Trees;
 
-namespace Utility.Nodes.WPF
+namespace Utility.WPF.Trees
 {
     public class EventListener : ReplayModel<IEvent>, IEventListener
     {

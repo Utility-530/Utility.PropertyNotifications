@@ -21,7 +21,7 @@ namespace Utility.Nodes.Demo.Editor
                 NodeViewModel { Name: NodeMethodFactory.Slave } => TableStyle,
                 NodeViewModel { DataTemplate: "TabStyle" } => TabStyle,
                 DataFileModel => DefaultStyle,
-                MemberDescriptor => Utility.Nodes.WPF.StyleSelector.Instance.SelectStyle(item, container),
+                MemberDescriptor => Utility.WPF.Trees.StyleSelector.Instance.SelectStyle(item, container),
                 Model => DefaultStyle,
                 _ => base.SelectStyle(item, container),
             };
@@ -57,7 +57,7 @@ namespace Utility.Nodes.Demo.Editor
         {
             return item switch
             {
-                MemberDescriptor => Utility.WPF.Trees.Filters.DataTemplateSelector.Instance.SelectTemplate(item, container),
+                MemberDescriptor => Utility.WPF.Trees.DataTemplateSelector.Instance.SelectTemplate(item, container),
                 NodeViewModel { DataTemplate: "TabStyle" } => TabTemplate,            
                 Model => ModelTemplateSelector.SelectTemplate(item, container),       
                 _ => throw new Exception("DVS")
@@ -75,7 +75,7 @@ namespace Utility.Nodes.Demo.Editor
             {
                 null => ModelTemplateSelector.SelectTemplate(item, container),
                 Model => ModelTemplateSelector.SelectTemplate(item, container),
-                MemberDescriptor => Utility.WPF.Trees.Filters.DataTemplateSelector.Instance.SelectTemplate(item, container),
+                MemberDescriptor => Utility.WPF.Trees.DataTemplateSelector.Instance.SelectTemplate(item, container),
                 ProliferationModel => ModelTemplateSelector.SelectTemplate(item, container),
                 _ => throw new Exception("DVS")
             };

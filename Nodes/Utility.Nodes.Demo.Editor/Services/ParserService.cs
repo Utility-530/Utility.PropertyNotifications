@@ -18,6 +18,7 @@ using Utility.Observables.Generic;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Extensions.Async;
+using Utility.WPF.Trees;
 
 
 namespace Utility.Nodes.Demo.Filters.Services

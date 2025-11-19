@@ -1,8 +1,11 @@
-﻿using Utility.Interfaces.NonGeneric;
+﻿using Utility;
+using Utility.Interfaces.NonGeneric;
+using Utility.Nodes;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Decisions;
+using Utility.WPF.Trees;
 
-namespace Utility.Nodes.WPF
+namespace Utility.WPF.Trees
 {
     public class Expander : IExpander
     {

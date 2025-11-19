@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>
@@ -10,25 +9,11 @@
     <FileVersion>1.0.1.0</FileVersion>
     <ApplicationIcon>Icons\editor2.ico</ApplicationIcon>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Themes\**" />
-    <EmbeddedResource Remove="Themes\**" />
-    <None Remove="Themes\**" />
-    <Page Remove="Themes\**" />
-  </ItemGroup>
-
-  <ItemGroup>
+ <ItemGroup>
     <None Remove="Data\entireframework.min.css" />
     <None Remove="Data\master.css" />
     <None Remove="Data\pico.classless.blue.css" />
     <None Remove="Data\pico.min.css" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Remove="Container.xaml" />
-    <Page Remove="Master.xaml" />
-    <Page Remove="Slave.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -65,6 +50,7 @@
     <PackageReference Include="AngleSharp" Version="1.2.0" />
     <PackageReference Include="AngleSharp.Css" Version="1.0.0-beta.144" />
     <PackageReference Include="AngleSharp.Diffing" Version="1.0.0" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
   </ItemGroup>
 
 

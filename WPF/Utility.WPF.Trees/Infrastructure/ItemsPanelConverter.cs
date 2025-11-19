@@ -9,7 +9,7 @@ using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
 using O = System.Windows.Controls.Orientation;
 
-namespace Utility.Nodes.WPF
+namespace Utility.WPF.Trees
 {
     public class ItemsPanelConverter : IValueConverter
     {

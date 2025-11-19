@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Globalization;
 using System.Windows.Data;
+using Utility;
 using Utility.Interfaces;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
+using Utility.Nodes;
 using Utility.Trees.Abstractions;
+using Utility.WPF.Trees;
 
-namespace Utility.Nodes.WPF
+namespace Utility.WPF.Trees
 {
     public class ChildrenConverter : IValueConverter
     {

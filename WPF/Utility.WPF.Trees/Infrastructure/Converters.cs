@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Windows;
 using Microsoft.Xaml.Behaviors;
+using Utility;
 using Utility.Interfaces.NonGeneric;
+using Utility.Nodes;
+using Utility.WPF.Trees;
 
-namespace Utility.Nodes.WPF
+namespace Utility.WPF.Trees
 {
     //public class EditConverter : IValueConverter
     //{
@@ -27,7 +30,7 @@ namespace Utility.Nodes.WPF
     {
         protected override void Invoke(object parameter)
         {
-            if (parameter is Utility.WPF.EditRoutedEventArgs { IsAccepted: true, Edit: { } instance } value)
+            if (parameter is EditRoutedEventArgs { IsAccepted: true, Edit: { } instance } value)
             {
                 var x = AssociatedObject;
                 ;

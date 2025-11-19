@@ -22,6 +22,7 @@ using Utility.ServiceLocation;
 using Utility.Services.Meta;
 using Utility.WPF.Helpers;
 using Utility.WPF.Templates;
+using Utility.WPF.Trees;
 using static Utility.WPF.Controls.Trees.Infrastructure.TreeTabHelper;
 
 namespace Utility.Nodes.Demo.Editor
@@ -64,12 +65,12 @@ namespace Utility.Nodes.Demo.Editor
             SQLitePCL.Batteries.Init();
 
             Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
-            Locator.CurrentMutable.RegisterConstant<IExpander>(WPF.Expander.Instance);
+            Locator.CurrentMutable.RegisterConstant<IExpander>(Utility.WPF.Trees.Expander.Instance);
             //Locator.CurrentMutable.RegisterLazySingleton<MethodCache>(() => MethodCache.Instance);
             Locator.CurrentMutable.RegisterLazySingleton<IObservableIndex<INodeViewModel>>(() => MethodCache.Instance);
             Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new NodeMethodFactory());            
             Locator.CurrentMutable.RegisterLazySingleton<IFactory<IId<Guid>>>(() => new ModelFactory());
-            Locator.CurrentMutable.RegisterLazySingleton<DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
+            Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
 
             initialiseGlobals(Globals.Register);
             initialiseConnections(Globals.Resolver.Resolve<IServiceResolver>());

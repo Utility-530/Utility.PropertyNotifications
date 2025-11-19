@@ -1,11 +1,13 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using Utility;
 using Utility.Interfaces.Generic;
+using Utility.Nodes;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Decisions;
 
-namespace Utility.Nodes.WPF
+namespace Utility.WPF.Trees
 {
     public class StyleSelector : System.Windows.Controls.StyleSelector
     {

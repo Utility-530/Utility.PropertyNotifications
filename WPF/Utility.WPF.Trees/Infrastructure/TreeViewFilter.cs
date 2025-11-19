@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
+using Utility;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.NonGeneric;
+using Utility.Nodes;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Decisions;
 
-namespace Utility.Nodes.WPF
+namespace Utility.WPF.Trees
 {
     public class TreeViewFilter : IFilter
     {
