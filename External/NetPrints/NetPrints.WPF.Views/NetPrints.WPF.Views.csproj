@@ -12,6 +12,6 @@
     <ProjectReference Include="..\NetPrints.WPF.Controls\NetPrints.WPF.Controls.csproj" />
   </ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Splat" Version="15.3.1" />
+		<PackageReference Include="Splat" Version="17.1.1" />
 	</ItemGroup>
 </Project>
