@@ -20,16 +20,22 @@ namespace Utility.Interfaces.Exs
         IIsReadOnly,
         ILocation,
         IGetIsSingular,
-        IIsChildrenTracked,
-        IIsValueTracked,
+        //IIsChildrenTracked,
+        IShouldValueBeTracked,
         IDoesValueRequireLoading,
-        IIsValueSaved,
+        IDoesValueRequireSaving,
         IIsValueLoaded,
         IAreChildrenLoaded,
-        IAreChildrenTracked
+        IAreChildrenTracked,
+        IIsProliferable
     //IHeight,
     //IWidth
     {
+    }
+
+    public interface IIsProliferable
+    {
+        bool IsProliferable { get; set; }
     }
 
     public interface ISelectedItemTemplate
@@ -54,7 +60,7 @@ namespace Utility.Interfaces.Exs
         bool IsValueLoaded { get; set; }
     }
 
-    public interface IIsValueSaved
+    public interface IDoesValueRequireSaving
     {
         bool DoesValueRequireSaving { get; set; }
     }
@@ -69,15 +75,15 @@ namespace Utility.Interfaces.Exs
         double? Width { get; set; }
     }
 
-    public interface IIsValueTracked
+    public interface IShouldValueBeTracked
     {
-        bool IsValueTracked { get; set; }
+        bool ShouldValueBeTracked { get; set; }
     }
 
-    public interface IIsChildrenTracked
-    {
-        bool IsChildrenTracked { get; set; }
-    }
+    //public interface IIsChildrenTracked
+    //{
+    //    bool IsChildrenTracked { get; set; }
+    //}
 
     public interface IIsChildrenRefreshed
     {
