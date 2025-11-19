@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11206.111 d18.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumSourceConverter", "EnumSourceConverter.csproj", "{7377C762-7CD4-48E1-A5EB-344C72E80FF5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumSourceConverter.Test", "..\EnumSourceConverter.Test\EnumSourceConverter.Test.csproj", "{18A9605E-311F-4051-A67C-C18545D0240D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumSourceConverter", "EnumSourceConverter\EnumSourceConverter.csproj", "{EBC8F570-F268-9842-9CB5-D0331300F4CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,16 +13,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7377C762-7CD4-48E1-A5EB-344C72E80FF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7377C762-7CD4-48E1-A5EB-344C72E80FF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7377C762-7CD4-48E1-A5EB-344C72E80FF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7377C762-7CD4-48E1-A5EB-344C72E80FF5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{18A9605E-311F-4051-A67C-C18545D0240D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{18A9605E-311F-4051-A67C-C18545D0240D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18A9605E-311F-4051-A67C-C18545D0240D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18A9605E-311F-4051-A67C-C18545D0240D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBC8F570-F268-9842-9CB5-D0331300F4CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBC8F570-F268-9842-9CB5-D0331300F4CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBC8F570-F268-9842-9CB5-D0331300F4CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBC8F570-F268-9842-9CB5-D0331300F4CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B96B9A29-FD42-464A-AA87-902006D0A9F6}
 	EndGlobalSection
 EndGlobal
