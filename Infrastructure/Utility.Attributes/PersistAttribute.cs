@@ -2,8 +2,8 @@
 
 namespace Utility.Attributes
 {
-    public class PersistAttribute(bool shouldPersist) : Attribute
+    public class PersistAttribute(bool should) : Attribute
     {
-        public bool ShouldPersist { get; } = shouldPersist;
+        public bool Should { get; } = should;
     }
 }
