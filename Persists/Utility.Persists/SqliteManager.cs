@@ -171,7 +171,7 @@ namespace Utility.Persists
                     }
 
                     if (collection is INotifyCollectionChanged notifyCollection)
-                        notifyCollection.Changes()
+                        notifyCollection.NotificationChanges()
                             .Subscribe(a =>
                             {
                                 Task.Run(() => OnCollectionChanged(a, type));

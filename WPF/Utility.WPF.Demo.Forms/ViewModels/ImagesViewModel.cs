@@ -7,6 +7,7 @@ using System.Windows.Input;
 using ReactiveUI;
 using Utility.Helpers.Ex;
 using Utility.Models;
+using Utility.Reactives;
 using Utility.WPF.Abstract;
 using _ViewModel = Utility.ViewModels.ViewModel;
 
@@ -35,7 +36,7 @@ namespace Utility.WPF.Demo.Forms.ViewModels
             var obsCollection = new ObservableCollection<ImageViewModel>(collection);
 
             obsCollection
-                .SelectNewItems<ImageViewModel>()
+                .Additions<ImageViewModel>()
                 .Subscribe(a =>
                 {
                     var dis = a.WhenAnyValue(a => a.URL).Subscribe(a =>
@@ -47,7 +48,7 @@ namespace Utility.WPF.Demo.Forms.ViewModels
                 });
 
             obsCollection
-                .SelectOldItems<ImageViewModel>()
+                .Additions<ImageViewModel>()
                 .Subscribe(a =>
                 {
                     if (list.ContainsKey(a))

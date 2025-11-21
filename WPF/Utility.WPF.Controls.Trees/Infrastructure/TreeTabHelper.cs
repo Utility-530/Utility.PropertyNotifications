@@ -256,7 +256,7 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
 
                 if (tabTree.Items is INotifyCollectionChanged incc)
                 {
-                    incc.Changes().Subscribe(a =>
+                    incc.NotificationChanges().Subscribe(a =>
                     {
                         switch (a.Action)
                         {
@@ -277,7 +277,7 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
                                         {
                                             if (container.IsSelected)
                                             {
-                                                TreeTabHelper.SetSelectedItem(tabTree, container);
+                                                TreeTabHelper.SetSelectedItem(tabTree, container.DataContext);
                                                 ZIndexAnimator.AnimateOnSelected(tabTree, container);
                                             }
                                         };
@@ -323,7 +323,7 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
                                 {
                                     if (item.IsSelected)
                                     {
-                                        TreeTabHelper.SetSelectedItem(tabTree, item);
+                                        TreeTabHelper.SetSelectedItem(tabTree, item.DataContext);
                                         ZIndexAnimator.AnimateOnSelected(tabTree, item);
                                     }
                                 };

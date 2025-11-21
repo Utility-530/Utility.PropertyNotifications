@@ -37,7 +37,7 @@ namespace Utility.WPF.Attached
             if (d is ItemsControl itemsControl)
             {
                 DataTemplate originalTemplate = itemsControl.ItemTemplate;
-                _ = itemsControl.Items.Changes().Select(a => itemsControl.Items.Count)
+                _ = itemsControl.Items.NotificationChanges().Select(a => itemsControl.Items.Count)
                     .Subscribe(count =>
                     {
                         if (count == 1)

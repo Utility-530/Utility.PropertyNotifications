@@ -72,10 +72,9 @@ namespace Utility.WPF.Reactives
             where T : DependencyObject
         {
             var dp = GetDependencyProperty(propertyExpression);
-            return component.Observe(dp)
-                            .Select(_ => GetValueOnUIThread<TProp>(component, dp))
-                            .StartWith((TProp)component.GetValue(dp))
-                            .WhereNotDefault();
+            IObservable<TProp> main() => component.Observe(dp)
+                            .Select(_ => GetValueOnUIThread<TProp>(component, dp));
+            return dp == null ? main() : main().StartWith((TProp)component.GetValue(dp));
         }
 
         private static TProp GetValueOnUIThread<TProp>(
