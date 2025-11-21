@@ -23,10 +23,10 @@ namespace Utility.WPF.Behaviors
 {
     public class EnumComboBehavior : Behavior<ComboBox>
     {
-        record EnumType(Type Type, Enum? Value);
+        record Enum_Type(Type Type, Enum? Value);
 
         public static readonly DependencyProperty ValueProperty = DependencyHelper.Register<Enum>(new FrameworkPropertyMetadata(default, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-        public static readonly DependencyProperty EnumProperty = DependencyHelper.Register<Type>(new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty EnumTypeProperty = DependencyHelper.Register<Type>(new FrameworkPropertyMetadata());
 
         public static readonly DependencyProperty IsReadOnlyProperty = DependencyHelper.Register<bool>();
         public static readonly DependencyProperty IsMultiSelectProperty = DependencyHelper.Register<bool>();
@@ -47,14 +47,16 @@ namespace Utility.WPF.Behaviors
 
             ClearCommand = new Command<object>(a =>
             {
-                Value = (Enum)System.Enum.ToObject(Value?.GetType() ?? Enum as Type, 0);
+                Value = (Enum)System.Enum.ToObject(Value?.GetType() ?? EnumType as Type, 0);
             });
 
-            this.Observe(a => a.Enum)
+
+            this.Observe(a => a.EnumType)
                 .WhereIsNotNull()
                 .Select(a => Nullable.GetUnderlyingType(a) is Type type ? type : a)
-                .Select(a => new EnumType(a, null))
-                .Merge(this.Observe(a => a.Value).WhereIsNotNull().Where(a => a != internalValue).Select(a => new EnumType(a.GetType(), a)))
+                .Select(a => new Enum_Type(a, null))
+                .Merge(this.Observe(a => a.Value).Where(a => a != internalValue).WhereIsNotNull().Select(a => new Enum_Type(a.GetType(), a)))
+                .DistinctUntilChanged(a => a.Type.ToString())
                 .CombineLatest(this.Observe(a => a.IsReadOnly))
                 .Select(a => BuildFromEnum(a.First.Type, a.First.Value, a.Second))
                 .Subscribe(enums =>
@@ -84,7 +86,7 @@ namespace Utility.WPF.Behaviors
                             else
                             {
                                 internalValue = e.HasFlag(e) ?
-                                Utility.Helpers.EnumHelper.CombineFlags(enums.Where(a => a.IsChecked).Select(e => e.Value), Enum) :
+                                Utility.Helpers.EnumHelper.CombineFlags(enums.Where(a => a.IsChecked).Select(e => e.Value), EnumType) :
                                 e;
                             }
                             Value = internalValue;
@@ -93,12 +95,20 @@ namespace Utility.WPF.Behaviors
                     }
                 });
 
-            this.Observe(a => a.Enum)
-                .WhereIsNotNull()
-                .Subscribe(e =>
+            if (Value == default)
+                if (AssociatedObject.IsLoaded)
                 {
-                    Value = (Enum)System.Enum.ToObject(e, 0);
-                });
+                    Value = (Enum)System.Enum.ToObject(EnumType, 0);
+                }
+                else
+                {
+                    this.Observe(a => a.EnumType)
+                        .WhereIsNotNull()
+                        .Subscribe(e =>
+                        {
+                            Value = (Enum)System.Enum.ToObject(e, 0);
+                        });
+                }
 
             static EnumItem[] BuildFromEnum(Type t, Enum? Value, bool isReadOnly)
             {
@@ -144,10 +154,10 @@ namespace Utility.WPF.Behaviors
             set => SetValue(IsMultiSelectProperty, value);
         }
 
-        public Type Enum
+        public Type EnumType
         {
-            get => (Type)GetValue(EnumProperty);
-            set => SetValue(EnumProperty, value);
+            get => (Type)GetValue(EnumTypeProperty);
+            set => SetValue(EnumTypeProperty, value);
         }
 
         public Enum Value
@@ -171,7 +181,7 @@ namespace Utility.WPF.Behaviors
             public EnumItem(Enum @enum, bool isReadOnly)
             {
                 Value = @enum;
-                Command = new Command(()=> replay.OnNext(@enum));
+                Command = new Command(() => replay.OnNext(@enum));
                 //IsReadOnly = isReadOnly;
             }
 
