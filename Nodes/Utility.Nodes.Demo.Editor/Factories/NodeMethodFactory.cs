@@ -64,9 +64,11 @@ namespace Utility.Nodes.Demo.Editor
                         new Model(() => [new CommandModel<SaveEvent> { Name = Save }, new CommandModel<RefreshEvent> { Name = Refresh }, new CommandModel<RunEvent> { Name = Run }],
                         attach: n => {
                             n.Orientation = Enums.Orientation.Horizontal; })
-                        { Name = Commands,
-                       }
-                    ], addition:a=>
+                        {
+                            Name = Commands,
+                            DataTemplate = "InvisibleTemplate"
+                        }
+                        ], addition:a=>
                     {
                         if(a is Model { Name:  nameof(Files)} dfm)
                         {
@@ -77,7 +79,7 @@ namespace Utility.Nodes.Demo.Editor
                     })
                     {
                         Name = Master,
-                        Orientation = Enums.Orientation.Vertical
+                        DataTemplate = "InvisibleTemplate"
                     },
                     new Model(attach: attach =>
                     {
@@ -105,11 +107,13 @@ namespace Utility.Nodes.Demo.Editor
                     })
                     {
                         Name = Slave,
-                        IsProliferable = true
+                        IsProliferable = true,
+                        DataTemplate = "InvisibleTemplate"
                     }])
                 {
                     Name = s,
-                    Orientation = Enums.Orientation.Vertical
+                    Orientation = Enums.Orientation.Vertical,
+                    DataTemplate = "InvisibleTemplate"
                 });
         }
     }
