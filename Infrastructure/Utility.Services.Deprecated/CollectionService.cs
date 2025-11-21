@@ -12,6 +12,7 @@ using Utility.Common.Models;
 using Utility.Extensions;
 using Utility.Helpers.Ex;
 using Utility.PropertyNotifications;
+using Utility.Reactives;
 
 namespace Utility.Services
 {
@@ -34,7 +35,7 @@ namespace Utility.Services
         {
             var dis1 = AllItems()
               .Scan(default((CollectionChange, CollectionChange)), (a, b) => (a.Item2, b))
-              .WithLatestFrom(repositoryMessages.Select(a => a.Service).WhereNotDefault())
+              .WithLatestFrom(repositoryMessages.Select(a => a.Service).WhereIsNotNull())
               .Subscribe(cc =>
               {
                   var ((a, (action, enumerable)), repository) = cc;
@@ -147,14 +148,14 @@ namespace Utility.Services
             IObservable<CollectionChange> OldItems()
             {
                 return items
-                    .SelectChanges()
+                    .NotificationChanges()
                     .Select(a => new CollectionChange(a.Action, a.OldItems?.Cast<object>()?.ToArray() ?? Array.Empty<object>()));
             }
 
             IObservable<CollectionChange> NewItems()
             {
                 return Items
-                    .SelectChanges()
+                    .NotificationChanges()
                     .Select(a => new CollectionChange(a.Action, a.NewItems?.Cast<object>()?.ToArray() ?? Array.Empty<object>()));
             }
         }
