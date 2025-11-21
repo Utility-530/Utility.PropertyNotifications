@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Utility.Changes;
@@ -20,17 +21,17 @@ namespace Utility.Reactives
         public static IObservable<T> ToNewItemsObservable<T>(this INotifyCollectionChanged notifyCollectionChanged)
         {
             return notifyCollectionChanged
-              .Changes()
+              .NotificationChanges()
               .Where(a => a.Action == NotifyCollectionChangedAction.Add)
               .SelectMany(x => x.NewItems?.Cast<T>() ?? []);
         }
 
-        public static IObservable<T> Additions<T>(this INotifyCollectionChanged notifyCollectionChanged)
+        public static IObservable<T> NewItems<T>(this INotifyCollectionChanged notifyCollectionChanged)
         {
             return Observable.Create<T>(observer =>
             {
                 return notifyCollectionChanged
-                .Changes()
+                .NotificationChanges()
                 .Where(a => a.Action == NotifyCollectionChangedAction.Add)
                 .Subscribe(a =>
                 {
@@ -43,7 +44,7 @@ namespace Utility.Reactives
         public static IObservable<T> Additions<T>(this IEnumerable enumerable)
         {
             if (enumerable is INotifyCollectionChanged changed)
-                return changed.Additions<T>();
+                return changed.NewItems<T>();
             else
                 return Observable.Empty<T>();
         }
@@ -56,7 +57,7 @@ namespace Utility.Reactives
         public static IObservable<T> ToOldItemsObservable<T>(this INotifyCollectionChanged notifyCollectionChanged)
         {
             return notifyCollectionChanged
-                .Changes()
+                .NotificationChanges()
                 .Where(a => a.Action == NotifyCollectionChangedAction.Remove)
                 .SelectMany(x => x.OldItems?.Cast<T>() ?? []);
         }
@@ -65,7 +66,7 @@ namespace Utility.Reactives
         {
             return collection is INotifyCollectionChanged collectionChanged ?
                 collectionChanged
-                .Changes()
+                .NotificationChanges()
                 .Where(a => a.Action == NotifyCollectionChangedAction.Remove)
                 .SelectMany(x => x.OldItems?.Cast<T>() ?? [])
                 : O.Empty<T>();
@@ -75,7 +76,7 @@ namespace Utility.Reactives
         {
             return collection is INotifyCollectionChanged collectionChanged ?
                 collectionChanged
-                .Changes()
+                .NotificationChanges()
                 .Where(a => a.Action == NotifyCollectionChangedAction.Replace)
                 .SelectMany(x => x.NewItems?.Cast<T>().Join(x.OldItems?.Cast<T>(), a => true, b => true, (a, b) => (a, b)))
                 : O.Empty<(T @new, T old)>();
@@ -84,11 +85,11 @@ namespace Utility.Reactives
         public static IObservable<NotifyCollectionChangedAction> ToActionsObservable<T>(this INotifyCollectionChanged notifyCollectionChanged)
         {
             return notifyCollectionChanged
-                .Changes()
+                .NotificationChanges()
                 .Select(x => x.Action);
         }
 
-        public static IObservable<NotifyCollectionChangedEventArgs> Changes(this INotifyCollectionChanged collection)
+        public static IObservable<NotifyCollectionChangedEventArgs> NotificationChanges(this INotifyCollectionChanged collection)
         {
             return Observable
                    .FromEvent<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
@@ -156,7 +157,7 @@ namespace Utility.Reactives
                     observer.OnNext(x);
 
                 if (collection is INotifyCollectionChanged notifyCollection)
-                    return Additions<T>(notifyCollection).Subscribe(observer);
+                    return NewItems<T>(notifyCollection).Subscribe(observer);
                 return Disposable.Empty;
             });
         }
@@ -169,7 +170,7 @@ namespace Utility.Reactives
                     observer.OnNext(x);
 
                 if (collection is INotifyCollectionChanged notifyCollection)
-                    return Additions<T>(notifyCollection).Subscribe(observer);
+                    return NewItems<T>(notifyCollection).Subscribe(observer);
                 return Disposable.Empty;
             });
         }
@@ -183,7 +184,7 @@ namespace Utility.Reactives
                 foreach (var x in collection)
                     observer.OnNext(x);
 
-                return Additions<TR>((INotifyCollectionChanged)collection).Subscribe(observer);
+                return NewItems<TR>((INotifyCollectionChanged)collection).Subscribe(observer);
             });
         }
 
@@ -194,7 +195,7 @@ namespace Utility.Reactives
                 foreach (TR x in collection)
                     observer.OnNext(x);
                 if (collection is INotifyCollectionChanged incc)
-                    return Additions<TR>(incc).Subscribe(observer);
+                    return NewItems<TR>(incc).Subscribe(observer);
                 return Disposable.Empty;
             });
         }
@@ -208,7 +209,7 @@ namespace Utility.Reactives
         {
             return O.Create<(TR, TR)>(observer =>
             {
-                return Changes(collection)
+                return NotificationChanges(collection)
                     .Where(a => a.Action == NotifyCollectionChangedAction.Replace)
                     .Subscribe(a =>
                     {
@@ -248,6 +249,22 @@ namespace Utility.Reactives
         public static IObservable<(TR, TR)> Replacements<TR>(this ObservableCollection<TR> collection)
         {
             return Replacements<ObservableCollection<TR>, TR>(collection);
+        }
+
+        public static ObservableCollection<T> ToObservableCollection<T>(this IObservable<T> observable, IScheduler? scheduler = null)
+        {
+            var obs = new ObservableCollection<T>();
+
+            observable
+                .Subscribe(a =>
+                {
+                    if (scheduler == null)
+                        obs.Add(a);
+                    else
+                        scheduler.Schedule(() => obs.Add(a));
+                });
+
+            return obs;
         }
     }
 }
