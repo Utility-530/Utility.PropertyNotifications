@@ -27,9 +27,9 @@
                 Value="1.12" />
         </DoubleAnimationUsingKeyFrames>
         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_Card" Storyboard.TargetProperty="(materialDesign:ElevationAssist.Elevation)">
-            <DiscreteObjectKeyFrame KeyTime="0:0:0.08" Value="2" />
-            <DiscreteObjectKeyFrame KeyTime="0:0:0.12" Value="3" />
-            <DiscreteObjectKeyFrame KeyTime="0:0:0.16" Value="4" />
+            <DiscreteObjectKeyFrame KeyTime="0:0:0.08" Value="{x:Static materialDesign:Elevation.Dp2}" />
+            <DiscreteObjectKeyFrame KeyTime="0:0:0.12" Value="{x:Static materialDesign:Elevation.Dp3}" />
+            <DiscreteObjectKeyFrame KeyTime="0:0:0.16" Value="{x:Static materialDesign:Elevation.Dp4}" />
         </ObjectAnimationUsingKeyFrames>
     </Storyboard>
 
@@ -47,9 +47,9 @@
                 Value="1" />
         </DoubleAnimationUsingKeyFrames>
         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_Card" Storyboard.TargetProperty="(materialDesign:ElevationAssist.Elevation)">
-            <DiscreteObjectKeyFrame KeyTime="0:0:0.12" Value="4" />
-            <DiscreteObjectKeyFrame KeyTime="0:0:0.16" Value="3" />
-            <DiscreteObjectKeyFrame KeyTime="0:0:0.22" Value="2" />
+            <DiscreteObjectKeyFrame KeyTime="0:0:0.12" Value="{x:Static materialDesign:Elevation.Dp4}"/>
+            <DiscreteObjectKeyFrame KeyTime="0:0:0.16" Value="{x:Static materialDesign:Elevation.Dp3}" />
+            <DiscreteObjectKeyFrame KeyTime="0:0:0.22" Value="{x:Static materialDesign:Elevation.Dp2}" />
         </ObjectAnimationUsingKeyFrames>
     </Storyboard>
 
