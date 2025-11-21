@@ -95,7 +95,7 @@
     <DataTemplate x:Key="Nullable`1[Enum]">
         <ComboBox IsEnabled="false">
             <i:Interaction.Behaviors>
-                <bhvrs:EnumComboBehavior Enum="{Binding Type, Mode=OneWay}" Value="{Binding Value.Value, Mode=OneWay}" />
+                <bhvrs:EnumComboBehavior EnumType="{Binding Type, Mode=OneWay}" Value="{Binding Value.Value, Mode=OneWay}" />
                 <ad:NullBehavior ShowCancel="{Binding Value.HasValue, Mode=OneWay}"></ad:NullBehavior>
             </i:Interaction.Behaviors>
         </ComboBox>
