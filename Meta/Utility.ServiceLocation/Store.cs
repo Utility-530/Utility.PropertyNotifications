@@ -4,6 +4,9 @@
 // See the LICENSE file in the project root for full license information.
 
 
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using Utility.Interfaces.NonGeneric;
 using Utility.Interfaces.NonGeneric.Dependencies;
 
 namespace Utility.ServiceLocation;
@@ -25,7 +28,7 @@ namespace Utility.ServiceLocation;
 public partial class Store : IResolver, IRegister, IDisposable
 {
     private readonly Dictionary<(Type serviceType, string? contract), List<Action<IDisposable>>> _callbackRegistry;
-    private Dictionary<(Type serviceType, string? contract), List<Func<object?>>>? _registry;
+    private Dictionary<(Type serviceType, string? contract), IList<Func<object?>>>? _registry;
 
     private bool _isDisposed;
 
@@ -41,10 +44,10 @@ public partial class Store : IResolver, IRegister, IDisposable
     /// Initializes a new instance of the <see cref="ModernDependencyResolver"/> class.
     /// </summary>
     /// <param name="registry">A registry of services.</param>
-    protected Store(Dictionary<(Type serviceType, string? contract), List<Func<object?>>>? registry)
+    protected Store(Dictionary<(Type serviceType, string? contract), IList<Func<object?>>>? registry)
     {
         _registry = registry is not null ?
-            registry.ToDictionary(k => k.Key, v => v.Value.ToList()) :
+            registry.ToDictionary(k => k.Key, v => (IList<Func<object?>>)new ObservableCollection<Func<object?>>(v.Value)) :
             [];
 
         _callbackRegistry = [];
@@ -119,7 +122,7 @@ public partial class Store : IResolver, IRegister, IDisposable
 
     public object this[Type type]
     {
-        get=> Resolve(type) ?? throw new InvalidOperationException($"No registration for {type} found.");
+        get => Resolve(type) ?? throw new InvalidOperationException($"No registration for {type} found.");
         set
         {
             if (value is Func<object?> factory)
@@ -165,7 +168,7 @@ public partial class Store : IResolver, IRegister, IDisposable
     }
 
     /// <inheritdoc />
-    public IEnumerable<object> ResolveMany(Type? serviceType, string? contract = null)
+    public ObservableCollection<object> ResolveMany(Type? serviceType, string? contract = null)
     {
         if (_registry is null)
         {
@@ -175,7 +178,45 @@ public partial class Store : IResolver, IRegister, IDisposable
         serviceType ??= typeof(NullServiceType);
 
         var pair = GetKey(serviceType, contract);
-        return !_registry.TryGetValue(pair, out var value) ? Array.Empty<object>() : value.ConvertAll(x => x()!);
+        ObservableCollection<object> obs = new();
+        if (!_registry.TryGetValue(pair, out var value))
+            return obs;
+        
+        foreach (var item in value) {
+            obs.Add(item());
+        }
+        if(value is INotifyCollectionChanged changed)
+     {
+            changed.CollectionChanged += (s, e) =>
+            {
+                if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems is not null)
+                {
+                    foreach (var newItem in e.NewItems)
+                    {
+                        if (newItem is Func<object?> func)
+                        {
+                            obs.Add(func());
+                        }
+                    }
+                }
+                else if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems is not null)
+                {
+                    foreach (var oldItem in e.OldItems)
+                    {
+                        if (oldItem is Func<object?> func)
+                        {
+                            var toRemove = func();
+                            obs.Remove(toRemove);
+                        }
+                    }
+                }
+                else if (e.Action == NotifyCollectionChangedAction.Reset)
+                {
+                    obs.Clear();
+                }
+            };
+        }
+        return obs;
     }
 
     /// <inheritdoc />

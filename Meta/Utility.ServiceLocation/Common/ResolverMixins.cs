@@ -3,6 +3,8 @@
 // ReactiveUI licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
+using System.Collections.ObjectModel;
+using Utility.Helpers.Reflection;
 using Utility.Interfaces.NonGeneric.Dependencies;
 
 namespace Utility.ServiceLocation;
@@ -23,9 +25,13 @@ public static class ResolverMixins
     public static T? Resolve<T>(this IResolver resolver, string? contract = null)
     {
         resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
-
-        return (T?)resolver.Resolve(typeof(T), contract);
-    }
+        var resolution = resolver.Resolve(typeof(T), contract);
+        if (resolution is T t)
+            return t;
+        else if (resolution is Func<T> method)
+            return (T?)method();
+        throw new Exception("$£V£D£DDFFD;");
+      }
 
     /// <summary>
     /// Gets all instances of the given <typeparamref name="T"/>. Must return an empty
@@ -36,11 +42,11 @@ public static class ResolverMixins
     /// <param name="contract">A optional value which will retrieve only a object registered with the same contract.</param>
     /// <returns>A sequence of instances of the requested <typeparamref name="T"/>. The sequence
     /// should be empty (not <c>null</c>) if no objects of the given type are available.</returns>
-    public static IEnumerable<T> ResolveMany<T>(this IResolver resolver, string? contract = null)
+    public static ObservableCollection<object> ResolveMany<T>(this IResolver resolver, string? contract = null)
     {
         resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
 
-        return resolver.ResolveMany(typeof(T), contract).Cast<T>();
+        return resolver.ResolveMany(typeof(T), contract);
     }
 
     /// <summary>
@@ -158,7 +164,17 @@ public static class ResolverMixins
     /// <param name="resolver">The resolver to register the service type with.</param>
     /// <param name="valueFactory">A factory method for generating a object of the specified type.</param>
     /// <param name="contract">A optional contract value which will indicates to only return the value if this contract is specified.</param>
-    public static void Register<T>(this IRegister resolver, Func<T?> valueFactory, string? contract = null) => Register(resolver, () => valueFactory(), typeof(T), contract);
+    public static void Register<T, TR>(this IRegister resolver, Func<TR>? valueFactory = null, string? contract = null)
+        where TR : class, T =>
+        Register(resolver,
+            valueFactory == null ?
+            ConstructorFactory.Create<TR> :
+            valueFactory,
+            typeof(T),
+            contract);
+
+    public static void Register<TR>(this IRegister resolver, Func<TR>? valueFactory = null, string? contract = null) where TR : class
+        => Register<TR, TR>(resolver, valueFactory, contract);
 
     /// <summary>
     /// Unregisters the current the value for the specified type and the optional contract.
