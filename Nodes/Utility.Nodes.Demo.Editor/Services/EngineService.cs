@@ -6,6 +6,7 @@ using Utility.Models.Trees;
 using Utility.Nodes.Meta;
 using Utility.Repos;
 using Utility.Services.Meta;
+using Utility.ServiceLocation;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -19,8 +20,11 @@ namespace Utility.Nodes.Demo.Filters.Services
         public static INodeSource Change(Model<string> dataFileModel)
         {
             var engine = dictionary.Get(dataFileModel.Guid, a =>
-            new NodeEngine(new TreeRepository(Path.Combine(dataFileModel.Value + ".sqlite")))
-            );
+            {
+                var engine = new NodeEngine(new TreeRepository(Path.Combine(dataFileModel.Value + ".sqlite")));
+                Globals.Register.Register<INodeSource>(engine);  
+                return engine;
+            });
             return engine;
         }
     }
