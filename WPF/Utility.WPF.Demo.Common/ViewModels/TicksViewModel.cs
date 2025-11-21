@@ -6,6 +6,7 @@ using Microsoft.Xaml.Behaviors.Core;
 using Utility.Helpers.Ex;
 using Utility.ServiceLocation;
 using Utility.WPF.Demo.Common.Meta;
+using Utility.Helpers.Generic;
 
 namespace Utility.WPF.Demo.Common.ViewModels
 {
