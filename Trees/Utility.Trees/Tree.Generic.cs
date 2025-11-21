@@ -157,35 +157,9 @@ namespace Utility.Trees
 
         protected override IList CreateChildren()
         {
-            var m_items = new ObservableCollection<ITree<T>>();
-            m_items.CollectionChanged += ItemsOnCollectionChanged;
-            return m_items;
+            return new ObservableCollection<ITree<T>>();
         }
 
-        private void ResetOnCollectionChangedEvent()
-        {
-            if (m_items != null)
-                (m_items as ObservableCollection<ITree<T>>).CollectionChanged -= ItemsOnCollectionChanged;
-        }
-
-        private void ItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
-        {
-            if (args.Action == NotifyCollectionChangedAction.Add && args.NewItems != null)
-            {
-                foreach (var item in args.NewItems.Cast<Tree<T>>())
-                {
-                    item.Parent = this;
-                }
-            }
-            else if (args.Action != NotifyCollectionChangedAction.Move && args.OldItems != null)
-            {
-                foreach (var item in args.OldItems.Cast<Tree<T>>())
-                {
-                    item.Parent = null;
-                    item.ResetOnCollectionChangedEvent();
-                }
-            }
-        }
 
         public override IEnumerator<ITree> GetEnumerator()
         {
