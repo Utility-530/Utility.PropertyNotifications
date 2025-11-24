@@ -127,21 +127,4 @@ namespace Utility.Models
                                                     select x;
         }
     }
-
-    public static class ModelResolverExtensions
-    {
-        public static System.Type toType(this object data)
-        {
-            return data is IGetType { } getType ? getType.GetType() : data.GetType();
-        }
-
-        public static string Name(this ITree node)
-        {
-            if (node is IGetName getName)
-            {
-                return getName.Name;
-            }
-            return node.ToString();
-        }
-    }
 }

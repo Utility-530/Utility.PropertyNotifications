@@ -1,6 +1,7 @@
 ﻿using System;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Interfaces
 {
@@ -33,5 +34,19 @@ namespace Utility.Interfaces
         public static Guid Guid(this IGetGuid getKey) => getKey.Guid;
 
         public static void SetGuid(this ISetGuid setParent, Guid parent) => setParent.Guid = parent;
+
+        public static string Name(this ITree node)
+        {
+            if (node is IGetName getName)
+            {
+                return getName.Name;
+            }
+            return node.ToString();
+        }
+
+        public static System.Type toType(this object data)
+        {
+            return data is IGetType { } getType ? getType.GetType() : data.GetType();
+        }
     }
 }
