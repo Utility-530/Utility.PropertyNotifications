@@ -109,6 +109,10 @@ namespace Utility.Models.Diagrams
                             {
                                 if (disposable != null)
                                     disposable.Dispose();
+                                if (cacheIn.InValues.ContainsKey(methodParameterIn.Name)== false)
+                                {
+                                    throw new Exception($"Method, {cacheIn.MethodInfo.Name}, does not contain a parameter, {methodParameterIn.Name}!");
+                                }
                                 disposable = subscribe<TParamOut>(a, cacheIn.InValues[methodParameterIn.Name].OnNext);
                             }, cache.OutValue));
                         }
@@ -196,7 +200,7 @@ namespace Utility.Models.Diagrams
                 if (attribute.Event.HasFlag(Enums.CLREvent.CollectionChanged) &&
                     a is INotifyCollectionChanged collectionChanged)
                 {
-                    var sub = collectionChanged.Changes().Subscribe(async _ =>
+                    var sub = collectionChanged.NotificationChanges().Subscribe(async _ =>
                     {
                         await triggerIfChangedAsync((x, y) => false, cts.Token);
                     });
