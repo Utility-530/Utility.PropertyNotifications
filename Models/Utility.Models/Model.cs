@@ -155,11 +155,11 @@ namespace Utility.Models
             this.Descendants()
                 .Subscribe(a =>
                 {
-                    if (a.Type == Changes.Type.Add)
+                    if (a.Type == Utility.Changes.Type.Add)
                         AddDescendant(a.NewItem, a.Level);
-                    else if (a.Type == Changes.Type.Remove)
+                    else if (a.Type == Utility.Changes.Type.Remove)
                         SubtractDescendant(a.NewItem, a.Level);
-                    else if (a.Type == Changes.Type.Update)
+                    else if (a.Type == Utility.Changes.Type.Update)
                         ReplaceDescendant(a.NewItem, a.OldItem, a.Level);
                     else
                         throw new Exception("Cds 333222");

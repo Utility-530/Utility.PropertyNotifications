@@ -101,7 +101,7 @@ namespace Utility.Models.Trees
                             source.Nodes.AndChanges<INodeViewModel>().Subscribe(a =>
                             {
                                 foreach (var item in a)
-                                    if (item.Type == Changes.Type.Add)
+                                    if (item.Type == Utility.Changes.Type.Add)
                                         if (ResolvableModel.TryGetValue(item.Value, out var x))
                                         {
                                             list.Add(x);
@@ -138,7 +138,7 @@ namespace Utility.Models.Trees
                 case _value:
                     Model = a as ValueModel;
                     Model.WithChangesTo(a => a.IsListening)
-                        .CombineLatest(source.Selections)
+                        .CombineLatest(source.Nodes.AndAdditions().SelectMany(a => a.WithChangesTo(ca => (ca as IGetIsSelected).IsSelected).Select(c => a)))
                         .Where(a => a.First)
                         .Select(a => a.Second)
                         .Subscribe(selected =>
