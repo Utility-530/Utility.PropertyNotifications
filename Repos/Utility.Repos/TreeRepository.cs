@@ -1,6 +1,8 @@
 ﻿using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using SQLite;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.NonGeneric;
 using Utility.Reactives;
 using Utility.Structs.Repos;
 using static System.Environment;
@@ -8,6 +10,143 @@ using Guid = System.Guid;
 
 namespace Utility.Repos
 {
+    public class ValueRepository : TypeRepository, IValueRepository
+    {
+        private record Values
+        {
+            public Guid Guid { get; set; }
+            public string Name { get; set; }
+            public string Value { get; set; }
+            public int? TypeId { get; set; }
+            public DateTime Added { get; set; }
+        }
+
+        private Dictionary<Guid, Dictionary<string, DateValue>> values = new();
+
+        private readonly string valuesTableName;
+        Task initialisationTask;
+
+        public ValueRepository(string? dbDirectory, string? valuesTableName = nameof(Values)) : base(dbDirectory)
+        {
+            initialisationTask = initialise();
+            this.valuesTableName = valuesTableName;
+        }
+
+        private bool IsInitialised { get; set; }
+
+        private Task initialise()
+        {
+            if (IsInitialised == false)
+            {
+                IsInitialised = true;
+                var task = new Task(() =>
+                {
+                    init();
+                });
+                task.Start(TaskScheduler.FromCurrentSynchronizationContext());
+                return task;
+            }
+            return initialisationTask;
+
+            void init()
+            {
+                foreach (var value in connection.Query<Values>(SqlQueries.SelectValues(valuesTableName)).ToList())
+                {
+                    if (value.TypeId.HasValue == false)
+                        continue;
+                    System.Type? type = ToType(value.TypeId.Value);
+                    object? _value;
+                    try
+                    {
+                        _value = JsonConvert.DeserializeObject(value.Value, type, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                    }
+                    catch (JsonReaderException ex)
+                    {
+                        _value = value.Value;
+                    }
+
+                    var dateValue = new DateValue(value.Guid, value.Name, value.Added, _value);
+                    if (values.ContainsKey(value.Guid) == false)
+                    {
+                        values[value.Guid] = new() { { value.Name, dateValue } };
+                    }
+                    else if (values[value.Guid].ContainsKey(value.Name) == false)
+                    {
+                        values[value.Guid].Add(value.Name, dateValue);
+                    }
+                }
+            }
+        }
+
+
+        public virtual async void Set(Guid guid, string name, object value, DateTime dateTime)
+        {
+            await initialisationTask;
+            string text;
+            if (values.ContainsKey(guid) && values[guid].ContainsKey(name) && values[guid][name].Value?.Equals(value) == true)
+                return;
+
+            text = JsonConvert.SerializeObject(value, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+            var query = $"SELECT * FROM '{valuesTableName}' WHERE Guid = ? AND Name = ? AND Value = ?";
+            var typeId = TypeId(value?.GetType());
+            if (connection.Query<Values>(query, guid, name, text).Count == 0)
+            {
+                connection.Insert(new Values { Guid = guid, Value = text, Name = name, Added = dateTime, TypeId = typeId });
+            }
+            else
+            {
+                connection.Execute($"UPDATE '{valuesTableName}' SET Added = '{SQLiteHelper.date()}' WHERE Guid = '{guid}' AND Name = '{name}' AND Value = '{text}'");
+            }
+            values.Get(guid)[name] = new(guid, name, dateTime, value);
+        }
+
+        public virtual IObservable<DateValue> Get(Guid guid, string? name = null)
+        {
+
+            return Observable.Create<DateValue>(observer =>
+            {
+                return initialisationTask.ToObservable().Subscribe(a =>
+                {
+                    if (values.ContainsKey(guid))
+                    {
+                        if (name != null)
+                        {
+                            if (values[guid].ContainsKey(name))
+                                observer.OnNext((DateValue)values[guid][name]);
+                            else
+                                observer.OnNext(new DateValue(guid, name, default, null));
+                        }
+                        else
+                        {
+                            foreach (var value in values[guid].Values)
+                            {
+                                observer.OnNext((DateValue)value);
+                            }
+                        }
+                    }
+                    observer.OnCompleted();
+                });
+            });
+        }
+
+        public void Copy(Guid guid, Guid newGuid)
+        {
+            var table = connection.FindWithQuery<Values>("SELECT * FROM ? WHERE Guid = ?", valuesTableName, guid);
+            if (table is Values { Value: { } text, TypeId: { } typeId })
+            {
+                connection.InsertOrReplace(new Values { Guid = newGuid, Value = text, TypeId = typeId });
+            }
+        }
+
+        public bool ValueExists(Guid guid)
+        {
+            if (values.ContainsKey(guid))
+                return true;
+            var tables = connection.Query<Values>($"SELECT * FROM {valuesTableName} WHERE {nameof(Values.Guid)} = ?", guid);
+            return tables.Any();
+        }
+    }
+
     public static class SqlQueries
     {
         // Generic
@@ -71,18 +210,166 @@ namespace Utility.Repos
         public const string SelectTypeId =
             "SELECT Id FROM Type WHERE Assembly = ? AND Namespace = ? AND Name = ? AND GenericTypeNames IS ?";
 
-        public const string SelectValues = "SELECT v.* FROM \"Values\" v JOIN (SELECT Guid, Name, MAX(Added) AS MaxAdded FROM \"Values\" GROUP BY Guid, Name) latest ON v.Guid = latest.Guid AND v.Name = latest.Name AND v.Added = latest.MaxAdded;";
+        public static string SelectValues(string valuesTableName) =>
+             $"SELECT v.* FROM \"{valuesTableName}\" v " +
+                   $"JOIN (SELECT Guid, Name, MAX(Added) AS MaxAdded " +
+                   $"FROM \"{valuesTableName}\" " +
+                   $"GROUP BY Guid, Name) latest " +
+                   $"ON v.Guid = latest.Guid AND v.Name = latest.Name AND v.Added = latest.MaxAdded;";
+
     }
 
-    public class TreeRepository : ITreeRepository
+    public class TypeRepository
     {
-        private Dictionary<Guid, Dictionary<string, DateValue>> values = new();
-        private Dictionary<int, System.Type> types = new();
-        private Dictionary<Guid, string> tablelookup = new();
+        private record Types
+        {
+            [PrimaryKey, AutoIncrement]
+            public int Id { get; set; }
+            public string? Assembly { get; set; }
+            public string? Namespace { get; set; }
+            public string Name { get; set; }
+            public string? GenericTypeNames { get; set; }
+        }
 
+        protected readonly SQLiteConnection connection;
+        private Dictionary<int, System.Type> types = new();
+
+        private bool IsInitialised { get; set; }
+
+        public TypeRepository(string? dbDirectory = null)
+        {
+            this.connection = CreateConnection(dbDirectory);
+            connection.CreateTable<Types>();
+            initialise();
+
+            static SQLiteConnection CreateConnection(string? dbDirectory)
+            {
+                //if (dbDirectory == null)
+                //{
+                //    return new SQLiteConnection(":memory:");
+                //}     
+                if (dbDirectory == null)
+                    return new SQLiteConnection("data.sqlite", false);
+                else
+                {
+                    //if file name
+                    if (string.IsNullOrEmpty(System.IO.Path.GetExtension(dbDirectory)) == false)
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(dbDirectory));
+                        return new SQLiteConnection(dbDirectory, false);
+                    }
+                    // if directory name
+                    else
+                    {
+                        Directory.CreateDirectory(dbDirectory);
+                        return new SQLiteConnection(Path.Combine(dbDirectory, "data.sqlite"), false);
+                    }
+                }
+
+            }
+        }
+
+        private void initialise()
+        {
+            if (IsInitialised == false)
+            {
+                IsInitialised = true;
+
+                foreach (var type in connection.Table<Types>().ToList())
+                {
+                    if (types.TryAdd(type.Id, convert(type)) == false)
+                    {
+
+                    }
+                }
+
+            }
+
+        }
+
+        public System.Type? ToType(int typeId)
+        {
+            if (typeId == -1)
+                return null;
+
+            if (types.ContainsKey(typeId))
+                return types[typeId];
+
+            var type = connection.Table<Types>().Where(v => v.Id.Equals(typeId)).First();
+            var systemType = convert(type);
+
+            lock (types)
+                types[typeId] = systemType;
+
+            return systemType;
+        }
+
+        public int TypeId(System.Type? type)
+        {
+            if (type == null)
+                return -1;
+            if (this.types.ToArray().FirstOrDefault(x => x.Value == type) is { Key: { } key, Value: { } value })
+                return key;
+            if (type.GenericTypeArguments.Any())
+            {
+            }
+            int typeId = 0;
+            var str = type.GenericTypeArguments.Any() ? string.Join('|', type.GenericTypeArguments.Select(a => TypeSerialization.TypeSerializer.Serialize(a))) : null;
+            connection.RunInTransaction(() =>
+            {
+                connection.Insert(new Types { Assembly = type.Assembly.FullName, Namespace = type.Namespace, Name = type.Name, GenericTypeNames = str });
+                var types = connection.Query<Types>($"SELECT * FROM '{nameof(Types)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' AND {nameof(Types.GenericTypeNames)} {SQLiteHelper.ToComparisonAndValue(str)}");
+                if (types.Count > 1)
+                    throw new Exception("fds ");
+            });
+
+            typeId = connection.ExecuteScalar<int>($"SELECT Id FROM '{nameof(Types)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' AND {nameof(Types.GenericTypeNames)} {SQLiteHelper.ToComparisonAndValue(str)}");
+            this.types[typeId] = type;
+            return typeId;
+        }
+
+
+        private System.Type convert(Types type)
+        {
+            try
+            {
+                var ass = Assembly.Load(type.Assembly);
+            }
+            catch (Exception ex)
+            {
+                string assemblyFileName = type.Assembly.Split(',')[0];
+                foreach (var file in System.IO.Directory.EnumerateFiles(AssembliesPath, "*.dll"))
+                {
+                    if (file.Contains(assemblyFileName))
+                    {
+                        var ass = Assembly.LoadFrom(file);
+                        break;
+                    }
+                }
+            }
+
+            string assemblyQualifiedName = Assembly.CreateQualifiedName(type.Assembly, $"{type.Namespace}.{type.Name}");
+            var baseType = System.Type.GetType(assemblyQualifiedName);
+            var typeArguments = type.GenericTypeNames?.Split('|').Select(a => new TypeSerialization.TypeDeserializer().Deserialize(a)).ToArray();
+            System.Type constructedType = typeArguments == null ? baseType : baseType.MakeGenericType(typeArguments);
+            if (constructedType == null)
+                throw new Exception($"Type, {assemblyQualifiedName},  does not exist");
+            return constructedType;
+        }
+
+        public static readonly string AssembliesPath = System.IO.Path.Combine(ProgramData, Utility, "Assemblies");
+
+        public const string Utility = nameof(Utility);
+
+        public static readonly string ProgramData = GetFolderPath(SpecialFolder.CommonApplicationData);
+    }
+
+    public class TreeRepository : TypeRepository, ITreeRepository
+    {
+        private Dictionary<Guid, string> tablelookup = new();
         public const string No_Existing_Table_No_Name_To_Create_New_One = "ioioi* 22144 fd3323";
 
-        public record Relationships
+        private record Relationships
         {
             [PrimaryKey, AutoIncrement]
             public int Id { get; set; }
@@ -95,58 +382,22 @@ namespace Utility.Repos
             public int? TypeId { get; set; }
         }
 
-        public record Values
-        {
-            public Guid Guid { get; set; }
-            public string Name { get; set; }
-            public string Value { get; set; }
-            public int? TypeId { get; set; }
-            public DateTime Added { get; set; }
-        }
-
-        public record Type
-        {
-            [PrimaryKey, AutoIncrement]
-            public int Id { get; set; }
-            public string? Assembly { get; set; }
-            public string? Namespace { get; set; }
-            public string Name { get; set; }
-            public string? GenericTypeNames { get; set; }
-        }
-
         public record String
         {
             public string Name { get; set; }
         }
 
-        private readonly SQLiteConnection connection;
+
         private readonly Task initialisationTask;
 
-        public TreeRepository(string? dbDirectory = default)
-        {
-            if (dbDirectory == null)
-                connection = new SQLiteConnection("data.sqlite", false);
-            else
-            {
-                //if file name
-                if (string.IsNullOrEmpty(System.IO.Path.GetExtension(dbDirectory)) == false)
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(dbDirectory));
-                    connection = new SQLiteConnection(dbDirectory, false);
-                }
-                // if directory name
-                else
-                {
-                    Directory.CreateDirectory(dbDirectory);
-                    connection = new SQLiteConnection(Path.Combine(dbDirectory, "data.sqlite"), false);
-                }
-            }
 
+        public TreeRepository(string? dbDirectory = default) : base(dbDirectory)
+        {
             connection.CreateTable<Relationships>();
-            connection.CreateTable<Values>();
-            connection.CreateTable<Type>();
             initialisationTask = Initialise();
         }
+
+
 
         public bool IsInitialised { get; set; }
 
@@ -159,36 +410,6 @@ namespace Utility.Repos
                     foreach (var relationship in connection.Table<Relationships>().ToList())
                     {
                         setName(relationship.Guid, relationship.Name);
-                    }
-                    foreach (var type in connection.Table<Type>().ToList())
-                    {
-                        types.Add(type.Id, convert(type));
-                    }
-
-                    foreach (var value in connection.Query<Values>(SqlQueries.SelectValues).ToList())
-                    {
-                        if (value.TypeId.HasValue == false)
-                            continue;
-                        System.Type? type = ToType(value.TypeId.Value);
-                        object? _value;
-                        try
-                        {
-                            _value = JsonConvert.DeserializeObject(value.Value, type, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-                        }
-                        catch (JsonReaderException ex)
-                        {
-                            _value = value.Value;
-                        }
-
-                        var dateValue = new DateValue(value.Guid, value.Name, value.Added, _value);
-                        if (values.ContainsKey(value.Guid) == false)
-                        {
-                            values[value.Guid] = new() { { value.Name, dateValue } };
-                        }
-                        else if (values[value.Guid].ContainsKey(value.Name) == false)
-                        {
-                            values[value.Guid].Add(value.Name, dateValue);
-                        }
                     }
                     IsInitialised = true;
                 });
@@ -257,14 +478,7 @@ namespace Utility.Repos
             });
         }
 
-        public bool ValueExists(Guid guid)
-        {
-            if (values.ContainsKey(guid))
-                return true;
 
-            var table = connection.Find<Values>(guid);
-            return table is Values { Value: { }, Added: { }, TypeId: { } };
-        }
 
         public IEnumerable<Duplication> Duplicate(Guid oldGuid, Guid? newParentGuid = default)
         {
@@ -388,7 +602,7 @@ namespace Utility.Repos
                     if (parentGuid == Guid.Empty)
                     {
                     }
-                    string query = $"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' {includeClause($"AND Guid {ToComparisonAndValue(guid)}", guid)} {includeClause($"AND Name {ToComparisonAndValue(name)}", name)}  {includeClause($"AND _Index {ToComparisonAndValue(index)}", index)}  {includeClause($"AND TypeId {ToComparisonAndValue(typeId)}", type)}";
+                    string query = $"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' {includeClause($"AND Guid {SQLiteHelper.ToComparisonAndValue(guid)}", guid)} {includeClause($"AND Name {SQLiteHelper.ToComparisonAndValue(name)}", name)}  {includeClause($"AND _Index {SQLiteHelper.ToComparisonAndValue(index)}", index)}  {includeClause($"AND TypeId {SQLiteHelper.ToComparisonAndValue(typeId)}", type)}";
                     var tables = connection.Query<Relationships>(query);
                     if (tables.Count == 0)
                     {
@@ -457,7 +671,7 @@ namespace Utility.Repos
                 var sql = "SELECT name FROM sqlite_master WHERE type ='table' AND sql LIKE '%Removed%' AND tbl_name != 'Relationships'";
                 foreach (var table_name in connection.Query<String>(sql))
                 {
-                    var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' {includeClause($"AND Guid {ToComparisonAndValue(guid)}", guid)} {includeClause($"AND Name {ToComparisonAndValue(name)}", name)}  {includeClause($"AND _Index {ToComparisonAndValue(index)}", index)}  {includeClause($"AND TypeId {ToComparisonAndValue(typeId)}", type)}");
+                    var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' {includeClause($"AND Guid {SQLiteHelper.ToComparisonAndValue(guid)}", guid)} {includeClause($"AND Name {SQLiteHelper.ToComparisonAndValue(name)}", name)}  {includeClause($"AND _Index {SQLiteHelper.ToComparisonAndValue(index)}", index)}  {includeClause($"AND TypeId {SQLiteHelper.ToComparisonAndValue(typeId)}", type)}");
 
                     if (tables.Count == 0)
                         continue;
@@ -488,7 +702,7 @@ namespace Utility.Repos
                     var guid = Guid.NewGuid();
                     setName(guid, table_name);
                     //var i = connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
-                    var query = $"INSERT INTO '{table_name}' (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {ToValue(index)}, '{parentGuid}', '{date()}', {ToValue(typeId)});";
+                    var query = $"INSERT INTO '{table_name}' (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {SQLiteHelper.ToValue(index)}, '{parentGuid}', '{SQLiteHelper.date()}', {SQLiteHelper.ToValue(typeId)});";
                     var i = connection.Execute(query);
                     observer.OnNext(guid);
                 });
@@ -566,52 +780,19 @@ namespace Utility.Repos
             string table_name;
             // need to check if removing a root since getName will return wrong value for root values
             var x = connection.FindWithQuery<Relationships>($"SELECT * FROM {nameof(Relationships)} WHERE {nameof(Relationships.Guid)} = ?", guid);
-            if(x != null)
+            if (x != null)
             {
                 table_name = nameof(Relationships);
             }
             else
                 table_name = getName(guid);
             var _date = DateTime.Now;
-            string cmd = $"UPDATE '{table_name}' SET Removed = '{date(_date)}' WHERE Guid = '{guid}'";
+            string cmd = $"UPDATE '{table_name}' SET Removed = '{SQLiteHelper.date(_date)}' WHERE Guid = '{guid}'";
             connection.Execute(cmd);
             return _date;
         }
 
-        private static string ToComparisonAndValue(object? value)
-        {
-            return ToComparison(value) + " " + ToValue(value);
-        }
 
-        private static string ToComparison(object? value)
-        {
-            return value == null ? "is" : $"=";
-        }
-
-        private static string ToValue(object? value)
-        {
-            return value == null ? "null" : $"'{value}'";
-        }
-
-        public virtual void Set(Guid guid, string name, object value, DateTime dateTime)
-        {
-            string text;
-            if (values.ContainsKey(guid) && values[guid].ContainsKey(name) && values[guid][name].Value?.Equals(value) == true)
-                return;
-
-            text = JsonConvert.SerializeObject(value, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-            var query = $"SELECT * FROM '{nameof(Values)}' WHERE Guid = ? AND Name = ? AND Value = ?";
-            var typeId = TypeId(value?.GetType());
-            if (connection.Query<Values>(query, guid, name, text).Count == 0)
-            {
-                connection.Insert(new Values { Guid = guid, Value = text, Name = name, Added = dateTime, TypeId = typeId });
-            }
-            else
-            {
-                connection.Execute($"UPDATE '{nameof(Values)}' SET Added = '{date()}' WHERE Guid = '{guid}' AND Name = '{name}' AND Value = '{text}'");
-            }
-            values.Get(guid)[name] = new(guid, name, dateTime, value);
-        }
 
         public System.Type? GetType(Guid guid, string tableName)
         {
@@ -624,110 +805,6 @@ namespace Utility.Repos
                 return ToType(single.Value);
             }
             return null;
-        }
-
-        public virtual IObservable<DateValue> Get(Guid guid, string? name = null)
-        {
-            return Observable.Create<DateValue>(observer =>
-            {
-                if (values.ContainsKey(guid))
-                {
-                    if (name != null)
-                    {
-                        if (values[guid].ContainsKey(name))
-                            observer.OnNext((DateValue)values[guid][name]);
-                        else
-                            observer.OnNext(new DateValue(guid, name, default, null));
-                    }
-                    else
-                    {
-                        foreach (var value in values[guid].Values)
-                        {
-                            observer.OnNext((DateValue)value);
-                        }
-                    }
-                }
-                observer.OnCompleted();
-                return Disposable.Empty;
-            });
-        }
-
-        public void Copy(Guid guid, Guid newGuid)
-        {
-            var table = connection.Find<Values>(guid);
-            if (table is Values { Value: { } text, TypeId: { } typeId })
-            {
-                connection.InsertOrReplace(new Values { Guid = newGuid, Value = text, TypeId = typeId });
-            }
-        }
-
-        public System.Type? ToType(int typeId)
-        {
-            if (typeId == -1)
-                return null;
-
-            if (types.ContainsKey(typeId))
-                return types[typeId];
-
-            var type = connection.Table<Type>().Where(v => v.Id.Equals(typeId)).First();
-            var systemType = convert(type);
-
-            lock (types)
-                types[typeId] = systemType;
-
-            return systemType;
-        }
-
-        private System.Type convert(Type type)
-        {
-            try
-            {
-                var ass = Assembly.Load(type.Assembly);
-            }
-            catch (Exception ex)
-            {
-                string assemblyFileName = type.Assembly.Split(',')[0];
-                foreach (var file in System.IO.Directory.EnumerateFiles(AssembliesPath, "*.dll"))
-                {
-                    if (file.Contains(assemblyFileName))
-                    {
-                        var ass = Assembly.LoadFrom(file);
-                        break;
-                    }
-                }
-            }
-
-            string assemblyQualifiedName = Assembly.CreateQualifiedName(type.Assembly, $"{type.Namespace}.{type.Name}");
-            var baseType = System.Type.GetType(assemblyQualifiedName);
-            var typeArguments = type.GenericTypeNames?.Split('|').Select(a => new TypeSerialization.TypeDeserializer().Deserialize(a)).ToArray();
-            System.Type constructedType = typeArguments == null ? baseType : baseType.MakeGenericType(typeArguments);
-            if (constructedType == null)
-                throw new Exception($"Type, {assemblyQualifiedName},  does not exist");
-            return constructedType;
-        }
-
-        public int TypeId(System.Type? type)
-        {
-            if (type == null)
-                return -1;
-            if (this.types.ToArray().FirstOrDefault(x => x.Value == type) is { Key: { } key, Value: { } value })
-                return key;
-            if (type.GenericTypeArguments.Any())
-            {
-            }
-            int typeId = 0;
-            var str = type.GenericTypeArguments.Any() ? string.Join('|', type.GenericTypeArguments.Select(a => TypeSerialization.TypeSerializer.Serialize(a))) : null;
-            connection.RunInTransaction(() =>
-            {
-                connection.Insert(new Type { Assembly = type.Assembly.FullName, Namespace = type.Namespace, Name = type.Name, GenericTypeNames = str });
-                var types = connection.Query<Type>($"SELECT * FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' AND {nameof(Type.GenericTypeNames)} {ToComparisonAndValue(str)}");
-                if (types.Count > 1)
-                    throw new Exception("fds ");
-            });
-
-            typeId = connection.ExecuteScalar<int>($"SELECT Id FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' AND {nameof(Type.GenericTypeNames)} {ToComparisonAndValue(str)}");
-            this.types[typeId] = type;
-            return typeId;
         }
 
         private void setName(Guid guid, string name)
@@ -746,12 +823,6 @@ namespace Utility.Repos
             throw new Exception("Have you created a root?");
         }
 
-        private string date(DateTime? date = null)
-        {
-            //return (date ?? DateTime.Now).ToString("'yyyy-MM-dd HH:mm:ss'");
-            return (date ?? DateTime.Now).ToString("yyyy-MM-ddTHH:mm:ss.fff");
-        }
-
         public void Reset()
         {
         }
@@ -763,17 +834,34 @@ namespace Utility.Repos
             //setName(guid, newName);
         }
 
-        public const string Utility = nameof(Utility);
-
-        public static readonly string ProgramData = GetFolderPath(SpecialFolder.CommonApplicationData);
-
         public static readonly string DataPath = System.IO.Path.Combine(ProgramData, Utility);
-
-        public static readonly string AssembliesPath = System.IO.Path.Combine(ProgramData, Utility, "Assemblies");
 
         public static TreeRepository Instance { get; } = new("../../../Data");
 
         private static readonly Dictionary<string, TreeRepository> dictionary = new();
-        //public static TreeRepository Create(string name) => dictionary.GetValueOrCreate(name, () => new TreeRepository(Path.Combine(ProgramData, name)));
+    }
+
+    internal static class SQLiteHelper
+    {
+        public static string date(DateTime? date = null)
+        {
+            //return (date ?? DateTime.Now).ToString("'yyyy-MM-dd HH:mm:ss'");
+            return (date ?? DateTime.Now).ToString("yyyy-MM-ddTHH:mm:ss.fff");
+        }
+
+        public static string ToComparisonAndValue(object? value)
+        {
+            return ToComparison(value) + " " + ToValue(value);
+        }
+
+        public static string ToComparison(object? value)
+        {
+            return value == null ? "is" : $"=";
+        }
+
+        public static string ToValue(object? value)
+        {
+            return value == null ? "null" : $"'{value}'";
+        }
     }
 }

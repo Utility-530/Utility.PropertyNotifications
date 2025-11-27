@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Disposables;
+using SQLite;
 using Utility.Interfaces.Exs;
 using Utility.Structs.Repos;
 using static Utility.Repos.TreeRepository;
@@ -7,6 +8,28 @@ namespace Utility.Repos
 {
     public class InMemoryTreeRepository : ITreeRepository
     {
+        private record Relationships
+        {
+            [PrimaryKey, AutoIncrement]
+            public int Id { get; set; }
+            public Guid Guid { get; set; }
+            public Guid Parent { get; set; }
+            public string Name { get; set; }
+            public int? _Index { get; set; }
+            public DateTime Added { get; set; }
+            public DateTime? Removed { get; set; }
+            public int? TypeId { get; set; }
+
+        }
+        private record Values
+        {
+            public Guid Guid { get; set; }
+            public string Name { get; set; }
+            public string Value { get; set; }
+            public int? TypeId { get; set; }
+            public DateTime Added { get; set; }
+        }
+
         private Dictionary<string, List<Relationships>> relationships = new();
         private Dictionary<System.Type, int> types = new();
         private Dictionary<Guid, string> names = new();
