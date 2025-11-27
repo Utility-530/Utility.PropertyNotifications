@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Linq;
+using System.Runtime.InteropServices;
 using Optional;
 using Utility.Changes;
 using Utility.Entities.Comms;
@@ -14,11 +15,18 @@ using Utility.ServiceLocation;
 
 namespace Utility.Nodes.Demo.Editor
 {
+    public class BuildAttribute : Attribute
+    {
+        public BuildAttribute(string guid, string? serviceConstructor = null)
+        {
+        }
+    }
+
     internal partial class NodeMethodFactory : EnumerableMethodFactory
     {
-        private Guid guid = Guid.Parse("D4F6C8E2-3B7A-4F2E-9F1A-8C6D8E2B3A7C");
-        private Guid subGuid = Guid.Parse("A1B2C3D4-E5F6-4789-ABCD-EF0123456789");
-        private Guid f = Guid.Parse("12345678-90AB-CDEF-1234-567890ABCDEF");
+        //private Guid guid = Guid.Parse("D4F6C8E2-3B7A-4F2E-9F1A-8C6D8E2B3A7C");
+        private const string subGuid = "A1B2C3D4-E5F6-4789-ABCD-EF0123456789";
+        private const string fileGuid = "12345678-90AB-CDEF-1234-567890ABCDEF";
 
         public const string Refresh = nameof(Refresh);
         public const string Run = nameof(Run);
@@ -44,29 +52,34 @@ namespace Utility.Nodes.Demo.Editor
         public static readonly Guid settingsRootGuid = Guid.Parse("a743505d-128c-466f-afdb-d7dd97e37a08");
         public static readonly Guid listRootGuid = Guid.Parse("7ed21df8-d54c-44e1-8d97-7fcc2591e6c1");
 
-        public IObservable<INodeViewModel> BuildContainer()
+        [Utility.Attributes.GuidAttribute(subGuid)]
+        public Model BuildContainer()
         {
-            return nodeSource.Create(
-                nameof(BuildContainer),
-                subGuid,
-               s =>
-
+            return 
                 new Model(() =>
                 [
                     new Model(() =>
                     [
-                        new Model(proliferation: () => new Model<string>(){ Name = "File", DataTemplate ="StringTemplate", SelectedItemTemplate="StringTemplate" })
+                        new Model(proliferation: () => new Model<string>()
+                        { 
+                            Name = "File", 
+                            Guid = Guid.Parse(fileGuid), 
+                            DataTemplate ="StringTemplate", 
+                            SelectedItemTemplate="StringTemplate" 
+                        })
                         {
                             Name = nameof(Files),
                             IsProliferable = true,
-                            DataTemplate = "InvisibleTemplate"
+                            DataTemplate = "InvisibleTemplate",
+                            IsExpanded = true
                         },
                         new Model(() => [new CommandModel<SaveEvent> { Name = Save }, new CommandModel<RefreshEvent> { Name = Refresh }, new CommandModel<RunEvent> { Name = Run }],
                         attach: n => {
                             n.Orientation = Enums.Orientation.Horizontal; })
                         {
                             Name = Commands,
-                            DataTemplate = "InvisibleTemplate"
+                            DataTemplate = "InvisibleTemplate",
+                            IsExpanded = true
                         }
                         ], addition:a=>
                     {
@@ -79,7 +92,8 @@ namespace Utility.Nodes.Demo.Editor
                     })
                     {
                         Name = Master,
-                        DataTemplate = "InvisibleTemplate"
+                        DataTemplate = "InvisibleTemplate",
+                        IsExpanded = true
                     },
                     new Model(attach: attach =>
                     {
@@ -108,13 +122,15 @@ namespace Utility.Nodes.Demo.Editor
                     {
                         Name = Slave,
                         IsProliferable = true,
-                        DataTemplate = "InvisibleTemplate"
+                        IsExpanded = true
                     }])
                 {
-                    Name = s,
+                    Name = nameof(BuildContainer),
                     Orientation = Enums.Orientation.Vertical,
+                    IsExpanded = true,
+                    Key = subGuid,
                     DataTemplate = "InvisibleTemplate"
-                });
+                };
         }
     }
 }

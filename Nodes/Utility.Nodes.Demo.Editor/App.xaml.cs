@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using Splat;
 using Utility.Conversions.Json.Newtonsoft;
@@ -66,11 +67,10 @@ namespace Utility.Nodes.Demo.Editor
 
             Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
             Locator.CurrentMutable.RegisterConstant<IExpander>(Utility.WPF.Trees.Expander.Instance);
-            //Locator.CurrentMutable.RegisterLazySingleton<MethodCache>(() => MethodCache.Instance);
-            Locator.CurrentMutable.RegisterLazySingleton<IObservableIndex<INodeViewModel>>(() => MethodCache.Instance);
-            Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new NodeMethodFactory());            
+            Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new NodeMethodFactory());
             Locator.CurrentMutable.RegisterLazySingleton<IFactory<IId<Guid>>>(() => new ModelFactory());
             Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
+            Locator.CurrentMutable.RegisterLazySingleton<INodeRoot>(() => new NodeEngine(new TreeRepository("../../../Data/temp.sqlite")));
 
             initialiseGlobals(Globals.Register);
             initialiseConnections(Globals.Resolver.Resolve<IServiceResolver>());
@@ -90,12 +90,14 @@ namespace Utility.Nodes.Demo.Editor
             shadowWindow.ToLeft();
             window.Show();
             shadowWindow.Show();
-            MethodCache.Instance[nameof(NodeMethodFactory.BuildContainer)]
+
+            Globals.Resolver
+                .Resolve<INodeRoot>()
+                .Create(nameof(NodeMethodFactory.BuildContainer))
                 .Subscribe(node =>
                 {
                     window.Content = node;
                     shadowWindow.Content = node;
-
                 });
 
             base.OnStartup(e);
@@ -104,10 +106,12 @@ namespace Utility.Nodes.Demo.Editor
         private static void initialiseGlobals(IRegister register)
         {
             register.Register<IServiceResolver>(() => new ServiceResolver());
-            register.Register<INodeSource>(() => new NodeEngine(childrenTracking: a => (a.Parent() as IGetName)?.Name != NodeMethodFactory.Slave));
-            register.Register<ITreeRepository>(() => new TreeRepository("../../../Data"));
+            register.Register<INodeRoot>(() => new NodeEngine(new TreeRepository("../../../Data"), childrenTracking: a => (a.Parent() as IGetName)?.Name != NodeMethodFactory.Slave));
             register.Register<IPlaybackEngine>(() => new PlaybackEngine());
+            register.Register<NodeInterface>();
+            register.Register<NodesStore>();
         }
+
         private void initialiseConnections(IServiceResolver register)
         {
             adds.Observe<TabServiceAddItemParam, AddItemActionCallbackArgs>();
@@ -119,6 +123,6 @@ namespace Utility.Nodes.Demo.Editor
 
         public AddItemActionCallback Add { get; }
 
-        public RemoveItemActionCallback Remove { get; } 
+        public RemoveItemActionCallback Remove { get; }
     }
 }

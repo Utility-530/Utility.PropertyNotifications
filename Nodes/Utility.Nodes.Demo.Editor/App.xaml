@@ -24,6 +24,7 @@
     xmlns:models="clr-namespace:Utility.Models;assembly=Utility.Models"
     xmlns:dragablz="http://schemas.utility.com/dragablz" 
     xmlns:wpf="clr-namespace:Utility.Nodes.WPF;assembly=Utility.Nodes.WPF"
+    xmlns:conv="http://schemas.utility.com/converters"
     xmlns:obj="http://schemas.utility.com/objects">
 
     <Application.Resources>
@@ -103,12 +104,12 @@
 
 
             <Style x:Key="TabExControlStyle" TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource TabControlStyle}">
-                <Setter Property="ct:TreeTabHelper.SelectedItem" Value="{Binding Current}"></Setter>
+                <Setter Property="ct:TreeTabHelper.SelectedItem" Value="{Binding Current, Mode=TwoWay}"></Setter>
                 <Setter Property="ct:TreeTabHelper.AddItemCallback" Value="{Binding Source={x:Static Application.Current}, Path='Add'}"></Setter>
                 <Setter Property="ct:TreeTabHelper.RemoveItemCallback" Value="{Binding Source={x:Static Application.Current}, Path='Remove'}"></Setter>
                 <Setter Property="ct:TreeTabHelper.Edit">
                     <Setter.Value>
-                        <models:Model Name="new"  DataTemplate = "TabStyle" IsProliferable="True"/>
+                        <models:Model Name="new" Guid="{local:Guid}" DataTemplate = "TabStyle" IsProliferable="True"/>
                     </Setter.Value>
                 </Setter>
                 <Setter Property="ct:TreeTabHelper.EditTemplate">
@@ -125,7 +126,7 @@
                         </HierarchicalDataTemplate>
                     </Setter.Value>
                 </Setter>-->
-                <Setter Property="Height" Value="800"></Setter>
+                <Setter Property="Height" Value="1200"></Setter>
                 <Setter Property="Width" Value="1800"></Setter>
             </Style>
 
@@ -134,7 +135,6 @@
                 ComboStyle="{StaticResource ComboEx2Style}"
                 TableStyle="{StaticResource TabExControlStyle}"
                 TabStyle="{StaticResource TabStyle}"
-                
                 DefaultStyle="{StaticResource DefaultStyle}" />
 
             <!--<local:SelectedItemStyleSelector

@@ -17,12 +17,12 @@ namespace Utility.Nodes.Demo.Filters.Services
     {
         private static readonly Dictionary<Guid, NodeEngine> dictionary = [];
 
-        public static INodeSource Change(Model<string> dataFileModel)
+        public static INodeRoot Change(Model<string> dataFileModel)
         {
             var engine = dictionary.Get(dataFileModel.Guid, a =>
             {
                 var engine = new NodeEngine(new TreeRepository(Path.Combine(dataFileModel.Value + ".sqlite")));
-                Globals.Register.Register<INodeSource>(engine);  
+                Globals.Register.Register<INodeRoot>(engine);  
                 return engine;
             });
             return engine;

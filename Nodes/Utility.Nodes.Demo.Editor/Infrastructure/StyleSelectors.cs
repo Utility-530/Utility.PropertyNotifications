@@ -11,7 +11,6 @@ namespace Utility.Nodes.Demo.Editor
 {
     public class ContainerStyleSelector : StyleSelector
     {
-
         public override Style SelectStyle(object item, DependencyObject container)
         {
             //var parent = (container as TreeViewItem).FindParent<TreeViewItem>();
@@ -32,7 +31,6 @@ namespace Utility.Nodes.Demo.Editor
         public Style ComboStyle { get; set; }
         public Style TableStyle { get; set; }
         public Style TabStyle { get; set; }
-
     }
 
     public class SelectedItemStyleSelector : StyleSelector

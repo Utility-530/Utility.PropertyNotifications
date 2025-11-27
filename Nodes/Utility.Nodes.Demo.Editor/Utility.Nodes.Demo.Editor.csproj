@@ -9,6 +9,12 @@
     <FileVersion>1.0.1.0</FileVersion>
     <ApplicationIcon>Icons\editor2.ico</ApplicationIcon>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Themes\**" />
+    <EmbeddedResource Remove="Themes\**" />
+    <None Remove="Themes\**" />
+    <Page Remove="Themes\**" />
+  </ItemGroup>
  <ItemGroup>
     <None Remove="Data\entireframework.min.css" />
     <None Remove="Data\master.css" />
