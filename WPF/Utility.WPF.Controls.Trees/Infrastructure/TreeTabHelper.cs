@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,8 +13,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using Endless;
+using Kaos.Collections;
+using MaterialDesignExtensions.Controls;
 using Utility.Reactives;
 using Utility.WPF.Helpers;
+using Utility.WPF.Reactives;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace Utility.WPF.Controls.Trees.Infrastructure
 {
@@ -32,7 +39,29 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
                 "SelectedItem",
                 typeof(object),
                 typeof(TreeTabHelper),
-                new PropertyMetadata());
+                new PropertyMetadata(selectedItemChanged));
+
+        private static void selectedItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is TreeViewItem tabTree)
+            {
+                for (int i = 0; i < tabTree.Items.Count; i++)
+                {
+                    TreeViewItem lastItem;
+                    if (tabTree.ItemContainerGenerator.ContainerFromIndex(i) is TreeViewItem item)
+                    {
+                        //item.IsSelected = item == container;
+                        var b = item.DataContext == e.NewValue;
+                        TreeTabHelper.SetIsSelected(item, b);
+                        if (b)
+                            ZIndexAnimator.AnimateOnSelected(tabTree, item);
+                        //TreeViewItemExtensions.SetIsSelectedReflective(item, item == container);
+
+                    }
+                }
+
+            }
+        }
 
         public static object GetSelectedItem(DependencyObject obj)
         {
@@ -97,6 +126,30 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
         {
             obj.SetValue(IsLoadedProperty, value);
         }
+
+
+        public static readonly DependencyProperty IsSelectedProperty =
+            DependencyProperty.RegisterAttached(
+                "IsSelected",
+                typeof(bool),
+                typeof(TreeTabHelper),
+                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, selectedChanged));
+
+        private static void selectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+
+        }
+
+        public static bool GetIsSelected(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(IsSelectedProperty);
+        }
+
+        public static void SetIsSelected(DependencyObject obj, bool value)
+        {
+            obj.SetValue(IsSelectedProperty, value);
+        }
+
 
 
         public static readonly DependencyProperty ParentItemCountProperty =
@@ -178,17 +231,17 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
             => (Thickness)element.GetValue(TotalTabOffsetProperty);
 
 
-        public static readonly DependencyProperty DoubleProperty =
+        public static readonly DependencyProperty ContentOpacityProperty =
             DependencyProperty.RegisterAttached(
-                "Double", typeof(double),
+                "ContentOpacity", typeof(double),
                 typeof(TreeTabHelper),
                 new FrameworkPropertyMetadata(1.0));
 
-        public static void SetDouble(DependencyObject element, double value)
-            => element.SetValue(DoubleProperty, value);
+        public static void SetContentOpacity(DependencyObject element, double value)
+            => element.SetValue(ContentOpacityProperty, value);
 
-        public static double GetDouble(DependencyObject element)
-            => (double)element.GetValue(DoubleProperty);
+        public static double GetContentOpacity(DependencyObject element)
+            => (double)element.GetValue(ContentOpacityProperty);
 
 
         public static readonly DependencyProperty DepthProperty =
@@ -271,16 +324,44 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
                                         process(container, index);
                                         if (container.IsSelected)
                                         {
-                                            ZIndexAnimator.AnimateOnSelected(tabTree, container);
+                                            //TreeTabHelper.SetSelectedItem(tabTree, container.DataContext);
+                                            //ZIndexAnimator.AnimateOnSelected(tabTree, container);
                                         }
-                                        container.Selected += (s, _) =>
+                                        //container.Selected += (s, _) =>
+                                        //{
+                                        //    if (container.IsSelected)
+                                        //    {
+                                        //        TreeTabHelper.SetSelectedItem(tabTree, container.DataContext);
+                                        //        ZIndexAnimator.AnimateOnSelected(tabTree, container);
+                                        //    }
+                                        //};
+                                        container.MouseLeftButtonUp += (s, _) =>
                                         {
-                                            if (container.IsSelected)
+                                            //TreeTabHelper.SetSelectedItem(tabTree, container.DataContext);
+
+                                            for (int i = 0; i < tabTree.Items.Count; i++)
                                             {
-                                                TreeTabHelper.SetSelectedItem(tabTree, container.DataContext);
-                                                ZIndexAnimator.AnimateOnSelected(tabTree, container);
+                                                TreeViewItem lastItem;
+                                                if (tabTree.ItemContainerGenerator.ContainerFromIndex(i) is TreeViewItem item)
+                                                {
+                                                    //item.IsSelected = item == container;
+                                                    TreeTabHelper.SetIsSelected(item, item == container);
+                                                    //TreeViewItemExtensions.SetIsSelectedReflective(item, item == container);
+
+                                                }
                                             }
+                                            ZIndexAnimator.AnimateOnSelected(tabTree, container);
+
                                         };
+
+                                        container.Observe(a => a.IsSelected)
+                                        .Where(a => a == true)
+                                        .Subscribe(a =>
+                                        {
+                                            TreeTabHelper.SetSelectedItem(tabTree, container.DataContext);
+                                            ZIndexAnimator.AnimateOnSelected(tabTree, container);
+                                        });
+
                                         container.Unloaded += (s, e) =>
                                         {
                                             ZIndexAnimator.AnimateOnRemoval(tabTree, container);
@@ -319,7 +400,7 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
                             process(item, i);
                             if (first)
                             {
-                                item.Selected += (s, _) =>
+                                item.MouseLeftButtonUp += (s, _) =>
                                 {
                                     if (item.IsSelected)
                                     {
@@ -395,7 +476,7 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
                 void update(TreeViewItem tvi, int i)
                 {
                     TreeTabHelper.SetTabOffset(tvi, new Thickness(totalWidth, 0, 0, 0));
-                    totalWidth += VisualTreeExHelper.FindChild<Border>(tvi, "TabHeader").ActualWidth;
+                    totalWidth += VisualTreeExHelper.FindChild<Border>(tvi, "Bd").ActualWidth;
                     Panel.SetZIndex(tvi, tabTree.Items.Count - i); // initial z-order                        
                     tvi.SetValue(TreeTabHelper.DepthProperty, 1 - ((tabTree.Items.Count - i) / (tabTree.Items.Count * 1d)));
                     TreeTabHelper.SetTotalTabOffset(tabTree, new Thickness(totalWidth, 0, 0, 0));
@@ -449,11 +530,10 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
                         if (!cancel)
                             RemoveItem(owner, item);
                     }
-
                 }
+
                 static void AddItemClassHandler(object sender, ExecutedRoutedEventArgs e)
                 {
-
                     var treeViewItem = e.Parameter as TreeViewItem;
                     treeViewItem ??= VisualTreeExHelper.FindParent<TreeViewItem>(e.OriginalSource as DependencyObject);
                     if (treeViewItem is null)
@@ -480,8 +560,6 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
                         }
                     }
                 }
-
-
 
                 static void RemoveItem(TreeViewItem owner, TreeViewItem dragablzItem)
                 {
@@ -588,6 +666,39 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
 
         public static class ZIndexAnimator
         {
+            public class ControlMatchThenZIndexComparer : IComparer<Control>
+            {
+                private readonly Control _matchTarget;
+                private readonly Func<Control, Control, bool> _matchPredicate;
+
+                public ControlMatchThenZIndexComparer(
+                    Control matchTarget,
+                    Func<Control, Control, bool>? matchPredicate = null)
+                {
+                    _matchTarget = matchTarget;
+                    _matchPredicate = matchPredicate ?? ((a, b) => ReferenceEquals(a, b));
+                }
+
+                public int Compare(Control? x, Control? y)
+                {
+                    if (x == null || y == null)
+                        return 0;
+
+                    bool xMatches = _matchPredicate(x, _matchTarget);
+                    bool yMatches = _matchPredicate(y, _matchTarget);
+
+                    // 1. Matching controls come first
+                    if (xMatches && !yMatches) return -1;
+                    if (yMatches && !xMatches) return 1;
+
+                    // 2. If both match or both don’t match, sort by ZIndex
+                    int zx = Panel.GetZIndex(x);
+                    int zy = Panel.GetZIndex(y);
+
+                    return zx.CompareTo(zy);
+                }
+            }
+
 
             public static void AnimateOnSelected(TreeViewItem tree, TreeViewItem selectedItem)
             {
@@ -597,13 +708,16 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
                     if (tree.ItemContainerGenerator.ContainerFromIndex(i) is TreeViewItem item)
                         items.Add(item);
                 }
+                var comparer = new ControlMatchThenZIndexComparer(selectedItem);
+                items.Sort(comparer);
 
                 int maxZ = items.Count;
+                int j = 0;
                 foreach (var item in items)
                 {
                     int start = Panel.GetZIndex(item);
-                    int target = (item == selectedItem) ? maxZ : Math.Max(0, start - 1);
-                    AnimateZStep(item, start, target, maxZ);
+                    Panel.SetZIndex(item, maxZ - j++);
+                    //AnimateZStep(item, start, maxZ - j++, maxZ);
                 }
             }
 
@@ -629,7 +743,8 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
 
                     // If the removed item had a higher Z, shift down
                     int target = start > Panel.GetZIndex(removedItem) ? start - 1 : start;
-                    AnimateZStep(item, start, target, maxZ);
+                    Panel.SetZIndex(item, target);
+                    //AnimateZStep(item, start, target, maxZ);
                 }
             }
 
@@ -651,14 +766,14 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
                         int steppedZ = (int)Math.Round(progressValue);
                         Panel.SetZIndex(item, steppedZ);
                         item.SetValue(TreeTabHelper.DepthProperty, 1 - (progressValue / count));
-                        if (target >= start)
-                            item.SetValue(TreeTabHelper.DoubleProperty, clock.CurrentProgress.Value);
-                        else
-                            item.SetValue(TreeTabHelper.DoubleProperty, 1 - clock.CurrentProgress.Value);
+                        //if (target >= start)
+                        //    item.SetValue(TreeTabHelper.ContentOpacityProperty, clock.CurrentProgress.Value);
+                        //else
+                        //    item.SetValue(TreeTabHelper.ContentOpacityProperty, 1 - clock.CurrentProgress.Value);
                     }
                 };
                 // Use dummy element to host animation
-                _element.BeginAnimation(TreeTabHelper.DoubleProperty, anim);
+                _element.BeginAnimation(TreeTabHelper.ContentOpacityProperty, anim);
             }
 
         }
@@ -698,6 +813,4 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
             throw new NotImplementedException();
         }
     }
-
-
 }

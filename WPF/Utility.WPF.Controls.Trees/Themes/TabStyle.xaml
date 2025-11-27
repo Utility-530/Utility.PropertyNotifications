@@ -6,6 +6,7 @@
                     xmlns:anim="http://schemas.utility.com/animation" 
                     xmlns:btns="http://schemas.utility.com/buttons"
                     xmlns:c="http://schemas.utility.com/colours" 
+                    xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:res="http://schemas.utility.com/resourcedictionary">
 
     <ResourceDictionary.MergedDictionaries>
@@ -74,7 +75,6 @@
         </Style.Triggers>
     </Style>
 
-
     <Style TargetType="{x:Type Button}" x:Key="CloseItemCommandButtonStyle" BasedOn="{StaticResource MenuCommandButtonStyle}">
         <Setter Property="Template">
             <Setter.Value>
@@ -119,29 +119,32 @@
 
     <local:ShowCloseButtonConverter x:Key="ShowCloseButtonConverter"/>
 
-    <Style x:Key="TabStyle" TargetType="TreeViewItem">
+    <Style x:Key="TabStyle" TargetType="TreeViewItem" >
         <Setter Property="local:TreeTabHelper.ParentItemCount" Value="0"></Setter>
+        <Setter Property="local:TreeTabHelper.IsSelected" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+        <Setter Property="IsExpanded" Value="{Binding IsSelected, Mode=TwoWay}"/>
+        <Setter Property="IsSelected" Value="{Binding IsExpanded, Mode=TwoWay}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TreeViewItem">
                     <Grid>
+                        <!--Opacity="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:TreeTabHelper.Double)}"-->
                         <Border x:Name="TabContent"
                                     Background="White"
                                     BorderBrush="Gray"
                                     BorderThickness="1"
                                     CornerRadius="0,6,6,6"
                                     Margin="0,25,0,0"
-                                    Padding="10"
-                           
-                                    Opacity="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:TreeTabHelper.Double)}"
-                                      RenderTransformOrigin="0.5,0.5">
+                                    Padding="10"                      
+                                 Opacity="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:TreeTabHelper.ContentOpacity)}"
+                                    RenderTransformOrigin="0.5,0.5">
                             <Border.RenderTransform>
                                 <ScaleTransform x:Name="ScaleEffect" ScaleX="1" ScaleY="1"/>
                             </Border.RenderTransform>
                             <ItemsPresenter x:Name="ItemsHost"/>
                         </Border>
-                        <!--Opacity="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:TreeTabHelper.Double)}"-->
-                        <Border x:Name="TabHeader"  
+                        <!--"-->
+                        <Border x:Name="Bd"  
                                     BorderBrush="Gray"
                                     BorderThickness="1,1,1,0"
                                     CornerRadius="6,6,0,0"
@@ -149,28 +152,26 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Height="26"
-                                    Margin="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:TreeTabHelper.TabOffset)}"
-                  >
-                            <Border.Background>
+                                    Margin="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:TreeTabHelper.TabOffset)}">
+                            <!--<Border.Background>
                                 <SolidColorBrush Color="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(local:TreeTabHelper.Depth), Converter={StaticResource IntensityToColorConverter}}"></SolidColorBrush>
-                            </Border.Background>
-                            <Grid>
+                            </Border.Background>-->
+                            <Grid >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
 
-
                                 <ContentPresenter x:Name="PART_Header" ContentSource="Header"/>
 
                                 <Grid Grid.Column="1" HorizontalAlignment="Stretch"></Grid>
 
-                                <Button  Grid.Column="2" HorizontalAlignment="Right"
-     
-           Style="{StaticResource CloseItemCommandButtonStyle}"
-           Command="{x:Static local:TreeTabHelper.CloseItemCommand}"
-           CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                                <Button  Grid.Column="2" 
+HorizontalAlignment="Right"    
+                                         Style="{StaticResource CloseItemCommandButtonStyle}"
+                                         Command="{x:Static local:TreeTabHelper.CloseItemCommand}"
+                                         CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                                     <Button.Visibility>
                                         <Binding  RelativeSource="{RelativeSource Mode=TemplatedParent}" Path="(local:TreeTabHelper.ParentItemCount)" Converter="{StaticResource ShowCloseButtonConverter}">
                                             <!--<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:DragablzItem}, AncestorLevel=1}" Path="ShowDefaultCloseButton" />-->
@@ -179,16 +180,67 @@
                                         </Binding>
                                     </Button.Visibility>
                                 </Button>
+
                             </Grid>
                         </Border>
                     </Grid>
 
                     <ControlTemplate.Triggers>
 
+                        <EventTrigger SourceName="Bd" RoutedEvent="PreviewMouseLeftButtonUp">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <!--<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="IsSelected">
+                                            <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                        </BooleanAnimationUsingKeyFrames>-->
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.7" Storyboard.TargetName="Bd" AutoReverse="True" Duration="0:0:0.2">
 
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <!-- Hover -->
+                        <Trigger Property="IsMouseOver" Value="True">
+
+                        </Trigger>
+
+                        <!-- Pressed (mouse down) -->
+                        <!--<Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="#FFCCCCCC"/>
+                            <Setter TargetName="TabContent" Property="Background" Value="#FFEAEAEA"/>
+                            <Setter TargetName="ScaleEffect" Property="ScaleX" Value="0.98"/>
+                            <Setter TargetName="ScaleEffect" Property="ScaleY" Value="0.98"/>
+                        </Trigger>-->
+
+                        <!-- Selected -->
+                        <Trigger Property="local:TreeTabHelper.IsSelected" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="#FFB0D4FF"/>
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="#FF4A90E2"/>
+                            <!--<Setter TargetName="TabContent" Property="Background" Value="#FFE7F2FF"/>-->
+                            <Setter TargetName="TabContent" Property="BorderBrush" Value="#FF4A90E2"/>
+                            <Setter TargetName="Bd" Property="TextElement.FontWeight" Value="SemiBold"/>
+                        </Trigger>
+
+                        <!-- Selected + Hover -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="local:TreeTabHelper.IsSelected" Value="False"/>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Background" Value="#FFE0E0E0"/>
+                            <Setter TargetName="TabContent" Property="Background" Value="#FFF5F5F5"/>
+                            <!--<Setter TargetName="Bd" Property="Background" Value="#FF9CCBFF"/>
+                            <Setter TargetName="TabContent" Property="Background" Value="#FFDCEBFF"/>-->
+                        </MultiTrigger>
+
+                        <!-- Keyboard focus -->
+                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="#FF1E70C9"/>
+                            <!--<Setter TargetName="Bd" Property="BorderThickness" Value="2"/>-->
+                        </Trigger>
                         <!--<Trigger Property="IsSelected" Value="True">
                                 -->
-                        <!--<Setter TargetName="TabHeader" Property="Background" Value="White"/>
+                        <!--<Setter TargetName="Bd" Property="Background" Value="White"/>
                                 <Setter TargetName="TabContent" Property="Visibility" Value="Visible"/>-->
                         <!--<Setter Property="Panel.ZIndex" Value="100000000"/>-->
                         <!--
@@ -203,6 +255,41 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
+        <Style.Triggers>
+            <!--<Trigger Property="IsSelected" Value="False">
+                <Setter Property="Opacity" Value="0" />
+            </Trigger>-->
+            <Trigger Property="IsSelected" Value="False">
+
+                <!-- When IsSelected becomes False -->
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                        Storyboard.TargetProperty="(local:TreeTabHelper.ContentOpacity)"
+                        To="0"
+                        Duration="0:0:0.4"
+                        AccelerationRatio="0.7" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+
+                <!-- When IsSelected becomes True -->
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                        Storyboard.TargetProperty="(local:TreeTabHelper.ContentOpacity)"
+                        To="1"
+                        Duration="0:0:0.3"
+                        AccelerationRatio="0.7" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 
@@ -251,6 +338,7 @@
     <Style x:Key="TabControlStyle" TargetType="TreeViewItem">
         <Setter Property="ItemsPanel" Value="{StaticResource TabPanelTemplate}"></Setter>
         <Setter Property="ItemContainerStyle" Value="{StaticResource TabStyle}"></Setter>
+        <Setter Property="local:TreeTabHelper.SelectedItem" Value="{Binding Current, Mode=TwoWay}"></Setter>
         <Setter Property="IsExpanded" Value="True"></Setter>
         <Setter Property="Template">
             <Setter.Value>
