@@ -14,7 +14,7 @@ namespace Utility.Nodes.Reflections
         {
             this.Data = propertyData;
             if (data is IYieldItems children)
-                children.Items().Cast<IDescriptor>().ForEach(a => changes.OnNext(new(a, Changes.Type.Add)));
+                children.Items().Cast<IDescriptor>().ForEach(a => changes.OnNext(new(a, Utility.Changes.Type.Add)));
         }
 
         //public ReflectionNode()
