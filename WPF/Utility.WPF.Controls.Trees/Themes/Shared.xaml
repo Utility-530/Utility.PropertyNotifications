@@ -6,8 +6,6 @@
     xmlns:math="http://hexinnovation.com/math">
 
     <math:MathConverter x:Key="MathConverter" />
-    <local:MultiItemsPanelConverter x:Key="MultiItemsPanelConverter" />
-    <local:RowColumnConverter x:Key="RowColumnConverter" />
     <local:SizeConverter x:Key="SizeConverter" />
     <conv:NullableBooleanToVisibilityConverter x:Key="VisibilityConverter" />
     <conv:NullableBooleanToInverseConverter x:Key="InverseConverter" />
