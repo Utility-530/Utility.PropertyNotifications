@@ -333,3 +333,6 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 .vshistory/
+
+# don't ignore Utility.Nodes.Meta folder
+!Utility.Nodes.Meta/
