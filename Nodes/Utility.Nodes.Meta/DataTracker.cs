@@ -26,15 +26,15 @@ namespace Utility.Nodes.Meta
     internal class DataTracker : IDataTracker, IDisposable
     {
 
-        Lazy<ITreeRepository> repository;
+        IValueRepository repository;
         CompositeDisposable compositeDisposable = new();
         NodeInterface nodeInterface;
         private bool _disposed;
         private static IEnumerable<PropertyInfo> yieldProperties;
 
-        public DataTracker(ITreeRepository treeRepository, NodeInterface nodeInterface)
+        public DataTracker(IValueRepository valueRepository, NodeInterface nodeInterface)
         {
-            repository = new(() => treeRepository);
+            repository = valueRepository;
             this.nodeInterface = nodeInterface;
         }
 
@@ -45,13 +45,13 @@ namespace Utility.Nodes.Meta
                 {
                     if (change.PropertyName != nameof(ViewModelTree.Name))
                     {
-                        repository.Value
+                        repository
                        .Get((GuidKey)node.Key(), change.PropertyName)
                        .Subscribe(a =>
                        {
                            if (a.Value == null)
                            {
-                               repository.Value.Set((GuidKey)node.Key(), change.PropertyName, change.NewValue, DateTime.Now);
+                               repository.Set((GuidKey)node.Key(), change.PropertyName, change.NewValue, DateTime.Now);
                            }
                        }).DisposeWith(compositeDisposable);           
                     }
@@ -62,7 +62,6 @@ namespace Utility.Nodes.Meta
             return Observable.Create<INodeViewModel>(observer =>
             {
                 return repository
-                .Value
                 .Get(Guid.Parse(node.Key()))
                 .Subscribe(_d =>
                 {
@@ -110,7 +109,7 @@ namespace Utility.Nodes.Meta
                         {
                         }
 
-                        repository.Value
+                        repository
                         .Get((GuidKey)node.Key(), call.Name)
                         .Subscribe(a =>
                         {
@@ -130,8 +129,9 @@ namespace Utility.Nodes.Meta
                     {
                         if (reception.Name == nameof(Model.Name))
                         {
-                            (reception.Target as INotifyPropertyChanged).RaisePropertyChanged(reception.Name);
-                            repository.Value.UpdateName((GuidKey)(node as IGetParent<IReadOnlyTree>).Parent.Key(), (GuidKey)node.Key(), (string)reception.OldValue, (string)reception.Value);
+                            throw new Exception("ds2d cdd32");
+                            //(reception.Target as INotifyPropertyChanged).RaisePropertyChanged(reception.Name);
+                            //repository.Value.UpdateName((GuidKey)(node as IGetParent<IReadOnlyTree>).Parent.Key(), (GuidKey)node.Key(), (string)reception.OldValue, (string)reception.Value);
                         }
                         else
                         {
@@ -152,7 +152,7 @@ namespace Utility.Nodes.Meta
                             if (nodeInterface.Getter(reception.Name) is { } getter)
                             {
                                 var value = getter.Get(node);
-                                repository.Value.Set((GuidKey)node.Key(), reception.Name, value, DateTime.Now);
+                                repository.Set((GuidKey)node.Key(), reception.Name, value, DateTime.Now);
                             }
                         }
                     }).DisposeWith(compositeDisposable);
@@ -160,7 +160,7 @@ namespace Utility.Nodes.Meta
 
             if (node is IDoesValueRequireSaving { DoesValueRequireSaving: true } and IGetValue { Value: { } value })
             {
-                repository.Value.Set((GuidKey)node.Key(), nameof(IGetValue.Value), value, DateTime.Now);
+                repository.Set((GuidKey)node.Key(), nameof(IGetValue.Value), value, DateTime.Now);
             }
 
 

@@ -40,15 +40,16 @@ namespace Utility.Nodes.Meta
         HashSet<Key> roots = new();
 
         private readonly ITreeRepository repository;
-        private readonly NodesStore nodesStore;
+        private readonly INodeSource nodesStore;
 
-        public NodeEngine(ITreeRepository? treeRepo = null, Predicate<INodeViewModel>? childrenTracking = null)
+        public NodeEngine(ITreeRepository? treeRepo = null, IValueRepository valueRepository = null, Predicate<INodeViewModel>? childrenTracking = null)
         {
             treeRepo ??= Globals.Resolver.Resolve<ITreeRepository>() ?? throw new Exception("££SXXX");
+            valueRepository ??= Globals.Resolver.Resolve<IValueRepository>() ?? throw new Exception("£3__SXXX");
             repository = treeRepo;
             var x = Globals.Resolver.Resolve<NodeInterface>();
-            nodesStore = Globals.Resolver.Resolve<NodesStore>();
-            _dataInitialiser = new(treeRepo, x);
+            nodesStore = Globals.Resolver.Resolve<INodeSource>();
+            _dataInitialiser = new(valueRepository, x);
             this.childrenTracking = childrenTracking;
         }
 
@@ -58,7 +59,7 @@ namespace Utility.Nodes.Meta
             {
                 if (instance is string key)
                 {
-                    return Globals.Resolver.Resolve<NodesStore>()[key]
+                    return nodesStore[key]
                     .Subscribe(a =>
                     {
                         Create(a).Subscribe(observer);
@@ -109,6 +110,7 @@ namespace Utility.Nodes.Meta
                 {
                     nodesStore.Remove(key);
                 }
+                repository.Remove((GuidKey)key);
             }
         }
 

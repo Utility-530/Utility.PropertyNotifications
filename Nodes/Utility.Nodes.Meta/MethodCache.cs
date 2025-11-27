@@ -35,7 +35,7 @@ namespace Utility.Nodes.Meta
         }
     }
 
-    public partial class NodesStore : INodeSource, IObservableIndex<INodeViewModel>
+    public partial class NodesStore : INodeSource
     {
         private Lazy<IOP> dict = new(() =>
         {

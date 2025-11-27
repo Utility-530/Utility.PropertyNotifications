@@ -34,12 +34,7 @@ namespace Utility.Nodes.Meta
 
         public IReadOnlyCollection<INodeViewModel> Nodes => _nodes;
 
-        public void Remove(string key)
-        {
-            ObjectDisposedException.ThrowIf(_disposed, nameof(NodeEngine));
-            var node = _nodes.SingleOrDefault(a => a.Key() == key);
-            _nodes.Remove(node);
-        }
+
 
         private IObservable<INodeViewModel> many(string key)
         {
@@ -83,6 +78,17 @@ namespace Utility.Nodes.Meta
         #endregion disposepattern
     }
 
-
+    public static class NodesStoreHelper
+    {
+        public static void Remove(this INodeSource nodeSource, string key)
+        {
+            var node = nodeSource.Nodes.SingleOrDefault(a => a.Key() == key);
+            if(nodeSource.Nodes is IList<INodeViewModel> nodes)
+                nodes.Remove(node);
+            else
+                throw new InvalidOperationException("Nodes collection is not mutable.");
+        }
+    }
+    
 
 }
