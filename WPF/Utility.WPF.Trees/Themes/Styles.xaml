@@ -1,5 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"              
                     xmlns:markup="http://schemas.utility.com/markup"
                     xmlns:local="clr-namespace:Utility.WPF.Trees"
                     xmlns:btns="http://schemas.utility.com/buttons"
@@ -18,8 +18,6 @@
     </ResourceDictionary.MergedDictionaries>
 
     <conv:InverseNullToBooleanConverter x:Key="InverseNullToBooleanConverter" />
-    <local:ItemsPanelConverter x:Key="ItemsPanelConverter"/>
-    <local:ChildrenConverter x:Key="ChildrenConverter"/>
     
     <Style x:Key="DefaultMemberStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}">
         <Style.Triggers>
@@ -84,6 +82,7 @@
 
     <Style x:Key="TableStyle"  TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource PlusTreeViewItem}">
         <Style.Resources>
+            <local:ChildrenConverter x:Key="ChildrenConverter" />
             <DataTemplate x:Key="JsonTemplate">
                 <trees:CustomTreeView ItemsSource="{Binding Converter={StaticResource ChildrenConverter}}" 
                           ItemContainerStyleSelector="{Binding ItemContainerStyleSelector, RelativeSource={RelativeSource AncestorType=trees:CustomTreeViewItem}}"

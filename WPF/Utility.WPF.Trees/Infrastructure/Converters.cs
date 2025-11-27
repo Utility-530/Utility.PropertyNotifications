@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Windows;
 using Microsoft.Xaml.Behaviors;
+using NodaTime;
 using Utility;
 using Utility.Interfaces.NonGeneric;
+using Utility.Keys;
 using Utility.Nodes;
 using Utility.WPF.Trees;
 
@@ -38,6 +40,8 @@ namespace Utility.WPF.Trees
                 {
                     if (descriptor.Children is IList list)
                     {
+                        if (instance is ISetKey setKey)
+                            setKey.Key = (GuidKey)Guid.NewGuid();
                         list?.Add(instance);
                         //descriptor.OnNext(new System.ComponentModel.RefreshEventArgs(instance));
                     }
