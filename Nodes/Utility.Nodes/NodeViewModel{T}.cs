@@ -26,12 +26,12 @@ namespace Utility.Nodes
                 {
                     if (value.First)
                     {
-                        if (Data is IChanges children)
-                            children.Changes.Cast<Changes.Change<T>>().Subscribe(changes);
+                        if (base.Data is IChanges children)
+                            children.Changes.Cast<Change<T>>().Subscribe(changes);
                     }
                     else
                     {
-                        changes.OnNext(new Changes.Change<T>(default, Changes.Type.Reset));
+                        changes.OnNext(new Changes.Change<T>(default, Utility.Changes.Type.Reset));
                     }
                 });
         }
@@ -76,12 +76,12 @@ namespace Utility.Nodes
 
             _ = GetChildren()
 
-                .Subscribe(async a =>
+                .Subscribe<object>(async a =>
                 {
                     if (a is Change<T> change)
                         switch (change.Type)
                         {
-                            case Changes.Type.Add:
+                            case Utility.Changes.Type.Add:
                                 {
                                     if (change.Value is not { } desc)
                                     {
@@ -95,18 +95,18 @@ namespace Utility.Nodes
                                     else
                                     {
                                         //var conversion = ObjectConverter.ToValue(inst, desc);
-                                        var node = await ToTree(desc);
+                                        var node = await base.ToTree(desc);
                                         //await node.RefreshChildrenAsync();
                                         m_items.Add(node);
                                     }
                                     break;
                                 }
-                            case Changes.Type.Remove:
+                            case Utility.Changes.Type.Remove:
                                 {
                                     m_items.RemoveOne(e => (e as IReadOnlyTree)?.Equals(change.Value) == true);
                                     break;
                                 }
-                            case Changes.Type.Reset:
+                            case Utility.Changes.Type.Reset:
                                 {
                                     m_items.Clear();
                                     break;
@@ -114,7 +114,7 @@ namespace Utility.Nodes
                         }
                     else if (a is T t)
                     {
-                        var node = await ToTree(t);
+                        var node = await base.ToTree(t);
                         //await node.RefreshChildrenAsync();
                         m_items.Add(node);
                     }

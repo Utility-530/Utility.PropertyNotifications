@@ -23,7 +23,6 @@ namespace Utility.Nodes
 
         public NodeViewModel()
         {
-            Orientation = Enums.Orientation.Horizontal;
             AddCommand = new Command<object>(async a =>
             {
                 var node = a is IReadOnlyTree ? a : await ToTree(a);
