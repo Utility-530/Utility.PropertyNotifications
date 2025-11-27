@@ -46,7 +46,7 @@ namespace Utility.PropertyDescriptors
         {
             var observer = Observer.Create<Change<IDescriptor>>((a) =>
             {
-                if (a.Type == Changes.Type.Add && a.Value is IFinalise finalise)
+                if (a.Type == Utility.Changes.Type.Add && a.Value is IFinalise finalise)
                 {
                     finalise.Finalise();
                 }

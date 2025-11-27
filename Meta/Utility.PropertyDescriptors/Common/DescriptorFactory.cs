@@ -64,7 +64,6 @@ namespace Utility.PropertyDescriptors
                 _ => new NullValue(descriptor, value),
             };
 
-            //_descriptor.Initialise();
             return _descriptor;
         }
 
