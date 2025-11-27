@@ -630,16 +630,24 @@ namespace Utility.Repos
         {
             return Observable.Create<DateValue>(observer =>
             {
-                if (values.ContainsKey(guid) && name != null && values[guid].ContainsKey(name))
+                if (values.ContainsKey(guid))
                 {
-                    observer.OnNext((DateValue)values[guid][name]);
-                    observer.OnCompleted();
-                    return Disposable.Empty;
+                    if (name != null)
+                    {
+                        if (values[guid].ContainsKey(name))
+                            observer.OnNext((DateValue)values[guid][name]);
+                        else
+                            observer.OnNext(new DateValue(guid, name, default, null));
+                    }
+                    else
+                    {
+                        foreach (var value in values[guid].Values)
+                        {
+                            observer.OnNext((DateValue)value);
+                        }
+                    }
                 }
-                {
-                    observer.OnNext(new DateValue(guid, name, default, null));
-                    observer.OnCompleted();
-                }
+                observer.OnCompleted();
                 return Disposable.Empty;
             });
         }
