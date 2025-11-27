@@ -1,4 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Collections.Specialized;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Utility.WPF.Helpers
 {
@@ -41,6 +44,21 @@ namespace Utility.WPF.Helpers
             }
             return null;
         }
+        public static void ExpandAll(this ItemsControl treeView)
+        {
+            if (treeView is TreeViewItem treeViewItem)
+            {
+                treeViewItem.IsExpanded = true;
+                treeViewItem.UpdateLayout();
+            }
+            foreach (var item in treeView.Items)
+            {
+                if (item is ItemsControl itemsControl)
+                {
+                    ExpandAll(itemsControl);
+                }
+            }
+        }
 
         public static TreeViewItem ContainerFromItemRecursive(this ItemContainerGenerator root, object item)
         {
@@ -55,6 +73,67 @@ namespace Utility.WPF.Helpers
                     return search;
             }
             return null;
+        }
+
+
+        public static void ExpandAllWithTracking(TreeViewItem treeView)
+        {
+            foreach (var item in treeView.Items)
+            {
+                if (treeView.ItemContainerGenerator.ContainerFromItem(item) is TreeViewItem tvi)
+                {
+                    ExpandWithTracking(tvi);
+                }
+            }
+        }
+
+        private static void ExpandWithTracking(TreeViewItem item)
+        {
+            item.IsExpanded = true;
+
+            // Expand children that already exist
+            item.UpdateLayout();
+
+            HookCollectionChanged(item);
+
+            for (int i = 0; i < item.Items.Count; i++)
+            {
+                if (item.ItemContainerGenerator.ContainerFromIndex(i) is TreeViewItem child)
+                {
+                    ExpandWithTracking(child);
+                }
+            }
+        }
+
+        private static void HookCollectionChanged(TreeViewItem item)
+        {
+            if (item.Items is INotifyCollectionChanged incc)
+            {
+                // Strong reference creates a memory leak → use weak handler
+                EventHandler<NotifyCollectionChangedEventArgs> handler = null;
+
+                handler = (s, e) =>
+                {
+                    // When new items are added, expand and recurse
+                    if (e.NewItems != null)
+                    {
+                        item.UpdateLayout();
+
+                        foreach (var newItem in e.NewItems)
+                        {
+                            var container = item.ItemContainerGenerator.ContainerFromItem(newItem) as TreeViewItem;
+
+                            if (container != null)
+                            {
+                                ExpandWithTracking(container);
+                            }
+                        }
+                    }
+                };
+
+                WeakEventManager<INotifyCollectionChanged, NotifyCollectionChangedEventArgs>
+                    .AddHandler(incc, "CollectionChanged", handler);
+            }
         }
     }
 }
