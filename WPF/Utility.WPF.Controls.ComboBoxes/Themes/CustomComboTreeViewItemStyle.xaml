@@ -10,14 +10,61 @@
     xmlns:res="http://schemas.utility.com/resourcedictionary"
     xmlns:sb="http://schemas.utility.com/splitbuttons"
     xmlns:att="http://schemas.utility.com/attached"
+    xmlns:btns="http://schemas.utility.com/buttons"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:trees="http://schemas.utility.com/trees">
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml" />
+        
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/ButtonComboBoxTreeViewStyle.xaml" />
     </ResourceDictionary.MergedDictionaries>
-
+    
+    
+    <Style TargetType="{x:Type Button}" x:Key="ExpandCommandButtonStyle" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid Background="White" MinWidth="12" MinHeight="12">
+                        <!--<Ellipse Width="{TemplateBinding Width}"
+                               Height="{TemplateBinding Height}"
+                               Fill="{TemplateBinding Background}" />-->
+                        <Path x:Name="Path"
+                       
+                            Data="{StaticResource Plus}"
+          
+                            Stretch="UniformToFill"
+                            Stroke="{TemplateBinding Foreground}"
+                            StrokeThickness="1.5"
+                            StrokeStartLineCap="Square"
+                            StrokeEndLineCap="Square"
+                            SnapsToDevicePixels="True" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Foreground">
+            <Setter.Value>
+                <SolidColorBrush Color="Gray" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Width" Value="12" />
+        <Setter Property="Height" Value="12" />
+        <Setter Property="Margin" Value="4 0 2 0" />
+        <Setter Property="Background" Value="{x:Static SystemColors.HighlightTextBrush}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <!--<Setter Property="Background" Value="{x:Static local:DragablzColors.WindowGlassBrush}" />-->
+                <Setter Property="Foreground" Value="Blue" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter Property="Opacity" Value="1" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    
     <Style
         x:Key="CustomComboTreeViewItemStyle"        
         TargetType="{x:Type trees:CustomTreeViewItem}">         
@@ -26,8 +73,8 @@
         <Setter Property="ConnectorPosition" Value="{Binding ConnectorPosition}" />
         <Setter Property="RemoveCommand" Value="{Binding Path=RemoveCommand}" />
         <Setter Property="AddParentCommand" Value="{Binding Path=AddParentCommand}" />
-       
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="trees:ExpansionHelper.IsExpandAllEnabled" Value="True"/>
+        <!--<Setter Property="Background" Value="Transparent" />-->
         <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
         <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
         <Setter Property="Padding" Value="1,0,0,0" />
@@ -44,20 +91,26 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" MinWidth="19" />
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" MinWidth="6" />
+                            <ColumnDefinition Width="200" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <ToggleButton
-                            x:Name="Expander"
-                            ClickMode="Press"
-                            IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
-                            Foreground="{TemplateBinding Foreground}"
-                            Opacity="0.2"
-                            Style="{StaticResource ExpandCollapseToggleStyle}" />
+                        <StackPanel>
+                            <ToggleButton
+              x:Name="Expander"
+              ClickMode="Press"
+              IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+              Foreground="{TemplateBinding Foreground}"
+              Opacity="0.2"
+              Style="{StaticResource ExpandCollapseToggleStyle}" />
+                            <Button Command="{x:Static trees:ExpansionHelper.ExpandAllCommand}" 
+                                    Style="{StaticResource ExpandCommandButtonStyle}"></Button>
+                        </StackPanel>
+              
                         <Border
                             x:Name="Bd"
                             Grid.Column="1"
@@ -133,7 +186,7 @@
                         </Border>
                         
                         <Border Grid.Column="2">
-                            <UniformGrid Rows="1" Width="80" Height="20" HorizontalAlignment="Left">
+                            <UniformGrid Rows="1" Width="140" Height="20" HorizontalAlignment="Left">
                                 <UniformGrid.Resources>
 
                                     <!-- Implicit style for all Ellipses -->
@@ -150,6 +203,7 @@
                                         <Setter Property="HorizontalAlignment" Value="Center"/>
                                         <Setter Property="VerticalAlignment" Value="Center"/>
                                         <Setter Property="IsHitTestVisible" Value="False"/>
+                                        <Setter Property="FontWeight" Value="DemiBold"/>
                                     </Style>
 
                                     <!-- Implicit style for the Grid to ensure it has size -->
@@ -160,24 +214,39 @@
 
                                 </UniformGrid.Resources>
 
-                                <Grid>
+                                <Grid ToolTip="Loaded">
                                     <Ellipse x:Name="LoadedStateEllipse"/>
                                     <TextBlock Text="L"/>
                                 </Grid>
 
-                                <Grid>
+                                <Grid ToolTip="Visibility">
                                     <Ellipse x:Name="VisibilityStateEllipse"/>
                                     <TextBlock Text="Vis"/>
                                 </Grid>
 
-                                <Grid>
+                                <Grid ToolTip="Expanded">
                                     <Ellipse x:Name="ExpandedStateEllipse"  />
                                     <TextBlock Text="Ex"/>
                                 </Grid>
 
-                                <Grid>
+                                <Grid ToolTip="Within Window Bounds">
                                     <Ellipse x:Name="IsWithinWindowBoundsEllipse"/>
                                     <TextBlock Text="W B"/>
+                                </Grid>
+
+                                <Grid ToolTip="Selected">
+                                    <Ellipse x:Name="IsSelectedEllipse"/>
+                                    <TextBlock Text="S"/>
+                                </Grid>
+                                
+                                <Grid ToolTip="Expanded">
+                                    <Ellipse x:Name="IsExpandedEllipse"/>
+                                    <TextBlock Text="Ex"/>
+                                </Grid>
+                                
+                                <Grid ToolTip="Enabled">
+                                    <Ellipse x:Name="IsEnabledEllipse"/>
+                                    <TextBlock Text="En"/>
                                 </Grid>
                             </UniformGrid>
                         </Border>
@@ -338,6 +407,17 @@
                         </DataTrigger>-->
                         <DataTrigger Value="True" Binding="{Binding IsWithinWindowBounds}">
                             <Setter TargetName="IsWithinWindowBoundsEllipse" Property="Fill" Value="LightGreen" />
+                        </DataTrigger>
+
+                        <DataTrigger Value="True" Binding="{Binding IsSelected}">
+                            <Setter TargetName="IsSelectedEllipse" Property="Fill" Value="Cyan" />
+                        </DataTrigger>
+
+                        <DataTrigger Value="True" Binding="{Binding IsElementExpanded}">
+                            <Setter TargetName="IsExpandedEllipse" Property="Fill" Value="LemonChiffon" />
+                        </DataTrigger>
+                        <DataTrigger Value="True" Binding="{Binding IsEnabled}">
+                            <Setter TargetName="IsEnabledEllipse" Property="Fill" Value="Thistle" />
                         </DataTrigger>
                         <!--<DataTrigger Value="False" Binding="{Binding IsWithinWindowBounds}">
                             <Setter TargetName="IsWithinWindowBoundsEllipse" Property="Fill" Value="DarkGoldenrod" />
