@@ -70,7 +70,7 @@ namespace Utility.Nodes.Demo.Editor
             Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new NodeMethodFactory());
             Locator.CurrentMutable.RegisterLazySingleton<IFactory<IId<Guid>>>(() => new ModelFactory());
             Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
-            Locator.CurrentMutable.RegisterLazySingleton<INodeRoot>(() => new NodeEngine(new TreeRepository("../../../Data/temp.sqlite")));
+            Locator.CurrentMutable.RegisterLazySingleton<INodeRoot>(() => new NodeEngine(new TreeRepository("../../../Data/temp.sqlite"), new ValueRepository("../../../Data/temp.sqlite")));
 
             initialiseGlobals(Globals.Register);
             initialiseConnections(Globals.Resolver.Resolve<IServiceResolver>());
@@ -106,10 +106,11 @@ namespace Utility.Nodes.Demo.Editor
         private static void initialiseGlobals(IRegister register)
         {
             register.Register<IServiceResolver>(() => new ServiceResolver());
-            register.Register<INodeRoot>(() => new NodeEngine(new TreeRepository("../../../Data"), childrenTracking: a => (a.Parent() as IGetName)?.Name != NodeMethodFactory.Slave));
+            register.Register<INodeRoot>(() => new NodeEngine(new TreeRepository("../../../Data"), new ValueRepository("../../../Data"), childrenTracking: a => (a.Parent() as IGetName)?.Name != NodeMethodFactory.Slave));
             register.Register<IPlaybackEngine>(() => new PlaybackEngine());
             register.Register<NodeInterface>();
-            register.Register<NodesStore>();
+            register.Register<INodeSource>(() => new NodesStore());
+
         }
 
         private void initialiseConnections(IServiceResolver register)

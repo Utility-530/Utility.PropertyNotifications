@@ -21,7 +21,7 @@ namespace Utility.Nodes.Demo.Filters.Services
         {
             var engine = dictionary.Get(dataFileModel.Guid, a =>
             {
-                var engine = new NodeEngine(new TreeRepository(Path.Combine(dataFileModel.Value + ".sqlite")));
+                var engine = new NodeEngine(new TreeRepository(Path.Combine(dataFileModel.Value + ".sqlite")), new ValueRepository(Path.Combine(dataFileModel.Value + ".sqlite")));
                 Globals.Register.Register<INodeRoot>(engine);  
                 return engine;
             });
