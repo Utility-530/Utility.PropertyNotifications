@@ -67,5 +67,28 @@ namespace Utility.WPF.Attached
         }
 
         public static IEnumerable GetEnumerable(DependencyObject dep) => (IEnumerable)dep.GetValue(EnumerableProperty);
+
+
+        public static readonly DependencyProperty GuidProperty = DependencyProperty.RegisterAttached(
+            "Guid",
+            typeof(Guid),
+            typeof(Base),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, guidChanged));
+
+        private static void guidChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+      
+        }
+
+        public static void SetGuid(DependencyObject dep, Guid value)
+        {
+            dep.SetValue(GuidProperty, value);
+        }
+
+        public static Guid GetGuid(DependencyObject dep)
+        {
+            return (Guid)dep.GetValue(GuidProperty);
+        }
+
     }
 }
