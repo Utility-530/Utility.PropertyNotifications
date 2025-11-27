@@ -27,10 +27,18 @@ namespace Utility.Interfaces.Exs
         IIsValueLoaded,
         IAreChildrenLoaded,
         IAreChildrenTracked,
-        IIsProliferable
+        IIsProliferable,
+        IIsLoaded
+ 
     //IHeight,
     //IWidth
     {
+    }
+
+
+    public interface IIsLoaded
+    {
+        bool IsLoaded { get; set; }
     }
 
     public interface IIsProliferable
