@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Runtime.InteropServices;
 using Utility.Entities.Comms;
 using Utility.Enums;
 using Utility.Helpers.Reflection;
@@ -12,13 +13,13 @@ using Utility.Models;
 using Utility.Models.Trees;
 using Utility.ServiceLocation;
 using Utility.Services.Meta;
+using Utility.Attributes;
+using GuidAttribute = Utility.Attributes.GuidAttribute;
 
 namespace Utility.Nodes.Meta
 {
     public class EnumerableMethodFactory : IEnumerableFactory<Method>
     {
-        // needs to be a property in case INodeSource changes
-        protected INodeSource nodeSource => Globals.Resolver.Resolve<INodeSource>();
         protected IServiceResolver serviceResolver => Globals.Resolver.Resolve<IServiceResolver>();
         public IEnumerable<Method> Create(object config) => this.GetType().InstantMethods().Where(a => a.Name != nameof(Create)).Select(a => new Method(a, this));
     }
@@ -50,21 +51,21 @@ namespace Utility.Nodes.Meta
         // readonly Guid rootModelGuid = Guid.Parse("76ae564a-fda0-419c-9b88-dee3ac7430c1");
         // readonly Guid assemblyGuid = Guid.Parse("ae00fed1-c58d-4e09-ac24-99cad4fbbc56");
 
-        private readonly Guid and_orGuid = Guid.Parse("2afe3e32-eb9e-4d2c-b862-5fe8ac95559f");
-        private readonly Guid breadcrumbGuid = Guid.Parse("ae00fed1-c58d-4e09-ac24-99cad4fbbc56");
-        private readonly Guid subGuid = Guid.Parse("cd79fd35-46c4-4da6-a53f-2a0fb307781a");
-        private readonly Guid transformerGuid = Guid.Parse("76ae564a-fda0-419c-9b88-dee3ac7430c1");
-        private readonly Guid filterGuid = Guid.Parse("2db6ac81-590e-4f94-98b9-215a1cd880bb");
-        private readonly Guid contentGuid = Guid.Parse("004cf888-a762-4149-a3b9-7a0911cdf1a9");
-        private readonly Guid demoContentGuid = Guid.Parse("8beee93e-fede-4c73-912f-1f3fea885c8e");
-        private readonly Guid htmlGuid = Guid.Parse("d44f1125-66ac-4b2e-8330-b2bdfb4797cb");
-        private readonly Guid htmlRenderGuid = Guid.Parse("48e723e9-5e67-4381-940d-e1f240d31ea6");
-        private readonly Guid controlsGuid = Guid.Parse("f4565c31-c35b-4cbf-911a-26a841d3bc04");
-        private readonly Guid guid = Guid.Parse("d7bccfe8-2818-4e64-b399-f6230b087a86");
-        private readonly Guid dirtyGuid = Guid.Parse("6c9ee869-9d3b-4745-b6de-6de4a8f011f1");
-        private readonly Guid collectionGuid = Guid.Parse("d6fa45af-e543-4ac9-bec4-fcbd3a800097");
-        private readonly Guid input_controlGuid = Guid.Parse("d31ca5b1-0de0-41cb-8c7d-e83a4f0c8237");
-        private readonly Guid input_nodeGuid = Guid.Parse("3dded14d-0f46-4ab8-bce3-50ac339e6d97");
+        private const string and_orGuid = "2afe3e32-eb9e-4d2c-b862-5fe8ac95559f";
+        private const string breadcrumbGuid = "ae00fed1-c58d-4e09-ac24-99cad4fbbc56";
+        private const string subGuid = "cd79fd35-46c4-4da6-a53f-2a0fb307781a";
+        private const string transformerGuid = "76ae564a-fda0-419c-9b88-dee3ac7430c1";
+        private const string filterGuid = "2db6ac81-590e-4f94-98b9-215a1cd880bb";
+        private const string contentGuid = "004cf888-a762-4149-a3b9-7a0911cdf1a9";
+        private const string demoContentGuid = "8beee93e-fede-4c73-912f-1f3fea885c8e";
+        private const string htmlGuid = "d44f1125-66ac-4b2e-8330-b2bdfb4797cb";
+        private const string htmlRenderGuid = "48e723e9-5e67-4381-940d-e1f240d31ea6";
+        private const string controlsGuid = "f4565c31-c35b-4cbf-911a-26a841d3bc04";
+        private const string guid = "d7bccfe8-2818-4e64-b399-f6230b087a86";
+        private const string dirtyGuid = "6c9ee869-9d3b-4745-b6de-6de4a8f011f1";
+        private const string collectionGuid = "d6fa45af-e543-4ac9-bec4-fcbd3a800097";
+        private const string input_controlGuid = "d31ca5b1-0de0-41cb-8c7d-e83a4f0c8237";
+        private const string input_nodeGuid = "3dded14d-0f46-4ab8-bce3-50ac339e6d97";
 
         public const string Refresh = nameof(Refresh);
         public const string Run = nameof(Run);
@@ -80,107 +81,84 @@ namespace Utility.Nodes.Meta
         public const string Select = nameof(Select);
         public const string Cancel = nameof(Cancel);
 
-        private NodeMethodFactory()
+        [Guid(guid)]
+        public INodeViewModel BuildRoot()
         {
+            return new Model() { Name = root };
         }
 
-        public IObservable<INodeViewModel> BuildRoot()
+        [Guid(breadcrumbGuid)]
+        public INodeViewModel BreadcrumbRoot()
         {
-            return nodeSource.Create(root, guid, s => new Model() { Name = s });
+            return new NodePropertyRootModel { Name = breadcrumb, Key = breadcrumbGuid };
         }
 
-        public IObservable<INodeViewModel> BreadcrumbRoot()
+        [Guid(controlsGuid)]
+        public INodeViewModel BuildControlRoot()
         {
-            return nodeSource.Create(breadcrumb, breadcrumbGuid, s => new NodePropertyRootModel { Name = s });
-        }
-
-        public IObservable<INodeViewModel> BuildControlRoot()
-        {
-            return nodeSource.Create(controls,
-                controlsGuid,
-                s => new Model(() => [new CommandModel<SaveEvent> { Name = Save }, new CommandModel<RefreshEvent> { Name = Refresh }, new CommandModel<RunEvent> { Name = Run }],
+            return new Model(() => [new CommandModel<SaveEvent> { Name = Save }, new CommandModel<RefreshEvent> { Name = Refresh }, new CommandModel<RunEvent> { Name = Run }],
                 attach: n => { n.IsExpanded = true; n.Orientation = Enums.Orientation.Horizontal; })
-                { Name = s });
+                { Name = controls, Key = controlsGuid };
         }
 
-        public IObservable<INodeViewModel> BuildInputControlRoot()
+        [Guid(controlsGuid)]
+        public INodeViewModel BuildInputControlRoot()
         {
-            return nodeSource.Create(input_control,
-                input_controlGuid,
-                s => new Model(() => [new CommandModel<SelectEvent> { Name = Select }, new CommandModel<CancelEvent> { Name = Cancel }], attach: n =>
+            return 
+                new Model(() => [new CommandModel<SelectEvent> { Name = Select }, new CommandModel<CancelEvent> { Name = Cancel }], attach: n =>
                 {
                     n.IsExpanded = true; n.Orientation = Enums.Orientation.Horizontal; n.IsContentVisible = false;
                 })
-                { Name = s });
+                { Name = input_control, Key = controlsGuid };
         }
 
-        public IObservable<INodeViewModel> BuildInputNodeRoot()
+        [Guid(input_nodeGuid)]
+        public INodeViewModel BuildInputNodeRoot()
         {
-            return nodeSource.Create(input_node,
-                input_nodeGuid,
-                s => new Model(() => [new NodePropertyRootModel { Name = "npm" }], attach: n => n.IsExpanded = true) { Name = s });
+            return new Model(() => [new NodePropertyRootModel { Name = "npm" }], attach: n => n.IsExpanded = true) { Name = input_node , Key = input_nodeGuid };
         }
 
-        public IObservable<INodeViewModel> BuildTransformersRoot()
+        [Guid(transformerGuid)]
+        public INodeViewModel BuildTransformersRoot()
         {
-            return nodeSource.Create(transformers,
-                transformerGuid,
-                s => new TransformersModel() { Name = s, IsExpanded = true });
+            return new TransformersModel() { Name = transformers, Key = transformerGuid, IsExpanded = true };
         }
 
-        public IObservable<INodeViewModel> BuildFiltersRoot()
+        [Guid(filterGuid)]
+        public INodeViewModel BuildFiltersRoot()
         {
-            return nodeSource.Create(filters,
-                filterGuid,
-                s => new FiltersModel() { Name = s, IsExpanded = true, Orientation = Orientation.Vertical });
+            return new FiltersModel() { Name = filters, Key = filterGuid, IsExpanded = true, Orientation = Orientation.Vertical };
         }
 
-        public IObservable<INodeViewModel> BuildAndOrRoot()
+        [Guid(and_orGuid)]
+        public INodeViewModel BuildAndOrRoot()
         {
-            return nodeSource.Create(and_or,
-                and_orGuid,
-                s => new AndOrModel() { IsExpanded = true, Orientation = Enums.Orientation.Vertical });
+            return new AndOrModel() { Name = and_or, Key = and_orGuid, IsExpanded = true, Orientation = Enums.Orientation.Vertical,  };
         }
 
-        public IObservable<INodeViewModel> BuildCollectionRoot()
+        [Guid(collectionGuid)]
+        public INodeViewModel BuildCollectionRoot()
         {
-            return nodeSource.Create(collection,
-                collectionGuid,
-                s => new Model<string>(attach: n => { n.IsExpanded = true; n.Orientation = Enums.Orientation.Vertical; }) { Name = s });
+            return new Model<string>(attach: n => { n.IsExpanded = true; n.Orientation = Enums.Orientation.Vertical; }) { Name = collection, Key = collectionGuid };
         }
 
-        public IObservable<INodeViewModel> BuildHtmlRoot()
+        [Guid(htmlGuid)]
+        public INodeViewModel BuildHtmlRoot()
         {
-            return nodeSource.Create(html,
-                htmlGuid,
-                s => new Model<string>(attach: n => n.DataTemplate = "Html") { Name = s });
+            return new Model<string>(attach: n => n.DataTemplate = "Html") { Name = html, Key = htmlGuid };
         }
 
-        public IObservable<INodeViewModel> BuildHtmlRenderRoot()
+        [Guid(htmlRenderGuid)]
+        public INodeViewModel BuildHtmlRenderRoot()
         {
-            return nodeSource.Create(_html,
-                htmlRenderGuid,
-                s => new Model<string>(attach: n => n.DataTemplate = "Html") { Name = s });
+            return new Model<string>(attach: n => n.DataTemplate = "Html") { Name = _html, Key = htmlRenderGuid };
         }
 
-        //public INodeViewModel BuildDirty()
-        //{
-        //    var data = new DirtyModels { Name = dirty };
-        //    var node = new NodeViewModel(data)
-        //    {
-        //        Key = new GuidKey(guid)
-        //    };
-        //    return node;
-        //}
 
-        //public IObservable<INodeViewModel> BuildContentRoot()
-        //{
-        //    return nodeSource.Create("Root", contentGuid, s => new CollectionModel() { Name = s });
-        //}
-
-        public IObservable<INodeViewModel> BuildDemoContentRoot()
+        [Guid(demoContentGuid)]
+        public INodeViewModel BuildDemoContentRoot()
         {
-            return nodeSource.Create(demo_content, demoContentGuid, s =>
+            return 
                 new ExpandedModel(() =>
                 {
                     return [
@@ -205,9 +183,7 @@ namespace Utility.Nodes.Meta
                     }){ Name = "Group 3"}
                     ];
                 })
-                { Name = s });
+                { Name = demo_content, Key = demoContentGuid };
         }
-
-        public static NodeMethodFactory Instance { get; } = new();
     }
 }

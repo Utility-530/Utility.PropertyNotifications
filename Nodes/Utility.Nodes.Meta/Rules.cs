@@ -2,29 +2,35 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Reflection;
 using System.Threading.Tasks;
 using Utility.Helpers.NonGeneric;
+using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models.Trees;
+using Utility.Observables.Generic;
 using Utility.PropertyNotifications;
+using Utility.Reactives;
+using Utility.ServiceLocation;
 
 namespace Utility.Nodes.Meta
 {
     public class NodeInterface
     {
-        private Interfaces.Exs.INodeSource nodeSource;
+
         private Rules rules;
         private readonly Lazy<Dictionary<string, PropertyInterface>> setdictionary;
 
-        public NodeInterface(Interfaces.Exs.INodeSource nodeSource)
+        public NodeInterface()
         {
-            this.nodeSource = nodeSource;
-            this.rules = new Rules(nodeSource);
+            this.rules = new Rules();
             this.setdictionary = new(() =>
             {
                 var dict = typeof(NodeViewModel)
@@ -65,11 +71,11 @@ namespace Utility.Nodes.Meta
 
     public class CurrentSetter : Setter
     {
-        private Interfaces.Exs.INodeSource nodeSource;
+        private Lazy<INodeSource> nodeSource;
 
-        public CurrentSetter(Interfaces.Exs.INodeSource nodeSource)
+        public CurrentSetter()
         {
-            this.nodeSource = nodeSource;
+            nodeSource = new(() => Globals.Resolver.Resolve<INodeSource>());
         }
 
         public override string Name => nameof(NodeViewModel.Current);
@@ -102,8 +108,17 @@ namespace Utility.Nodes.Meta
                     throw new Exception("ds 3££!!");
                 }
 
-                var task = await nodeSource.FindChild(node, guid).ToTask();
-                node.Current = task;
+                CompositeDisposable disposables = new CompositeDisposable();
+
+                nodeSource.Value.Nodes.AndAdditions()
+                    .Subscribe(a =>
+                    {
+                        if (a.Guid == guid)
+                        {
+                            node.Current = a;
+                            disposables.Dispose();
+                        }
+                    }).DisposeWith(disposables);
             }
         }
     }
@@ -147,7 +162,7 @@ namespace Utility.Nodes.Meta
             (instance as ISet).Set(value, Name);
             if (instance is IRaiseChanges raiseChanges)
             {
-                raiseChanges.RaisePropertyReceived(value, null, Name);
+                raiseChanges.RaisePropertyReceived(null, value, Name);
                 raiseChanges.RaisePropertyChanged(Name);
             }
             else
@@ -209,18 +224,15 @@ namespace Utility.Nodes.Meta
 
     public class Rules
     {
-        private Interfaces.Exs.INodeSource nodeSource;
-
-        public Rules(Interfaces.Exs.INodeSource nodeSource)
+        public Rules()
         {
-            this.nodeSource = nodeSource;
         }
 
         public PropertyInterface Decide(PropertyInfo propertyInfo)
         {
             if (propertyInfo.Name == nameof(INodeViewModel.Current))
             {
-                return new PropertyInterface { Name = propertyInfo.Name, Setter = new CurrentSetter(nodeSource), Getter = new CurrentGetter() };
+                return new PropertyInterface { Name = propertyInfo.Name, Setter = new CurrentSetter(), Getter = new CurrentGetter() };
             }
             if (propertyInfo.Name == nameof(ListModel.Add))
             {

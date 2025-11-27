@@ -1,51 +1,41 @@
-﻿using Splat;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
+using System.Reflection;
 using System.Threading.Tasks;
-using Observable = System.Reactive.Linq.Observable;
-using Utility.Helpers;
-using Utility.Interfaces.Generic;
+using Splat;
 using Utility.Extensions;
+using Utility.Helpers;
+using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
+using Utility.Interfaces.Generic;
 using Utility.Services.Meta;
+using Observable = System.Reactive.Linq.Observable;
 
 namespace Utility.Nodes.Meta
 {
-    public class MethodsValue(object instance, Method methodInfo)
-    {
-        Dictionary<Guid, MethodValue> pairs = new();
-
-        public MethodValue this[Guid guid]
-        {
-            get
-            {
-                return pairs.Get(guid, a => new MethodValue() { Instance = instance, Method = methodInfo });
-            }
-        }
-    }
-
     public class IOP
     {
-        Dictionary<string, MethodsValue> _methods = new();
+        public Dictionary<string, MethodValue> _methods = new();
 
         public void Add(string key, object instance, Method value)
         {
-            _methods.Add(key, new(instance, value));
+            _methods.Add(key, new MethodValue() { Instance = instance, Method = value });
         }
 
-        public MethodValue this[(string key, Guid? guid) yt] => _methods[yt.key][yt.guid ?? default];
+        public MethodValue this[string key] => _methods[key];
+        public bool Contains(string key) => _methods.ContainsKey(key);
 
-        public object Invoke(string key, Guid? guid, object[]? objects = null)
+        public object Invoke(string key, object[]? objects = null)
         {
             if (_methods.ContainsKey(key))
-                return this[(key, guid)].Method.ExecuteWithObjects([.. guid.HasValue ? [guid.Value] : Array.Empty<object>(), .. objects ?? []]);
+                return this[key].Method.ExecuteWithObjects([.. objects ?? []]);
             throw new Exception("eeee 0ff0s");
         }
     }
 
-    public class MethodCache : IObservableIndex<INodeViewModel>
+    public partial class NodesStore : INodeSource, IObservableIndex<INodeViewModel>
     {
         private Lazy<IOP> dict = new(() =>
         {
@@ -55,96 +45,131 @@ namespace Utility.Nodes.Meta
             return iop;
         });
 
-        private MethodCache()
-        {
-
-        }
-
-        private MethodValue this[(string key, Guid? guid) x]
+        public System.IObservable<INodeViewModel> this[string key]
         {
             get
             {
-                return dict.Value[x];
-            }
-        }
-
-
-        public System.IObservable<INodeViewModel> this[string key] => Get(key);
-
-        public System.IObservable<INodeViewModel> Get(string key, Guid? guid = default, object?[] objects = null)
-        {
-            if (Contains(key, guid) == false)
-            {
-                this[(key, guid)].Nodes ??= [];
-                object output = dict.Value.Invoke(key, guid, objects);
-                if (output is NodeViewModel node)
+                return Observable.Create<INodeViewModel>(observer =>
                 {
-                    this[(key, guid)].Nodes.Add(node);
-
-                    //node.Name = key;
-                }
-                else if (output is IEnumerable<INodeViewModel> nodes)
-                {
-                    foreach (var _node in nodes)
+                    if (Guid.TryParse(key, out Guid guid))
                     {
-                        this[(key, guid)].Nodes.Add(_node);
-
-                        //_node.Name = key;
-                    }
-                }
-                else if (output is System.IObservable<INodeViewModel> nodeObservable)
-                {
-                    return Observable.Create<INodeViewModel>(obs =>
-                    {
-                        return nodeObservable.Subscribe(_node =>
+                        if (this.Find(key) is not { } child)
                         {
-                            this[(key, guid)].Nodes.Add(_node);
-
-                            //_node.Name = key;
-                            //Add(_node);
-                            obs.OnNext(_node);
-                        });
-                    });
-                }
-                else if (output is Task task)
-                {
-                    if (this[(key, guid)].Task == null)
-                    {
-                        this[(key, guid)].Task = task;
-                    }
-                    return Observable.Create<INodeViewModel>(o =>
-                    {
-                        return this[(key, guid)].Task.ToObservable().Subscribe(a =>
+                            foreach (var x in dict.Value._methods.Values)
+                            {
+                                if (x.Guid == guid)
+                                {
+                                    return this[x.Method.Name].Subscribe(observer);
+                                }
+                            }
+                        }
+                        else
                         {
-                            var result = (INodeViewModel)this[(key, guid)].Task.GetType().GetProperty("Result").GetValue(this[(key, guid)].Task);
-                            this[(key, guid)].Nodes.Add(result);
-                            //Add(result);
-                            o.OnNext(result);
-                        });
-                    });
-                }
-                else
-                {
-                    return Observable.Return<INodeViewModel>(null);
-                }
+                            observer.OnNext(child);
+                            observer.OnCompleted();
+                            return System.Reactive.Disposables.Disposable.Empty;
+                        }
+
+                        return many(key).Subscribe(node =>
+                        {
+                            observer.OnNext(node);
+                        }, () => observer.OnCompleted());
+                    }
+
+                    if (dict.Value.Contains(key))
+                    {
+                        if (dict.Value[key].IsAccessed == false)
+                        {
+                            dict.Value[key].Nodes ??= [];
+                            object output = dict.Value.Invoke(key);
+                            if (output is NodeViewModel node)
+                            {
+                                dict.Value[key].Nodes.Add(node);
+                                observer.OnNext(node);
+                                observer.OnCompleted();
+                                return System.Reactive.Disposables.Disposable.Empty;
+                                //node.Name = key;
+                            }
+                            else if (output is IEnumerable<INodeViewModel> nodes)
+                            {
+                                foreach (var _node in nodes)
+                                {
+                                    dict.Value[key].Nodes.Add(_node);
+                                    observer.OnNext(_node);
+                                }
+                                observer.OnCompleted();
+                                return System.Reactive.Disposables.Disposable.Empty;
+                            }
+                            else if (output is System.IObservable<INodeViewModel> nodeObservable)
+                            {
+
+                                return nodeObservable.Subscribe(_node =>
+                                {
+                                    dict.Value[key].Nodes.Add(_node);
+
+                                    //_node.Name = key;
+                                    //Add(_node);
+                                    observer.OnNext(_node);
+                                }, () => observer.OnCompleted());
+
+                            }
+                            else if (output is Task task)
+                            {
+                                if (dict.Value[key].Task == null)
+                                {
+                                    dict.Value[key].Task = task;
+                                }
+
+                                return dict.Value[key].Task.ToObservable().Subscribe(a =>
+                                {
+                                    var result = (INodeViewModel)dict.Value[key].Task.GetType().GetProperty("Result").GetValue(dict.Value[key].Task);
+                                    dict.Value[key].Nodes.Add(result);
+                                    //Add(result);
+                                    observer.OnNext(result);
+                                }, () => observer.OnCompleted());
+
+                            }
+                            else
+                            {
+                                observer.OnNext(null);
+                                observer.OnCompleted();
+                                return System.Reactive.Disposables.Disposable.Empty;
+                                //return Observable.Return<INodeViewModel>(null);
+                            }
+                        }
+                        else
+                        {
+                            foreach (var x in dict.Value[key].Nodes)
+                            {
+                                //Add(x);
+                                observer.OnNext(x);
+                            }
+                            observer.OnCompleted();
+                            return System.Reactive.Disposables.Disposable.Empty;
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("fr343 df");
+                    }
+
+                });
             }
-            return Observable.Create<INodeViewModel>(obs =>
-            {
-                foreach (var x in this[(key, guid)].Nodes)
-                {
-                    //Add(x);
-                    obs.OnNext(x);
-                }
-                return System.Reactive.Disposables.Disposable.Empty;
-            });
         }
 
         public bool Contains(string key, Guid? guid)
         {
-            return this[(key, guid)].IsAccessed;
+            return dict.Value[key].IsAccessed;
         }
+    }
 
-
-        public static MethodCache Instance { get; } = new();
+    public class MethodValue
+    {
+        public Guid Guid { get; set; }
+        public bool IsAccessed => Task != null || Nodes != null;
+        public object Instance { get; set; }
+        public Method Method { get; set; }
+        public Task Task { get; set; }
+        public IList<INodeViewModel> Nodes { get; set; }
     }
 }

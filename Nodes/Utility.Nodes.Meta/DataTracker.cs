@@ -34,45 +34,57 @@ namespace Utility.Nodes.Meta
 
         public DataTracker(ITreeRepository treeRepository, NodeInterface nodeInterface)
         {
-            var repo = Globals.Resolver.Resolve<ITreeRepository>();
             repository = new(() => treeRepository);
             this.nodeInterface = nodeInterface;
         }
 
         public IObservable<INodeViewModel> Load(INodeViewModel node)
         {
-            if (node.DoesValueRequireLoading)
-            {
-                return Observable.Create<INodeViewModel>(observer =>
+            if (node is ViewModelTree tree)
+                foreach (var change in tree.Changes())
                 {
-                    return repository
-                    .Value
-                    .Get(Guid.Parse(node.Key()))
-                    .Subscribe(_d =>
+                    if (change.PropertyName != nameof(ViewModelTree.Name))
                     {
-                        if (_d.Name == nameof(IGetValue.Value) && _d.Value != null)
-                        {
-                            if (nodeInterface.Setter(_d.Name) is not { } setter)
-                            {
-                                throw new Exception($"no field for property, {_d.Name}");
-                            }
-                            //if (node is ISet set)
-                            //{
-                            //    set.Set(_d.Value, _d.Name);
-                            //    return;
-                            //}
-                            setter?.Set(node, _d.Value);
-                        }
-                    }, () =>
-                    {
-                        observer.OnNext(node);
-                        observer.OnCompleted();
-                    });
-                });
-            }
-            else
-                return Observable.Return<INodeViewModel>(node);
+                        repository.Value
+                       .Get((GuidKey)node.Key(), change.PropertyName)
+                       .Subscribe(a =>
+                       {
+                           if (a.Value == null)
+                           {
+                               repository.Value.Set((GuidKey)node.Key(), change.PropertyName, change.NewValue, DateTime.Now);
+                           }
+                       }).DisposeWith(compositeDisposable);           
+                    }
+                }
 
+            return Observable.Return(node);
+
+            return Observable.Create<INodeViewModel>(observer =>
+            {
+                return repository
+                .Value
+                .Get(Guid.Parse(node.Key()))
+                .Subscribe(_d =>
+                {
+                    if (_d.Name == nameof(IGetValue.Value) && _d.Value != null)
+                    {
+                        if (nodeInterface.Setter(_d.Name) is not { } setter)
+                        {
+                            throw new Exception($"no field for property, {_d.Name}");
+                        }
+                        //if (node is ISet set)
+                        //{
+                        //    set.Set(_d.Value, _d.Name);
+                        //    return;
+                        //}
+                        setter?.Set(node, _d.Value);
+                    }
+                }, () =>
+                {
+                    observer.OnNext(node);
+                    observer.OnCompleted();
+                });
+            });
         }
 
         public void Track(INodeViewModel node)
@@ -151,14 +163,14 @@ namespace Utility.Nodes.Meta
                 repository.Value.Set((GuidKey)node.Key(), nameof(IGetValue.Value), value, DateTime.Now);
             }
 
-           
-                //.ForEach(prop =>
-                //{
-                //    if (prop.GetValue(node) is { } value)
-                //    {
-                //        repository.Value.Set((GuidKey)node.Key(), prop.Name, value, DateTime.Now);
-                //    }
-                //});
+
+            //.ForEach(prop =>
+            //{
+            //    if (prop.GetValue(node) is { } value)
+            //    {
+            //        repository.Value.Set((GuidKey)node.Key(), prop.Name, value, DateTime.Now);
+            //    }
+            //});
         }
 
         private void update(INodeViewModel node, PropertyCall call, object value)
