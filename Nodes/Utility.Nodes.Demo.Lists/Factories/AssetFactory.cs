@@ -1,7 +1,6 @@
-﻿using Splat;
-using System.Collections;
-using System.Data.Entity.Core.Metadata.Edm;
+﻿using System.Collections;
 using System.Reactive.Linq;
+using Splat;
 using Utility.Entities;
 using Utility.Enums;
 using Utility.Extensions;
@@ -10,6 +9,7 @@ using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Models.Trees;
+using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
@@ -20,16 +20,17 @@ namespace Utility.Nodes.Demo.Lists.Factories
 {
     internal partial class NodeMethodFactory : EnumerableMethodFactory
     {
-        public IObservable<INodeViewModel> BuildAssetRoot(Guid guid, Type type)
+        public INodeViewModel BuildAssetRoot()
         {
+            var guid = Guid.Parse(MetaDataFactory.assetGuid);
             buildNetwork(guid);
 
-            return nodeSource.Create(nameof(BuildAssetRoot),
-                guid,
-                s =>
-                new Model(() => [
+            //return nodeSource.Create(nameof(BuildAssetRoot),
+            //    guid,
+            //    s =>
+            return   new Model(() => [
                     new Model<string>() { Name = search, DataTemplate = "SearchEditor" },
-                    new ListModel(type) { Name = list, DataTemplate =  "SFGridTemplate"},
+                    new ListModel(MetaDataFactory.assetType) { Name = list, DataTemplate =  "SFGridTemplate"},
                     new EditModel(attach: node =>
                     {
                         //node
@@ -53,7 +54,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                         node.ReactTo<SelectionReturnParam>(setAction: (a) => { node.Value = a; node.RaisePropertyChanged(nameof(EditModel.Value)); }, guid: guid);
                     })
                     { Name = edit },
-                    new Model<string>() { Name = summary , DataTemplate = "MoneySumTemplate", IsValueTracked = false }
+                    new Model<string>() { Name = summary , DataTemplate = "MoneySumTemplate",/* IsValueTracked = false*/ }
                 ],
 
                 (addition) =>
@@ -83,7 +84,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     }
                 },
                 (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; })
-                { Name = main });
+                { Name = main };
 
             static void buildNetwork(Guid guid)
             {

@@ -11,7 +11,6 @@
              xmlns:beh="http://schemas.utility.com/behaviors"
              xmlns:att="http://schemas.utility.com/attached"
              xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
-             xmlns:filters="clr-namespace:Utility.Nodes.WPF;assembly=Utility.WPF.Trees"
              xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
              xmlns:node="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
              xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020"
@@ -64,12 +63,12 @@
                     ItemsSource="{markup:Array {Binding}}"
                     ItemTemplateSelector="{StaticResource ContainerTemplateSelector}"
                     ItemContainerStyleSelector="{StaticResource ContainerStyleSelector}">
-                    <trees:CustomTreeView.ItemsPanel>
+                    <!--<trees:CustomTreeView.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel></StackPanel>
-                            <!--<panels:AnimatedWrapPanel />-->
+                            <StackPanel Ori></StackPanel>
+                            --><!--<panels:AnimatedWrapPanel />--><!--
                         </ItemsPanelTemplate>
-                    </trees:CustomTreeView.ItemsPanel>
+                    </trees:CustomTreeView.ItemsPanel>-->
                 </trees:CustomTreeView>
             </DataTemplate>
             

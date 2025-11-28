@@ -16,13 +16,11 @@ namespace Utility.Nodes.Demo.Lists.Factories
 {
     internal partial class NodeMethodFactory : EnumerableMethodFactory
     {
-        public IObservable<INodeViewModel> BuildUserProfileRoot(Guid guid, Type type)
+        public INodeViewModel BuildUserProfileRoot(Guid guid, Type type)
         {
             buildNetwork(guid);
 
-            return nodeSource.Create(nameof(BuildUserProfileRoot),
-                guid,
-                s =>
+            return 
                 new Model(() => [
                      new Model<string>() { Name = search,DataTemplate = "SearchEditor" },
                      new ListModel(type) { Name = list },
@@ -56,7 +54,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     }
                 },
                  (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; })
-                { Name = main });
+                { Name = main, Guid = guid };
 
             static void buildNetwork(Guid guid)
             {

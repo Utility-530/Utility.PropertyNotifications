@@ -35,7 +35,6 @@ namespace Utility.Nodes.Demo.Lists
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            CurrentMutable.RegisterLazySingleton(() => new ContainerModel());
             CurrentMutable.RegisterLazySingleton<PlaybackService>(() => new PlaybackService());
             showPlayback();
             SQLitePCL.Batteries.Init();
@@ -51,16 +50,17 @@ namespace Utility.Nodes.Demo.Lists
 
         private static void initialise(IMutableDependencyResolver register)
         {
-            register.RegisterConstant<IExpander>(WPF.Expander.Instance);
-            register.RegisterLazySingleton<IObservableIndex<INodeViewModel>>(() => MethodCache.Instance);
-            register.RegisterLazySingleton<MethodCache>(() => MethodCache.Instance);
+            //register.RegisterConstant<IExpander>(WPF.Expander.Instance);
+            //register.RegisterLazySingleton<IObservableIndex<INodeViewModel>>(() => MethodCache.Instance);
+            //register.RegisterLazySingleton<MethodCache>(() => MethodCache.Instance);
             register.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new Factories.NodeMethodFactory());
-            register.RegisterLazySingleton<IEnumerableFactory<Method>>(() => Nodes.Meta.NodeMethodFactory.Instance);
+            register.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new Nodes.Meta.NodeMethodFactory());
             //register.RegisterLazySingleton(() => new MasterViewModel());
             register.RegisterConstant(new ContainerService());
             register.RegisterConstant(new RazorService());
-            register.RegisterLazySingleton<IEnumerableFactory<Type>>(() => new ModelTypesFactory());
-            register.RegisterLazySingleton<IFactory<EntityMetaData>>(() => new MetaDataFactory());
+            //register.RegisterLazySingleton<IEnumerableFactory<Type>>(() => new ModelTypesFactory());
+            register.RegisterLazySingleton<IFactory<EntityMetaData>>(() => MetaDataFactory.Instance);
+            register.RegisterLazySingleton<IEnumerableFactory<EntityMetaData>>(() => MetaDataFactory.Instance);
             register.RegisterLazySingleton<IFactory<IId<Guid>>>(() => new ModelFactory());
             register.RegisterLazySingleton<FilterService>(() => new FilterService());
             register.RegisterLazySingleton<CollectionCreationService>(() => new CollectionCreationService());
@@ -72,9 +72,11 @@ namespace Utility.Nodes.Demo.Lists
         private static void initialiseGlobals(IRegister register)
         {
             register.Register<IServiceResolver>(() => new ServiceResolver());
-            register.Register<INodeSource>(() => new NodeEngine());
-            register.Register<ITreeRepository>(() => new TreeRepository("../../../Data"));
+            register.Register<INodeSource>(() => new NodesStore());
+            //register.Register<ITreeRepository>(() => new TreeRepository("../../../Data"));
+            register.Register<INodeRoot>(() => new NodeEngine(new TreeRepository("../../../Data"), new ValueRepository("../../../Data")));
             register.Register<IPlaybackEngine>(() => new PlaybackEngine());
+            register.Register<NodeInterface>();
         }
 
         private static void showPlayback()
@@ -99,9 +101,17 @@ namespace Utility.Nodes.Demo.Lists
             sswindow.Content = slashscreen;
             var window = new Window()
             {
-                Content = Locator.Current.GetService<ContainerModel>(),
                 ContentTemplate = Utility.WPF.Helpers.ResourceHelper.FindTemplate("MasterTemplate")
             };
+
+            Globals.Resolver
+                .Resolve<INodeRoot>()
+                .Create(nameof(Factories.NodeMethodFactory.BuildListRoot))
+                .Subscribe(node =>
+                {
+                    window.Content = node;
+                });
+
             slashscreen.Finished += (s, e) =>
             {
                 window.Show();

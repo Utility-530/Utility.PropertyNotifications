@@ -9,12 +9,9 @@ namespace Utility.Nodes.Demo.Lists.Factories
 {
     internal partial class NodeMethodFactory : EnumerableMethodFactory
     {
-        public IObservable<INodeViewModel> BuildSettingsRoot()
+        public INodeViewModel BuildSettingsRoot()
         {
-            return nodeSource.Create(nameof(BuildSettingsRoot),
-                settingsRootGuid,
-                str =>
-
+            return 
                 new Model(() =>
                 [
                     new Model(() => [new CommandModel<ResetEvent> { Name = Reset }],
@@ -24,10 +21,11 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     })
                     { Name = controls }])
                 {
-                    Name = str,
+                    Name = nameof(BuildSettingsRoot),
                     IsExpanded = true,
+                    Guid = settingsRootGuid,
                     Orientation = Orientation.Vertical
-                });
+                };
         }
     }
 }

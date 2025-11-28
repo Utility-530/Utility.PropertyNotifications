@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
-using Splat;
-using System;
+﻿using System;
 using System.Collections;
 using System.IO;
 using System.Reactive.Linq;
+using Newtonsoft.Json;
+using Splat;
+using Utility.Entities;
 using Utility.Entities.Comms;
 using Utility.Enums;
 using Utility.Extensions;
@@ -12,22 +13,23 @@ using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Models.Trees;
+using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
-using Utility.Services;
 using Utility.ServiceLocation;
-using Utility.Entities;
+using Utility.Services;
 
 namespace Utility.Nodes.Demo.Lists.Factories
 {
     internal partial class NodeMethodFactory : EnumerableMethodFactory
     {
-        public IObservable<INodeViewModel> BuildEbayRoot(Guid guid, Type type)
+        public INodeViewModel BuildEbayRoot()
         {
+            var guid = Guid.Parse(MetaDataFactory.auctionItemGuid);
             buildNetwork(guid);
 
-            return nodeSource.Create(nameof(BuildEbayRoot), guid, (s) =>
+            return 
                 new Model(() => [
                     new Model(()=>
                     [
@@ -45,7 +47,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                             Title = "Index Path"},
                     ],
                     attach : node=> {node.IsExpanded = true;  node.Orientation = Orientation.Horizontal; }                   ){ Name = controllerPath },
-                    new ListModel(type, attach: listModel=>{
+                    new ListModel(MetaDataFactory.auctionItemType, attach: listModel=>{
                         listModel.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a, guid : guid);
 
                         listModel.WhenReceivedFrom(a => a.Add, includeNulls: false)
@@ -99,7 +101,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 ],
                 attach: (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; }
                 )
-                { Name = s });
+                { Name = nameof(BuildEbayRoot), Guid =guid };
 
             static void buildNetwork(Guid guid)
             {

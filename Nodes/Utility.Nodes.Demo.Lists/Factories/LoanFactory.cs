@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Data.Entity.Core.Metadata.Edm;
 using System.Reactive.Linq;
 using Utility.Entities;
 using Utility.Enums;
@@ -9,6 +8,7 @@ using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Models.Trees;
+using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
@@ -19,26 +19,25 @@ namespace Utility.Nodes.Demo.Lists.Factories
 {
     internal partial class NodeMethodFactory : EnumerableMethodFactory
     {
-        public IObservable<INodeViewModel> BuildCreditCardRoot(Guid guid, Type type)
+        public INodeViewModel BuildCreditCardRoot()
         {
+            var guid = Guid.Parse(MetaDataFactory.loanGuid);
             buildNetwork(guid);
 
-            return nodeSource.Create(nameof(BuildCreditCardRoot),
-                guid,
-                s =>
+            return
                 new Model(() => [
                     new Model<string>() { Name = search, DataTemplate = "SearchEditor" },
-                    new ListModel(type) { Name = list },
+                    new ListModel(MetaDataFactory.loanType) { Name = list },
                     new Model(attach: node =>
                     {
                         node.ReactTo<SelectionReturnParam>(setAction: (a) => { node.Value = a; node.RaisePropertyChanged(nameof(EditModel.Value)); }, guid: guid);
                     })
                     {
                         Name = edit,
-                        IsValueTracked = false,
+                        ShouldValueBeTracked = false,
                         DataTemplate = "EditTemplate"
                     },
-                    new Model<string>() { Name = summary , DataTemplate = "MoneySumTemplate", IsValueTracked = false }
+                    new Model<string>() { Name = summary , DataTemplate = "MoneySumTemplate", ShouldValueBeTracked = false }
                 ],
 
                 (addition) =>
@@ -68,7 +67,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     }
                 },
                 (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; })
-                { Name = main });
+                { Name = main, Guid = guid };
 
             static void buildNetwork(Guid guid)
             {

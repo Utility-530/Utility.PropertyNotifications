@@ -7,6 +7,7 @@ using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Models;
 using Utility.Models.Trees;
+using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Meta;
 using Utility.ServiceLocation;
@@ -17,17 +18,16 @@ namespace Utility.Nodes.Demo.Lists.Factories
 {
     internal partial class NodeMethodFactory : EnumerableMethodFactory
     {
-        public IObservable<INodeViewModel> BuildCoinbaseTransactionRoot(Guid guid, Type type)
+        public INodeViewModel BuildCoinbaseTransactionRoot()
         {
+            var guid = Guid.Parse(MetaDataFactory.coinbaseTransactionGuid);
             buildNetwork(guid);
 
-            return nodeSource.Create(nameof(BuildCoinbaseTransactionRoot),
-                guid,
-                s =>
+            return 
                 new Model(() => [
                     new CommandModel() { Name = "Import"},
                     new Model<string>() { Name = search, DataTemplate = "SearchEditor"},
-                    new ListModel(type) { Name = list, DataTemplate =  "SFGridTemplate"},
+                    new ListModel(MetaDataFactory.coinbaseTransactionType) { Name = list, DataTemplate =  "SFGridTemplate"},
                     new Model<CryptoCoin>(attach: a =>{
                         a.Observe<CryptoCoinParam>(guid);
                     }){ Name = nameof(CryptoCoin), DataTemplate = "EnumTemplate"  },
@@ -63,7 +63,8 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     //}
                 },
                 attach: (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; })
-                { Name = "coinbase" });
+                { Name = "coinbase",
+                Guid = guid };
 
             static void buildNetwork(Guid guid)
             {

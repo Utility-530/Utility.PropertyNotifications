@@ -7,6 +7,7 @@ using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Models;
 using Utility.Models.Trees;
+using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
@@ -17,17 +18,16 @@ namespace Utility.Nodes.Demo.Lists.Factories
 {
     internal partial class NodeMethodFactory : EnumerableMethodFactory
     {
-        public IObservable<INodeViewModel> BuildTransactionRoot(Guid guid, Type type)
+        public INodeViewModel BuildTransactionRoot()
         {
+            var guid = Guid.Parse(MetaDataFactory.transactionGuid);
             buildNetwork(guid);
 
-            return nodeSource.Create(nameof(BuildTransactionRoot),
-                guid,
-                s =>
+            return 
                 new Model(() => [
                     new Model<string>() { Name = search, DataTemplate = "SearchEditor"},
-                    new ListModel(type) { Name = list, DataTemplate =  "SFGridTemplate"},
-                    new ListModel(type) { Name = list, DataTemplate =  "SFChartTemplate", XAxis = nameof(Transaction.Date), YAxis = nameof(Transaction.Balance00)},
+                    new ListModel(MetaDataFactory.transactionType) { Name = list, DataTemplate =  "SFGridTemplate"},
+                    new ListModel(MetaDataFactory.transactionType) { Name = list, DataTemplate =  "SFChartTemplate", XAxis = nameof(Transaction.Date), YAxis = nameof(Transaction.Balance00)},
                     new Model<string>() { Name = summary, DataTemplate = "MoneySumTemplate" }
                 ],
                 (addition) =>
@@ -57,7 +57,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     }
                 },
                 attach: (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; })
-                { Name = main });
+                { Name = main, Guid = guid };
 
             static void buildNetwork(Guid guid)
             {
