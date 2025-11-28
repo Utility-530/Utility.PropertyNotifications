@@ -54,10 +54,6 @@ namespace Utility.Nodes.Demo.Editor
         Models.Templates.ModelTemplateSelector ModelTemplateSelector = new();
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if(item is IGetName name && name.Name=="Files")
-            {
-
-            }
             return item switch
             {
                 MemberDescriptor => Utility.WPF.Trees.DataTemplateSelector.Instance.SelectTemplate(item, container),

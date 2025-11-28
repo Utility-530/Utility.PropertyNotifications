@@ -6,7 +6,6 @@ using Utility.Interfaces.Generic;
 
 namespace Utility.Interfaces.Exs
 {
-
     public interface INodeRoot : IObservable<INodeViewModel>
     {
         IObservable<INodeViewModel> Create(object model);
@@ -24,5 +23,4 @@ namespace Utility.Interfaces.Exs
             return nodeStore.Nodes.SingleOrDefault(a => a.Key() == key);
         }
     }
-
 }

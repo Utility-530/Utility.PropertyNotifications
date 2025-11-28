@@ -60,8 +60,8 @@ namespace Utility.Nodes.Meta
                     }
                     return Observable.Empty<INodeViewModel>();
                 })
-         .Subscribe(child => Globals.UI.Post((a) => node.Add(child), null))
-         .DisposeWith(_compositeDisposable);
+                .Subscribe(child => Globals.UI.Post((a) => node.Add(child), null))
+                .DisposeWith(_compositeDisposable);
 
             IObservable<INodeViewModel> unloadChildren(INodeViewModel node)
             {

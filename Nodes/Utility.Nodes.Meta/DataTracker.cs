@@ -46,14 +46,14 @@ namespace Utility.Nodes.Meta
                     if (change.PropertyName != nameof(ViewModelTree.Name))
                     {
                         repository
-                       .Get((GuidKey)node.Key(), change.PropertyName)
-                       .Subscribe(a =>
-                       {
-                           if (a.Value == null)
-                           {
-                               repository.Set((GuidKey)node.Key(), change.PropertyName, change.NewValue, DateTime.Now);
-                           }
-                       }).DisposeWith(compositeDisposable);           
+                            .Get((GuidKey)node.Key(), change.PropertyName)
+                            .Subscribe(a =>
+                            {
+                                if (a.Value == null)
+                                {
+                                    repository.Set((GuidKey)node.Key(), change.PropertyName, change.NewValue, DateTime.Now);
+                                }
+                            }).DisposeWith(compositeDisposable);
                     }
                 }
 
@@ -162,15 +162,6 @@ namespace Utility.Nodes.Meta
             {
                 repository.Set((GuidKey)node.Key(), nameof(IGetValue.Value), value, DateTime.Now);
             }
-
-
-            //.ForEach(prop =>
-            //{
-            //    if (prop.GetValue(node) is { } value)
-            //    {
-            //        repository.Value.Set((GuidKey)node.Key(), prop.Name, value, DateTime.Now);
-            //    }
-            //});
         }
 
         private void update(INodeViewModel node, PropertyCall call, object value)
@@ -208,6 +199,7 @@ namespace Utility.Nodes.Meta
             }
         }
 
+        #region dispose
         public void Dispose()
         {
             Dispose(true);
@@ -233,6 +225,7 @@ namespace Utility.Nodes.Meta
 
             _disposed = true;
         }
+        #endregion dispose
         //    void configure(INodeViewModel node)
         //    {
         //        if (filter.Value?.Filter(node) == false)
@@ -273,7 +266,5 @@ namespace Utility.Nodes.Meta
         //                throw new Exception("ss FGre333333333");
         //        });
         //    }
-
-
     }
 }

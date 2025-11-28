@@ -36,6 +36,8 @@ namespace Utility.Nodes.WPF
                 nameof(NodeViewModel.Column),
                 nameof(NodeViewModel.Arrangement),
                 nameof(NodeViewModel.Orientation),
+                nameof(NodeViewModel.IsSelected),
+                nameof(NodeViewModel.IsWithinWindowBounds),
             ];
 
         public override bool CanRead => base.CanRead;
@@ -62,9 +64,6 @@ namespace Utility.Nodes.WPF
             foreach (var prop in filterProperties)
             {
                 MetadataConverter.Process(prop, value, writer, serializer);
-
-
-
             }
             writer.WriteEndObject();
         }

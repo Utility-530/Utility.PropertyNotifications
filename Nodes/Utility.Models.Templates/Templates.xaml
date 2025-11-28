@@ -73,8 +73,6 @@
         </WrapPanel>
     </HierarchicalDataTemplate>
 
-
-
     <HierarchicalDataTemplate
         x:Key="DefaultTemplate"
         DataType="{x:Type nodes:NodeViewModel}"
