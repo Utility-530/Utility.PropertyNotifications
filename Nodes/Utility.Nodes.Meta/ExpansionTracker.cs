@@ -32,7 +32,7 @@ namespace Utility.Nodes.Meta
         private const string ERROR_KEY_NOT_FOUND = "Key not found";
         private readonly Utility.Observables.CompositeDisposable _compositeDisposable = new();
         private readonly Dictionary<INodeViewModel, List<INodeViewModel>> dictionary = new();
-
+        private readonly IDataActivator dataActivator;
         private bool _disposed;
 
         void setupExpansionHandling(INodeViewModel node)
@@ -98,8 +98,6 @@ namespace Utility.Nodes.Meta
                 });
             }
 
-
-
             IObservable<INodeViewModel> loadChildren(INodeViewModel node)
             {
                 int childIndex = 0;
@@ -117,7 +115,15 @@ namespace Utility.Nodes.Meta
                         return repository
                                     .Find((GuidKey)node.Key())
                                     .Subscribe(
-                                        key => processKey(node, key, observer, ref childIndex),
+                                        change =>
+                                        {
+                                            if (change.Type == Changes.Type.Add)
+                                                processKey(node, change.Value, observer, ref childIndex);
+                                            else if(change.Type == Changes.Type.None)
+                                            {     
+                                            }
+                                            else throw new Exception("VD");
+                                        },
                                         observer.OnError,
                                         () => { observer.OnCompleted(); }
                                         ).DisposeWith(disposables);
@@ -169,21 +175,23 @@ namespace Utility.Nodes.Meta
                             throw new Exception("child name is null");
                         return repository
                             .Find((GuidKey)parent.Key(), child.Name(), type: GetNodeType(child), index: index)
-                            .Subscribe(key =>
+                            .Subscribe(change =>
                             {
-                                if (key.HasValue == false)
-                                    throw new Exception("Key is null");
-                                keys.Add(key.Value);
+                                if (change.Type != Changes.Type.Add)
+                                    throw new Exception("V33D");
+                                //if (change.Value == false)
+                                //    throw new Exception("Key is null");
+                                keys.Add(change.Value);
 
-                                var existingNode = nodesStore.Find(key.Value.Guid.ToString());
+                                var existingNode = nodesStore.Find(change.Value.Guid.ToString());
                                 if (existingNode != null)
                                 {
                                     // if current value set then already created
                                 }
                                 else
                                 {
-                                    validateKey(key);
-                                    child.SetKey(new GuidKey(key.Value.Guid));
+                                    validateKey(change.Value);
+                                    child.SetKey(new GuidKey(change.Value.Guid));
                                     observer.OnNext(child);
                                 }
                             });
@@ -196,7 +204,12 @@ namespace Utility.Nodes.Meta
         {
             return repository
             .Find((GuidKey)node.Key(), guid: guid)
-            .SelectMany(key => activateNode(node, key));
+            .SelectMany(change =>
+            {
+                if (change.Type != Changes.Type.Add)
+                    throw new Exception("V33d d3D");
+                return activateNode(node, change.Value);
+            });
         }
 
 
@@ -214,12 +227,13 @@ namespace Utility.Nodes.Meta
                     else
                     {
                         // Search in repository
-                        return findInRepository(node, guid)
-                             .Subscribe(activatedNode =>
-                             {
-                                 observer.OnNext(activatedNode);
-                                 observer.OnCompleted();
-                             });
+                        return
+                        findInRepository(node, guid)
+                        .Subscribe(activatedNode =>
+                        {
+                            observer.OnNext(activatedNode);
+                            observer.OnCompleted();
+                        });
                     }
                     //return new CompositeDisposable(repositorySubscription);
                 }
@@ -243,7 +257,7 @@ namespace Utility.Nodes.Meta
                 keys.Add(key.Value);
                 validateKey(key);
 
-                var newNode = (INodeViewModel)DataActivator.Activate(key);
+                var newNode = (INodeViewModel)dataActivator.Activate(key);
                 newNode.SetParent(parent);
                 newNode.SetKey(new GuidKey(key.Value.Guid));
                 newNode.Removed = key.Value.Removed;
@@ -253,41 +267,41 @@ namespace Utility.Nodes.Meta
             });
         }
 
-
         public IObservable<INodeViewModel> Roots()
         {
             return Observable.Create<INodeViewModel>(observer =>
             {
-                return repository
-                       .SelectKeys()
-                       .Subscribe(keys =>
-                       {
-                           foreach (var key in keys)
-                           {
-                               if (key == default)
-                                   throw new Exception("Key is null");
-                               this.keys.Add(key);
-                               this.roots.Add(key);
-                               var existingNode = nodesStore.Find(key.Guid.ToString());
-                               if (existingNode != null)
-                               {
-                                   // if current value set then already created
-                               }
-                               else if (key.Removed.HasValue)
-                               {
+                return
+                repository
+                .Find()
+                .Subscribe(change =>
+                {
+                    if (change.Type != Changes.Type.Add)
+                        throw new Exception("V33D");
+                    var key = change.Value;
+         
+                    this.keys.Add(key);
+                    this.roots.Add(key);
+                    var existingNode = nodesStore.Find(key.Guid.ToString());
+                    if (existingNode != null)
+                    {
+                        // if current value set then already created
+                    }
+                    else if (key.Removed.HasValue)
+                    {
 
-                               }
-                               else
-                               {
-                                   var child = (INodeViewModel)DataActivator.Activate(key);
-                                   validateKey(key);
-                                   child.SetKey(new GuidKey(key.Guid));
-                                   child.IsProliferable = true;
-                                   Add(child);
-                                   observer.OnNext(child);
-                               }
-                           }
-                       }, () => observer.OnCompleted());
+                    }
+                    else
+                    {
+                        var child = (INodeViewModel)dataActivator.Activate(key);
+                        validateKey(key);
+                        child.SetKey(new GuidKey(key.Guid));
+                        child.IsProliferable = true;
+                        Add(child);
+                        observer.OnNext(child);
+                    }
+
+                }, () => observer.OnCompleted());
             });
         }
     }

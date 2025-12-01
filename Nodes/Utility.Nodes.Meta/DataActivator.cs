@@ -2,14 +2,21 @@
 using Utility.Interfaces.NonGeneric;
 using System.Linq;
 using System.Collections.Generic;
+using Utility.Structs.Repos;
+using Utility.Interfaces.Exs;
 
 namespace Utility.Nodes.Meta
 {
-    internal static class DataActivator
+    public class DataActivator : IDataActivator
     {
-        public static object Activate(Structs.Repos.Key? a)
+        public object Activate(Structs.Repos.Key? a)
         {
-            if (infos().SingleOrDefault() is { } constructorInfo)         
+            return activate(a);
+        }
+
+        static object activate(Structs.Repos.Key? a)
+        {
+            if (infos().SingleOrDefault() is { } constructorInfo)
             {
                 return constructorInfo.Invoke([a.Value.Name]);
             }
@@ -30,7 +37,7 @@ namespace Utility.Nodes.Meta
 
             IEnumerable<ConstructorInfo> infos() => from x in a.Value.Type.GetConstructors()
                                                     let p = x.GetParameters()
-                                                    where p.Length == 1 && p[0].ParameterType ==typeof(string)
+                                                    where p.Length == 1 && p[0].ParameterType == typeof(string)
                                                     select x;
         }
     }

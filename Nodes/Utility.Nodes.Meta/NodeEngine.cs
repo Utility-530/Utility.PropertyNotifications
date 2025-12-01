@@ -42,11 +42,11 @@ namespace Utility.Nodes.Meta
         private readonly ITreeRepository repository;
         private readonly INodeSource nodesStore;
 
-        public NodeEngine(ITreeRepository? treeRepo = null, IValueRepository valueRepository = null, Predicate<INodeViewModel>? childrenTracking = null)
+        public NodeEngine(ITreeRepository? treeRepo = null, IValueRepository? valueRepository = null, IDataActivator? dataActivator = null, Predicate<INodeViewModel>? childrenTracking = null)
         {
-            treeRepo ??= Globals.Resolver.Resolve<ITreeRepository>() ?? throw new Exception("££SXXX");
-            valueRepository ??= Globals.Resolver.Resolve<IValueRepository>() ?? throw new Exception("£3__SXXX");
-            repository = treeRepo;
+            this.repository = treeRepo ?? Globals.Resolver.Resolve<ITreeRepository>() ?? throw new Exception("££SXXX");
+            valueRepository ??=  Globals.Resolver.Resolve<IValueRepository>() ?? throw new Exception("£3__SXXX");
+            this.dataActivator = dataActivator ?? Globals.Resolver.Resolve<IDataActivator>() ?? throw new Exception("£3__SXXX");
             var x = Globals.Resolver.Resolve<NodeInterface>();
             nodesStore = Globals.Resolver.Resolve<INodeSource>();
             _dataInitialiser = new(valueRepository, x);
@@ -74,13 +74,13 @@ namespace Utility.Nodes.Meta
                         throw new Exception("GFD£ d");
                     }
 
-                        var existingNode = nodesStore.Find(node.Key());
+                    var existingNode = nodesStore.Find(node.Key());
                     if (existingNode != null)
                     {
                         observer.OnNext(existingNode);
                         observer.OnCompleted();
                         return Disposable.Empty;
-                    }          
+                    }
 
                     return repository
                            .InsertRoot(node.Guid, node.Name(), GetNodeType(node))
@@ -129,7 +129,7 @@ namespace Utility.Nodes.Meta
             {
             }
 
-            if (nodesStore.Find(node.Key()) != null) 
+            if (nodesStore.Find(node.Key()) != null)
                 return;
 
             addNodeToCollection(node);
@@ -139,11 +139,16 @@ namespace Utility.Nodes.Meta
                 var index = countSiblingNodesWithSameName(node);
                 var findSubscription = repository
                     .Find((GuidKey)node.Parent().Key(), node.Name(), type: GetNodeType(node), index: index == 0 ? null : index)
-                    .Subscribe(key =>
+                    .Subscribe(change =>
                     {
-                        validateKey(key);
-                        node.SetKey(new GuidKey(key.Value.Guid));
-                        Add(node);
+                        if(change.Type == Changes.Type.Add)
+                        {
+                            validateKey(change.Value);
+                            node.SetKey(new GuidKey(change.Value.Guid));
+                            Add(node);
+                        }
+                        else
+                            throw new Exception("Node not found in repository");
                     });
             }
 
@@ -161,7 +166,7 @@ namespace Utility.Nodes.Meta
         }
 
         void addNodeToCollection(INodeViewModel node)
-        {      
+        {
             _dataInitialiser
                 .Load(node)
                 .Subscribe(_ =>

@@ -40,10 +40,10 @@ namespace Utility.Nodes.Meta
 
         public IObservable<INodeViewModel> Load(INodeViewModel node)
         {
-            if (node is ViewModelTree tree)
+            if (node is NodeViewModel tree)
                 foreach (var change in tree.Changes())
                 {
-                    if (change.PropertyName != nameof(ViewModelTree.Name))
+                    if (change.PropertyName != nameof(NodeViewModel.Name))
                     {
                         repository
                             .Get((GuidKey)node.Key(), change.PropertyName)
@@ -242,11 +242,11 @@ namespace Utility.Nodes.Meta
         //        {
         //            if (e is PropertyChange { Name: string name, Value: var value })
         //            {
-        //                if (name == nameof(ViewModelTree.Order))
+        //                if (name == nameof(NodeViewModel.Order))
         //                {
         //                    ((node as IGetParent<IReadOnlyTree>).Parent as INodeViewModel).Sort(null);
         //                }
-        //                if (name == nameof(ViewModelTree.IsSelected) && value is true)
+        //                if (name == nameof(NodeViewModel.IsSelected) && value is true)
         //                {
         //                    selections.OnNext(node);
         //                }

@@ -34,9 +34,9 @@ namespace Utility.Nodes.Meta
             this.setdictionary = new(() =>
             {
                 var dict = typeof(NodeViewModel)
-                               .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                               .Where(a => a.Name != nameof(IGetParent<>.Parent))
-                               .ToDictionary(a => a.Name, a => rules.Decide(a));
+                            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                            .Where(a => a.Name != nameof(IGetParent<>.Parent))
+                            .ToDictionary(a => a.Name, a => rules.Decide(a));
                 return dict;
             });
         }
@@ -159,14 +159,18 @@ namespace Utility.Nodes.Meta
         public override Task Set(object instance, object value)
         {
             //prop.SetValue(instance, value);
-            (instance as ISet).Set(value, Name);
-            if (instance is IRaiseChanges raiseChanges)
+            if ((instance as IGet).Get(Name) != value)
             {
-                raiseChanges.RaisePropertyReceived(null, value, Name);
-                raiseChanges.RaisePropertyChanged(Name);
+                (instance as ISet).Set(value, Name);
+                if (instance is IRaiseChanges raiseChanges)
+                {
+                    raiseChanges.RaisePropertyReceived(null, value, Name);
+                    raiseChanges.RaisePropertyChanged(Name);
+                }
+                else
+                    throw new Exception("Dddazzzzz");
             }
-            else
-                throw new Exception("Dddazzzzz");
+      
             return Task.CompletedTask;
         }
     }
