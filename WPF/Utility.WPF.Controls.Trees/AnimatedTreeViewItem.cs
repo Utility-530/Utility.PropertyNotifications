@@ -55,6 +55,8 @@ namespace Utility.WPF.Controls.Trees
 
         private void AnimatedListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (this.ItemsSource == null)
+                return;
             var index = this.ItemsSource.IndexOf(a => a == e.AddedItems.Cast<object>().FirstOrDefault());
             if (sender is CustomTreeViewItem item)
             {
