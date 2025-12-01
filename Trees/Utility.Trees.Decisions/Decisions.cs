@@ -183,12 +183,12 @@ namespace Utility.Trees.Decisions
         }
     }
 
-    //public class ViewModelTree : ObservableTree, INotifyPropertyReceived
+    //public class NodeViewModel : ObservableTree, INotifyPropertyReceived
     //{
     //    //readonly ReplaySubject<Utility.Changes.Update<IReadOnlyTree>> subject = new();
     //    private bool isSelected;
 
-    //    public ViewModelTree()
+    //    public NodeViewModel()
     //    {
     //        var viewModel = new ViewModel();
     //        Data = viewModel;

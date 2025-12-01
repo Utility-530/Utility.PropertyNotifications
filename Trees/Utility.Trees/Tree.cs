@@ -21,7 +21,7 @@ namespace Utility.Trees
         private bool flag;
         private string key;
         private bool? hasItems;
-
+        Type type;
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         protected IList m_items
@@ -257,7 +257,7 @@ namespace Utility.Trees
 
         public virtual Task<bool> HasMoreChildren() => Task.FromResult(false);
 
-        Type IType.Type => Data?.GetType();
+        public virtual Type Type { get => type; set => type = value; }
 
         private void ResetOnCollectionChangedEvent()
         {
