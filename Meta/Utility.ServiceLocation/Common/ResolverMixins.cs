@@ -24,14 +24,19 @@ public static class ResolverMixins
     /// <returns>The requested object, if found; <c>null</c> otherwise.</returns>
     public static T? Resolve<T>(this IResolver resolver, string? contract = null)
     {
+        return TryResolve<T>(resolver, contract) ?? throw new Exception("$£V£D£DDFFD;");
+
+    }
+    public static T? TryResolve<T>(this IResolver resolver, string? contract = null)
+    {
         resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
         var resolution = resolver.Resolve(typeof(T), contract);
         if (resolution is T t)
             return t;
         else if (resolution is Func<T> method)
             return (T?)method();
-        throw new Exception("$£V£D£DDFFD;");
-      }
+        return default;
+    }
 
     /// <summary>
     /// Gets all instances of the given <typeparamref name="T"/>. Must return an empty
