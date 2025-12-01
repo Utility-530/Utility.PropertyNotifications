@@ -29,7 +29,8 @@
     xmlns:text="http://schemas.utility.com/texts"
     xmlns:ui="http://toniccomputing.com/patterns/ui"
     xmlns:wpf1="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
-    xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit">
+    xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit" 
+    xmlns:trees="http://schemas.utility.com/trees">
 
 
     <ResourceDictionary.MergedDictionaries>
@@ -50,7 +51,7 @@
         DataType="{x:Type nodes:NodeViewModel}"
         ItemsSource="{Binding Children}">
         <WrapPanel>
-            <ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource ModelTemplateSelector}">
+            <ContentControl Content="{Binding}" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Style.Triggers>
@@ -92,9 +93,14 @@
         <TextBlock Text="{Binding Name}" />
     </HierarchicalDataTemplate>-->
 
-    <DataTemplate x:Key="IndexTemplate" DataType="{x:Type nodes:NodeViewModel}">
-        <xc:IntegerUpDown Value="{Binding Value}" />
-    </DataTemplate>
+
+    <!--<DataTemplate x:Key="EditTreeTemplate" DataType="{x:Type nodes:NodeViewModel}">
+        <trees:CustomTreeView 
+              ItemsSource="{Binding Path=Children}" 
+              ItemContainerStyleSelector="{StaticResource StyleSelector}"
+              ItemTemplateSelector="{StaticResource DataTemplateSelector}">
+        </trees:CustomTreeView>
+    </DataTemplate>-->
 
     <DataTemplate DataType="{x:Type inf:RelationModel}">
         <ComboBox
@@ -297,13 +303,6 @@
         <TextBlock Text="{Binding Type, Converter={x:Static conv:TypeNameConverter.Instance}}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type inf:EditModel}">
-        <obj:JsonControl Width="500" Height="400">
-            <i:Interaction.Behaviors>
-                <obj:ObjectBehavior Object="{Binding Value, Mode=OneWay}" RaisePropertyChanged="True" />
-            </i:Interaction.Behaviors>
-        </obj:JsonControl>
-    </DataTemplate>
 
     <DataTemplate x:Key="EditTemplate" DataType="{x:Type nodes:NodeViewModel}">
         <obj:JsonControl Width="500" Height="400">
@@ -368,27 +367,20 @@
             Text="{Binding Exception.Message}" />
     </DataTemplate>
 
-    <DataTemplate x:Key="ProliferationTemplate">
-        <list:CustomSelector
-         x:Name="CustomSelector"
-         Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"
-         Height="400"
-         Edit="{Binding Converter={StaticResource NewObjectConverter}, Mode=OneWay}"
-         IsGrid="True"
-         ItemsHeight="500"
-         ItemsWidth="300"
-         RemoveCommand="{markup:Command Remove}"
-         SelectedItem="{Binding Current, Mode=TwoWay}">
-            <!--  Edit="{Binding Edit,Mode=TwoWay}">  -->
+
+    <DataTemplate x:Key="DataGridTemplate">
+        <DataGrid AutoGenerateColumns="True"
+                 
+                  x:Name="CustomSelector"
+                  Height="200"
+                  ItemsSource="{Binding Collection, Mode=OneWay}"
+                  SelectedItem="{Binding Value, Mode=TwoWay, Converter={x:Static local:SelectedItemConverter.Instance}}">
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="FinishEdit">
-                    <beh:SetterAction
-                     Converter="{StaticResource FinishEditConverter}"
-                     PropertyName="Add"
-                     TargetObject="{Binding}" />
+                <i:EventTrigger EventName="CellEditEnding">
+                    <local:CellEditEndingAction />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-        </list:CustomSelector>
+        </DataGrid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:ListModel}">
@@ -488,10 +480,10 @@
     </DataTemplate>
 
     <DataTemplate x:Key="Html">
-        <TextBlock Text="Html" />
+        <!--<TextBlock Text="Html" />-->
         <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
         <!--<html:TinyHtmlEditorControl Html="{Binding Value, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>-->
-        <!--<wpf1:HtmlPanel Text="{Binding Value, Mode=OneWay}"></wpf1:HtmlPanel>-->
+        <wpf1:HtmlPanel Text="{Binding Value, Mode=OneWay}"></wpf1:HtmlPanel>
         <!--<avalonedit:TextEditor x:Name="_htmlEditor"
 
                                        VerticalScrollBarVisibility="Visible"
@@ -545,7 +537,7 @@
         <Setter Property="Width" Value="60" />
     </Style>
 
-    
+
 
 
     <DataTemplate x:Key="DirectoryEditor" DataType="{x:Type nodes:NodeViewModel}">
@@ -600,7 +592,60 @@
 
         </Grid>
     </DataTemplate>
+    <DataTemplate x:Key="HeaderTemplate">
+        <Grid
+            Margin="0,4,4,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center">
 
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+
+            <ContentControl Content="{Binding Value, Mode=OneWay}">
+                <ContentControl.ContentTemplate>
+                    <DataTemplate>
+                        <Grid
+                            x:Name="tile"
+                            Grid.Column="0"
+                            Margin="5"
+                            Background="Transparent">
+
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                FontWeight="DemiBold"
+                                Text="{Binding Name, Converter={x:Static local:HumaniseConverter.Instance}}"
+                                TextWrapping="WrapWithOverflow" />
+                        </Grid>
+                    </DataTemplate>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+
+        </Grid>
+    </DataTemplate>
+
+
+    <DataTemplate x:Key="NameTemplate">
+        <Grid
+                            x:Name="tile"
+                            Grid.Column="0"
+                            Margin="2"
+                            Background="Transparent">
+
+            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                FontWeight="DemiBold"
+                                Text="{Binding Name, Converter={x:Static local:HumaniseConverter.Instance}}"
+                                TextWrapping="WrapWithOverflow" />
+
+        </Grid>
+    </DataTemplate>
 
     <DataTemplate x:Key="Missing">
         <TextBlock Text="missing" />

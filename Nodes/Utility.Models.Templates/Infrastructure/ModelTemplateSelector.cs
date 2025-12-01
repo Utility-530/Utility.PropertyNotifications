@@ -25,21 +25,8 @@ namespace Utility.Models.Templates
             }
 
             DataTemplate baseTemplate = item.GetType().FindTemplate(Templates.Instance);
-
-            if (baseTemplate is HierarchicalDataTemplate)
-            {
-                return Templates.Instance["DefaultTemplate"] as DataTemplate ?? throw new Exception("d3091111111");
-            }
-            else
-            {
-                //if (baseTemplate.DataType is Type type && type == typeof(ListModel))
-                //{
-                return baseTemplate;
-                //}
-            }
-            //throw new Exception("VSD 333");
-            //return baseTemplate ?? Templates.Instance["Missing"] as DataTemplate ?? throw new Exception("d3091111111");
-
+            return baseTemplate;
+      
             static DataTemplate? FindTemplate(string template)
             {
                 if (Templates.Instance[template] is DataTemplate _dataTemplate)
@@ -49,5 +36,7 @@ namespace Utility.Models.Templates
                 return null;
             }
         }
+
+        public static ModelTemplateSelector Instance { get; } = new();
     }
 }
