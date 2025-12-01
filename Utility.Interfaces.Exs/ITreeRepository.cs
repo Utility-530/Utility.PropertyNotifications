@@ -6,20 +6,15 @@ namespace Utility.Interfaces.Exs
 {
     public interface ITreeRepository
     {
-
         IObservable<Key?> InsertRoot(Guid guid, string name, Type type);
 
         IEnumerable<Duplication> Duplicate(Guid oldGuid, Guid? newParentGuid = null);
 
-        IObservable<Key?> Find(Guid parentGuid, string? name = null, Guid? guid = null, Type? type = null, int? index = null);
-
-        IObservable<Guid> InsertByParent(Guid parentGuid, string name, string? table_name = null, int? typeId = null, int? index = null);
+        IObservable<Utility.Changes.Change<Key>> Find(Guid? parentGuid = default, string? name = null, Guid? guid = null, Type? type = null, int? index = null);
 
         int? MaxIndex(Guid parentGuid, string? name = null);
 
         DateTime Remove(Guid guid);
-
-        IObservable<IReadOnlyCollection<Key>> SelectKeys(Guid? parentGuid = null, string? name = null, string? table_name = null);
 
         void UpdateName(Guid parentGuid, Guid guid, string name, string newName);
 

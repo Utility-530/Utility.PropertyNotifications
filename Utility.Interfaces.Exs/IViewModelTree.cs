@@ -28,14 +28,18 @@ namespace Utility.Interfaces.Exs
         IAreChildrenLoaded,
         IAreChildrenTracked,
         IIsProliferable,
-        IIsLoaded
- 
+        IIsLoaded,
+        IStyle
+
     //IHeight,
     //IWidth
     {
     }
 
-
+    public interface IStyle
+    {
+        string Style { get; set; }
+    }
     public interface IIsLoaded
     {
         bool IsLoaded { get; set; }

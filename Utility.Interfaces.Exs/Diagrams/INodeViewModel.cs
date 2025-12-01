@@ -4,8 +4,8 @@ namespace Utility.Interfaces.Exs.Diagrams
 {
     public interface INodeViewModel : IViewModelTree, IAddCommand, IRemoveCommand
     {
-        ICollection<IConnectorViewModel> Input { get; }
-        ICollection<IConnectorViewModel> Output { get; }
+        ICollection<IConnectorViewModel> Inputs { get; }
+        ICollection<IConnectorViewModel> Outputs { get; }
         IDiagramViewModel Diagram { get; set; }
     }
 }
