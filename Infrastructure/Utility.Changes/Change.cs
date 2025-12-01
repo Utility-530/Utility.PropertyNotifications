@@ -22,5 +22,18 @@ namespace Utility.Changes
         {
             return new Set(this);
         }
+
+
+        public static Change<T> None<T>() => new(default, Type.None);
+
+        public Change<TR> As<TR>() where TR : class
+        {
+            return new Change<TR>(Value as TR ?? throw new Exception("sd ssss"), Type);
+        }
+
+        public static Change<T> Add<T>(T NewItem) => new(NewItem, default, Changes.Type.Add);
+        public static Change<T> Remove<T>(T NewItem) => new(NewItem, default, Changes.Type.Remove);
+        public static Change<T> Update<T>(T NewItem, T OldItem) => new(NewItem, OldItem, Changes.Type.Update);
+        public static Change<T> Reset<T>() => new(default, default, Changes.Type.Reset);
     }
 }
