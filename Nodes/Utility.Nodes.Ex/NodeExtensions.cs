@@ -15,7 +15,7 @@ namespace Utility.Nodes.Ex
 {
     public static class NodeExtensions
     {
-        public static string Name(this IViewModelTree node)
+        public static string Name(this INodeViewModel node)
         {
             if (node is IGetName getName)
             {
@@ -24,13 +24,13 @@ namespace Utility.Nodes.Ex
             return node.ToString();
         }
 
-        public static ITree ToViewModelTree(this Assembly[] assemblies, Predicate<Type>? typePredicate = null)
+        public static ITree ToNodeViewModel(this Assembly[] assemblies, Predicate<Type>? typePredicate = null)
         {
-            ViewModelTree t_tree = new() { Name = "root" };
+            NodeViewModel t_tree = new() { Name = "root" };
 
             foreach (var assembly in assemblies)
             {
-                ViewModelTree tree = AssemblyModel.Create(assembly);
+                NodeViewModel tree = AssemblyModel.Create(assembly);
 
                 foreach (var type in assembly.GetTypes())
                 {
@@ -48,7 +48,7 @@ namespace Utility.Nodes.Ex
             return t_tree;
         }
 
-        public static ITree ToViewModelTree(this Model<string>[] models, Predicate<Type>? typePredicate = null, IViewModelTree? t_tree = null)
+        public static ITree ToNodeViewModel(this Model<string>[] models, Predicate<Type>? typePredicate = null, INodeViewModel? t_tree = null)
         {
             t_tree ??= new NodeViewModel("root");
 
@@ -57,7 +57,7 @@ namespace Utility.Nodes.Ex
                 model.WhenReceivedFrom(a => a.IsExpanded).Subscribe(isExpanded =>
                 {
                     if (isExpanded)
-                        ToViewModelTree([.. model.Items().OfType<Model<string>>()], t_tree: model);
+                        ToNodeViewModel([.. model.Items().OfType<Model<string>>()], t_tree: model);
                 });
 
                 t_tree.Add(model);
