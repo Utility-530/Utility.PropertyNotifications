@@ -39,7 +39,7 @@ namespace Utility.Nodes.WPF
             if (value is ChangeRoutedEventArgs { Type: Changes.Type.Add, Instance: INodeViewModel nObject } args)
             {
                 args.Handled = true;
-                if (nObject is Model<string> model  && nObject is IGetParent<INodeViewModel> { Parent: ListModel { Children: { } collection } dModels })
+                if (nObject is Model<string> model && nObject is IGetParent<INodeViewModel> { Parent: ListModel { Children: { } collection } dModels })
                 {
                     //var alias = toFileName(dModels, model);
                     var newName = StringExtensions.IncrementSuffixNumber(model.Get());
@@ -105,13 +105,9 @@ namespace Utility.Nodes.WPF
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value:  TypeModel { Type: Type type }  })
+            if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value: TypeModel { Type: Type type } })
             {
-                if (parameter is IGetKey { Key: string key } && Guid.TryParse(key, out var guid))
-                {
-                    var root = CreateRoot(type, guid);
-                    return root;
-                }
+                return DescriptorFactory.CreateRoot(type);
             }
             else if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value: AssemblyModel { Assembly: Assembly ass } })
             {
@@ -124,23 +120,8 @@ namespace Utility.Nodes.WPF
         {
             throw new NotImplementedException();
         }
-
-        public static IDescriptor CreateRoot(Type type, Guid guid)
-        {
-            //var instance = Activator.CreateInstance(type);
-            var instance = ActivateAnything.Activate.New(type);
-            var rootDescriptor = new RootDescriptor(type) { };
-            rootDescriptor.SetValue(null, instance);
-            var root = CreateRoot(rootDescriptor);
-            return root;
-
-            IDescriptor CreateRoot(System.ComponentModel.PropertyDescriptor descriptor)
-            {
-                var _descriptor = DescriptorConverter.ToDescriptor(instance, descriptor);
-                return _descriptor;
-            }
-        }
     }
+
     public static class StringExtensions
     {
         private static readonly Regex NumberAtEnd = new Regex(@"(\d+)$", RegexOptions.Compiled);

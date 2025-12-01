@@ -4,10 +4,7 @@
     xmlns:conv="http://schemas.utility.com/converters"
     xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:Utility.Nodes.WPF"
-    xmlns:mt="clr-namespace:Utility.Models.Templates;assembly=Utility.Models.Templates"
     xmlns:mvvm="http://hexinnovation.com/math">
-
-
 
     <local:SelectedNodeChangeConverter x:Key="SelectedNodeChangeConverter" />
     <conv:TypeNameConverter x:Key="TypeNameConverter" />

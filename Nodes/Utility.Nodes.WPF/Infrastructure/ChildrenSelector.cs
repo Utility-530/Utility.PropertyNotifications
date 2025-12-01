@@ -16,13 +16,9 @@ namespace Utility.Nodes.WPF
     {
         public IEnumerable Select(object data)
         {
-            return NodeExtensions.ToViewModelTree([typeof(CustomModels.Controls).Assembly, new SystemAssembly()]);
+            return NodeExtensions.ToNodeViewModel([typeof(CustomModels.Controls).Assembly, new SystemAssembly()]);
         }
     }
-
-
-
-
 
     public class ChildrenSelectorConverter : IMultiValueConverter
     {

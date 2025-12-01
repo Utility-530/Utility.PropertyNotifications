@@ -27,6 +27,7 @@
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Markup\Utility.WPF.Markup.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
+		<ProjectReference Include="..\Models\Models.csproj" />
 		<ProjectReference Include="..\Utility.Models.Templates\Utility.Models.Templates.csproj" />
 		<ProjectReference Include="..\Utility.Nodes.WPF.Templates.SyncFusion\Utility.Nodes.WPF.Templates.SyncFusion.csproj" />
 	</ItemGroup>
