@@ -111,12 +111,12 @@ namespace Utility.Models.Trees
                             if (typesCount > propertiesCount)
                             {
                                 Model.Set(ResolvableModel.Types.Last());
-                                ComparisonModel.Type = a.First == null ? ComparisonType.Default : ComparisonType.Type;
+                                ComparisonModel.ComparisonType = a.First == null ? ComparisonType.Default : ComparisonType.Type;
                             }
                             else if (typesCount == 0)
                             {
                                 Model.Set(null);
-                                ComparisonModel.Type = ComparisonType.Default;
+                                ComparisonModel.ComparisonType = ComparisonType.Default;
                             }
                             else if (typesCount == propertiesCount)
                             {
@@ -125,7 +125,7 @@ namespace Utility.Models.Trees
                                 if (Model.Value?.GetType() != propertyType)
                                 {
                                     Model.Set(_value ?? ActivateAnything.Activate.New(propertyType));
-                                    ComparisonModel.Type = toComparisonType(propertyType);
+                                    ComparisonModel.ComparisonType = toComparisonType(propertyType);
                                 }
                             }
                             else

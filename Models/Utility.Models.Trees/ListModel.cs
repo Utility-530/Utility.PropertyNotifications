@@ -50,9 +50,11 @@ namespace Utility.Models.Trees
                 });
         }
 
+        public override Type Type => type;
+
         public int Limit { get => limit; set => RaisePropertyReceived(ref limit, value); }
 
-        public IEnumerable Collection { get => collection; set => RaisePropertyChanged(ref collection, value); }
+        //public IEnumerable Collection { get => collection; set => RaisePropertyChanged(ref collection, value); }
 
         public override object Data { get => type; set => base.Data = value; }
 

@@ -11,7 +11,7 @@ namespace Utility.Models.Trees
         {
         }
 
-        public ComparisonType Type
+        public ComparisonType ComparisonType
         {
             get => type; set
             {
@@ -36,7 +36,7 @@ namespace Utility.Models.Trees
 
         internal bool Compare(object value1, object value2)
         {
-            switch (Type)
+            switch (ComparisonType)
             {
                 case ComparisonType.String:
                     switch ((CustomStringComparison)Value)

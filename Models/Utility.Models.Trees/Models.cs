@@ -40,7 +40,7 @@ namespace Utility.Models.Trees
             this.Value = type;
         }
 
-        public Type Type { get => Value as Type; set => Value = value; }
+        public override Type Type { get => Value as Type; set => Value = value; }
 
         public override IEnumerable<IReadOnlyTree> Items()
         {
@@ -253,7 +253,7 @@ namespace Utility.Models.Trees
 
         public Assembly Assembly => Type?.Assembly;
 
-        public Type Type => Get()?.DeclaringType;
+        public override Type Type => Get()?.DeclaringType;
     }
 
     public class RelationModel : Model
@@ -413,7 +413,7 @@ namespace Utility.Models.Trees
 
         //public override object Data { get => type; set => type = (Type)value; }
 
-        public Type Type => type;
+        public override Type Type => type;
 
         public ICommand Command { get; }
 
@@ -429,14 +429,14 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class EditModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<IReadOnlyTree>? addition = null, Action<EditModel>? attach = null) : Model(func, addition, a => attach?.Invoke((EditModel)a))
-    {
-        public EditModel() : this(null, null, null)
-        {
-        }
+    //public class EditModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<IReadOnlyTree>? addition = null, Action<EditModel>? attach = null) : Model(func, addition, a => attach?.Invoke((EditModel)a))
+    //{
+    //    public EditModel() : this(null, null, null)
+    //    {
+    //    }
 
-        public override object Value { get; set; }
-    }
+    //    public override object Value { get; set; }
+    //}
 
     public class RelationshipModel : Model
     {
@@ -532,7 +532,7 @@ namespace Utility.Models.Trees
         private TypeModel type;
 
         public Model<string> String { get => @string; set => @string = value; }
-        public TypeModel Type { get => type; set => type = value; }
+        public TypeModel TypeModel { get => type; set => type = value; }
 
         public SelectionModel()
         {
@@ -549,7 +549,7 @@ namespace Utility.Models.Trees
             switch (a.ToString())
             {
                 case _string: String = a as Model<string>; break;
-                case _type: Type = a as TypeModel; break;
+                case _type: TypeModel = a as TypeModel; break;
                 default: throw new ArgumentOutOfRangeException("ds 33` 33kfl.. ");
             }
         }

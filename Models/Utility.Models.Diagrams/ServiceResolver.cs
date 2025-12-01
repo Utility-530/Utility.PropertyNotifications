@@ -146,14 +146,14 @@ namespace Utility.Models.Diagrams
 
         public IDisposable Subscribe(IObserver<Set<IResolvableNode>> observer)
         {
-            var set = new Set<IResolvableNode>([.. methodNodes.Select(a => Changes.Change<IResolvableNode>.Add(a.Value))]);
+            var set = new Set<IResolvableNode>([.. methodNodes.Select(a => Changes.Change.Add<IResolvableNode>(a.Value))]);
             observer.OnNext(set);
 
             return methodNodes.Changes<IResolvableNode>().Subscribe(a => observer.OnNext(a));
         }
         public IDisposable Subscribe(IObserver<Set<IResolvableConnection>> observer)
         {
-            var set = new Set<IResolvableConnection>([.. connections.Select(Changes.Change<IResolvableConnection>.Add)]);
+            var set = new Set<IResolvableConnection>([.. connections.Select(Changes.Change.Add<IResolvableConnection>)]);
             observer.OnNext(set);
             return connections.Changes<IResolvableConnection>().Subscribe(a => observer.OnNext(a));
         }

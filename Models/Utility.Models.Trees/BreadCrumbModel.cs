@@ -23,11 +23,11 @@ namespace Utility.Models.Trees
             var topNode = this as INodeViewModel;
             var currentNode = current;
 
-            List<IViewModelTree> items = new();
-            IViewModelTree child = topNode;
+            List<INodeViewModel> items = new();
+            INodeViewModel child = topNode;
             while (child.Current != null)
             {
-                items.Add(child = child.Current);
+                items.Add(child = (INodeViewModel)child.Current);
                 child.IsExpanded = false;
             }
 
