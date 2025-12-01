@@ -10,7 +10,7 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
-    public abstract class NodeViewModel<T> : ViewModelTree, IExpand
+    public abstract class NodeViewModel<T> : NodeViewModel, IExpand
     {
         protected ReplaySubject<Changes.Change<T>> changes = new();
         private bool isRefreshing;

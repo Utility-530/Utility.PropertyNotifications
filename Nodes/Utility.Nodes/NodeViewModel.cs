@@ -6,11 +6,12 @@ using Utility.Interfaces;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Keys;
 using Utility.Nodify.Base;
+using Utility.Trees;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
-    public class NodeViewModel : ViewModelTree, INodeViewModel
+    public partial class NodeViewModel : Tree, INodeViewModel
     {
         private object data;
         private ICollection<IConnectorViewModel> input;
@@ -59,8 +60,8 @@ namespace Utility.Nodes
             var node = new NodeViewModel(value)
             {
                 Parent = this,
-                Input = [],
-                Output = []
+                Inputs = [],
+                Outputs = []
             };
 
             return Task.FromResult((ITree)node);
@@ -100,7 +101,7 @@ namespace Utility.Nodes
 
         public IDiagramViewModel Diagram { get; set; }
 
-        public virtual ICollection<IConnectorViewModel> Input
+        public virtual ICollection<IConnectorViewModel> Inputs
         {
             get =>
                 input;
@@ -130,7 +131,7 @@ namespace Utility.Nodes
                 });
         }
 
-        public virtual ICollection<IConnectorViewModel> Output
+        public virtual ICollection<IConnectorViewModel> Outputs
         {
             get => output;
             set

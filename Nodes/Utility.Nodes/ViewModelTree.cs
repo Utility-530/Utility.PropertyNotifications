@@ -11,10 +11,11 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Interfaces;
 using Utility.Structs;
 using Utility.Trees;
+using Utility.Interfaces.Exs.Diagrams;
 
 namespace Utility.Nodes
 {
-    public class ViewModelTreeConstants
+    public class NodeViewModelConstants
     {
         public static readonly bool? IsHighlighted = default;
         public static readonly bool IsExpanded = default;
@@ -27,7 +28,7 @@ namespace Utility.Nodes
         public static readonly bool? IsValid = null;
         public static readonly bool IsReadOnly = default;
         public static readonly bool IsEditable = default;
-        public static readonly IViewModelTree Current = default;
+        public static readonly INodeViewModel Current = default;
         public static readonly bool IsClicked = default;
         public static readonly bool IsSelected = default;
         public static readonly DateTime? Removed = default;
@@ -38,6 +39,7 @@ namespace Utility.Nodes
         public static readonly bool? IsContentVisible = true;
         public static readonly Position2D ConnectorPosition = Position2D.None;
         public static readonly string DataTemplate = default;
+        public static readonly string Style = default;
         public static readonly string SelectedItemTemplate = default;
         public static readonly string ItemsPanelTemplate = default;
         public static readonly string Title = default;
@@ -52,50 +54,49 @@ namespace Utility.Nodes
         public static readonly bool IsWithinWindowBounds = false;
     }
 
-    public class ViewModelTree : Tree, IViewModelTree, ISet, IGet
+    public partial class NodeViewModel : Tree, INodeViewModel, ISet, IGet
     {
-        private bool? isHighlighted = ViewModelTreeConstants.IsHighlighted;
-        private bool isExpanded = ViewModelTreeConstants.IsExpanded;
-        private Arrangement arrangement = ViewModelTreeConstants.Arrangement;
-        private int column = ViewModelTreeConstants.Column;
-        private int row = ViewModelTreeConstants.Row;
-        private Orientation orientation = ViewModelTreeConstants.Orientation;
-        private bool? isVisible = ViewModelTreeConstants.IsVisible;
-        private bool isLoaded = ViewModelTreeConstants.IsLoaded;
-        private bool? isValid = ViewModelTreeConstants.IsValid;
-        private bool isReadOnly = ViewModelTreeConstants.IsReadOnly;
-        private bool isEditable = ViewModelTreeConstants.IsEditable;
-        private IViewModelTree current = ViewModelTreeConstants.Current;
-        private bool isClicked = ViewModelTreeConstants.IsClicked;
-        private bool isSelected = ViewModelTreeConstants.IsSelected;
-        private DateTime? removed = ViewModelTreeConstants.Removed;
-        private bool isReplicable = ViewModelTreeConstants.IsReplicable;
-        private bool isRemovable = ViewModelTreeConstants.IsRemovable;
-        private int order = ViewModelTreeConstants.Order;
         private Collection collection;
-        private bool isAugmentable = ViewModelTreeConstants.IsAugmetable;
-        private bool? isContentVisible = ViewModelTreeConstants.IsContentVisible;
-        private Position2D connectorPosition = ViewModelTreeConstants.ConnectorPosition;
-        private string dataTemplate = ViewModelTreeConstants.DataTemplate;
-        private string selectedItemTemplate = ViewModelTreeConstants.SelectedItemTemplate;
-        private string itemsPanelTemplate = ViewModelTreeConstants.ItemsPanelTemplate;
-        private string title = ViewModelTreeConstants.Title;
-        private PointF location = ViewModelTreeConstants.Location;
-        private SizeF? size = ViewModelTreeConstants.Size;
-        private bool isActive = ViewModelTreeConstants.IsActive;
-        protected string name = ViewModelTreeConstants.Name;
-        private bool isChildrenRefreshed = ViewModelTreeConstants.IsChildrenRefreshed;
-        private object? value = ViewModelTreeConstants.Value;
+
+        private bool? isHighlighted = NodeViewModelConstants.IsHighlighted;
+        private bool isExpanded = NodeViewModelConstants.IsExpanded;
+        private Arrangement arrangement = NodeViewModelConstants.Arrangement;
+        private int column = NodeViewModelConstants.Column;
+        private int row = NodeViewModelConstants.Row;
+        private Orientation orientation = NodeViewModelConstants.Orientation;
+        private bool? isVisible = NodeViewModelConstants.IsVisible;
+        private bool isLoaded = NodeViewModelConstants.IsLoaded;
+        private bool? isValid = NodeViewModelConstants.IsValid;
+        private bool isReadOnly = NodeViewModelConstants.IsReadOnly;
+        private bool isEditable = NodeViewModelConstants.IsEditable;
+        private IViewModelTree current = NodeViewModelConstants.Current;
+        private bool isClicked = NodeViewModelConstants.IsClicked;
+        private bool isSelected = NodeViewModelConstants.IsSelected;
+        private DateTime? removed = NodeViewModelConstants.Removed;
+        private bool isReplicable = NodeViewModelConstants.IsReplicable;
+        private bool isRemovable = NodeViewModelConstants.IsRemovable;
+        private int order = NodeViewModelConstants.Order;
+        private bool isAugmentable = NodeViewModelConstants.IsAugmetable;
+        private bool? isContentVisible = NodeViewModelConstants.IsContentVisible;
+        private Position2D connectorPosition = NodeViewModelConstants.ConnectorPosition;
+        private string dataTemplate = NodeViewModelConstants.DataTemplate;
+        private string style = NodeViewModelConstants.Style;
+        private string selectedItemTemplate = NodeViewModelConstants.SelectedItemTemplate;
+        private string itemsPanelTemplate = NodeViewModelConstants.ItemsPanelTemplate;
+        private string title = NodeViewModelConstants.Title;
+        private PointF location = NodeViewModelConstants.Location;
+        private SizeF? size = NodeViewModelConstants.Size;
+        private bool isActive = NodeViewModelConstants.IsActive;
+        protected string name = NodeViewModelConstants.Name;
+        private bool isChildrenRefreshed = NodeViewModelConstants.IsChildrenRefreshed;
+        private object? value = NodeViewModelConstants.Value;
 
         public event Action? Closed;
 
-        public bool isEnabled = ViewModelTreeConstants.IsEnabled;
-        protected bool isProliferable = ViewModelTreeConstants.IsProliferable;
-        protected bool isWithinWindowBounds = ViewModelTreeConstants.IsWithinWindowBounds;
+        public bool isEnabled = NodeViewModelConstants.IsEnabled;
+        protected bool isProliferable = NodeViewModelConstants.IsProliferable;
+        protected bool isWithinWindowBounds = NodeViewModelConstants.IsWithinWindowBounds;
 
-        public ViewModelTree()
-        {
-        }
 
         protected override IList CreateChildren()
         {
@@ -120,9 +121,9 @@ namespace Utility.Nodes
             set => this.RaisePropertyReceived(ref this.value, value);
         }
 
-        public IViewModelTree Root
+        public INodeViewModel Root
         {
-            get => this.m_items.FirstOrDefault() as IViewModelTree;
+            get => this.m_items.FirstOrDefault() as INodeViewModel;
             set => this.Add(value);
         }
 
@@ -318,6 +319,12 @@ namespace Utility.Nodes
             set => this.RaisePropertyReceived(ref this.dataTemplate, value);
         }
 
+        public string Style
+        {
+            get { RaisePropertyCalled(style); return style; }
+            set => this.RaisePropertyReceived(ref this.style, value);
+        }
+
         [FieldName(nameof(selectedItemTemplate))]
         public string SelectedItemTemplate
         {
@@ -382,7 +389,7 @@ namespace Utility.Nodes
         {
             switch (name)
             {
-                case nameof(Current): /*current = value as IViewModelTree;*/ break;
+                case nameof(Current): /*current = value as INodeViewModel;*/ break;
                 case nameof(Name): name = value as string; break;
                 case nameof(IsActive): isActive = Convert.ToBoolean(value); break;
                 case nameof(IsEditable): isEditable = Convert.ToBoolean(value); break;
@@ -396,6 +403,7 @@ namespace Utility.Nodes
                 case nameof(IsExpanded): isExpanded = Convert.ToBoolean(value); break;
                 case nameof(IsReplicable): isReplicable = Convert.ToBoolean(value); break;
                 case nameof(IsRemovable): isRemovable = Convert.ToBoolean(value); break;
+                case nameof(IsProliferable): isProliferable = Convert.ToBoolean(value); break;
                 case nameof(IsChildrenRefreshed): isChildrenRefreshed = Convert.ToBoolean(value); break;
                 case nameof(Order): order = Convert.ToInt32(value); break;
                 case nameof(Row): row = Convert.ToInt32(value); break;
@@ -413,6 +421,7 @@ namespace Utility.Nodes
                 case nameof(IsEnabled): this.isEnabled = (bool)value; break;
                 case nameof(SelectedItemTemplate): this.selectedItemTemplate = (string)value; break;
                 case nameof(IsWithinWindowBounds): this.isWithinWindowBounds = (bool)value; break;
+                case nameof(IsAugmentable): this.isAugmentable = (bool)value; break;
                 default: throw new ArgumentException($"Unknown field: {name}");
             }
             RaisePropertyChanged(name);
@@ -453,82 +462,85 @@ namespace Utility.Nodes
                 nameof(IsEnabled) => isEnabled,
                 nameof(SelectedItemTemplate) => selectedItemTemplate,
                 nameof(IsWithinWindowBounds) => isWithinWindowBounds,
+                nameof(IsProliferable) => isProliferable,
+                nameof(IsAugmentable) => isAugmentable,
                 _ => throw new ArgumentException($"Unknown field: {name}")
             };
         }
 
         public virtual IEnumerable<(string PropertyName, object OriginalValue, object NewValue)> Changes()
         {
-            if (current != ViewModelTreeConstants.Current)
-                yield return (nameof(Current), ViewModelTreeConstants.Current, current);
-            if (name != ViewModelTreeConstants.Name)
-                yield return (nameof(Name), ViewModelTreeConstants.Name, name);
-            if (isActive != ViewModelTreeConstants.IsActive)
-                yield return (nameof(IsActive), ViewModelTreeConstants.IsActive, isActive);
-            if (isEditable != ViewModelTreeConstants.IsEditable)
-                yield return (nameof(IsEditable), ViewModelTreeConstants.IsEditable, isEditable);
-            if (isReadOnly != ViewModelTreeConstants.IsReadOnly)
-                yield return (nameof(IsReadOnly), ViewModelTreeConstants.IsReadOnly, isReadOnly);
-            if (isVisible != ViewModelTreeConstants.IsVisible)
-                yield return (nameof(IsVisible), ViewModelTreeConstants.IsVisible, isVisible);
-            if (isContentVisible != ViewModelTreeConstants.IsContentVisible)
-                yield return (nameof(IsContentVisible), ViewModelTreeConstants.IsContentVisible, isContentVisible);
-            if (isValid != ViewModelTreeConstants.IsValid)
-                yield return (nameof(IsValid), ViewModelTreeConstants.IsValid, isValid);
-            if (isHighlighted != ViewModelTreeConstants.IsHighlighted)
-                yield return (nameof(IsHighlighted), ViewModelTreeConstants.IsHighlighted, isHighlighted);
-            if (isClicked != ViewModelTreeConstants.IsClicked)
-                yield return (nameof(IsClicked), ViewModelTreeConstants.IsClicked, isClicked);
-            if (isSelected != ViewModelTreeConstants.IsSelected)
-                yield return (nameof(IsSelected), ViewModelTreeConstants.IsSelected, isSelected);
-            if (isExpanded != ViewModelTreeConstants.IsExpanded)
-                yield return (nameof(IsExpanded), ViewModelTreeConstants.IsExpanded, isExpanded);
-            if (isReplicable != ViewModelTreeConstants.IsReplicable)
-                yield return (nameof(IsReplicable), ViewModelTreeConstants.IsReplicable, isReplicable);
-            if (isRemovable != ViewModelTreeConstants.IsRemovable)
-                yield return (nameof(IsRemovable), ViewModelTreeConstants.IsRemovable, isRemovable);
-            if (isChildrenRefreshed != ViewModelTreeConstants.IsChildrenRefreshed)
-                yield return (nameof(IsChildrenRefreshed), ViewModelTreeConstants.IsChildrenRefreshed, isChildrenRefreshed);
-            if (order != ViewModelTreeConstants.Order)
-                yield return (nameof(Order), ViewModelTreeConstants.Order, order);
-            if (row != ViewModelTreeConstants.Row)
-                yield return (nameof(Row), ViewModelTreeConstants.Row, row);
-            if (column != ViewModelTreeConstants.Column)
-                yield return (nameof(Column), ViewModelTreeConstants.Column, column);
-            if (removed != ViewModelTreeConstants.Removed)
-                yield return (nameof(Removed), ViewModelTreeConstants.Removed, removed);
-            if (arrangement != ViewModelTreeConstants.Arrangement)
-                yield return (nameof(Arrangement), ViewModelTreeConstants.Arrangement, arrangement);
-            if (orientation != ViewModelTreeConstants.Orientation)
-                yield return (nameof(Orientation), ViewModelTreeConstants.Orientation, orientation);
-            if (connectorPosition != ViewModelTreeConstants.ConnectorPosition)
-                yield return (nameof(ConnectorPosition), ViewModelTreeConstants.ConnectorPosition, connectorPosition);
-            if (location != ViewModelTreeConstants.Location)
-                yield return (nameof(Location), ViewModelTreeConstants.Location, location);
-            if (size != ViewModelTreeConstants.Size)
-                yield return (nameof(Size), ViewModelTreeConstants.Size, size);
-            if (dataTemplate != ViewModelTreeConstants.DataTemplate)
-                yield return (nameof(DataTemplate), ViewModelTreeConstants.DataTemplate, dataTemplate);
-            if (itemsPanelTemplate != ViewModelTreeConstants.ItemsPanelTemplate)
-                yield return (nameof(ItemsPanelTemplate), ViewModelTreeConstants.ItemsPanelTemplate, itemsPanelTemplate);
-            if (title != ViewModelTreeConstants.Title)
-                yield return (nameof(Title), ViewModelTreeConstants.Title, title);
-            if (!Equals(value, ViewModelTreeConstants.Value))
-                yield return (nameof(Value), ViewModelTreeConstants.Value, value);
-            if (isEnabled != ViewModelTreeConstants.IsEnabled)
-                yield return (nameof(IsEnabled), ViewModelTreeConstants.IsEnabled, isEnabled);
-            if (selectedItemTemplate != ViewModelTreeConstants.SelectedItemTemplate)
-                yield return (nameof(SelectedItemTemplate), ViewModelTreeConstants.SelectedItemTemplate, selectedItemTemplate);
-            if (isWithinWindowBounds != ViewModelTreeConstants.IsWithinWindowBounds)
-                yield return (nameof(IsWithinWindowBounds), ViewModelTreeConstants.IsWithinWindowBounds, isWithinWindowBounds);
+            if (current != NodeViewModelConstants.Current)
+                yield return (nameof(Current), NodeViewModelConstants.Current, current);
+            if (name != NodeViewModelConstants.Name)
+                yield return (nameof(Name), NodeViewModelConstants.Name, name);
+            if (isActive != NodeViewModelConstants.IsActive)
+                yield return (nameof(IsActive), NodeViewModelConstants.IsActive, isActive);
+            if (isEditable != NodeViewModelConstants.IsEditable)
+                yield return (nameof(IsEditable), NodeViewModelConstants.IsEditable, isEditable);
+            if (isReadOnly != NodeViewModelConstants.IsReadOnly)
+                yield return (nameof(IsReadOnly), NodeViewModelConstants.IsReadOnly, isReadOnly);
+            if (isVisible != NodeViewModelConstants.IsVisible)
+                yield return (nameof(IsVisible), NodeViewModelConstants.IsVisible, isVisible);
+            if (isContentVisible != NodeViewModelConstants.IsContentVisible)
+                yield return (nameof(IsContentVisible), NodeViewModelConstants.IsContentVisible, isContentVisible);
+            if (isValid != NodeViewModelConstants.IsValid)
+                yield return (nameof(IsValid), NodeViewModelConstants.IsValid, isValid);
+            if (isHighlighted != NodeViewModelConstants.IsHighlighted)
+                yield return (nameof(IsHighlighted), NodeViewModelConstants.IsHighlighted, isHighlighted);
+            if (isClicked != NodeViewModelConstants.IsClicked)
+                yield return (nameof(IsClicked), NodeViewModelConstants.IsClicked, isClicked);
+            if (isSelected != NodeViewModelConstants.IsSelected)
+                yield return (nameof(IsSelected), NodeViewModelConstants.IsSelected, isSelected);
+            if (isExpanded != NodeViewModelConstants.IsExpanded)
+                yield return (nameof(IsExpanded), NodeViewModelConstants.IsExpanded, isExpanded);
+            if (isReplicable != NodeViewModelConstants.IsReplicable)
+                yield return (nameof(IsReplicable), NodeViewModelConstants.IsReplicable, isReplicable);
+            if (isRemovable != NodeViewModelConstants.IsRemovable)
+                yield return (nameof(IsRemovable), NodeViewModelConstants.IsRemovable, isRemovable);
+            if (isChildrenRefreshed != NodeViewModelConstants.IsChildrenRefreshed)
+                yield return (nameof(IsChildrenRefreshed), NodeViewModelConstants.IsChildrenRefreshed, isChildrenRefreshed);
+            if (order != NodeViewModelConstants.Order)
+                yield return (nameof(Order), NodeViewModelConstants.Order, order);
+            if (row != NodeViewModelConstants.Row)
+                yield return (nameof(Row), NodeViewModelConstants.Row, row);
+            if (column != NodeViewModelConstants.Column)
+                yield return (nameof(Column), NodeViewModelConstants.Column, column);
+            if (removed != NodeViewModelConstants.Removed)
+                yield return (nameof(Removed), NodeViewModelConstants.Removed, removed);
+            if (arrangement != NodeViewModelConstants.Arrangement)
+                yield return (nameof(Arrangement), NodeViewModelConstants.Arrangement, arrangement);
+            if (orientation != NodeViewModelConstants.Orientation)
+                yield return (nameof(Orientation), NodeViewModelConstants.Orientation, orientation);
+            if (connectorPosition != NodeViewModelConstants.ConnectorPosition)
+                yield return (nameof(ConnectorPosition), NodeViewModelConstants.ConnectorPosition, connectorPosition);
+            if (location != NodeViewModelConstants.Location)
+                yield return (nameof(Location), NodeViewModelConstants.Location, location);
+            if (size != NodeViewModelConstants.Size)
+                yield return (nameof(Size), NodeViewModelConstants.Size, size);
+            if (dataTemplate != NodeViewModelConstants.DataTemplate)
+                yield return (nameof(DataTemplate), NodeViewModelConstants.DataTemplate, dataTemplate);
+            if (itemsPanelTemplate != NodeViewModelConstants.ItemsPanelTemplate)
+                yield return (nameof(ItemsPanelTemplate), NodeViewModelConstants.ItemsPanelTemplate, itemsPanelTemplate);
+            if (title != NodeViewModelConstants.Title)
+                yield return (nameof(Title), NodeViewModelConstants.Title, title);
+            if (!Equals(value, NodeViewModelConstants.Value))
+                yield return (nameof(Value), NodeViewModelConstants.Value, value);
+            if (isEnabled != NodeViewModelConstants.IsEnabled)
+                yield return (nameof(IsEnabled), NodeViewModelConstants.IsEnabled, isEnabled);
+            if (selectedItemTemplate != NodeViewModelConstants.SelectedItemTemplate)
+                yield return (nameof(SelectedItemTemplate), NodeViewModelConstants.SelectedItemTemplate, selectedItemTemplate);
+            if (isWithinWindowBounds != NodeViewModelConstants.IsWithinWindowBounds)
+                yield return (nameof(IsWithinWindowBounds), NodeViewModelConstants.IsWithinWindowBounds, isWithinWindowBounds);
         }
     }
 
-        public class Comparer : IComparer<object>
+
+    public class Comparer : IComparer<object>
     {
         public int Compare(object? x, object? y)
         {
-            return (x as ViewModelTree)?.Order.CompareTo((y as ViewModelTree)?.Order) ?? 0;
+            return (x as NodeViewModel)?.Order.CompareTo((y as NodeViewModel)?.Order) ?? 0;
         }
     }
 }

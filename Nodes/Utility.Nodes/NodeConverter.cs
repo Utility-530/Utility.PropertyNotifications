@@ -113,11 +113,11 @@ namespace Utility.Nodes
                 var type = Type.GetType(data["$type"].ToString());
                 Trace.WriteLine(type);
                 var _data = data.ToObject(type, serializer);
-                node = new NodeViewModel(_data) { Input = [], Output = [] };
+                node = new NodeViewModel(_data) { Inputs = [], Outputs = [] };
             }
             else
             {
-                node = new NodeViewModel() { Input = [], Output = [] };
+                node = new NodeViewModel() { Inputs = [], Outputs = [] };
             }
 
             node.Key = new GuidKey(Guid.Parse(jObject["Key"].ToString()));
@@ -171,7 +171,7 @@ namespace Utility.Nodes
                 {
                     //node.Current = current;
                     if (current.Key().Equals(key))
-                        node.Set(current, nameof(ViewModelTree.Current));
+                        node.Set(current, nameof(NodeViewModel.Current));
                 });
             }
             return node;

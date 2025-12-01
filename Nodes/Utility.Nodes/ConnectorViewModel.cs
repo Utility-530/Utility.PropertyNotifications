@@ -8,7 +8,7 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Nodes
 {
-    public class ConnectorViewModel : ViewModelTree, IValueConnectorViewModel, IValue, IType
+    public class ConnectorViewModel : NodeViewModel, IValueConnectorViewModel, IValue, IType
     {
         private ThreadSafeObservableCollection<IConnectionViewModel> connections = [];
         private INodeViewModel _node = default!;
@@ -37,7 +37,7 @@ namespace Utility.Nodes
             });
         }
 
-        public Type Type => Data is ParameterInfo parameterInfo ?
+        public override Type Type => Data is ParameterInfo parameterInfo ?
             parameterInfo.ParameterType :
             Data is PropertyInfo propertyInfo ? propertyInfo.PropertyType :
             throw new Exception("ds322d 11");
@@ -97,7 +97,7 @@ namespace Utility.Nodes
         {
             if (Node is INodeViewModel flow)
             {
-                Flow = flow.Input.Contains(this) ? IO.Input : IO.Output;
+                Flow = flow.Inputs.Contains(this) ? IO.Input : IO.Output;
             }
 
             //else if (Node is KnotNodeViewModel knot)

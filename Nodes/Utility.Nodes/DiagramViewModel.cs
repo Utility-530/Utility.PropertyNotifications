@@ -82,7 +82,7 @@ namespace Utility.Nodes
             if (nodes is ThreadSafeObservableCollection<INodeViewModel> _threadSafe)
                 _threadSafe.WhenAdded(x =>
                 {
-                    if (x.Input is ThreadSafeObservableCollection<IConnectorViewModel> _tt_)
+                    if (x.Inputs is ThreadSafeObservableCollection<IConnectorViewModel> _tt_)
                         _tt_.WhenRemoved(RemoveConnection);
 
                     void RemoveConnection(IConnectorViewModel i)
@@ -93,14 +93,14 @@ namespace Utility.Nodes
                 })
                 .WhenRemoved(x =>
                 {
-                    foreach (var input in x.Input)
+                    foreach (var input in x.Inputs)
                     {
                         DisconnectConnector(input);
                     }
 
-                    if (x.Output.Any())
+                    if (x.Outputs.Any())
                     {
-                        foreach (var output in x.Output)
+                        foreach (var output in x.Outputs)
                         {
                             DisconnectConnector(output);
                         }
@@ -152,13 +152,13 @@ namespace Utility.Nodes
             {
                 if (pending.IsVisible)
                 {
-                    connector = nodeViewModel.Input.FirstOrDefault(a => a is IGetData { Data: IType { Type: { } _type } } && _type == type);
+                    connector = nodeViewModel.Inputs.FirstOrDefault(a => a is IGetData { Data: IType { Type: { } _type } } && _type == type);
                 }
             }
 
             if (pending.IsVisible)
             {
-                connector = nodeViewModel.Input.FirstOrDefault();
+                connector = nodeViewModel.Inputs.FirstOrDefault();
             }
 
             if (pending.Output != null && container.Resolve<IViewModelFactory>().CanCreateConnection(pending.Output, pending.Input))
@@ -190,7 +190,7 @@ namespace Utility.Nodes
                 {
                     pending.Data = _type;
                 }
-                pending.Node.Input.Additions<ConnectorViewModel>().Take(1).Subscribe(connector =>
+                pending.Node.Inputs.Additions<ConnectorViewModel>().Take(1).Subscribe(connector =>
                 {
                     CreateConnection(source, connector);
                 });

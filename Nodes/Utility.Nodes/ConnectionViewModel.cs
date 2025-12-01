@@ -4,7 +4,7 @@ using Utility.Nodify.Base;
 
 namespace Utility.Nodes
 {
-    public class ConnectionViewModel : ViewModelTree, IConnectionViewModel
+    public class ConnectionViewModel : NodeViewModel, IConnectionViewModel
     {
         private IConnectorViewModel _output = default!, _input = default!;
 
@@ -14,22 +14,14 @@ namespace Utility.Nodes
 
         public IConnectorViewModel Input
         {
-            get => _input;
-            set => RaisePropertyChanged(ref _input, value)
-                .Then(() =>
-                {
-                });
+            get => Inputs.SingleOrDefault();
+            set => Inputs.Add(value);
         }
-
-        public NodeState State { get; set; } = NodeState.None;
 
         public IConnectorViewModel Output
         {
-            get => _output;
-            set => RaisePropertyChanged(ref _output, value)
-                .Then(() =>
-                {
-                });
+            get => Outputs.SingleOrDefault();
+            set => Outputs.Add(value);
         }
 
 
