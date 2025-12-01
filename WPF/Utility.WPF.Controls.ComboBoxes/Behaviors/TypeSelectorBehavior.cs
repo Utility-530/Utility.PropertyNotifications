@@ -101,7 +101,7 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         private static void Set(TypeSelectorBehavior typeSelector, IEnumerable enumerable)
         {
-            var assemblyTree = enumerable.Cast<Assembly>().ToArray().ToViewModelTree();
+            var assemblyTree = enumerable.Cast<Assembly>().ToArray().ToNodeViewModel();
             typeSelector.AssociatedObject.ItemsSource = assemblyTree;
         }
 

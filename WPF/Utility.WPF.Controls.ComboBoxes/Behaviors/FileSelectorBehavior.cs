@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Models.Trees;
@@ -55,7 +56,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                 {
                     if (a is DirectoryModel tree)
                     {
-                        var x = tree.Items().OfType<Model<string>>().ToArray().ToViewModelTree(t_tree: tree);
+                        var x = tree.Items().OfType<Model<string>>().ToArray().ToNodeViewModel(t_tree: tree);
 
                         if (tree.FileSystemInfo is FileSystemInfo fileSystemInfo)
                             FileSystemInfo = fileSystemInfo;
@@ -86,7 +87,7 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         private static void set(FileSelectorBehavior FileSystemInfoSelector, IEnumerable enumerable)
         {
-            var assemblyTree = enumerable.Cast<DirectoryInfo>().Select(a => DirectoryModel.Create(a, FileSystemInfoSelector.ExcludesFiles == false)).ToArray().ToViewModelTree();
+            var assemblyTree = enumerable.Cast<DirectoryInfo>().Select(a => DirectoryModel.Create(a, FileSystemInfoSelector.ExcludesFiles == false)).ToArray().ToNodeViewModel();
             FileSystemInfoSelector.AssociatedObject.ItemsSource = assemblyTree;
         }
 
@@ -126,7 +127,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                         {
                             if (_fsi.FileSystemInfo.FullName.TrimEnd('\\').Equals(_FileSystemInfo.FullName.TrimEnd('\\'), StringComparison.CurrentCultureIgnoreCase))
                                 return true;
-                            if (tree.Children.Count() == 0 && a.tree.Value is IYieldItems model && a.tree is IViewModelTree node)
+                            if (tree.Children.Count() == 0 && a.tree.Value is IYieldItems model && a.tree is INodeViewModel node)
                             {
                                 node.IsExpanded = true;
                             }
