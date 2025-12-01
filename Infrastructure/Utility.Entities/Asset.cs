@@ -5,7 +5,7 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Entities
 {
-    public class Asset : Entity, IId<Guid>, IClone, IFactory
+    public class Asset : Entity, IClone, IFactory
     {
         public Asset()
         { }
@@ -16,7 +16,6 @@ namespace Utility.Entities
             Id = Guid.NewGuid();
         }
 
-        public Guid Id { get; set; }
         public string OrderId { get; set; }
 
         [Column(width: 200)]

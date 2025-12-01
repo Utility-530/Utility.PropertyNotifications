@@ -1,15 +1,22 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Utility.Attributes;
+using SQLite;
+using Utility.Interfaces.Generic.Data;
 
 namespace Utility.Entities
 {
-    public class Entity : INotifyPropertyChanged
+    public class Entity : IId<Guid>, IIdSet<Guid>, INotifyPropertyChanged
     {
+        [PrimaryKey]
+        [Attributes.Column(ignore: true)]
+        //[System.Text.Json.Serialization.JsonIgnore]
+        //[Newtonsoft.Json.JsonIgnore]
+        public Guid Id { get; set; }
+
         [System.ComponentModel.ReadOnly(true)]
         public DateTime Added { get; set; }
 
-        [Ignore]
+        [Utility.Attributes.Ignore]
         public DateTime Removed { get; set; }
 
         [System.ComponentModel.ReadOnly(true)]

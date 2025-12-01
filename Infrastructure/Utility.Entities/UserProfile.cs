@@ -5,12 +5,8 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Entities
 {
-    public class UserProfile : Entity, IId<Guid>, IIdSet<Guid>, IComparable, ICopy, IClone
+    public class UserProfile : Entity, IComparable, ICopy, IClone
     {
-        [PrimaryKey]
-        [Attributes.Column(ignore: true)]
-        public Guid Id { get; set; }
-
         [Attributes.Column(width: 120)]
         public string? Group { get; set; }
 

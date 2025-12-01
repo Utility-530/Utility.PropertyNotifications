@@ -4,7 +4,7 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Entities
 {
-    public class Loan : Entity, IId<Guid>, IClone, IFactory, IGetAmount
+    public class Loan : Entity,  IClone, IFactory, IGetAmount
     {
         public Loan()
         { }
@@ -14,8 +14,6 @@ namespace Utility.Entities
         {
             Id = Guid.NewGuid();
         }
-
-        public Guid Id { get; set; }
 
         [Column(width: 200)]
         public string Name { get; set; }

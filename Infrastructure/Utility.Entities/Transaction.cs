@@ -7,7 +7,6 @@ namespace Utility.Entities
     //29/12/2017, DEB,'11-08-52,00864878,SAINSBURYS S/MKTS,7.65,,3993.32
     public class Transaction : Entity, IEquatable<Transaction>, IGetBalance, IId<Guid>
     {
-        public Guid Id { get; set; }
         public DateTime Date { get; set; }
 
         [Attributes.Ignore]
