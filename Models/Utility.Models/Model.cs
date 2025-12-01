@@ -61,41 +61,12 @@ namespace Utility.Models
         }
     }
 
-    //public class ProliferationModel : NodeViewModel, IProliferation, IKey, IName, IAttach<IReadOnlyTree>
-    //{
-    //    private readonly Action<NodeViewModel>? attach;
-    //    private readonly Func<Model>? proliferation;
-
-    //    public ProliferationModel()
-    //        : this(null, null)
-    //    {
-    //    }   
-
-    //    public ProliferationModel(Action<NodeViewModel>? attach = null, Func<Model>? proliferation = null)
-    //        : base()
-    //    {
-    //        this.attach = attach;
-    //        this.proliferation = proliferation;
-    //    }
-
-    //    public void Attach(IReadOnlyTree value)
-    //    {
-    //        attach?.Invoke(this);
-    //    }
-
-    //    public virtual IEnumerable Proliferation()
-    //    {
-    //        if (proliferation is not null)
-    //            yield return proliferation.Invoke();
-    //        yield break;
-    //    }
-    //}
-
     public class Model : NodeViewModel, IClone, IYieldItems, IKey, IName, IAttach<IReadOnlyTree>, IProliferation
     {
         protected readonly Func<IEnumerable<IReadOnlyTree>>? childrenLambda;
         private readonly Action<IReadOnlyTree>? addition;
         private readonly Func<Model>? proliferation;
+        private readonly Func<Type>? funcType;
         private readonly Action<IReadOnlyTree>? attach;
 
         public virtual Version Version { get; set; } = new();
@@ -105,14 +76,17 @@ namespace Utility.Models
             Initialise();
         }
 
-        public Model(Func<IEnumerable<IReadOnlyTree>>? childrenLambda = null, Action<IReadOnlyTree>? addition = null, Action<Model>? attach = null, Func<Model>? proliferation = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : this()
+        public Model(Func<IEnumerable<IReadOnlyTree>>? childrenLambda = null, Action<IReadOnlyTree>? addition = null, Action<Model>? attach = null, Func<Model>? proliferation = null, Func<Type>? funcType = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : this()
         {
             this.childrenLambda = childrenLambda;
             this.isProliferable = childrenLambda == null;
             this.addition = addition;
             this.proliferation = proliferation;
+            this.funcType = funcType;
             this.attach = new Action<IReadOnlyTree>(a => attach?.Invoke((Model)a));
         }
+
+        public override Type Type => funcType?.Invoke() ?? base.Type;
 
         public virtual void Initialise()
         {
