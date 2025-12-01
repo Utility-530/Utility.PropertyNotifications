@@ -8,7 +8,7 @@ namespace Utility
 {
     public class Globals
     {
-        private static readonly SynchronizationContext ui;
+        private static SynchronizationContext ui;
         private static Store store = new();
 
         static Globals()
@@ -25,10 +25,10 @@ namespace Utility
                         .Select(_ => DateTime.Now)
                         .Publish();
 
-            ui = SynchronizationContext.Current ?? throw new Exception($"Expected {nameof(SynchronizationContext)}!");
+            ui = SynchronizationContext.Current;
         }
 
-        public static SynchronizationContext UI => ui;
+        public static SynchronizationContext UI => ui ??= SynchronizationContext.Current ?? throw new Exception($"Expected {nameof(SynchronizationContext)}!");
 
         public static ReplaySubject<Log> Logs { get; } = new();
         public static ReplaySubject<Exception> Exceptions { get; } = new();
