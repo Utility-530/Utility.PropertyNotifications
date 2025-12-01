@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Utility.Changes\Utility.Changes.csproj" />
     <ProjectReference Include="..\..\Structs\Utility.Structs.Repos\Utility.Structs.Repos.csproj" />
     <ProjectReference Include="..\..\Structs\Utility.Structs\Utility.Structs.csproj" />
     <ProjectReference Include="..\Utility.Interfaces\Utility.Interfaces.csproj" />
