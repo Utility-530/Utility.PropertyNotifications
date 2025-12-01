@@ -1,4 +1,5 @@
-﻿using System.Reactive.Disposables;
+﻿using System;
+using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using SQLite;
 using Utility.Interfaces.Exs;
@@ -50,6 +51,12 @@ namespace Utility.Repos
 
             void init()
             {
+                connection.Execute($"CREATE TABLE IF NOT EXISTS \"{valuesTableName}\" (  " +
+                    " \"Guid\" varchar(36), " +
+                    "\"Name\" varchar,   " +
+                    "\"Value\" varchar,    " +
+                    "\"TypeId\" integer, " +
+                    "\"Added\" datetime);");
                 foreach (var value in connection.Query<Values>(SqlQueries.SelectValues(valuesTableName)).ToList())
                 {
                     if (value.TypeId.HasValue == false)
@@ -78,7 +85,6 @@ namespace Utility.Repos
             }
         }
 
-
         public virtual async void Set(Guid guid, string name, object value, DateTime dateTime)
         {
             await initialisationTask;
@@ -88,7 +94,7 @@ namespace Utility.Repos
 
             text = JsonConvert.SerializeObject(value, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
             var query = $"SELECT * FROM '{valuesTableName}' WHERE Guid = ? AND Name = ? AND Value = ?";
-            var typeId = TypeId(value?.GetType());
+            var typeId = FromType(value?.GetType());
             if (connection.Query<Values>(query, guid, name, text).Count == 0)
             {
                 connection.Insert(new Values { Guid = guid, Value = text, Name = name, Added = dateTime, TypeId = typeId });
@@ -211,12 +217,11 @@ namespace Utility.Repos
             "SELECT Id FROM Type WHERE Assembly = ? AND Namespace = ? AND Name = ? AND GenericTypeNames IS ?";
 
         public static string SelectValues(string valuesTableName) =>
-             $"SELECT v.* FROM \"{valuesTableName}\" v " +
-                   $"JOIN (SELECT Guid, Name, MAX(Added) AS MaxAdded " +
-                   $"FROM \"{valuesTableName}\" " +
-                   $"GROUP BY Guid, Name) latest " +
-                   $"ON v.Guid = latest.Guid AND v.Name = latest.Name AND v.Added = latest.MaxAdded;";
-
+            $"SELECT v.* FROM \"{valuesTableName}\" v " +
+            $"JOIN (SELECT Guid, Name, MAX(Added) AS MaxAdded " +
+            $"FROM \"{valuesTableName}\" " +
+            $"GROUP BY Guid, Name) latest " +
+            $"ON v.Guid = latest.Guid AND v.Name = latest.Name AND v.Added = latest.MaxAdded;";
     }
 
     public class TypeRepository
@@ -238,11 +243,10 @@ namespace Utility.Repos
 
         public TypeRepository(string? dbDirectory = null)
         {
-            this.connection = CreateConnection(dbDirectory);
-            connection.CreateTable<Types>();
+            this.connection = connect(dbDirectory);
             initialise();
 
-            static SQLiteConnection CreateConnection(string? dbDirectory)
+            static SQLiteConnection connect(string? dbDirectory)
             {
                 //if (dbDirectory == null)
                 //{
@@ -265,26 +269,22 @@ namespace Utility.Repos
                         return new SQLiteConnection(Path.Combine(dbDirectory, "data.sqlite"), false);
                     }
                 }
-
             }
-        }
 
-        private void initialise()
-        {
-            if (IsInitialised == false)
+            void initialise()
             {
-                IsInitialised = true;
-
-                foreach (var type in connection.Table<Types>().ToList())
+                if (IsInitialised == false)
                 {
-                    if (types.TryAdd(type.Id, convert(type)) == false)
+                    IsInitialised = true;
+                    connection.CreateTable<Types>();
+                    foreach (var type in connection.Table<Types>().ToList())
                     {
-
+                        if (types.TryAdd(type.Id, convert(type)) == false)
+                        {
+                        }
                     }
                 }
-
             }
-
         }
 
         public System.Type? ToType(int typeId)
@@ -304,7 +304,7 @@ namespace Utility.Repos
             return systemType;
         }
 
-        public int TypeId(System.Type? type)
+        public int FromType(System.Type? type)
         {
             if (type == null)
                 return -1;
@@ -368,6 +368,7 @@ namespace Utility.Repos
     {
         private Dictionary<Guid, string> tablelookup = new();
         public const string No_Existing_Table_No_Name_To_Create_New_One = "ioioi* 22144 fd3323";
+        private readonly Task initialisationTask;
 
         private record Relationships
         {
@@ -387,17 +388,11 @@ namespace Utility.Repos
             public string Name { get; set; }
         }
 
-
-        private readonly Task initialisationTask;
-
-
         public TreeRepository(string? dbDirectory = default) : base(dbDirectory)
         {
             connection.CreateTable<Relationships>();
             initialisationTask = Initialise();
         }
-
-
 
         public bool IsInitialised { get; set; }
 
@@ -419,185 +414,48 @@ namespace Utility.Repos
             return Task.CompletedTask;
         }
 
-        public virtual IObservable<IReadOnlyCollection<Key>> SelectKeys(Guid? parentGuid = null, string? name = null, string? table_name = default)
+        public virtual IObservable<Changes.Change<Key>> Find(Guid? parentGuid = default, string? name = null, Guid? guid = null, System.Type? type = null, int? index = null)
         {
-            return Observable.Create<IReadOnlyCollection<Key>>(observer =>
+            return Observable.Create<Changes.Change<Key>>(observer =>
             {
-                return initialisationTask.ToObservable().Subscribe(a =>
-                {
-                    List<Relationships> tables;
+                var typeId = type != null ? (int?)FromType(type) : null;
 
-                    if (table_name != default)
-                    {
-                        string query = string.Format(SqlQueries.SelectAllFromTable, table_name);
-                        tables = connection.Query<Relationships>(query);
-                    }
-                    else if (parentGuid.HasValue)
-                    {
-                        table_name = getName(parentGuid.Value);
-                        string query =
-                            string.Format(name != null ?
-                            SqlQueries.SelectByParentAndName :
-                            SqlQueries.SelectByParent
-                            , table_name);
-
-                        tables = name == null
-                            ? connection.Query<Relationships>(query, parentGuid.Value)
-                            : connection.Query<Relationships>(query, parentGuid.Value, name);
-                    }
-                    else
-                    {
-                        tables = connection.Table<Relationships>().ToList();
-                        int i = 0;
-                        foreach (var table in tables)
-                        {
-                            table._Index = i++;
-                        }
-                    }
-                    List<Key> selections = new();
-                    foreach (var table in tables)
-                    {
-                        System.Type type = null;
-                        if (table.TypeId.HasValue)
-                            type = ToType(table.TypeId.Value);
-
-                        if (type?.ContainsGenericParameters != false)
-                            throw new Exception("Invalid generic type");
-
-                        if (table_name != null)
-                            setName(table.Guid, table_name);
-                        else
-                        {
-                        }
-
-                        selections.Add(new(table.Guid, table.Parent, type, table.Name, table._Index, table.Removed));
-                    }
-                    observer.OnNext(selections);
-                    observer.OnCompleted();
-                });
-            });
-        }
-
-
-
-        public IEnumerable<Duplication> Duplicate(Guid oldGuid, Guid? newParentGuid = default)
-        {
-            var table_name = getName(oldGuid);
-            var query = newParentGuid != default
-                ? string.Format(SqlQueries.SelectByParent, table_name)
-                : string.Format(SqlQueries.SelectAllFromTable, table_name);
-
-            var _tables = newParentGuid != default
-                ? connection.Query<Relationships>(query, newParentGuid.Value)
-                : Array.Empty<Relationships>() as IReadOnlyCollection<Relationships>;
-
-            Guid guid;
-            if (_tables.Count == 0)
-            {
-                var row = connection.Query<Relationships>(
-                    string.Format(SqlQueries.SelectByGuid, table_name),
-                    oldGuid).Single();
-
-                var lastIndex = MaxIndex(row.Parent) + 1;
-                guid = Guid.NewGuid();
-                setName(guid, table_name);
-                connection.Execute(
-                    string.Format(SqlQueries.InsertRelationship, table_name),
-                    guid, row.Name, lastIndex, newParentGuid ?? row.Parent, DateTime.Now, row.TypeId);
-            }
-            else if (_tables.Count == 1)
-            {
-                guid = _tables.Single().Guid;
-            }
-            else
-            {
-                throw new Exception("Multiple duplicates found");
-            }
-
-            yield return new(oldGuid, guid);
-
-            var childQuery = string.Format(SqlQueries.SelectByParent, table_name);
-            var children = connection.Query<Relationships>(childQuery, oldGuid);
-            foreach (var t in children)
-            {
-                foreach (var x in Duplicate(t.Guid, guid))
-                    yield return x;
-            }
-        }
-
-        public IObservable<Guid> FindParent(Guid guid)
-        {
-            if (guid == default)
-                throw new Exception($"{nameof(guid)} is default");
-
-            return Observable.Create<Guid>(observer =>
-            {
-                return initialisationTask.ToObservable()
-                    .Subscribe(a =>
-                    {
-                        var table_name = getName(guid);
-                        var sql = string.Format(SqlQueries.SelectByGuid, table_name);
-                        var tables = connection.Query<Relationships>(sql, guid);
-
-                        if (tables.Count == 1)
-                        {
-                            observer.OnNext(tables.Single().Parent);
-                        }
-                        else if (tables.Count > 1)
-                        {
-                            throw new Exception("Multiple parents found");
-                        }
-                    });
-            });
-        }
-
-        public virtual IObservable<Key> FindRecursive(Guid parentGuid, int? maxIndex = null)
-        {
-            return Observable.Create<Key>(observer =>
-            {
-                return initialisationTask.ToObservable()
-                    .Subscribe(a =>
-                    {
-                        var table_name = getName(parentGuid);
-                        var stmt = string.Format(SqlQueries.SelectByParentGuidRecursive, table_name);
-                        var rows = connection.Query<Relationships>(stmt, parentGuid);
-
-                        foreach (var row in rows)
-                        {
-                            setName(row.Guid, table_name);
-                            observer.OnNext(new Key(
-                                row.Guid,
-                                row.Parent,
-                                row.TypeId.HasValue ? ToType(row.TypeId.Value) : null,
-                                row.Name,
-                                row._Index,
-                                row.Removed));
-                        }
-                        observer.OnCompleted();
-                    });
-            });
-        }
-
-        public virtual IObservable<Key?> Find(Guid parentGuid, string? name = null, Guid? guid = null, System.Type? type = null, int? index = null)
-        {
-            return Observable.Create<Key?>(observer =>
-            {
-                var typeId = type != null ? (int?)TypeId(type) : null;
-
-                if (parentGuid == default)
+                if (parentGuid.HasValue == false)
                     if (guid.HasValue)
                         if (findAll(observer, guid.Value, name, typeId, index))
                             return Disposable.Empty;
                         else
                             throw new Exception($"{nameof(guid)} is default");
                     else
-                        throw new Exception($"{nameof(parentGuid)} is default");
+                    {
+                        foreach(var table in connection.Table<Relationships>())
+                        {
+                            if (table.TypeId.HasValue)
+                                type = ToType(table.TypeId.Value);
+
+                            if (type?.ContainsGenericParameters != false)
+                                throw new Exception("Invalid generic type");
+
+                            //setName(table.Guid, table.Name);
+                            //if (table_name != null)
+                            //    setName(table.Guid, table_name);
+                            //else
+                            //{
+                            //}
+
+                            observer.OnNext(Changes.Change.Add<Key>(new(table.Guid, table.Parent, type, table.Name, table._Index, table.Removed)));
+                        }
+                        observer.OnCompleted();
+                        return Disposable.Empty;
+                    }
+                //throw new Exception($"{nameof(parentGuid)} is default");
 
                 return
-                initialisationTask.ToObservable()
+                initialisationTask
+                .ToObservable()
                 .Subscribe(a =>
                 {
-                    var table_name = getName(parentGuid);
+                    var table_name = getName(parentGuid.Value);
 
                     if (parentGuid == Guid.Empty)
                     {
@@ -608,17 +466,17 @@ namespace Utility.Repos
                     {
                         if (string.IsNullOrEmpty(name))
                         {
-                            observer.OnNext(null);
+                            observer.OnNext(Changes.Change.None<Key>());
                             observer.OnCompleted();
                             return;
                         }
-                        InsertByParent(parentGuid, name, table_name, typeId, index)
+                        insertByParent(parentGuid.Value, name, table_name, typeId, index)
                         .Subscribe(a =>
                         {
                             if (a is Guid guid)
                             {
                                 setName(guid, table_name);
-                                observer.OnNext(new Key(guid, parentGuid, type, name, index, default));
+                                observer.OnNext(Changes.Change.Add(new Key(guid, parentGuid.Value, type, name, index, default)));
                             }
                             else
                                 throw new Exception("* 44 fd3323");
@@ -629,7 +487,7 @@ namespace Utility.Repos
                     {
                         var table = tables.Single();
                         setName(table.Guid, table_name);
-                        observer.OnNext(new Key(table.Guid, parentGuid, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
+                        observer.OnNext(Changes.Change.Add(new Key(table.Guid, parentGuid.Value, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed)));
                         observer.OnCompleted();
                     }
                     else if (name == null)
@@ -637,7 +495,7 @@ namespace Utility.Repos
                         foreach (var table in tables)
                         {
                             setName(table.Guid, table_name);
-                            observer.OnNext(new Key(table.Guid, parentGuid, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
+                            observer.OnNext(Changes.Change.Add(new Key(table.Guid, parentGuid.Value, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed)));
                         }
                         observer.OnCompleted();
                     }
@@ -646,7 +504,7 @@ namespace Utility.Repos
                         var table = tables.SingleOrDefault(a => a.Name == name) ?? throw new Exception("FD £££££");
                         {
                             setName(table.Guid, table_name);
-                            observer.OnNext(new Key(table.Guid, parentGuid, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
+                            observer.OnNext(Changes.Change.Add(new Key(table.Guid, parentGuid.Value, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed)));
                         }
                         observer.OnCompleted();
                     }
@@ -655,7 +513,7 @@ namespace Utility.Repos
                         var table = tables.SingleOrDefault(a => a.Guid == guid.Value) ?? throw new Exception("3FD £2ui£££44£");
                         {
                             setName(guid.Value, table_name);
-                            observer.OnNext(new Key(table.Guid, parentGuid, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
+                            observer.OnNext(Changes.Change.Add(new Key(table.Guid, parentGuid.Value, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed)));
                         }
                         observer.OnCompleted();
                     }
@@ -666,7 +524,7 @@ namespace Utility.Repos
                 });
             });
 
-            bool findAll(IObserver<Key?> observer, Guid guid, string? name = null, int? typeId = null, int? index = null)
+            bool findAll(IObserver<Changes.Change<Key>> observer, Guid guid, string? name = null, int? typeId = null, int? index = null)
             {
                 var sql = "SELECT name FROM sqlite_master WHERE type ='table' AND sql LIKE '%Removed%' AND tbl_name != 'Relationships'";
                 foreach (var table_name in connection.Query<String>(sql))
@@ -679,43 +537,39 @@ namespace Utility.Repos
                     var table = tables.Single();
 
                     setName(table.Guid, table_name.Name);
-                    observer.OnNext(new Key(table.Guid, table.Parent, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
+                    observer.OnNext(Changes.Change.Add(new Key(table.Guid, table.Parent, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed)));
                     observer.OnCompleted();
                     return true;
                 }
                 return false;
             }
-        }
 
-        private string includeClause<T>(string clause, T? ss = default)
-        {
-            return ss == null ? string.Empty : clause;
-        }
-
-        public IObservable<Guid> InsertByParent(Guid parentGuid, string name, string? table_name = null, int? typeId = null, int? index = null)
-        {
-            return Observable.Create<Guid>(observer =>
+            IObservable<Guid> insertByParent(Guid parentGuid, string name, string? table_name = null, int? typeId = null, int? index = null)
             {
-                return initialisationTask.ToObservable().Subscribe(a =>
+                return Observable.Create<Guid>(observer =>
                 {
-                    table_name ??= getName(parentGuid);
-                    var guid = Guid.NewGuid();
-                    setName(guid, table_name);
-                    //var i = connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
-                    var query = $"INSERT INTO '{table_name}' (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {SQLiteHelper.ToValue(index)}, '{parentGuid}', '{SQLiteHelper.date()}', {SQLiteHelper.ToValue(typeId)});";
-                    var i = connection.Execute(query);
-                    observer.OnNext(guid);
+                    return initialisationTask.ToObservable().Subscribe(a =>
+                    {
+                        table_name ??= getName(parentGuid);
+                        var guid = Guid.NewGuid();
+                        setName(guid, table_name);
+                        //var i = connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
+                        var query = $"INSERT INTO '{table_name}' (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {SQLiteHelper.ToValue(index)}, '{parentGuid}', '{SQLiteHelper.date()}', {SQLiteHelper.ToValue(typeId)});";
+                        var i = connection.Execute(query);
+                        observer.OnNext(guid);
+                    });
                 });
-            });
+            }
         }
 
+        //todo change this to insert - should be able to insert at any point in database-tree
         public IObservable<Key?> InsertRoot(Guid guid, string name, System.Type type)
         {
             return Observable.Create<Key?>(observer =>
             {
                 return initialisationTask.ToObservable().Subscribe(a =>
                 {
-                    var typeId = TypeId(type);
+                    var typeId = FromType(type);
 
                     var notTables = connection.Query<Relationships>($"SELECT * FROM '{nameof(Relationships)}' WHERE Name = '{name}' AND Guid <> '{guid}'  AND TypeId = '{typeId}'");
                     var tables = connection.Query<Relationships>($"SELECT * FROM '{nameof(Relationships)}' WHERE Name = '{name}' AND Guid = '{guid}' AND TypeId = '{typeId}'");
@@ -763,6 +617,78 @@ namespace Utility.Repos
             });
         }
 
+        public IObservable<Guid> FindParent(Guid guid)
+        {
+            if (guid == default)
+                throw new Exception($"{nameof(guid)} is default");
+
+            return Observable.Create<Guid>(observer =>
+            {
+                return initialisationTask.ToObservable()
+                    .Subscribe(a =>
+                    {
+                        var table_name = getName(guid);
+                        var sql = string.Format(SqlQueries.SelectByGuid, table_name);
+                        var tables = connection.Query<Relationships>(sql, guid);
+
+                        if (tables.Count == 1)
+                        {
+                            observer.OnNext(tables.Single().Parent);
+                        }
+                        else if (tables.Count > 1)
+                        {
+                            throw new Exception("Multiple parents found");
+                        }
+                    });
+            });
+        }
+
+        public IEnumerable<Duplication> Duplicate(Guid oldGuid, Guid? newParentGuid = default)
+        {
+            var table_name = getName(oldGuid);
+            var query = newParentGuid != default
+                ? string.Format(SqlQueries.SelectByParent, table_name)
+                : string.Format(SqlQueries.SelectAllFromTable, table_name);
+
+            var _tables = newParentGuid != default
+                ? connection.Query<Relationships>(query, newParentGuid.Value)
+                : Array.Empty<Relationships>() as IReadOnlyCollection<Relationships>;
+
+            Guid guid;
+            if (_tables.Count == 0)
+            {
+                var row = connection.Query<Relationships>(
+                    string.Format(SqlQueries.SelectByGuid, table_name),
+                    oldGuid).Single();
+
+                var lastIndex = MaxIndex(row.Parent) + 1;
+                guid = Guid.NewGuid();
+                setName(guid, table_name);
+                connection.Execute(
+                    string.Format(SqlQueries.InsertRelationship, table_name),
+                    guid, row.Name, lastIndex, newParentGuid ?? row.Parent, DateTime.Now, row.TypeId);
+            }
+            else if (_tables.Count == 1)
+            {
+                guid = _tables.Single().Guid;
+            }
+            else
+            {
+                throw new Exception("Multiple duplicates found");
+            }
+
+            yield return new(oldGuid, guid);
+
+            var childQuery = string.Format(SqlQueries.SelectByParent, table_name);
+            var children = connection.Query<Relationships>(childQuery, oldGuid);
+            foreach (var t in children)
+            {
+                foreach (var x in Duplicate(t.Guid, guid))
+                    yield return x;
+            }
+        }
+
+
         public int? MaxIndex(Guid parentGuid, string? name = default)
         {
             if (tablelookup.TryGetValue(parentGuid, out string? value) == false)
@@ -792,8 +718,6 @@ namespace Utility.Repos
             return _date;
         }
 
-
-
         public System.Type? GetType(Guid guid, string tableName)
         {
             var tables = connection.Query<Relationships>($"SELECT * FROM '{tableName}' WHERE Guid = '{guid}'");
@@ -805,6 +729,40 @@ namespace Utility.Repos
                 return ToType(single.Value);
             }
             return null;
+        }
+
+        //todo combine this with find with switch for recursive
+        public virtual IObservable<Key> FindRecursive(Guid parentGuid, int? maxIndex = null)
+        {
+            return Observable.Create<Key>(observer =>
+            {
+                return initialisationTask.ToObservable()
+                    .Subscribe(a =>
+                    {
+                        var table_name = getName(parentGuid);
+                        var stmt = string.Format(SqlQueries.SelectByParentGuidRecursive, table_name);
+                        var rows = connection.Query<Relationships>(stmt, parentGuid);
+
+                        foreach (var row in rows)
+                        {
+                            setName(row.Guid, table_name);
+                            observer.OnNext(new Key(
+                                row.Guid,
+                                row.Parent,
+                                row.TypeId.HasValue ? ToType(row.TypeId.Value) : null,
+                                row.Name,
+                                row._Index,
+                                row.Removed));
+                        }
+                        observer.OnCompleted();
+                    });
+            });
+        }
+
+
+        private string includeClause<T>(string clause, T? ss = default)
+        {
+            return ss == null ? string.Empty : clause;
         }
 
         private void setName(Guid guid, string name)

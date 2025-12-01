@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Disposables;
 using Newtonsoft.Json.Linq;
 using Splat;
+using Utility.Changes;
 using Utility.Interfaces.Exs;
 using Utility.Structs.Repos;
 
@@ -32,7 +33,7 @@ namespace Utility.Repos
             throw new NotImplementedException();
         }
 
-        public IObservable<Key?> Find(Guid parentGuid, string? name = null, Guid? guid = null, Type? type = null, int? index = null)
+        public IObservable<Change<Key>> Find(Guid? parentGuid = default, string? name = null, Guid? guid = null, Type? type = null, int? index = null)
         {
             if (name != null)
             {
@@ -47,7 +48,7 @@ namespace Utility.Repos
                         if (names.Length > 0)
                         {
                             //return Observable.Return<Key?>(new Key { Guid = Guid.Parse(__token.Parent.Parent["Key"].Value<string>()), Name = name, ParentGuid = parentGuid, Type = Type.GetType(__token.Parent.First["$type"].Value<string>()) });
-                            return Observable.Empty<Key?>();
+                            return Observable.Empty<Change<Key>>();
                         }
                         else
                         {
@@ -59,14 +60,14 @@ namespace Utility.Repos
                     }
                 }
 
-                JsonKey key = new(parentGuid, name);
+                JsonKey key = new(parentGuid.Value, name);
 
                 if (!keys.ContainsKey(key))
                 {
                     keys[key] = Guid.NewGuid();
-                    return Observable.Return<Key?>(new Key(keys[key], parentGuid, type, name, index, null));
+                    return Observable.Return<Change<Key>>(Utility.Changes.Change.Add<Key>(new Key(keys[key], parentGuid.Value, type, name, index, null)));
                 }
-                return Observable.Empty<Key?>();
+                return Observable.Empty<Change<Key>>();
             }
 
             //else
@@ -79,10 +80,10 @@ namespace Utility.Repos
             //    //    .ToObservable();
             //}
 
-            return Observable.Return<Key?>(null);
+            return Observable.Return<Change<Key>>(Utility.Changes.Change.None<Key>());
         }
 
-        public IObservable<Guid> InsertByParent(Guid parentGuid, string name, string? table_name = null, int? typeId = null, int? index = null)
+        public IObservable<Guid> insertByParent(Guid parentGuid, string name, string? table_name = null, int? typeId = null, int? index = null)
         {
             throw new NotImplementedException();
         }
