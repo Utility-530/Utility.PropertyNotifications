@@ -14,22 +14,21 @@ namespace Utility.PropertyNotifications
     {
         private static Dictionary<Type, Func<object, PropertyChangedEventHandler>> dictionary = new();
 
-        public static void RaisePropertyChanged<T, P>(this T sender, Expression<Func<T, P>> propertyExpression) where T : INotifyPropertyChanged
+        public static bool RaisePropertyChanged<T, P>(this T sender, Expression<Func<T, P>> propertyExpression) where T : INotifyPropertyChanged
         {
-            Raise(sender, (propertyExpression.Body as MemberExpression).Member.Name, typeof(T));
+            return Raise(sender, (propertyExpression.Body as MemberExpression).Member.Name, typeof(T));
         }
 
-        public static void RaisePropertyChanged(this INotifyPropertyChanged sender, [CallerMemberName] string? prop = null)
+        public static bool RaisePropertyChanged(this INotifyPropertyChanged sender, [CallerMemberName] string? prop = null)
         {
-            Raise(sender, prop);
+            return Raise(sender, prop);
         }
 
-        private static void Raise(INotifyPropertyChanged sender, string propName, Type? targetType = null, bool cache = true)
+        private static bool Raise(INotifyPropertyChanged sender, string propName, Type? targetType = null, bool cache = true)
         {
             if (sender is IRaiseChanges r)
             {
-                r.RaisePropertyChanged(propName);
-                return;
+                return r.RaisePropertyChanged(propName);
             }
             PropertyChangedEventHandler? handler = null;
             targetType ??= sender.GetType();
@@ -38,7 +37,12 @@ namespace Utility.PropertyNotifications
             else
                 handler = dictionary.Get(targetType, t => field(targetType).ToGetter<PropertyChangedEventHandler>()).Invoke(sender);
 
-            handler.Invoke(sender, new PropertyChangedEventArgs(propName));
+            if (handler != null)
+            {
+                handler.Invoke(sender, new PropertyChangedEventArgs(propName));
+                return true;
+            }
+            return false;
             static FieldInfo field(Type type)
             {
                 return type.GetField(nameof(INotifyPropertyChanged.PropertyChanged), BindingFlags.Instance | BindingFlags.NonPublic) ??
@@ -123,7 +127,7 @@ namespace Utility.PropertyNotifications
                 private void raiseChange()
                 {
                     var value = func.Invoke(_target);
-                    if (_includeNulls || !Utility.Helpers.Reflection.Comparison.IsDefaultValue(value))
+                    if (_includeNulls || value != null)
                         _observer.OnNext(value);
                 }
             }
