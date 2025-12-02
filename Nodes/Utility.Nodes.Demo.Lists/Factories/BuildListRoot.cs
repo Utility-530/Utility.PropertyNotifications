@@ -26,12 +26,12 @@ namespace Utility.Nodes.Demo.Lists.Factories
             return
                 new Model(() =>
                 [
-                    new Model(() => [new CommandModel<OpenSettingsEvent> { Name = Settings }])
-                    {
-                         Name = controls,
-                         Orientation = Enums.Orientation.Horizontal,
-                         IsExpanded = true,
-                    },
+                    //new Model(() => [new CommandModel<OpenSettingsEvent> { Name = Settings }])
+                    //{
+                    //     Name = controls,
+                    //     Orientation = Enums.Orientation.Horizontal,
+                    //     IsExpanded = true,
+                    //},
                     new Model(items, attach: node =>
                     {
                         node
@@ -80,7 +80,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                         .OfType<OpenSettingsEvent>()
                         .Subscribe(e =>
                         {
-                            Locator.Current.GetService<INodeRoot>().Create(nameof(Factories.NodeMethodFactory.BuildSettingsRoot))
+                            Globals.Resolver.Resolve<INodeRoot>().Create(nameof(Factories.NodeMethodFactory.BuildSettingsRoot))
                             .Subscribe(model =>
                             {
                                  node.Clear();

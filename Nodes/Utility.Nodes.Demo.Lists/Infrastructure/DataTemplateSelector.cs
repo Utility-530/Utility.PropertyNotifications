@@ -19,7 +19,7 @@ namespace Utility.Nodes.Demo.Lists
         {
             return item switch
             {
-                Model => ModelTemplateSelector.SelectTemplate(item, container),
+                Model =>  ModelTemplateSelector.SelectTemplate(item, container),
                 MemberDescriptor => Utility.WPF.Trees.DataTemplateSelector.Instance.SelectTemplate(item, container),
                 //ProliferationModel => ModelTemplateSelector.SelectTemplate(item, container),
                 _ => throw new Exception("DVS")

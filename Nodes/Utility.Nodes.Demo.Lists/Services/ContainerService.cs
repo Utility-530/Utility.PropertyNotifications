@@ -21,7 +21,6 @@ namespace Utility.Nodes.Demo.Lists.Services
 
     public class ContainerService
     {
-
         public static IObservable<Changes.Change<INodeViewModel>> ChangeType(Type type)
         {
             var factory = Locator.Current.GetService<IFactory<EntityMetaData>>();
@@ -35,8 +34,8 @@ namespace Utility.Nodes.Demo.Lists.Services
                 .Create(metaData.TransformationMethod)
                 .Subscribe(a =>
                 {
-                    observer.OnNext(Changes.Change<INodeViewModel>.Reset());
-                    observer.OnNext(Changes.Change<INodeViewModel>.Add(a));
+                    observer.OnNext(Changes.Change.Reset<INodeViewModel>());
+                    observer.OnNext(Changes.Change.Add<INodeViewModel>(a));
 
                 }, () => observer.OnCompleted());
             });

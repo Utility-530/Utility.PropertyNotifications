@@ -25,38 +25,21 @@ namespace Utility.Nodes.Demo.Lists.Factories
             var guid = Guid.Parse(MetaDataFactory.assetGuid);
             buildNetwork(guid);
 
-            //return nodeSource.Create(nameof(BuildAssetRoot),
-            //    guid,
-            //    s =>
-            return   new Model(() => [
+            return  new Model(() => [
                     new Model<string>() { Name = search, DataTemplate = "SearchEditor" },
                     new ListModel(MetaDataFactory.assetType) { Name = list, DataTemplate =  "SFGridTemplate"},
-                    new EditModel(attach: node =>
+                    new Model(attach: node =>
                     {
-                        //node
-                        //.WithChangesTo(a => (a as IGetValue).Value)
-                        //.Subscribe(model =>
-                        //{
-                        //    if (model is Asset creditCardModel)
-                        //    {
-                        //        creditCardModel
-                        //        .WhenChanged()
-                        //        .Subscribe(a =>
-                        //        {
-                        //            if(a.Name!= nameof(Asset.LastEdit))
-                        //            {
-                        //                creditCardModel.LastEdit = DateTime.Now;
-                        //                creditCardModel.RaisePropertyChanged(nameof(Asset.LastEdit));
-                        //            }
-                        //        });
-                        //    }
-                        //});
-                        node.ReactTo<SelectionReturnParam>(setAction: (a) => { node.Value = a; node.RaisePropertyChanged(nameof(EditModel.Value)); }, guid: guid);
+         
+                        node.ReactTo<SelectionReturnParam>(setAction: (a) => { node.Value = a; node.RaisePropertyChanged(nameof(Model.Value)); }, guid: guid);
                     })
-                    { Name = edit },
+                    { 
+                        Name = edit,
+                        DataTemplate = "EditTemplate",
+                        ShouldValueBeTracked = false
+                    },
                     new Model<string>() { Name = summary , DataTemplate = "MoneySumTemplate",/* IsValueTracked = false*/ }
                 ],
-
                 (addition) =>
                 {
                     if (addition is Model<string> { Name: search } searchModel)

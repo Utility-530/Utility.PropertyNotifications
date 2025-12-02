@@ -4,6 +4,7 @@ using System.IO;
 using System.Reactive.Linq;
 using Newtonsoft.Json;
 using Splat;
+using UnitsNet;
 using Utility.Entities;
 using Utility.Entities.Comms;
 using Utility.Enums;
@@ -11,14 +12,19 @@ using Utility.Extensions;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
+using Utility.Keys;
 using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Meta;
+using Utility.PropertyDescriptors;
 using Utility.PropertyNotifications;
 using Utility.ServiceLocation;
 using Utility.Services;
+using Utility.Trees;
+using Utility.Interfaces;
+using Utility.Trees.Extensions.Async;
 
 namespace Utility.Nodes.Demo.Lists.Factories
 {
@@ -29,38 +35,54 @@ namespace Utility.Nodes.Demo.Lists.Factories
             var guid = Guid.Parse(MetaDataFactory.auctionItemGuid);
             buildNetwork(guid);
 
-            return 
+            return
                 new Model(() => [
                     new Model(()=>
                     [
                         new CommandModel<RefreshEvent>() { Name = refresh },
-                        new Model<string>(attach: searchModel=>{
+                        new Model<string>(attach: searchModel=> {
                                   searchModel.Observe<FilterParam>(guid);
-                        }) { Name = search,DataTemplate = "SearchEditor", Title = "Search"  },
-                        new Model<string>(attach: stringModel=>{
+                        })
+                        {
+                            Name = search,
+                            DataTemplate = "SearchEditor",
+                            Title = "Search"
+                        },
+                        new Model<string>(attach: stringModel=> {
                                stringModel.Observe<BasePathParam>(guid);
-                        } ) { Name = directory, DataTemplate = "DirectoryEditor",Title = "Base Directory" },
-                        new Model<string>( attach: stringModel =>{
-                               stringModel.Observe<FilePathParam>(guid);
-                        }) { Name = indexPath,
-                        DataTemplate = "FilePathEditor",
-                            Title = "Index Path"},
+                        } )
+                        {
+                            Name = directory,
+                            DataTemplate = "DirectoryEditor",
+                            Title = "Base Directory"
+                        },
+                        new Model<string>( attach: stringModel => {
+                        stringModel.Observe<FilePathParam>(guid);
+                        })
+                        {
+                            Name = indexPath,
+                            DataTemplate = "FilePathEditor",
+                            Title = "Index Path"
+                        },
                     ],
-                    attach : node=> {node.IsExpanded = true;  node.Orientation = Orientation.Horizontal; }                   ){ Name = controllerPath },
-                    new ListModel(MetaDataFactory.auctionItemType, attach: listModel=>{
-                        listModel.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a, guid : guid);
-
-                        listModel.WhenReceivedFrom(a => a.Add, includeNulls: false)
-                        .Select(a => new Changes.Change(a, null, Changes.Type.Add))
-                        .Observe<ChangeParam, Changes.Change>(guid);
-
-                        listModel.WhenReceivedFrom(a => a.Remove, includeNulls: false)
-                        .Select(a => new Changes.Change(a, null, Changes.Type.Remove))
-                        .Observe<ChangeParam, Changes.Change>(guid);
-
+                    attach : node=> {
+                        node.IsExpanded = true;
+                        node.Orientation = Orientation.Horizontal;
+                    }){
+                        Name = controllerPath
+                    },
+                    new Model(attach: listModel =>
+                    {
+                        listModel.ReactTo<ListCollectionViewReturnParam, IEnumerable>(a => listModel.Collection = a, guid);
                         listModel.Observe<SelectionParam>(guid);
-                    }) { Name = list1 },
-                    new EditModel(attach: editModel =>
+                    }) {
+                        Name = list1, 
+                        DataTemplate = "DataGridTemplate",
+                        ShouldValueBeTracked = false,
+                        Type = MetaDataFactory.auctionItemType
+                    },
+                    
+                    new Model(attach: editModel =>
                     {
                         editModel.WithChangesTo(a => (a as IGetValue).Value)
                         .Subscribe(model =>
@@ -77,31 +99,39 @@ namespace Utility.Nodes.Demo.Lists.Factories
                                 eModel.WithChangesTo(a => a.RelativePath).Observe<FilePathParam, string>(guid: guid);
                             }
                         });
-                        editModel.ReactTo<SelectionReturnParam>(setAction: (a) => { (editModel as ISetValue).Value = a; editModel.RaisePropertyChanged(nameof(EditModel.Value)); }, guid: guid);
-                    }) { Name = edit },
-                    new Model<string>(attach: jsonModel => {
-                        jsonModel.ReactTo<FullPathParam>(a =>
-                        {
-                            var path = Path.Combine(a.ToString(), "data.json");
-                            if (!File.Exists(path))
-                            {
-                                jsonModel.Set( JsonConvert.SerializeObject(new { Error = "File does not exist: " + path }));
-                            }
-                            var text = File.ReadAllText(path);
-                          jsonModel.Set(a.ToString());
-                        }, guid);
-                        }, raisePropertyCalled:false, raisePropertyReceived:false) {Name = details, DataTemplate = "Json"},
-                    new Model<string>() { Name = html, DataTemplate="Html" },
+                        editModel.ReactTo<OutValueParam>(setAction: (a) => { (editModel.Children as IList).Clear(); editModel.Add(a); }, guid: guid);
+                    }, funcType: ()=>  typeof(AuctionItem)) {
+                        Name = edit,
+                        ShouldValueBeTracked = false,
+                        //DataTemplate = "EditTreeTemplate",
+                    },
+                    //new Model<string>(attach: jsonModel => {
+                    //    jsonModel.ReactTo<FullPathParam>(a =>
+                    //    {
+                    //        var path = Path.Combine(a.ToString(), "data.json");
+                    //        if (!File.Exists(path))
+                    //        {
+                    //            jsonModel.Set( JsonConvert.SerializeObject(new { Error = "File does not exist: " + path }));
+                    //        }
+                    //        var text = File.ReadAllText(path);
+                    //      jsonModel.Set(a.ToString());
+                    //    }, guid);
+                    //    }, raisePropertyCalled:false, raisePropertyReceived:false) {Name = details, DataTemplate = "Json"},
+                    new Model<string>(attach: a=>{
+                        a.ReactTo<OutStringParam>(setAction: _a => a.Set((string)_a), guid: guid);
+                    }) { Name = html, DataTemplate="Html" },
                     new Model<string>(attach: stringModel=>{
-                              stringModel.ReactTo<RazorFileReturnParam>(setAction: a => stringModel.Set((string)a), guid: guid);
+                              //stringModel.ReactTo<RazorFileReturnParam>(setAction: a => stringModel.Set((string)a), guid: guid);
+                              stringModel.ReactTo<OutStringParam>(setAction: _a => stringModel.Set((string)_a), guid: guid);
                     }) { Name = html1, DataTemplate = "HtmlEditor" },
                     new Model<string>(attach: rstringModel =>{
-                         rstringModel.ReactTo<RazorFileReturnParam>(setAction: a => rstringModel.Set((string)a), guid: guid);
+                         //rstringModel.ReactTo<RazorFileReturnParam>(setAction: a => rstringModel.Set((string)a), guid: guid);
+                         rstringModel.ReactTo<OutStringParam>(setAction: _a => rstringModel.Set((string)_a), guid: guid);
                     }) { Name = html2, DataTemplate = "HtmlWebViewer" },
                 ],
                 attach: (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; }
                 )
-                { Name = nameof(BuildEbayRoot), Guid =guid };
+                { Name = nameof(BuildEbayRoot), Guid = guid };
 
             static void buildNetwork(Guid guid)
             {
@@ -110,6 +140,8 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 serviceResolver.Connect<PredicateReturnParam, PredicateParam>();
                 serviceResolver.Connect<ListInstanceReturnParam, ListInParam>();
                 serviceResolver.Connect<ListInstanceReturnParam, ListParam>();
+                serviceResolver.Connect<SelectionReturnParam, InValueParam>();
+                serviceResolver.Connect<OutValueParam, InNodeParam>();
             }
         }
     }

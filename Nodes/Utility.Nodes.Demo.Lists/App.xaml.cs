@@ -1,10 +1,11 @@
-﻿using AdonisUI;
-using Newtonsoft.Json;
-using Splat;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using AdonisUI;
+using Newtonsoft.Json;
+using Splat;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
@@ -23,6 +24,7 @@ using Utility.ServiceLocation;
 using Utility.Services;
 using Utility.Services.Meta;
 using Utility.WPF.Controls;
+using Utility.WPF.Templates;
 
 namespace Utility.Nodes.Demo.Lists
 {
@@ -40,6 +42,7 @@ namespace Utility.Nodes.Demo.Lists
             SQLitePCL.Batteries.Init();
             initialiseGlobals(Globals.Register);
             initialise(CurrentMutable);
+            Application.Current.Resources.MergedDictionaries.Add(new Utility.Models.Templates.Templates());         
             showSplashscreen();
 
             JsonConvert.DefaultSettings = () => SettingsFactory.Combined;
@@ -67,16 +70,19 @@ namespace Utility.Nodes.Demo.Lists
             register.RegisterLazySingleton<SelectionService>(() => new SelectionService());
             register.RegisterLazySingleton<CollectionViewService>(() => new CollectionViewService());
             register.RegisterConstant<IFilter>(new StringFilter());
+            Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
+            register.RegisterLazySingleton<INodeRoot>(() => new NodeEngine(Infrastructure.TreeRepository.Instance, Infrastructure.TreeRepository.Instance, Infrastructure.TreeRepository.Instance));
         }
 
         private static void initialiseGlobals(IRegister register)
         {
             register.Register<IServiceResolver>(() => new ServiceResolver());
             register.Register<INodeSource>(() => new NodesStore());
-            //register.Register<ITreeRepository>(() => new TreeRepository("../../../Data"));
-            register.Register<INodeRoot>(() => new NodeEngine(new TreeRepository("../../../Data"), new ValueRepository("../../../Data")));
+            register.Register<INodeRoot>(() => new NodeEngine(new Repos.TreeRepository("../../../Data"), new Repos.ValueRepository("../../../Data"), new DataActivator()));
             register.Register<IPlaybackEngine>(() => new PlaybackEngine());
             register.Register<NodeInterface>();
+                     register.Register<DataTemplateSelector>(()=> Models.Templates.ModelTemplateSelector.Instance);
+            register.Register<StyleSelector>(() => ContainerStyleSelector.Instance);
         }
 
         private static void showPlayback()

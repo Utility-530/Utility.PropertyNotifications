@@ -33,7 +33,7 @@
                 <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml" />
                 <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml" />
                 <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Generic.xaml" />
-                <res:SharedResourceDictionary Source="/Utility.Models.Templates;component/Templates.xaml" />
+                <!--<res:SharedResourceDictionary Source="/Utility.Models.Templates;component/Templates.xaml" />-->
                 <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Templates.SyncFusion;component/Templates.xaml" />
                 <res:SharedResourceDictionary Source="/Utility.Nodes.Demo.Lists;component/Themes/SyncFusion.xaml"/>
             </ResourceDictionary.MergedDictionaries>      
@@ -49,12 +49,74 @@
             
             <local:ContainerTemplateSelector x:Key="ContainerTemplateSelector" />
 
-            <Style x:Key="DefaultCustomStyle" TargetType="{x:Type trees:CustomTreeViewItem}">
+            <Style x:Key="DefaultCustomStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource DefaultStyle}">
                 <Setter Property="SelectedIndex" Value="-1" />
                 <Setter Property="SelectedItem" Value="{Binding Current, Mode=TwoWay}" />             
             </Style>
 
+            <Style x:Key="LabelValue"  TargetType="ItemsControl">
+                <Setter Property="ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <Grid  Margin="0,2,0,2"   HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"></ColumnDefinition>
+                                    <ColumnDefinition Width="10"></ColumnDefinition>
+                                    <ColumnDefinition Width="400"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="LabelStyle"  TargetType="ContentPresenter">
+                <Setter Property="Opacity" Value="0.9"></Setter>
+                <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+                <!--<Setter Property="FontWeight" Value="DemiBold"></Setter>-->
+                <Setter Property="ToolTip" Value="{StaticResource TokenToolTip}"></Setter>
+                <Setter Property="ToolTipService.InitialShowDelay" Value="300"></Setter>
+                <!--<Setter Property="Text" Value="{Binding Path=Name, Mode=OneWay}"></Setter>-->
+                <!--<Setter Property="Foreground">
+            <Setter.Value>
+                <SolidColorBrush Color="{Binding Path=Value.Type, Converter={x:Static controls:Converters.JTokenTypeToColorConverter}}" />
+            </Setter.Value>
+        </Setter>-->
+            </Style>
+
+            <Style x:Key="LabelValueStyle" TargetType="TreeViewItem">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TreeViewItem">
+                            <ItemsControl Style="{StaticResource LabelValue}">
+                                <ContentPresenter Style="{StaticResource LabelStyle}" ContentSource="Header" />
+                                <ItemsPresenter  Grid.Column="2" />
+                            </ItemsControl>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="TableRowStyle" TargetType="TreeViewItem">
+                <Setter Property="ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="1"></UniformGrid>
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TreeViewItem">
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            
             <local:ContainerStyleSelector x:Key="ContainerStyleSelector"
+                                          TableRowStyle="{StaticResource TableRowStyle}"
+                                          LabelStyle="{StaticResource LabelValueStyle}"
                                           DefaultStyle="{StaticResource DefaultCustomStyle}">
             </local:ContainerStyleSelector>
 

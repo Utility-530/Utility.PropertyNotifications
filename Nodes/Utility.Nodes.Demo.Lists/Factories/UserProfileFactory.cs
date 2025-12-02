@@ -1,16 +1,17 @@
 ﻿using System.Collections;
 using System.Reactive.Linq;
+using System.Windows;
 using Utility.Enums;
+using Utility.Extensions;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
-using Utility.Services;
-using Utility.Extensions;
-using Utility.Interfaces.Exs.Diagrams;
 using Utility.ServiceLocation;
+using Utility.Services;
 
 namespace Utility.Nodes.Demo.Lists.Factories
 {
@@ -24,13 +25,17 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 new Model(() => [
                      new Model<string>() { Name = search,DataTemplate = "SearchEditor" },
                      new ListModel(type) { Name = list },
-                     new EditModel { Name = edit },
+                     new Model {
+                        Name = edit,
+                        DataTemplate = "EditTemplate",
+                        ShouldValueBeTracked = false
+                    }, 
                 ],
                 (addition) =>
                 {
-                    if (addition is EditModel { } editModel)
+                    if (addition is Model { Name:edit } editModel)
                     {
-                        editModel.ReactTo<SelectionReturnParam>(setAction: (a) => { editModel.Value = a; editModel.RaisePropertyChanged(nameof(EditModel.Value)); }, guid: guid);
+                        editModel.ReactTo<SelectionReturnParam>(setAction: (a) => { editModel.Value = a; editModel.RaisePropertyChanged(nameof(Model.Value)); }, guid: guid);
                     }
 
                     if (addition is Model<string> { Name: search } searchModel)
