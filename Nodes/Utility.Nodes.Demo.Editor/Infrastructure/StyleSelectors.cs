@@ -33,21 +33,7 @@ namespace Utility.Nodes.Demo.Editor
         public Style TabStyle { get; set; }
     }
 
-    public class SelectedItemStyleSelector : StyleSelector
-    {
-        public override Style SelectStyle(object item, DependencyObject container)
-        {
-            //var parent = (container as TreeViewItem).FindParent<TreeViewItem>();
 
-            return item switch
-            {
-                NodeViewModel { Name: "MasterTab" } => DragablzItemStyle,
-                _ => base.SelectStyle(item, container),
-            };
-        }
-
-        public Style DragablzItemStyle { get; set; }
-    }
 
     public class ContainerTemplateSelector : DataTemplateSelector
     {
@@ -57,7 +43,7 @@ namespace Utility.Nodes.Demo.Editor
             return item switch
             {
                 MemberDescriptor => Utility.WPF.Trees.DataTemplateSelector.Instance.SelectTemplate(item, container),
-                NodeViewModel { DataTemplate: "TabStyle" } => TabTemplate,            
+                //NodeViewModel { DataTemplate: "TabStyle" } => TabTemplate,            
                 Model => ModelTemplateSelector.SelectTemplate(item, container),       
                 _ => throw new Exception("DVS")
             };
@@ -65,6 +51,7 @@ namespace Utility.Nodes.Demo.Editor
 
         public DataTemplate TabTemplate { get;set; }
     }
+
     public class SelectedItemTemplateSelector : DataTemplateSelector
     {
         Models.Templates.SelectedItemTemplateSelector ModelTemplateSelector = new();
