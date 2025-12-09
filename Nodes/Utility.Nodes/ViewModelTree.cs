@@ -39,7 +39,8 @@ namespace Utility.Nodes
         public static readonly bool? IsContentVisible = true;
         public static readonly Position2D ConnectorPosition = Position2D.None;
         public static readonly string DataTemplate = default;
-        public static readonly string Style = default;
+        public static readonly Visual Style = default;
+        public static readonly VisualLayout ContainerStyle = default;
         public static readonly string SelectedItemTemplate = default;
         public static readonly string ItemsPanelTemplate = default;
         public static readonly string Title = default;
@@ -80,7 +81,8 @@ namespace Utility.Nodes
         private bool? isContentVisible = NodeViewModelConstants.IsContentVisible;
         private Position2D connectorPosition = NodeViewModelConstants.ConnectorPosition;
         private string dataTemplate = NodeViewModelConstants.DataTemplate;
-        private string style = NodeViewModelConstants.Style;
+        private Visual style = NodeViewModelConstants.Style;
+        private VisualLayout layOut = NodeViewModelConstants.ContainerStyle;
         private string selectedItemTemplate = NodeViewModelConstants.SelectedItemTemplate;
         private string itemsPanelTemplate = NodeViewModelConstants.ItemsPanelTemplate;
         private string title = NodeViewModelConstants.Title;
@@ -293,13 +295,6 @@ namespace Utility.Nodes
             set => this.RaisePropertyReceived(ref this.order, value);
         }
 
-
-        public bool? IsContentVisible
-        {
-            get { RaisePropertyCalled(isContentVisible); return isContentVisible; }
-            set => this.RaisePropertyReceived(ref this.isContentVisible, value);
-        }
-
         public bool IsReplicable
         {
             get { RaisePropertyCalled(isReplicable); return isReplicable; }
@@ -312,6 +307,7 @@ namespace Utility.Nodes
             set => this.RaisePropertyReceived(ref this.isRemovable, value);
         }
 
+        //TODO : Rename to Customisation/ or custom-style
         [FieldName(nameof(dataTemplate))]
         public string DataTemplate
         {
@@ -319,10 +315,16 @@ namespace Utility.Nodes
             set => this.RaisePropertyReceived(ref this.dataTemplate, value);
         }
 
-        public string Style
+        public Visual Style
         {
             get { RaisePropertyCalled(style); return style; }
             set => this.RaisePropertyReceived(ref this.style, value);
+        }
+
+        public VisualLayout Layout
+        {
+            get { RaisePropertyCalled(layOut); return layOut; }
+            set => this.RaisePropertyReceived(ref this.layOut, value);
         }
 
         [FieldName(nameof(selectedItemTemplate))]
@@ -395,7 +397,6 @@ namespace Utility.Nodes
                 case nameof(IsEditable): isEditable = Convert.ToBoolean(value); break;
                 case nameof(IsReadOnly): isReadOnly = Convert.ToBoolean(value); break;
                 case nameof(IsVisible): isVisible = value as bool?; break;
-                case nameof(IsContentVisible): isContentVisible = value as bool?; break;
                 case nameof(IsValid): isValid = value as bool?; break;
                 case nameof(IsHighlighted): isHighlighted = value as bool?; break;
                 case nameof(IsClicked): isClicked = Convert.ToBoolean(value); break;
@@ -437,7 +438,6 @@ namespace Utility.Nodes
                 nameof(IsEditable) => isEditable,
                 nameof(IsReadOnly) => isReadOnly,
                 nameof(IsVisible) => isVisible,
-                nameof(IsContentVisible) => isContentVisible,
                 nameof(IsValid) => isValid,
                 nameof(IsHighlighted) => isHighlighted,
                 nameof(IsClicked) => isClicked,
@@ -482,8 +482,6 @@ namespace Utility.Nodes
                 yield return (nameof(IsReadOnly), NodeViewModelConstants.IsReadOnly, isReadOnly);
             if (isVisible != NodeViewModelConstants.IsVisible)
                 yield return (nameof(IsVisible), NodeViewModelConstants.IsVisible, isVisible);
-            if (isContentVisible != NodeViewModelConstants.IsContentVisible)
-                yield return (nameof(IsContentVisible), NodeViewModelConstants.IsContentVisible, isContentVisible);
             if (isValid != NodeViewModelConstants.IsValid)
                 yield return (nameof(IsValid), NodeViewModelConstants.IsValid, isValid);
             if (isHighlighted != NodeViewModelConstants.IsHighlighted)

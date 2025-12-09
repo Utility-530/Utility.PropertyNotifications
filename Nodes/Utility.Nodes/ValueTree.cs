@@ -29,7 +29,7 @@ namespace Utility.Nodes
         private string? stringValue;
         private IEnumerable _collection;
 
-        public IEnumerable Collection
+        public virtual IEnumerable Collection
         {
             get { return _collection; }
             set => this.RaisePropertyChanged(ref this._collection, value);
