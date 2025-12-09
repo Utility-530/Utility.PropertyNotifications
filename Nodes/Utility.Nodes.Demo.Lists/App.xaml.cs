@@ -19,12 +19,14 @@ using Utility.Models.Diagrams;
 using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Meta;
+using Utility.Reactives;
 using Utility.Repos;
 using Utility.ServiceLocation;
 using Utility.Services;
 using Utility.Services.Meta;
 using Utility.WPF.Controls;
 using Utility.WPF.Templates;
+using Utility.WPF.Helpers;
 
 namespace Utility.Nodes.Demo.Lists
 {
@@ -110,6 +112,16 @@ namespace Utility.Nodes.Demo.Lists
                 ContentTemplate = Utility.WPF.Helpers.ResourceHelper.FindTemplate("MasterTemplate")
             };
 
+            var exceptionWindow = new Window()
+            {
+                Content = Globals.Exceptions.ToObservableCollection(),
+                ContentTemplate = Utility.WPF.Helpers.ResourceHelper.FindTemplate("ExceptionsTemplate")
+            };
+
+            exceptionWindow.ToLeft();
+            exceptionWindow.Show();
+            window.Show();
+            
             Globals.Resolver
                 .Resolve<INodeRoot>()
                 .Create(nameof(Factories.NodeMethodFactory.BuildListRoot))

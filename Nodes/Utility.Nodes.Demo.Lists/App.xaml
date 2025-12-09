@@ -33,7 +33,7 @@
                 <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml" />
                 <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml" />
                 <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Generic.xaml" />
-                <!--<res:SharedResourceDictionary Source="/Utility.Models.Templates;component/Templates.xaml" />-->
+                <res:SharedResourceDictionary Source="/Utility.Models.Templates;component/VisualTemplates.xaml" />
                 <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Templates.SyncFusion;component/Templates.xaml" />
                 <res:SharedResourceDictionary Source="/Utility.Nodes.Demo.Lists;component/Themes/SyncFusion.xaml"/>
             </ResourceDictionary.MergedDictionaries>      
@@ -70,21 +70,22 @@
                 </Setter>
             </Style>
 
-            <Style x:Key="LabelStyle"  TargetType="ContentPresenter">
+            <!--<Style x:Key="LabelStyle"  TargetType="ContentPresenter" >
                 <Setter Property="Opacity" Value="0.9"></Setter>
                 <Setter Property="HorizontalAlignment" Value="Right"></Setter>
-                <!--<Setter Property="FontWeight" Value="DemiBold"></Setter>-->
+                --><!--<Setter Property="FontWeight" Value="DemiBold"></Setter>--><!--
                 <Setter Property="ToolTip" Value="{StaticResource TokenToolTip}"></Setter>
                 <Setter Property="ToolTipService.InitialShowDelay" Value="300"></Setter>
-                <!--<Setter Property="Text" Value="{Binding Path=Name, Mode=OneWay}"></Setter>-->
+                <Setter Property="ContentSource" Value="Header"></Setter>
+                --><!--<Setter Property="Text" Value="{Binding Path=Name, Mode=OneWay}"></Setter>-->
                 <!--<Setter Property="Foreground">
             <Setter.Value>
                 <SolidColorBrush Color="{Binding Path=Value.Type, Converter={x:Static controls:Converters.JTokenTypeToColorConverter}}" />
             </Setter.Value>
-        </Setter>-->
-            </Style>
+        </Setter>--><!--
+            </Style>-->
 
-            <Style x:Key="LabelValueStyle" TargetType="TreeViewItem">
+            <!--<Style x:Key="LabelValueStyle" TargetType="TreeViewItem">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="TreeViewItem">
@@ -95,19 +96,47 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+            </Style>-->
+
+            <Style x:Key="ContentStyle" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                            <Grid>
+                                <!--<Ellipse Fill="SeaGreen" Height="20" Width="20"></Ellipse>-->
+                                <ContentPresenter ContentSource="Header" />
+                            </Grid>                      
+                            <!--<ContentPresenter Style="{StaticResource LabelStyle}" ContentSource="Header" />-->                              
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
 
-            <Style x:Key="TableRowStyle" TargetType="TreeViewItem">
+            <Style x:Key="TableRowStyle" TargetType="{x:Type TreeViewItem}">
+                <!--<Setter Property="MinWidth" Value="300" ></Setter>
+                <Setter Property="MinHeight" Value="300" ></Setter>-->
                 <Setter Property="ItemsPanel">
                     <Setter.Value>
                         <ItemsPanelTemplate>
-                            <UniformGrid Rows="1"></UniformGrid>
+                            <!--<UniformGrid Width="300" Rows="1"></UniformGrid>-->
+                            <hc:UniformSpacingPanel ItemWidth="60"></hc:UniformSpacingPanel>
                         </ItemsPanelTemplate>
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="TreeViewItem">
+                        <ControlTemplate  TargetType="{x:Type TreeViewItem}">
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="TableStyle" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="MinWidth" Value="300"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
                             <ItemsPresenter />
                         </ControlTemplate>
                     </Setter.Value>
@@ -116,8 +145,9 @@
             
             <local:ContainerStyleSelector x:Key="ContainerStyleSelector"
                                           TableRowStyle="{StaticResource TableRowStyle}"
-                                          LabelStyle="{StaticResource LabelValueStyle}"
-                                          DefaultStyle="{StaticResource DefaultCustomStyle}">
+                                          TableStyle="{StaticResource TableStyle}"
+                                          ContentStyle="{StaticResource ContentStyle}"
+                                          HeaderedStyle="{StaticResource DefaultCustomStyle}">
             </local:ContainerStyleSelector>
 
             <DataTemplate x:Key="MasterTemplate" DataType="{x:Type node:NodeViewModel}">
@@ -133,7 +163,11 @@
                     </trees:CustomTreeView.ItemsPanel>-->
                 </trees:CustomTreeView>
             </DataTemplate>
-            
+
+
+            <DataTemplate x:Key="ExceptionsTemplate">
+                <DataGrid ItemsSource="{Binding }"></DataGrid>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

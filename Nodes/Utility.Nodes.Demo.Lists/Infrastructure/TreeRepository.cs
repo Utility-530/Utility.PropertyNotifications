@@ -41,6 +41,7 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
         Dictionary<Guid, (Guid parentGuid, Guid root, string name)> dictionary = new();
         Dictionary<Guid, ObjectWrapper> values = new();
         Dictionary<Guid, INodeViewModel> nodes = new();
+        Dictionary<(Guid, string), ReplaySubject<DateValue>> replay = new();
 
         public static class Constants
         {
@@ -53,8 +54,9 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
             public const string Measurements = "Measurements";
             public const string Disclaimers = "Disclaimers";
             public const string HasShipping = "Has Shipping";
+            public const string HasShippingValue = "Has Shipping.Value";
             public const string Description = "Description";
-            public const string Image = "Image";
+            public const string Image = "ImagePath";
             public const string Measurement = "Measurement";
             public const string MeasurementHeader = "Measurement.Header";
             public const string MeasurementCentimetres = "Measurement.Centimetres";
@@ -72,13 +74,12 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
             public const string Value = nameof(Value);
             public const string centimetre = "cm";
             public const string inch = "in";
+            public const string Unit = "unit";
         }
 
         private TreeRepository()
         {
         }
-
-
 
         public INodeViewModel CreateRoot(object instance)
         {
@@ -115,8 +116,9 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
 
         public object Activate(Key? a)
         {
-            var _bool = isProliferable(a.Value.Name);
+            var _bool = containerStyle(a.Value.Name) != Enums.VisualLayout.Content;
             var _dataTemplate = dataTemplate(a.Value.Name);
+            var value = get(values[dictionary[a.Value.Guid].root], a.Value.Name);
             var model = new Models.Model
             {
                 Name = a.Value.Name,
@@ -125,60 +127,154 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
                 DataTemplate = _dataTemplate,
                 Type = type(a.Value.Name),
                 Orientation = orientation(a.Value.Name),
-                Style = style(a.Value.Name)
+                Style = style(a.Value.Name),
+                Layout = containerStyle(a.Value.Name),
+                IsVisible = isVisible(a.Value.Name),
+                Value = value
             };
             (replay[(dictionary[a.Value.Guid].root, a.Value.Name)] = new())
                 .Subscribe(a =>
                 {
-                    //model.Value = a.Value;
                     model.RaisePropertyChanged(nameof(NodeViewModel.Value));
                 });
             return model;
-            static string style(string name)
+
+            static bool isVisible(string name)
             {
-                if (new string[] {
-                       "Unit",
-                       Constants.inch,
-                       Constants.centimetre,
-                       Constants.PitToPit,
-                       Constants.SleeveLength,
-                       Constants.Length,
-                       Constants.PitToPitIn,
-                       Constants.SleeveLengthIn,
-                       Constants.LengthIn,
-                       Constants.PitToPitCm,
-                       Constants.SleeveLengthCm,
-                       Constants.LengthCm
-                }.Contains(name))
-                    return default;
-                if (name.EndsWith(Constants.Value) == false)
+                if (name.EndsWith(Constants.Value))
                 {
-                    if (name.Equals(Constants.Title))
-                        return "LabelStyle";
-                    else if (name.Equals(Constants.SubTitle))
-                        return "LabelStyle";
-                    else if (name.StartsWith(Constants.Description))
-                        return "LabelStyle";
-                    else if (name.StartsWith(Constants.HasShipping))
-                        return "LabelStyle";
-                    else if (name.StartsWith(Constants.Disclaimer))
-                        return "LabelStyle";
-                    else if (name.Equals(Constants.Measurements))
-                        return "LabelStyle";
-                    else if (name.StartsWith(Constants.Measurement))
-                        return "TableRowStyle";
-                    else if (name.StartsWith(Constants.Image))
-                        return "LabelStyle";
-                    throw new Exception("f we3fff");
+
                 }
                 else
-                    return default;
+                {
+                    if (name.Equals(Constants.Title))
+                        return false;
+                    else if (name.Equals(Constants.SubTitle))
+                        return false;
+                    if (name.Equals(Constants.Descriptions))
+                        return false;
+                    if (name.Equals(Constants.Disclaimers))
+                        return false;
+                    if (name.Equals(Constants.Images))
+                        return false;
+                    if (name.Equals(Constants.Measurements))
+                        return false;
+                    if (name.StartsWith(Constants.Measurement))
+                        return false;
+                }
+                return true;
             }
 
-            static Type type(string name)
+            object get(ObjectWrapper _value, string _name)
             {
-                if (
-                   new string[] {
+                if (_name == Constants.Title)
+                    return Constants.Title;
+                if (_name == Constants.Title + "." + Constants.Value)
+                    return _value.Get<string>(nameof(AuctionItem.Title));
+                if (_name == Constants.SubTitle)
+                    return Constants.SubTitle;
+                if (_name == Constants.SubTitle + "." + Constants.Value)
+                    return _value.Get<string>(nameof(AuctionItem.SubTitle));
+                if (_name == Constants.Descriptions)
+                    return Constants.Descriptions;
+                if (_name == Constants.Images)
+                    return Constants.Images;
+                if (_name == Constants.Measurements)
+                    return Constants.Measurements;
+                if (_name == Constants.Disclaimers)
+                    return Constants.Disclaimers;
+                if (_name == Constants.HasShipping)
+                    return Constants.HasShipping;
+                if (_name == Constants.HasShipping + "." + Constants.Value)
+                    return _value.Get<bool>(nameof(AuctionItem.HasShipping));
+                if (_name == Constants.PitToPitCm)
+                    return _value.Get<int>(nameof(AuctionItem.PitToPitWidthInMillimetres)) / 10d;
+                if (_name == Constants.SleeveLengthCm)
+                    return _value.Get<int>(nameof(AuctionItem.SleeveLengthInMillimetres)) / 10d;
+                if (_name == Constants.LengthCm)
+                    return _value.Get<int>(nameof(AuctionItem.LengthInMillimetres)) / 10d;
+                if (_name == Constants.PitToPitIn)
+                    return _value.Get<int>(nameof(AuctionItem.PitToPitWidthInMillimetres)) * MMtoInchConversionFactory;
+                if (_name == Constants.SleeveLengthIn)
+                    return _value.Get<int>(nameof(AuctionItem.SleeveLengthInMillimetres)) * MMtoInchConversionFactory;
+                if (_name == Constants.LengthIn)
+                    return _value.Get<int>(nameof(AuctionItem.LengthInMillimetres)) * MMtoInchConversionFactory;
+                if (Regex.Match(_name, @"([a-zA-Z]+\d+)", RegexOptions.IgnoreCase) is Match { Success: true, Groups: { } groups })
+                    return _value.Get<string>(groups[1].Value);
+                return _name;
+
+            }
+
+            static Enums.Visual style(string name)
+            {
+                if (name.Equals(Constants.Title))
+                {
+                    return Enums.Visual.Label;
+                }
+                else if (name.Equals(Constants.TitleValue))
+                {
+                    return Enums.Visual.Title;
+                }
+                else if (name.Equals(Constants.SubTitle))
+                {
+                    return Enums.Visual.Label;
+                }
+                else if (name.Equals(Constants.SubTitleValue))
+                {
+                    return Enums.Visual.Subtitle;
+                }
+                else if (name.Equals(Constants.Descriptions))
+                {
+                    return Enums.Visual.SecondaryHeader;
+                }
+                else if (Regex.IsMatch(name, Constants.Description + "\\d+"))
+                {
+                    return Enums.Visual.Text;
+                }
+                else if (name.Equals(Constants.Images))
+                {
+                    return Enums.Visual.SecondaryHeader;
+                }
+                else if (Regex.IsMatch(name, Constants.Image + "\\d+"))
+                {
+                    return Enums.Visual.Image;
+                }
+                else if (name.Equals(Constants.Disclaimers))
+                {
+                    return Enums.Visual.SecondaryHeader;
+                }
+                else if (Regex.IsMatch(name, Constants.Disclaimer + "\\d+"))
+                {
+                    return Enums.Visual.Text;
+                }
+                else if (name.Equals(Constants.Measurements))
+                {
+                    return Enums.Visual.SecondaryHeader;
+                }
+                else if (name.Equals(Constants.MeasurementHeader))
+                {
+                    return Enums.Visual.Label;
+                }
+                else if (name.Equals(Constants.MeasurementInches))
+                {
+                    return Enums.Visual.Label;
+                }
+                else if (name.Equals(Constants.MeasurementCentimetres))
+                {
+                    return Enums.Visual.Label;
+                }
+                else if (new string[] {
+                       Constants.Unit,
+                       Constants.PitToPit,
+                       Constants.SleeveLength,
+                       Constants.Length,
+                }.Contains(name))
+                {
+                    return Enums.Visual.TableHeader;
+                }
+                else if (new string[] {
+                       Constants.inch,
+                       Constants.centimetre,
                        Constants.PitToPitIn,
                        Constants.SleeveLengthIn,
                        Constants.LengthIn,
@@ -186,71 +282,206 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
                        Constants.SleeveLengthCm,
                        Constants.LengthCm
                 }.Contains(name))
-                    return typeof(double);
-                else if (name.StartsWith(Constants.HasShipping))
-                    return typeof(bool);
-                else if (name.EndsWith(Constants.Value))
-                    return typeof(string);
-                else
-                    return typeof(object);
+                {
+                    return Enums.Visual.TableCell;
+                }
+                else if (name.Equals(Constants.HasShipping))
+                {
+                    return Enums.Visual.Label;
+                }
+                else if (name.Equals(Constants.HasShippingValue))
+                {
+                    return Enums.Visual.CheckBox;
+                }
+
+                throw new Exception("ds3vsdfd d");
             }
 
-            static bool isProliferable(string name)
+
+            static Enums.VisualLayout containerStyle(string name)
             {
-                return name.EndsWith(Constants.Value) == false &&
-                   new string[] {
+                if (name.Equals(Constants.Title))
+                {
+                    return Enums.VisualLayout.HeaderedPanel;
+                }
+                else if (name.Equals(Constants.TitleValue))
+                {
+                    return Enums.VisualLayout.Content;
+                }
+                else if (name.Equals(Constants.SubTitle))
+                {
+                    return Enums.VisualLayout.HeaderedPanel;
+                }
+                else if (name.Equals(Constants.SubTitleValue))
+                {
+                    return Enums.VisualLayout.Content;
+                }
+                else if (name.Equals(Constants.Descriptions))
+                {
+                    return Enums.VisualLayout.HeaderedPanel;
+                }
+                else if (Regex.IsMatch(name, Constants.Description + "\\d+"))
+                {
+                    return Enums.VisualLayout.Content;
+                }
+                else if (name.Equals(Constants.Images))
+                {
+                    return Enums.VisualLayout.HeaderedPanel;
+                }
+                else if (Regex.IsMatch(name, Constants.Image + "\\d+"))
+                {
+                    return Enums.VisualLayout.Content;
+                }
+                else if (name.Equals(Constants.Disclaimers))
+                {
+                    return Enums.VisualLayout.HeaderedPanel;
+                }
+                else if (Regex.IsMatch(name, Constants.Disclaimer + "\\d+"))
+                {
+                    return Enums.VisualLayout.Content;
+                }
+                else if (name.Equals(Constants.Measurements))
+                {
+                    return Enums.VisualLayout.Table;
+                }
+                else if (name.Equals(Constants.MeasurementHeader))
+                {
+                    return Enums.VisualLayout.TableRow;
+                }
+                else if (name.Equals(Constants.MeasurementInches))
+                {
+                    return Enums.VisualLayout.TableRow;
+                }
+                else if (name.Equals(Constants.MeasurementCentimetres))
+                {
+                    return Enums.VisualLayout.TableRow;
+                }
+                else if (new string[] {
+                       Constants.Unit,
                        Constants.PitToPit,
                        Constants.SleeveLength,
                        Constants.Length,
+                       Constants.PitToPitIn,
+                }.Contains(name))
+                {
+                    return Enums.VisualLayout.Content;
+                }
+                else if (new string[] {
+                       Constants.inch,
+                       Constants.centimetre,
                        Constants.PitToPitIn,
                        Constants.SleeveLengthIn,
                        Constants.LengthIn,
                        Constants.PitToPitCm,
                        Constants.SleeveLengthCm,
                        Constants.LengthCm
-                }.Contains(name) == false;
+                }.Contains(name))
+                {
+                    return Enums.VisualLayout.Content;
+                }
+                else if (name.Equals(Constants.HasShipping))
+                {
+                    return Enums.VisualLayout.HeaderedPanel;
+                }
+                else if (name.Equals(Constants.HasShippingValue))
+                {
+                    return Enums.VisualLayout.Content;
+                }
+
+                throw new Exception("ds3vsdfd d");
             }
 
             static string dataTemplate(string name)
             {
-                if (name.EndsWith(Constants.Value))
-                {
-                    if (name.StartsWith(Constants.Title))
-                        return default;
-                    else if (name.StartsWith(Constants.SubTitle))
-                        return default;
-                    else if (name.StartsWith(Constants.Description))
-                        return default;
-                    else if (name.StartsWith(Constants.HasShipping))
-                        return default;
-                    else if (name.StartsWith(Constants.Disclaimer))
-                        return default;
-                    else if (name.StartsWith(Constants.Images))
-                        return default;
-                    else if (name.StartsWith(Constants.Image))
-                        return "FilePathEditor";
-                    throw new Exception("f we3fff");
-                }
-                if (name == Constants.Measurement || name == Constants.inch || name == Constants.centimetre)
-                {
-                    return "NameTemplate";
-                }
-                if (name == Constants.PitToPit || name == Constants.SleeveLength || name == Constants.Length)
-                {
-                    return "NameTemplate";
-                }
-                if (name == Constants.PitToPitIn || name == Constants.SleeveLengthIn || name == Constants.LengthIn)
+                if (name.Equals(Constants.Title))
                 {
                     return default;
                 }
-                if (name == Constants.PitToPitCm || name == Constants.SleeveLengthCm || name == Constants.LengthCm)
+                else if (name.Equals(Constants.TitleValue))
                 {
                     return default;
                 }
-                //else if (name == Constants.HasShipping)
-                //    return "CheckBoxTemplate";
-                else
-                    return "DefaultTemplate";
+                else if (name.Equals(Constants.SubTitle))
+                {
+                    return default;
+                }
+                else if (name.Equals(Constants.SubTitleValue))
+                {
+                    return default;
+                }
+                else if (name.Equals(Constants.Descriptions))
+                {
+                    return default;
+                }
+                else if (Regex.IsMatch(name, Constants.Description + "\\d+"))
+                {
+                    return default;
+                }
+                else if (name.Equals(Constants.Images))
+                {
+                    return default;
+                }
+                else if (Regex.IsMatch(name, Constants.Image + "\\d+"))
+                {
+                    return default;
+                }
+                else if (name.Equals(Constants.Disclaimers))
+                {
+                    return default;
+                }
+                else if (Regex.IsMatch(name, Constants.Disclaimer + "\\d+"))
+                {
+                    return default;
+                }
+                else if (name.Equals(Constants.Measurements))
+                {
+                    return default;
+                }
+                else if (name.Equals(Constants.MeasurementHeader))
+                {
+                    return default;
+                }
+                else if (name.Equals(Constants.MeasurementInches))
+                {
+                    return default;
+                }
+                else if (name.Equals(Constants.MeasurementCentimetres))
+                {
+                    return default;
+                }
+                else if (new string[] {
+                       Constants.Unit,
+                       Constants.PitToPit,
+                       Constants.SleeveLength,
+                       Constants.Length,
+                       Constants.PitToPitIn,
+                }.Contains(name))
+                {
+                    return default;
+                }
+                else if (new string[] {
+                       Constants.inch,
+                       Constants.centimetre,
+                       Constants.PitToPitIn,
+                       Constants.SleeveLengthIn,
+                       Constants.LengthIn,
+                       Constants.PitToPitCm,
+                       Constants.SleeveLengthCm,
+                       Constants.LengthCm
+                }.Contains(name))
+                {
+                    return default;
+                }
+                else if (name.Equals(Constants.HasShipping))
+                {
+                    return default;
+                }
+                else if (name.Equals(Constants.HasShippingValue))
+                {
+                    return default;
+                }
+
+                throw new Exception("ds3vsdfd d");
             }
 
             static Enums.Orientation orientation(string name)
@@ -260,6 +491,25 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
                 if (name == Constants.Images || name == Constants.Descriptions || name == Constants.Measurements || name == Constants.Disclaimers)
                     return Enums.Orientation.Vertical;
                 return Enums.Orientation.Horizontal;
+            }
+
+            static Type type(string name)
+            {
+                if (new string[] {
+                    Constants.PitToPitIn,
+                    Constants.SleeveLengthIn,
+                    Constants.LengthIn,
+                    Constants.PitToPitCm,
+                    Constants.SleeveLengthCm,
+                    Constants.LengthCm
+                }.Contains(name))
+                    return typeof(double);
+                else if (name.StartsWith(Constants.HasShipping))
+                    return typeof(bool);
+                else if (name.EndsWith(Constants.Value))
+                    return typeof(string);
+                else
+                    return typeof(object);
             }
         }
 
@@ -286,8 +536,7 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
                 values[root].Observe(convert(name))
                 .Subscribe(a =>
                 {
-
-                    replay[(root, name + "." + "Value")].OnNext(new DateValue(root, name + "." + "Value", default, a));
+                    replay[(root, name)].OnNext(new DateValue(root, name + "." + "Value", default, a));
                 });
 
                 if (name == nameof(AuctionItem))
@@ -297,7 +546,7 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
                     observer.OnNext(Change.Add(create(Constants.Descriptions)));
                     observer.OnNext(Change.Add(create(Constants.Images)));
                     observer.OnNext(Change.Add(create(Constants.Measurements)));
-                    observer.OnNext(Change.Add(create(Constants.Disclaimers)));
+                    observer.OnNext(Change.Add(create(Constants.Disclaimers)));     
                     observer.OnNext(Change.Add(create(Constants.HasShipping)));
                     observer.OnCompleted();
                 }
@@ -372,7 +621,7 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
 
                     if (name == Constants.MeasurementHeader)
                     {
-                        observer.OnNext(Change.Add(create("Unit")));
+                        observer.OnNext(Change.Add(create(Constants.Unit)));
                         observer.OnNext(Change.Add(create(Constants.PitToPit)));
                         observer.OnNext(Change.Add(create(Constants.SleeveLength)));
                         observer.OnNext(Change.Add(create(Constants.Length)));
@@ -422,7 +671,7 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
                 {
                     observer.OnCompleted();
                 }
-                else if (name == "Unit")
+                else if (name == Constants.Unit)
                 {
                     observer.OnCompleted();
                 }
@@ -458,7 +707,7 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
             });
         }
 
-        Dictionary<(Guid, string), ReplaySubject<DateValue>> replay = new();
+
 
         public IObservable<DateValue> Get(Guid guid, string? name = null)
         {
@@ -482,10 +731,24 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
                 var _value = values[dictionary[guid].root];
                 var _name = dictionary[guid].name;
 
+                if (_name == Constants.Title)
+                    return Constants.Title;
                 if (_name == Constants.Title + "." + Constants.Value)
                     return _value.Get<string>(nameof(AuctionItem.Title));
+                if (_name == Constants.SubTitle)
+                    return Constants.SubTitle;
                 if (_name == Constants.SubTitle + "." + Constants.Value)
                     return _value.Get<string>(nameof(AuctionItem.SubTitle));
+                if (_name == Constants.Descriptions)
+                    return Constants.Descriptions;
+                if (_name == Constants.Images)
+                    return Constants.Images;
+                if (_name == Constants.Measurements)
+                    return Constants.Measurements;
+                if (_name == Constants.Disclaimers)
+                    return Constants.Disclaimers;
+                if (_name == Constants.HasShipping)
+                    return Constants.HasShipping;
                 if (_name == Constants.HasShipping + "." + Constants.Value)
                     return _value.Get<bool>(nameof(AuctionItem.HasShipping));
                 if (_name == Constants.PitToPitCm)
@@ -500,7 +763,7 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
                     return _value.Get<int>(nameof(AuctionItem.SleeveLengthInMillimetres)) * MMtoInchConversionFactory;
                 if (_name == Constants.LengthIn)
                     return _value.Get<int>(nameof(AuctionItem.LengthInMillimetres)) * MMtoInchConversionFactory;
-                if (Regex.Match(_name, @"([a-zA-Z]*\d*)\.Value", RegexOptions.IgnoreCase) is Match { Success: true, Groups: { } groups })
+                if (Regex.Match(_name, @"([a-zA-Z]+\d+)", RegexOptions.IgnoreCase) is Match { Success: true, Groups: { } groups })
                     return _value.Get<string>(groups[1].Value);
                 return _name;
             }
@@ -516,7 +779,6 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
                     nameof(NodeViewModel.IsEditable) => null,
                     nameof(NodeViewModel.IsReadOnly) => null,
                     nameof(NodeViewModel.IsVisible) => null,
-                    nameof(NodeViewModel.IsContentVisible) => null,
                     nameof(NodeViewModel.IsValid) => null,
                     nameof(NodeViewModel.IsHighlighted) => null,
                     nameof(NodeViewModel.IsClicked) => null,
@@ -545,6 +807,9 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
                     nameof(NodeViewModel.IsAugmentable) => null,
                     nameof(NodeViewModel.IsLoaded) => null,
                     nameof(NodeViewModel.Style) => null,
+                    nameof(NodeViewModel.Layout) => null,
+                    nameof(NodeViewModel.BoolValue) => null,
+                    nameof(NodeViewModel.ByteValue) => null,
                     _ => throw new ArgumentException($"Unknown field: {name}")
                 };
             }
@@ -669,11 +934,11 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
         static string convert(string _name)
         {
             if (_name == Constants.Title)
-                return nameof(AuctionItem.Title);
+                return nameof(AuctionItem.Title) + "." + Constants.Value;
             if (_name == Constants.SubTitle)
-                return nameof(AuctionItem.SubTitle);
+                return nameof(AuctionItem.SubTitle) + "." + Constants.Value;
             if (_name == Constants.HasShipping)
-                return nameof(AuctionItem.HasShipping);
+                return nameof(AuctionItem.HasShipping) + "." + Constants.Value;
             if (_name == Constants.PitToPit)
                 return nameof(AuctionItem.PitToPitWidthInMillimetres);
             if (_name == Constants.SleeveLength)

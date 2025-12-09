@@ -23,7 +23,7 @@ namespace Utility.Nodes.Demo.Lists
                 }
                 if (type == typeof(AuctionItem))
                 {
-                    return new AuctionItem { Id = Guid.NewGuid() };
+                    return new AuctionItem { Id = Guid.NewGuid(), Added = DateTime.Now };
                 }
                 if (type == typeof(Transaction))
                 {

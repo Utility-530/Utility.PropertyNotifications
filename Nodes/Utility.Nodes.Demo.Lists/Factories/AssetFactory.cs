@@ -8,6 +8,7 @@ using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
+using Utility.Models.Templates;
 using Utility.Models.Trees;
 using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
@@ -15,6 +16,7 @@ using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
 using Utility.ServiceLocation;
 using Utility.Services;
+using SFTemplates = Utility.Nodes.WPF.Templates.SyncFusion.Templates;
 
 namespace Utility.Nodes.Demo.Lists.Factories
 {
@@ -26,8 +28,8 @@ namespace Utility.Nodes.Demo.Lists.Factories
             buildNetwork(guid);
 
             return  new Model(() => [
-                    new Model<string>() { Name = search, DataTemplate = "SearchEditor" },
-                    new ListModel(MetaDataFactory.assetType) { Name = list, DataTemplate =  "SFGridTemplate"},
+                    new Model<string>() { Name = search, DataTemplate = Templates.SearchEditor },
+                    new ListModel(MetaDataFactory.assetType) { Name = list, DataTemplate =  SFTemplates.SFGridTemplate},
                     new Model(attach: node =>
                     {
          
@@ -35,10 +37,10 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     })
                     { 
                         Name = edit,
-                        DataTemplate = "EditTemplate",
+                        DataTemplate = Templates.EditTemplate,
                         ShouldValueBeTracked = false
                     },
-                    new Model<string>() { Name = summary , DataTemplate = "MoneySumTemplate",/* IsValueTracked = false*/ }
+                    new Model<string>() { Name = summary , DataTemplate = Templates.MoneySumTemplate,/* IsValueTracked = false*/ }
                 ],
                 (addition) =>
                 {
@@ -67,7 +69,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     }
                 },
                 (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; })
-                { Name = main };
+                { Name = main, Guid = guid };
 
             static void buildNetwork(Guid guid)
             {

@@ -6,6 +6,7 @@ using Utility.Extensions;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Models;
+using Utility.Models.Templates;
 using Utility.Models.Trees;
 using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
@@ -13,6 +14,7 @@ using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
 using Utility.ServiceLocation;
 using Utility.Services;
+using SFTemplates = Utility.Nodes.WPF.Templates.SyncFusion.Templates;
 
 namespace Utility.Nodes.Demo.Lists.Factories
 {
@@ -25,10 +27,10 @@ namespace Utility.Nodes.Demo.Lists.Factories
 
             return 
                 new Model(() => [
-                    new Model<string>() { Name = search, DataTemplate = "SearchEditor"},
-                    new ListModel(MetaDataFactory.transactionType) { Name = list, DataTemplate =  "SFGridTemplate"},
-                    new ListModel(MetaDataFactory.transactionType) { Name = list, DataTemplate =  "SFChartTemplate", XAxis = nameof(Transaction.Date), YAxis = nameof(Transaction.Balance00)},
-                    new Model<string>() { Name = summary, DataTemplate = "MoneySumTemplate" }
+                    new Model<string>() { Name = search, DataTemplate = Templates.SearchEditor},
+                    new ListModel(MetaDataFactory.transactionType) { Name = list, DataTemplate =  SFTemplates.SFGridTemplate},
+                    new ListModel(MetaDataFactory.transactionType) { Name = list, DataTemplate =  SFTemplates.SFChartTemplate, XAxis = nameof(Transaction.Date), YAxis = nameof(Transaction.Balance00)},
+                    new Model<string>() { Name = summary, DataTemplate = Templates.MoneySumTemplate }
                 ],
                 (addition) =>
                 {

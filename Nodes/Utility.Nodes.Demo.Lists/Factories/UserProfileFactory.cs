@@ -6,6 +6,7 @@ using Utility.Extensions;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Models;
+using Utility.Models.Templates;
 using Utility.Models.Trees;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Meta;
@@ -23,11 +24,11 @@ namespace Utility.Nodes.Demo.Lists.Factories
 
             return 
                 new Model(() => [
-                     new Model<string>() { Name = search,DataTemplate = "SearchEditor" },
+                     new Model<string>() { Name = search,DataTemplate = Templates.SearchEditor },
                      new ListModel(type) { Name = list },
                      new Model {
                         Name = edit,
-                        DataTemplate = "EditTemplate",
+                        DataTemplate = Templates.EditTemplate,
                         ShouldValueBeTracked = false
                     }, 
                 ],

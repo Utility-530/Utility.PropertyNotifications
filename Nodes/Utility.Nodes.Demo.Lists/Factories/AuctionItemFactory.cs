@@ -25,6 +25,7 @@ using Utility.Services;
 using Utility.Trees;
 using Utility.Interfaces;
 using Utility.Trees.Extensions.Async;
+using Utility.Models.Templates;
 
 namespace Utility.Nodes.Demo.Lists.Factories
 {
@@ -45,7 +46,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                         })
                         {
                             Name = search,
-                            DataTemplate = "SearchEditor",
+                            DataTemplate = Templates.SearchEditor,
                             Title = "Search"
                         },
                         new Model<string>(attach: stringModel=> {
@@ -53,7 +54,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                         } )
                         {
                             Name = directory,
-                            DataTemplate = "DirectoryEditor",
+                            DataTemplate = Templates.DirectoryEditor,
                             Title = "Base Directory"
                         },
                         new Model<string>( attach: stringModel => {
@@ -61,7 +62,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                         })
                         {
                             Name = indexPath,
-                            DataTemplate = "FilePathEditor",
+                            DataTemplate = Templates.FilePathEditor,
                             Title = "Index Path"
                         },
                     ],
@@ -76,12 +77,12 @@ namespace Utility.Nodes.Demo.Lists.Factories
                         listModel.ReactTo<ListCollectionViewReturnParam, IEnumerable>(a => listModel.Collection = a, guid);
                         listModel.Observe<SelectionParam>(guid);
                     }) {
-                        Name = list1, 
-                        DataTemplate = "DataGridTemplate",
+                        Name = list1,
+                        DataTemplate = Templates.DataGridTemplate,
                         ShouldValueBeTracked = false,
                         Type = MetaDataFactory.auctionItemType
                     },
-                    
+
                     new Model(attach: editModel =>
                     {
                         editModel.WithChangesTo(a => (a as IGetValue).Value)
@@ -118,16 +119,26 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     //    }, guid);
                     //    }, raisePropertyCalled:false, raisePropertyReceived:false) {Name = details, DataTemplate = "Json"},
                     new Model<string>(attach: a=>{
-                        a.ReactTo<OutStringParam>(setAction: _a => a.Set((string)_a), guid: guid);
-                    }) { Name = html, DataTemplate="Html" },
+                        a.ReactTo<GeneralOutStringParam>(setAction: _a =>
+                        {
+                            a.Set((string)_a);
+                            a.RaisePropertyChanged("Value");
+                        }, guid: guid);
+                    }) { Name = html, DataTemplate=Templates.Html },
                     new Model<string>(attach: stringModel=>{
                               //stringModel.ReactTo<RazorFileReturnParam>(setAction: a => stringModel.Set((string)a), guid: guid);
-                              stringModel.ReactTo<OutStringParam>(setAction: _a => stringModel.Set((string)_a), guid: guid);
-                    }) { Name = html1, DataTemplate = "HtmlEditor" },
+                              stringModel.ReactTo<GeneralOutStringParam>(setAction: _a =>    {
+                            stringModel.Set((string)_a);
+                            stringModel.RaisePropertyChanged("Value");
+                        }, guid: guid);
+                    }) { Name = html1, DataTemplate = Templates.HtmlEditor },
                     new Model<string>(attach: rstringModel =>{
                          //rstringModel.ReactTo<RazorFileReturnParam>(setAction: a => rstringModel.Set((string)a), guid: guid);
-                         rstringModel.ReactTo<OutStringParam>(setAction: _a => rstringModel.Set((string)_a), guid: guid);
-                    }) { Name = html2, DataTemplate = "HtmlWebViewer" },
+                         rstringModel.ReactTo<GeneralOutStringParam>(setAction: _a => {
+                             rstringModel.Set((string)_a);
+                             rstringModel.RaisePropertyChanged("Value");
+                         }, guid: guid);
+                    }) { Name = html2, DataTemplate = Templates.HtmlWebViewer },
                 ],
                 attach: (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; }
                 )
@@ -141,7 +152,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 serviceResolver.Connect<ListInstanceReturnParam, ListInParam>();
                 serviceResolver.Connect<ListInstanceReturnParam, ListParam>();
                 serviceResolver.Connect<SelectionReturnParam, InValueParam>();
-                serviceResolver.Connect<OutValueParam, InNodeParam>();
+                serviceResolver.Connect<OutValueParam, GeneralInNodeParam>();
             }
         }
     }

@@ -15,19 +15,33 @@ namespace Utility.Nodes.Demo.Lists
 
         public override Style SelectStyle(object item, DependencyObject container)
         {
-            if (item is INodeViewModel { Style: "LabelStyle" })
-                return LabelStyle;
-            if (item is INodeViewModel { Style: "TableRowStyle" })
-                return TableRowStyle;
-            return item switch
+            if (item is INodeViewModel { Layout: {} layout })
             {
-                _ => DefaultStyle ?? base.SelectStyle(item, container),
-            };
+                switch(layout)
+                {
+                    case Enums.VisualLayout.Content:
+                        return ContentStyle;
+                    case Enums.VisualLayout.HeaderedPanel:
+                        return HeaderedStyle;
+                    case Enums.VisualLayout.TableRow:
+                        return TableRowStyle;
+                    case Enums.VisualLayout.Table:
+                        return TableStyle;
+                }                
+            }
+          
+            //return item switch
+            //{
+            //    _ => HeaderedStyle ?? base.SelectStyle(item, container),
+            //};
+            //throw new Exception("F£$dff312");
+            return HeaderedStyle;
         }
 
+        public Style ContentStyle { get; set; }
         public Style TableRowStyle { get; set; }
-        public Style LabelStyle { get; set; }
-        public Style DefaultStyle { get; set; }
+        public Style TableStyle { get; set; }
+        public Style HeaderedStyle { get; set; }
 
         public static ContainerStyleSelector Instance { get; } = new();
     }

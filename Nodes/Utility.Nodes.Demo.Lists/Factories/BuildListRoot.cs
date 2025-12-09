@@ -17,6 +17,8 @@ using Utility.Trees.Abstractions;
 using Utility.ServiceLocation;
 using Utility.Models.Diagrams;
 using Utility.Meta;
+using Utility.Models.Templates;
+
 namespace Utility.Nodes.Demo.Lists.Factories
 {
     internal partial class NodeMethodFactory : EnumerableMethodFactory
@@ -110,7 +112,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     var pnode = new TypeModel(metaData.Type) 
                     {
                         Name = metaData.Type.Name, 
-                        DataTemplate = "HeaderTypeModel" 
+                        DataTemplate = Templates.HeaderTypeModel 
                     };
                     //pnode.Set(typeModel.Guid, nameof(ModelTypeModel.Guid));
                     yield return pnode;
