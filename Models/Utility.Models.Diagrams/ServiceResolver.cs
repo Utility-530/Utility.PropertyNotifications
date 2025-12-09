@@ -1,9 +1,10 @@
-﻿using Cogs.Collections;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Cogs.Collections;
 using Utility.Attributes;
 using Utility.Changes;
 using Utility.Helpers;
@@ -23,6 +24,7 @@ namespace Utility.Models.Diagrams
         readonly ObservableCollection<IObservable<object>> observables = [];
         readonly ObservableCollection<object> observers = [];
         readonly ObservableCollection<MethodConnection> connections = [];
+        readonly Dictionary<IParameter, List<object>> reactions = [];
 
         public ServiceResolver()
         {
@@ -83,16 +85,27 @@ namespace Utility.Models.Diagrams
                 if (get(methodParameter) is MethodNode cache)
                 {
                     observers.Add(observer);
-
-                    connections.Add(MethodConnection.FromAction(async a =>
+                    if (reactions.ContainsKey(methodParameter) == false)
                     {
-                        convert<TOutput>(a).Subscribe(observer.OnNext);
-                    }, cache.OutValue));
+                        reactions[methodParameter] = new List<object>();
+                        reactions[methodParameter].Add(observer);
+                        connections.Add(MethodConnection.FromAction(async a =>
+                        {
+                            convert<TOutput>(a)
+                            .Subscribe(a =>
+                            {
+                                foreach (IObserver<TOutput> observer in reactions[methodParameter])
+                                    observer.OnNext(a);
+                            });
+                        }, cache.OutValue));
+                    }
+                    else
+                    {
+                        reactions.Get(methodParameter, () => new List<object>()).Add(observer);
+                    }
                 }
             }
         }
-
-
 
         public void Connect<TParam, TParamOut>() where TParam : IParameter where TParamOut : IParameter
         {
@@ -109,7 +122,7 @@ namespace Utility.Models.Diagrams
                             {
                                 if (disposable != null)
                                     disposable.Dispose();
-                                if (cacheIn.InValues.ContainsKey(methodParameterIn.Name)== false)
+                                if (cacheIn.InValues.ContainsKey(methodParameterIn.Name) == false)
                                 {
                                     throw new Exception($"Method, {cacheIn.MethodInfo.Name}, does not contain a parameter, {methodParameterIn.Name}!");
                                 }
@@ -130,7 +143,18 @@ namespace Utility.Models.Diagrams
                     action(a);
                 });
             }
-            action(a);
+            else if (Activator.CreateInstance<TParamOut>() is IParameter param && a.GetType().IsAssignableTo(param.Info.ParameterType))
+            {
+                action(a);
+            }
+            else if (trySubscribe(a, action, () => { }, e => Globals.Exceptions.OnNext(e)) is { } disposable)
+            {
+                return disposable;
+            }
+            else
+            {
+                throw new Exception("DFS£CDD£dkds");
+            }
             return Disposable.Empty;
         }
 
@@ -206,8 +230,7 @@ namespace Utility.Models.Diagrams
                     });
                     disposables.Add(sub);
                 }
-
-                if (attribute.Event.HasFlag(Enums.CLREvent.PropertyChanged) &&
+                else if (attribute.Event.HasFlag(Enums.CLREvent.PropertyChanged) &&
                     a is INotifyPropertyChanged propertyChanged)
                 {
                     PropertyChangedEventHandler handler = async (_, __) =>
@@ -217,8 +240,7 @@ namespace Utility.Models.Diagrams
                     propertyChanged.PropertyChanged += handler;
                     disposables.Add(Disposable.Create(() => propertyChanged.PropertyChanged -= handler));
                 }
-
-                if (attribute.Event.HasFlag(Enums.CLREvent.CustomEvent))
+                else if (attribute.Event.HasFlag(Enums.CLREvent.CustomEvent))
                 {
                     if (attribute.CustomEventName == null)
                         throw new ArgumentException("CustomEventName must be provided when using CustomEvent flag.");
@@ -257,7 +279,7 @@ namespace Utility.Models.Diagrams
                 async Task triggerIfChangedAsync(Func<object, object, bool> equals, CancellationToken token)
                 {
                     try
-                    {                  
+                    {
                         if (token.IsCancellationRequested) return;
 
                         if (!equals(a, lastSnapshot))
@@ -271,7 +293,34 @@ namespace Utility.Models.Diagrams
                 }
 
             });
-        }
 
+        }
+        static IDisposable? trySubscribe(object obj, Action<object> action, Action? completed = null, Action<Exception>? aex = null)
+        {
+            var type = obj.GetType();
+
+            // Find IObservable<T>
+            var observableInterface = type
+                .GetInterfaces()
+                .FirstOrDefault(i =>
+                    i.IsGenericType &&
+                    i.GetGenericTypeDefinition() == typeof(IObservable<>));
+
+            if (observableInterface == null)
+                return null; // not observable
+
+            var t = observableInterface.GetGenericArguments()[0];
+
+            // Create an Observer<T> wrapper that forwards values to an IObserver<object>
+            var observerType = typeof(Utility.Reactives.Observer<>).MakeGenericType(t);
+            Delegate convertedAction = Delegate.CreateDelegate(typeof(Action<>).MakeGenericType(t), action.Target, action.Method);
+
+            var observer = Activator.CreateInstance(observerType, convertedAction, aex, completed);
+
+            // Call Subscribe(observer)
+            var subscribeMethod = observableInterface.GetMethod("Subscribe");
+            var disposable = (IDisposable)subscribeMethod.Invoke(obj, new[] { observer });
+            return disposable;
+        }
     }
 }
