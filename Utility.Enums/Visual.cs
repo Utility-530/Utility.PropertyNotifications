@@ -824,23 +824,23 @@ namespace Utility.Enums
             Markup.Section)]
         Footer = 80,
 
-        //// -------------------------------------------------------
-        //// TEXT BLOCK / LABEL
-        //// -------------------------------------------------------
-        //[VisualElement(
-        //    "Simple text block used to display static information.",
-        //    UIElementCategory.Output,
-        //    UISubCategory.Text,
-        //    HTML.p,
-        //    ReactNative.Text,
-        //    XAML.TextBlock,
-        //    Flutter.Text,
-        //    Qt.QLabel,
-        //    Swing.JLabel,
-        //    JavaFX.Text,
-        //    GTK.GtkLabel,
-        //    Markup.Paragraph)]
-        //Text = 91,
+        // -------------------------------------------------------
+        // TEXT BLOCK / LABEL
+        // -------------------------------------------------------
+        [VisualElement(
+            "Simple text block used to display static information.",
+            UIElementCategory.Output,
+            UISubCategory.Text,
+            HTML.p,
+            ReactNative.Text,
+            XAML.TextBlock,
+            Flutter.Text,
+            Qt.QLabel,
+            Swing.JLabel,
+            JavaFX.Text,
+            GTK.GtkLabel,
+            Markup.Paragraph)]
+        Text = 91,
 
         [VisualElement(
             "Inline label for identifying fields.",
