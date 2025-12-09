@@ -11,6 +11,10 @@ using System.Windows.Data;
 using Bogus;
 using DryIoc;
 using Microsoft.Xaml.Behaviors;
+using Splat;
+using Utility.Entities;
+using Utility.Interfaces.Generic;
+using Utility.Interfaces.Generic.Data;
 using Utility.PropertyNotifications;
 
 namespace Utility.Models.Templates
@@ -20,20 +24,6 @@ namespace Utility.Models.Templates
         protected override void Invoke(object parameter)
         {
             var e = parameter as DataGridCellEditEndingEventArgs;
-
-            //var dataGrid = AssociatedObject as DataGrid;
-
-            //if (args != null && args.EditAction == DataGridEditAction.Commit)
-            //{
-            //    var propertyName = (args.Column as DataGridTextColumn)?.Binding.GetPath();
-
-            //    var expr = (args.Column as DataGridTextColumn).GetBindingExpression(binding.Path);
-            //    (args.Column as DataGridTextColumn)?.Binding?.UpdateSource();
-
-            //    // Get the object backing the row
-            //    if (args.Row.DataContext is INotifyPropertyChanged changed)
-            //        changed.RaisePropertyChanged(propertyName);
-            //}
 
             if (e.Column is DataGridBoundColumn col)
             {
@@ -59,6 +49,26 @@ namespace Utility.Models.Templates
             var propertyName = (e.Column as DataGridBoundColumn)?.Binding.GetPath();
             if (e.Row.DataContext is INotifyPropertyChanged changed)
                 changed.RaisePropertyChanged(propertyName);
+        }
+    }
+    public class AddNewItemAction : TriggerAction<DataGrid>
+    {
+
+        public static readonly DependencyProperty TypeProperty =
+            DependencyProperty.Register(nameof(Type), typeof(Type), typeof(AddNewItemAction), new PropertyMetadata());
+
+        protected override void Invoke(object parameter)
+        {
+            if(parameter is AddingNewItemEventArgs e)
+            {
+                e.NewItem = Locator.Current.GetService<IFactory<IId<Guid>>>().Create(Type);
+            }
+        }
+
+        public Type Type
+        {
+            get { return (Type)GetValue(TypeProperty); }
+            set { SetValue(TypeProperty, value); }
         }
     }
 

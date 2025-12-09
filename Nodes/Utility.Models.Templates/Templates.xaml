@@ -51,16 +51,17 @@
         DataType="{x:Type nodes:NodeViewModel}"
         ItemsSource="{Binding Children}">
         <WrapPanel>
-            <ContentControl Content="{Binding}" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance}">
+            <!--<TextBlock Text="{Binding Name}" />-->
+            <ContentControl Content="{Binding}" ContentTemplateSelector="{x:Static local:VisualTemplateSelector.VisualInstance}">
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Path=IsHighlighted}" Value="False">
                                 <Setter Property="Opacity" Value="0.3" />
                             </DataTrigger>
-                            <!--<DataTrigger Binding="{Binding Path=IsHighlighted}" Value="{x:Null}">
+                            <DataTrigger Binding="{Binding Path=IsHighlighted}" Value="{x:Null}">
                                         <Setter Property="Foreground" Value="LightSkyBlue" />
-                                    </DataTrigger>-->
+                                    </DataTrigger>
                             <DataTrigger Binding="{Binding Path=IsHighlighted}" Value="True">
                                 <Setter Property="Opacity" Value="1" />
                                 <Setter Property="Foreground" Value="Orange" />
@@ -369,8 +370,7 @@
 
 
     <DataTemplate x:Key="DataGridTemplate">
-        <DataGrid AutoGenerateColumns="True"
-                 
+        <DataGrid AutoGenerateColumns="True"                 
                   x:Name="CustomSelector"
                   Height="200"
                   ItemsSource="{Binding Collection, Mode=OneWay}"
@@ -378,6 +378,9 @@
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="CellEditEnding">
                     <local:CellEditEndingAction />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="AddingNewItem">
+                    <local:AddNewItemAction Type="{Binding Type, Mode=OneWay}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </DataGrid>
