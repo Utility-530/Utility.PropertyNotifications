@@ -15,10 +15,10 @@ namespace Utility.Nodes.Demo.Filters.Services
         {
             return Observable.Create<Change<INodeViewModel>>(observer =>
             {
-                observer.OnNext(Change<INodeViewModel>.Reset());
+                observer.OnNext(Change.Reset<INodeViewModel>());
                 return nodeRoot.Subscribe(root =>
                 {
-                    observer.OnNext(Change<INodeViewModel>.Add(root));
+                    observer.OnNext(Change.Add<INodeViewModel>(root));
 
                 }, () => observer.OnCompleted());
             });
