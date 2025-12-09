@@ -10,9 +10,9 @@ namespace Utility.Reactives
         private readonly Action<Exception> onError;
         private readonly Action onCompleted;
 
-        public Observer(Action<T> onNext, Action<Exception> onError, Action onCompleted)
+        public Observer(Action<T> onNext, Action<Exception>? onError = null, Action? onCompleted = null)
         {
-            this.onNext = onNext;
+            this.onNext = onNext ?? throw new NotImplementedException();
             this.onError = onError;
             this.onCompleted = onCompleted;
         }
@@ -27,7 +27,7 @@ namespace Utility.Reactives
 
         public virtual void OnNext(T value)
         {
-            (onNext ?? throw new NotImplementedException()).Invoke(value);
+            onNext.Invoke(value);
         }
 
         public void OnCompleted()
