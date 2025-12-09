@@ -15,7 +15,7 @@ namespace Utility.Interfaces.Exs
         IIsChildrenRefreshed,
         IIsActive,
         IArrangement, IRows, IColumns, IIsAugmentable, IErrors, IConnectorPosition, IDataTemplate,
-        ISelectedItemTemplate, IItemsPanelTemplate, ITitle, IIsContentVisible,
+        ISelectedItemTemplate, IItemsPanelTemplate, ITitle,
         IGetGuid,
         IIsReadOnly,
         ILocation,
@@ -29,7 +29,8 @@ namespace Utility.Interfaces.Exs
         IAreChildrenTracked,
         IIsProliferable,
         IIsLoaded,
-        IStyle
+        IStyle,
+        ILayout
 
     //IHeight,
     //IWidth
@@ -38,7 +39,11 @@ namespace Utility.Interfaces.Exs
 
     public interface IStyle
     {
-        string Style { get; set; }
+        Visual Style { get; set; }
+    }
+    public interface ILayout
+    {
+        VisualLayout Layout { get; set; }
     }
     public interface IIsLoaded
     {
