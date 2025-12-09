@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Utility.Interfaces.Exs;
 using Position2D = Utility.Enums.Position2D;
 
 namespace Utility.WPF.Controls.Trees
@@ -43,10 +44,10 @@ namespace Utility.WPF.Controls.Trees
         public static readonly DependencyProperty ColumnsProperty = DependencyProperty.Register("Columns", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty IsAugmentableProperty = DependencyProperty.Register("IsAugmentable", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty ErrorsProperty = DependencyProperty.Register("Errors", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
-        public static readonly DependencyProperty ContentVisibilityProperty = DependencyProperty.Register("ContentVisibility", typeof(System.Windows.Visibility), typeof(CustomTreeViewItem), new PropertyMetadata(Visibility.Visible));
         public static readonly DependencyProperty ConnectorPositionProperty = DependencyProperty.Register("ConnectorPosition", typeof(Position2D), typeof(CustomTreeViewItem), new PropertyMetadata(Position2D.None));
         public static readonly DependencyProperty ItemsPanelTemplateProperty = DependencyProperty.Register("ItemsPanelTemplate", typeof(string), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty IsContentVisibleProperty = DependencyProperty.Register(nameof(IsContentVisible), typeof(bool?), typeof(CustomTreeViewItem), new PropertyMetadata());
 
         private static void _changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -82,6 +83,12 @@ namespace Utility.WPF.Controls.Trees
         {
             get { return (bool)GetValue(IsAugmentableProperty); }
             set { SetValue(IsAugmentableProperty, value); }
+        }
+
+        public bool? IsContentVisible
+        {
+            get { return (bool)GetValue(IsContentVisibleProperty); }
+            set { SetValue(IsContentVisibleProperty, value); }
         }
 
         public Visibility ItemsPresenterVisibility
@@ -244,12 +251,6 @@ namespace Utility.WPF.Controls.Trees
         {
             get { return (Utility.Enums.Arrangement)GetValue(ArrangementProperty); }
             set { SetValue(ArrangementProperty, value); }
-        }
-
-        public Visibility ContentVisibility
-        {
-            get { return (Visibility)GetValue(ContentVisibilityProperty); }
-            set { SetValue(ContentVisibilityProperty, value); }
         }
 
         public string ItemsPanelTemplate

@@ -100,11 +100,10 @@
         TrueValue="{x:Static Visibility.Visible}" />
 
     <Style x:Key="TrackedTreeViewItemStyle" TargetType="{x:Type TreeViewItem}">
-      
     </Style>
-    
+
     <Style x:Key="{x:Type local:CustomTreeViewItem}" TargetType="{x:Type local:CustomTreeViewItem}" >
-        <Setter Property="Visibility" Value="{Binding Path=IsVisible, Converter={StaticResource VisibilityConverter}}" />
+        <Setter Property="IsContentVisible" Value="{Binding IsVisible, Mode=TwoWay}" />
         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
         <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
         <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
@@ -121,7 +120,6 @@
         <Setter Property="AddParentCommand" Value="{Binding Path=AddParentCommand}" />
         <Setter Property="IsHighlighted" Value="{Binding Path=IsHighlighted}" />
         <Setter Property="Arrangement" Value="{Binding Path=Arrangement}" />
-        <Setter Property="ContentVisibility" Value="{Binding Path=IsContentVisible, Converter={StaticResource VisibilityConverter}}" />
         <Setter Property="Orientation" Value="{Binding Orientation, Converter={StaticResource OrientationConverter}}" />
         <Setter Property="Grid.Row" Value="{Binding Row}" />
         <Setter Property="Grid.Column" Value="{Binding Column}" />
@@ -139,7 +137,7 @@
         <Setter Property="Height" Value="{Binding Size, Converter={StaticResource SizeConverter}, ConverterParameter='Height'}" />
         <Setter Property="Width" Value="{Binding Size, Converter={StaticResource SizeConverter}, ConverterParameter='Width'}" />
         <Setter Property="Template">
-            <Setter.Value> 
+            <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:CustomTreeViewItem}">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -178,6 +176,7 @@
                                 </Grid.RowDefinitions>
                                 <Border
                                     x:Name="MainBorder"
+                                    Visibility="{Binding IsContentVisible, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={StaticResource VisibilityConverter}}"
                                     Grid.Column="1"
                                     HorizontalAlignment="Stretch"
                                     Background="Transparent"
@@ -185,42 +184,26 @@
                                     BorderThickness="2"
                                     CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                     RenderTransformOrigin=".5, .5"
-                                    Visibility="{TemplateBinding ContentVisibility}">
+                                   >
                                     <Border.RenderTransform>
                                         <ScaleTransform x:Name="ScaleTransform" ScaleX="1" ScaleY="1" />
                                     </Border.RenderTransform>
-                                    <Border
-                                        x:Name="TertiaryBorder"
-                                        HorizontalAlignment="Stretch"
-                                        Background="Transparent"
-                                        BorderBrush="Transparent"
-                                        BorderThickness="2"
-                                        CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource Mode=TemplatedParent}}">
-                                        <Border
-                                            x:Name="SecondaryBorder"
-                                            HorizontalAlignment="Stretch"
-                                            Background="Transparent"
-                                            BorderBrush="Transparent"
-                                            BorderThickness="2"
-                                            CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource Mode=TemplatedParent}}">
 
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition />
-                                                </Grid.RowDefinitions>
-                                                <TextBlock Text="{TemplateBinding Title}" Visibility="{Binding Title, Converter={StaticResource NullToInverseVisibilityConverter}}" />
-
-                                                <ContentPresenter
+                                    <Grid Margin="2">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="{TemplateBinding Title}" Visibility="{Binding Title, Converter={StaticResource NullToInverseVisibilityConverter}}" />
+                                        <ContentPresenter
                                                     x:Name="PART_Header"
-                                                    Grid.Row="1"
+                                                    Grid.Row="1"                                                   
                                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                     WPF.Connectors:Ex.Position="{TemplateBinding ConnectorPosition}"
                                                     ContentSource="Header" />
-                                            </Grid>
-                                        </Border>
-                                    </Border>
+                                    </Grid>
                                 </Border>
+
 
                                 <pnls:UniformStackPanel
                                     x:Name="WrapPanel1"
