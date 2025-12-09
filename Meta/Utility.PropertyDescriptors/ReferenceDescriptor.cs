@@ -23,7 +23,7 @@ internal class ReferenceDescriptor(Descriptor Descriptor, object Instance) : Mem
             if (Descriptor.PropertyType.IsAssignableTo(typeof(IEnumerable)) && Descriptor.PropertyType.IsAssignableTo(typeof(string)) == false && this.CollectionItemPropertyType is Type _elementType)
             {
                 var enumerable = (IEnumerable?)Activator.CreateInstance(Descriptor.PropertyType);
-                var collectionDescriptor = new CollectionDescriptor(Descriptor, _elementType, enumerable) { Parent = this, Input = [], Output = [], IsProliferable = true };
+                var collectionDescriptor = new CollectionDescriptor(Descriptor, _elementType, enumerable) { Parent = this, Inputs = [], Outputs = [], IsProliferable = true };
                 if (i++ > 0)
                 {
                     yield break;
@@ -33,17 +33,17 @@ internal class ReferenceDescriptor(Descriptor Descriptor, object Instance) : Mem
             else
             {
                 var inst = ActivateAnything.Activate.New(Descriptor.PropertyType);
-                propertiesDescriptor = new PropertiesDescriptor(Descriptor, inst) { Parent = this, Input = [], Output = [] };
+                propertiesDescriptor = new PropertiesDescriptor(Descriptor, inst) { Parent = this, Inputs = [], Outputs = [] };
                 yield return propertiesDescriptor;
             }
         }
         if (Instance is object obj)
         {
-            yield return new PropertiesDescriptor(Descriptor, Instance) { Input = [], Output = [] };
+            yield return new PropertiesDescriptor(Descriptor, Instance) { Inputs = [], Outputs = [] };
         }
         if (Instance is IEnumerable _enumerable && Instance is not string s && Instance.GetType() is Type _type && _type.ElementType() is Type elementType)
         {
-            yield return new CollectionDescriptor(Descriptor, elementType, _enumerable) { Parent = this, Input = [], Output = [], IsProliferable = true };
+            yield return new CollectionDescriptor(Descriptor, elementType, _enumerable) { Parent = this, Inputs = [], Outputs = [], IsProliferable = true };
         }
     }
 

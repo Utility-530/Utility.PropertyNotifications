@@ -17,7 +17,7 @@ namespace Utility.PropertyDescriptors
         }
     }
 
-    internal class CollectionDescriptor(Descriptor PropertyDescriptor, Type ElementType, IEnumerable Collection) : BasePropertyDescriptor(PropertyDescriptor, Collection),
+    internal class CollectionDescriptor(Descriptor PropertyDescriptor, Type ElementType, IEnumerable collection) : BasePropertyDescriptor(PropertyDescriptor, collection),
         ICollectionDescriptor,
         IRefresh,
         IGetType
@@ -30,11 +30,13 @@ namespace Utility.PropertyDescriptors
 
         public override string? Name => _Name;
 
+        public override IEnumerable Collection { get => collection; set => throw new Exception("FD£cwe"); }
+
         public override IEnumerable Items()
         {
             return children ??= new ObservableCollection<IDescriptor>(new[]
             {
-                new CollectionHeadersDescriptor(ElementType, Instance.GetType()) { Parent = this, Input = [], Output = [] } }
+                new CollectionHeadersDescriptor(ElementType, Instance.GetType()) { Parent = this, Inputs = [], Outputs = [] } }
             .Concat(addFromInstance()));
         }
 

@@ -17,14 +17,14 @@ public abstract class MemberDescriptor : NodeViewModel, IDescriptor, IIsReadOnly
     public MemberDescriptor(Descriptor descriptor)
     {
         Descriptor = descriptor;
-        Input = new ObservableCollection<IConnectorViewModel>();
-        Output = new ObservableCollection<IConnectorViewModel>();
+        Inputs = new ObservableCollection<IConnectorViewModel>();
+        Outputs = new ObservableCollection<IConnectorViewModel>();
         isProliferable = false;
     }
 
     public override string Name => Descriptor.Name;
     public virtual Type ParentType => Descriptor.ComponentType;
-    public virtual Type Type => Descriptor.PropertyType;
+    public override Type Type => Descriptor.PropertyType;
 
     public bool IsCollection => Type != null && Type != typeof(string) && typeof(IEnumerable).IsAssignableFrom(Type);
 

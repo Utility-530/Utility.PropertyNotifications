@@ -24,7 +24,7 @@ internal class CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeader
         {
             foreach (Descriptor descriptor in TypeDescriptor.GetProperties(Type))
             {
-                var hd = new HeaderDescriptor(descriptor.PropertyType, descriptor.ComponentType, descriptor.Name) { Input = [], Output = [] };
+                var hd = new HeaderDescriptor(descriptor.PropertyType, descriptor.ComponentType, descriptor.Name) { Inputs = [], Outputs = [] };
                 descriptors.Add(hd);
                 yield return hd;
             }

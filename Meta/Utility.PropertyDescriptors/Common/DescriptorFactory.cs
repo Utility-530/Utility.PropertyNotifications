@@ -6,12 +6,9 @@ namespace Utility.PropertyDescriptors
     {
         public static IDescriptor CreateRoot(Type type, string? name = null)
         {
-            var instance = Activator.CreateInstance(type);
-            var rootDescriptor = new RootDescriptor(type, name: name);
-            rootDescriptor.SetValue(null, instance);
-            var root = DescriptorConverter.ToDescriptor(instance, rootDescriptor);
-            //root.Initialise();
-            return root;
+
+            var instance = ActivateAnything.Activate.New(type);
+            return CreateRoot(instance, name);
         }
 
         public static IDescriptor CreateRoot(object instance, string? name = null)
