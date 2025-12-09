@@ -14,6 +14,9 @@ namespace Utility.Nodes.WPF.Templates.SyncFusion
             InitializeComponent();
         }
 
-        public static Templates Instance { get; } = new();    
+        public static readonly string SFChartTemplate = nameof(SFChartTemplate);
+        public static readonly string SFGridTemplate = nameof(SFGridTemplate);
+
+        public static Templates Instance { get; } = new();
     }
 }
