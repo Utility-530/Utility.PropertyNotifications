@@ -107,7 +107,7 @@ namespace Utility.Nodes.Meta
             return 
                 new Model(() => [new CommandModel<SelectEvent> { Name = Select }, new CommandModel<CancelEvent> { Name = Cancel }], attach: n =>
                 {
-                    n.IsExpanded = true; n.Orientation = Enums.Orientation.Horizontal; n.IsContentVisible = false;
+                    n.IsExpanded = true; n.Orientation = Enums.Orientation.Horizontal; n.IsVisible = false;
                 })
                 { Name = input_control, Key = controlsGuid };
         }
