@@ -33,7 +33,8 @@
                 <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml" />
                 <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml" />
                 <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Generic.xaml" />
-                <res:SharedResourceDictionary Source="/Utility.Models.Templates;component/VisualTemplates.xaml" />
+                <res:SharedResourceDictionary Source="/Utility.Models.Templates;component/VisualWriteTemplates.xaml" />
+                <res:SharedResourceDictionary Source="/Utility.Models.Templates;component/VisualReadOnlyTemplates.xaml" />
                 <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Templates.SyncFusion;component/Templates.xaml" />
                 <res:SharedResourceDictionary Source="/Utility.Nodes.Demo.Lists;component/Themes/SyncFusion.xaml"/>
             </ResourceDictionary.MergedDictionaries>      

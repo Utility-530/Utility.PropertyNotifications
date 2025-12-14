@@ -4,17 +4,18 @@ namespace Utility.Models.Templates
     using System.Windows.Controls;
     using System.Windows.Data;
     using Utility.Interfaces.Exs;
+    using Utility.Interfaces.NonGeneric;
     using Utility.ServiceLocation;
     using Utility.WPF.Templates;
 
-    public partial class VisualTemplates : ResourceDictionary
+    public partial class VisualReadOnlyTemplates : ResourceDictionary
     {
-        public VisualTemplates()
+        public VisualReadOnlyTemplates()
         {
             InitializeComponent();
         }
 
-        public static VisualTemplates Instance { get; } = new();
+        public static VisualReadOnlyTemplates Instance { get; } = new();
     //    public static VisualTemplates Instance =>
     //(VisualTemplates)Application.Current.Resources.MergedDictionaries
     //    .First(d => d is VisualTemplates);
@@ -27,39 +28,45 @@ namespace Utility.Models.Templates
         public DataTemplate TableHeader => this["TableHeaderTemplate"] as DataTemplate;
         public DataTemplate TableCell => this["TableCellTemplate"] as DataTemplate;
         public DataTemplate CheckBox => this["CheckBoxTemplate"] as DataTemplate;
+        public DataTemplate Image => this["ImageTemplate"] as DataTemplate;
     }
 
-    public class VisualTemplateSelector : CustomDataTemplateSelector
+    public class VisualReadOnlyTemplateSelector : CustomDataTemplateSelector
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
+            bool isReadOnly = false;
             if (item is IStyle { Style: { } style })
             {
+                if (item is IIsReadOnly { IsReadOnly: { } _isReadOnly })
+                    isReadOnly = _isReadOnly;
+
                 switch (style)
                 {
                     case Enums.Visual.Label:
-                        return VisualTemplates.Instance.Label;
+                        return VisualReadOnlyTemplates.Instance.Label;
                     case Enums.Visual.Title:
-                        return VisualTemplates.Instance.Title;
+                        return VisualReadOnlyTemplates.Instance.Title;
                     case Enums.Visual.Subtitle:
-                        return VisualTemplates.Instance.Subtitle;
+                        return VisualReadOnlyTemplates.Instance.Subtitle;
                     case Enums.Visual.SecondaryHeader:
-                        return VisualTemplates.Instance.SecondaryHeader;
+                        return VisualReadOnlyTemplates.Instance.SecondaryHeader;
                     case Enums.Visual.TextInput:
-                        return VisualTemplates.Instance.Text;
+                        return VisualReadOnlyTemplates.Instance.Text;
+                    case Enums.Visual.Text:
+                        return VisualReadOnlyTemplates.Instance.Text;
+                    case Enums.Visual.Image:
+                        return VisualReadOnlyTemplates.Instance.Image;
                     case Enums.Visual.TableHeader:
-                        return VisualTemplates.Instance.TableHeader;
+                        return VisualReadOnlyTemplates.Instance.TableHeader;
                     case Enums.Visual.TableCell:
-                        return VisualTemplates.Instance.TableCell;
+                        return VisualReadOnlyTemplates.Instance.TableCell;
                     case Enums.Visual.CheckBox:
-                        return VisualTemplates.Instance.CheckBox;
+                        return VisualReadOnlyTemplates.Instance.CheckBox;
                 }
             }
             //throw new Exception("DFS £Fjgjg kvov33");
             return base.SelectTemplate(item, container);
         }
-
-
-        public static VisualTemplateSelector VisualInstance { get; } = new();
     }
 }
