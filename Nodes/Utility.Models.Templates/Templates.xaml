@@ -103,6 +103,28 @@
         </trees:CustomTreeView>
     </DataTemplate>-->
 
+    <DataTemplate x:Key="MoneyTemplate">
+        <TextBox Name="myCurrencyTextBox2"
+                        VerticalAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        FontFamily="Consolas">          
+            <TextBox.Style>
+                <Style TargetType="TextBox">
+                    <Style.Triggers>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter Property="FrameworkElement.ToolTip" Value="{Binding RelativeSource={RelativeSource self}, Path=(Validation.Errors).CurrentItem.ErrorContent}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+            <i:Interaction.Behaviors>
+                <beh:StringFormatNumericBehavior FormatType="Money"
+                                                        Number="{Binding Value, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
+                </beh:StringFormatNumericBehavior>
+            </i:Interaction.Behaviors>
+        </TextBox>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type inf:RelationModel}">
         <ComboBox
             Grid.Column="0"

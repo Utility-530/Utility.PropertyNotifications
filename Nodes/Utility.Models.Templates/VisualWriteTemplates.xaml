@@ -224,4 +224,16 @@
     </DataTemplate>
 
 
+    <DataTemplate x:Key="ActionTemplate">
+        <btns:GeometryToggleButton
+            Width="100"
+            IsChecked="{Binding Value}"
+            
+            >
+            <i:Interaction.Behaviors>
+                <beh:ToggleButtonResetBehavior/>
+            </i:Interaction.Behaviors>
+        </btns:GeometryToggleButton>
+    </DataTemplate>
+
 </ResourceDictionary>

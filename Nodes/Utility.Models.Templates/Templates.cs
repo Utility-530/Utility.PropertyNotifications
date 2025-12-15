@@ -20,6 +20,8 @@ namespace Utility.Models.Templates
         public static string SearchEditor => nameof(SearchEditor);
         public static string MoneySumTemplate => nameof(MoneySumTemplate);
         public static string PriceTemplate => nameof(PriceTemplate);
+        public static string ActionTemplate => nameof(ActionTemplate);
+        public static string MoneyTemplate => nameof(MoneyTemplate);
         public static string EditTemplate => nameof(EditTemplate);
         public static string Json => nameof(Json);
         public static string BooleanTemplate => nameof(BooleanTemplate);
