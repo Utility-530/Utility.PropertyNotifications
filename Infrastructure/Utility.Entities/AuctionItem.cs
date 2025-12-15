@@ -12,7 +12,7 @@ namespace Utility.Entities
         }
     }   
 
-    public class AuctionItem : Entity, IId<Guid>, IIdSet<Guid>, IClone
+    public class AuctionItem : Entity, IClone
     {
 
         public AuctionItem()
