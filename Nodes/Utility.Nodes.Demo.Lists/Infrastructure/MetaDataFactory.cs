@@ -18,11 +18,13 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
         public const string transactionGuid = "6a63ecd3-5b1c-4e6d-b789-2135b6529388";
         public const string assetGuid = "f2a11e92-d1fe-4272-ae36-3a45b4a5571d";
         public const string coinbaseTransactionGuid = "4ec4c118-243e-47ca-a1a5-739bde9204eb";
+        public const string paymentScheduleGuid = "5e71d381-f60c-491e-919a-0d9eae220cad";
 
         public static readonly Type loanType = typeof(Loan);
         public static readonly Type auctionItemType = typeof(AuctionItem);
         public static readonly Type userProfileType = typeof(UserProfile);
         public static readonly Type transactionType = typeof(Transaction);
+        public static readonly Type personType = typeof(Person);
         public static readonly Type assetType = typeof(Asset);
         public static readonly Type coinbaseTransactionType = typeof(CoinbaseTransaction);
 
@@ -142,6 +144,13 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
                 Type = coinbaseTransactionType,
                 TransformationMethod = nameof(Factories.NodeMethodFactory.BuildCoinbaseTransactionRoot),
                 Index = 10,
+            },
+            new EntityMetaData
+            {
+                Guid = Guid.Parse(paymentScheduleGuid),
+                Type =personType,
+                TransformationMethod = nameof(Factories.NodeMethodFactory.BuildPaymentScheduleRoot),
+                Index = 11,
             }
         ];
 
