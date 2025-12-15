@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Runtime.Serialization;
 
 namespace Utility.Enums
@@ -735,4 +738,170 @@ namespace Utility.Enums
         [Description("Zimbabwean dollar")]
         ZWL = 932
     }
+
+
+
+
+    public static class CurrencySymbols
+    {
+        public static readonly IReadOnlyDictionary<Currency, string> Map =
+            new Dictionary<Currency, string>
+            {
+            // Major currencies
+            { Currency.USD, "$" },
+            { Currency.EUR, "€" },
+            { Currency.GBP, "£" },
+            { Currency.JPY, "¥" },
+            { Currency.CNY, "¥" },
+            { Currency.INR, "₹" },
+            { Currency.RUB, "₽" },
+            { Currency.KRW, "₩" },
+            { Currency.TRY, "₺" },
+            { Currency.ILS, "₪" },
+            { Currency.THB, "฿" },
+            { Currency.VND, "₫" },
+            { Currency.UAH, "₴" },
+            { Currency.PHP, "₱" },
+            { Currency.MXN, "$" },
+            { Currency.BRL, "R$" },
+            { Currency.ZAR, "R" },
+
+            // Dollar currencies
+            { Currency.AUD, "A$" },
+            { Currency.CAD, "C$" },
+            { Currency.NZD, "NZ$" },
+            { Currency.SGD, "S$" },
+            { Currency.HKD, "HK$" },
+            { Currency.TWD, "NT$" },
+            { Currency.BBD, "$" },
+            { Currency.BMD, "$" },
+            { Currency.BSD, "$" },
+            { Currency.BZD, "BZ$" },
+            { Currency.FJD, "$" },
+            { Currency.GYD, "$" },
+            { Currency.JMD, "$" },
+            { Currency.KYD, "$" },
+            { Currency.LRD, "$" },
+            { Currency.NAD, "$" },
+            { Currency.SBD, "$" },
+            { Currency.SRD, "$" },
+            { Currency.TTD, "$" },
+            { Currency.XCD, "$" },
+            { Currency.ZWL, "$" },
+
+            // Pound currencies
+            { Currency.EGP, "£" },
+            { Currency.FKP, "£" },
+            { Currency.GIP, "£" },
+            { Currency.LBP, "£" },
+            { Currency.SDG, "£" },
+            { Currency.SHP, "£" },
+            { Currency.SSP, "£" },
+            { Currency.SYP, "£" },
+
+            // Europe
+            { Currency.DKK, "kr" },
+            { Currency.NOK, "kr" },
+            { Currency.SEK, "kr" },
+            { Currency.ISK, "kr" },
+            { Currency.CZK, "Kč" },
+            { Currency.HUF, "Ft" },
+            { Currency.PLN, "zł" },
+            { Currency.RON, "lei" },
+
+            // Francs
+            { Currency.CHF, "CHF" },
+            { Currency.XAF, "FCFA" },
+            { Currency.XOF, "CFA" },
+            { Currency.XPF, "₣" },
+            { Currency.GNF, "FG" },
+            { Currency.RWF, "FRw" },
+            { Currency.BIF, "FBu" },
+            { Currency.KMF, "CF" },
+            { Currency.DJF, "Fdj" },
+
+            // Middle East
+            { Currency.AED, "د.إ" },
+            { Currency.SAR, "﷼" },
+            { Currency.QAR, "﷼" },
+            { Currency.OMR, "﷼" },
+            { Currency.KWD, "د.ك" },
+            { Currency.BHD, ".د.ب" },
+            { Currency.JOD, "د.ا" },
+            { Currency.IQD, "ع.د" },
+            { Currency.IRR, "﷼" },
+            { Currency.YER, "﷼" },
+
+            // Asia
+            { Currency.IDR, "Rp" },
+            { Currency.MYR, "RM" },
+            { Currency.PKR, "₨" },
+            { Currency.LKR, "Rs" },
+            { Currency.NPR, "₨" },
+            { Currency.BDT, "৳" },
+            { Currency.KHR, "៛" },
+            { Currency.MMK, "Ks" },
+            { Currency.MNT, "₮" },
+            { Currency.KZT, "₸" },
+            { Currency.KGS, "сом" },
+            { Currency.LAK, "₭" },
+
+            // Africa
+            { Currency.NGN, "₦" },
+            { Currency.GHS, "₵" },
+            { Currency.KES, "KSh" },
+            { Currency.TZS, "Sh" },
+
+            // Americas / Others
+            { Currency.DOP, "RD$" },
+            { Currency.DZD, "دج" },
+            { Currency.ERN, "Nfk" },
+            { Currency.ETB, "Br" },
+            { Currency.GEL, "₾" },
+            { Currency.GMD, "D" },
+            { Currency.GTQ, "Q" },
+            { Currency.HNL, "L" },
+            { Currency.HRK, "kn" },
+            { Currency.HTG, "G" },
+            { Currency.LSL, "L" },
+            { Currency.LYD, "ل.د" },
+            { Currency.MAD, "د.م." },
+            { Currency.MDL, "L" },
+            { Currency.MGA, "Ar" },
+            { Currency.MKD, "ден" },
+            { Currency.MOP, "MOP$" },
+            { Currency.MRU, "UM" },
+            { Currency.MUR, "Rs" },
+            { Currency.MVR, "Rf" },
+            { Currency.MWK, "MK" },
+            { Currency.MZN, "MT" },
+            { Currency.NIO, "C$" },
+            { Currency.PAB, "B/." },
+            { Currency.PEN, "S/." },
+            { Currency.PGK, "K" },
+            { Currency.PYG, "₲" },
+            { Currency.RSD, "дин" },
+            { Currency.SCR, "₨" },
+            { Currency.SLL, "Le" },
+            { Currency.SLE, "Le" },
+            { Currency.SOS, "Sh" },
+            { Currency.STN, "Db" },
+            { Currency.SVC, "₡" },
+            { Currency.SZL, "L" },
+            { Currency.TJS, "SM" },
+            { Currency.TMT, "m" },
+            { Currency.TND, "د.ت" },
+            { Currency.TOP, "T$" },
+            { Currency.UGX, "Sh" },
+            { Currency.UYU, "$" },
+            { Currency.UZS, "soʻm" },
+            { Currency.VED, "Bs.D" },
+            { Currency.VES, "Bs.S" },
+            { Currency.VUV, "Vt" },
+            { Currency.WST, "T" },
+            { Currency.ZMW, "ZK" }
+            };
+    }
+
 }
+
