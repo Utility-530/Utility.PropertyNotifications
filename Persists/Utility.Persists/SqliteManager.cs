@@ -71,10 +71,11 @@ namespace Utility.Persists
 
                 types = conn.Table<DataType>().ToList();
                 var typeString = TypeSerialization.TypeSerializer.Serialize(type);
-
+               
                 if (types.All(a => a.Type != typeString))
                 {
-                    var dataType = new DataType { Id = types.Count + 1, Type = typeString };
+                    int max = types.Max(a => a.Id);
+                    var dataType = new DataType { Id = max + 1, Type = typeString };
                     conn.Insert(dataType);
                     types.Add(dataType);
                 }
