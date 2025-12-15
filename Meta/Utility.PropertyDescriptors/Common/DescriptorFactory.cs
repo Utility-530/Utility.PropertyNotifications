@@ -4,14 +4,13 @@ namespace Utility.PropertyDescriptors
 {
     public class DescriptorFactory //: IValueConverter
     {
-        public static IDescriptor CreateRoot(Type type, string? name = null)
+        public static MemberDescriptor CreateRoot(Type type, string? name = null)
         {
-
             var instance = ActivateAnything.Activate.New(type);
             return CreateRoot(instance, name);
         }
 
-        public static IDescriptor CreateRoot(object instance, string? name = null)
+        public static MemberDescriptor CreateRoot(object instance, string? name = null)
         {
             var rootDescriptor = new RootDescriptor(instance.GetType(), name: name);
             rootDescriptor.SetValue(null, instance);
