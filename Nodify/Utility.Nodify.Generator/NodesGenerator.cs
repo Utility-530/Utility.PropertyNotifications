@@ -39,8 +39,8 @@ namespace Nodify.Playground
                                 Key = methodNode.MethodInfo.Name,
                                 Location = settings.NodeLocationGenerator(settings, ++i),
                                 Data = methodNode,
-                                Input = [],
-                                Output = []
+                                Inputs = [],
+                                Outputs = []
                             };
 
                             nodes.Add(node);
@@ -49,7 +49,7 @@ namespace Nodify.Playground
                             {
                                 var input = new ConnectorViewModel { Shape = FlatShape.Circle, Key = a.Value.Key, Data = a.Value };
                                 Shared.serviceConnectors.Add(a.Value, input);
-                                node.Input.Add(input);
+                                node.Inputs.Add(input);
                                 input.Node = node;
                             });
 
@@ -57,7 +57,7 @@ namespace Nodify.Playground
                             {
                                 var output = new ConnectorViewModel { Shape = FlatShape.Circle, Key = methodNode.MethodInfo.Name + ".", Data = methodNode.OutValue };
                                 Shared.serviceConnectors.Add(methodNode.OutValue, output);
-                                node.Output.Add(output);
+                                node.Outputs.Add(output);
                                 output.Node = node;
                             }
 
@@ -88,8 +88,8 @@ namespace Nodify.Playground
                                 Data = rNode,
                                 //Location = settings.NodeLocationGenerator(settings, ++i),
                                 Key = _name ?? (++indexKey).ToString(),
-                                Input = [],
-                                Output = []
+                                Inputs = [],
+                                Outputs = []
                             };
 
                             nodes.Add(node);
@@ -98,9 +98,9 @@ namespace Nodify.Playground
                             var output2 = new ConnectorViewModel { Node = node, Shape = FlatShape.Circle, Flow = IO.Output, Key = "output", Data = null };
                             Shared.serviceConnectors.Add(rNode, output2);
 
-                            node.Output.Add(output2);
+                            node.Outputs.Add(output2);
                             //Shared.connectors.Add(rNode, output);
-                            node.Input.Add(input);
+                            node.Inputs.Add(input);
                             input.Node = node;
                         }
                     }

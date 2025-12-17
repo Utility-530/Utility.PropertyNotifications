@@ -61,10 +61,10 @@
         <st:AutoGrid Rows="*,*,*" Columns="*,*"  MinWidth="160" Margin="4" Background="{DynamicResource BackgroundBrush}">
             <TextBlock Margin="2">key</TextBlock>
             <ContentControl Content="{Binding Key}" MinHeight="25" MinWidth="40" Margin="2"/>
-            <TextBlock Margin="2">inputs</TextBlock>
-            <ItemsControl ItemsSource="{Binding Inputs}" Margin="2"/>
+            <!--<TextBlock Margin="2">inputs</TextBlock>-->
+            <!--<ItemsControl ItemsSource="{Binding Inputs}" Margin="2"/>
             <TextBlock Margin="2">output</TextBlock>
-            <ContentControl Content="{Binding Output}" Margin="2"/>
+            <ContentControl Content="{Binding Output}" Margin="2"/>-->
         </st:AutoGrid>
     </DataTemplate>
 

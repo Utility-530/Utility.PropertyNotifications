@@ -155,7 +155,7 @@ namespace Utility.Nodify.Repository
                     var nodeId = (a as IGetGuid).Guid;
                     Add(new Node() { DiagramId = diagramId, Guid = nodeId, Key = key });
 
-                    a.Input.AndAdditions<IConnectorViewModel>().Subscribe(input =>
+                    a.Inputs.AndAdditions<IConnectorViewModel>().Subscribe(input =>
                     {
                         if (input is not IPendingConnectorViewModel)
                         {
@@ -168,7 +168,7 @@ namespace Utility.Nodify.Repository
                         }
                     });
 
-                    a.Output.AndAdditions<IConnectorViewModel>().Subscribe(output =>
+                    a.Outputs.AndAdditions<IConnectorViewModel>().Subscribe(output =>
                     {
                         if (output is not IPendingConnectorViewModel)
                         {
@@ -237,10 +237,10 @@ namespace Utility.Nodify.Repository
                         .ConvertBack(_outputConnector.Key)
                         .Subscribe(a =>
                         {
-                            var outputConnectorViewModel = nodeViewModel.Output.SingleOrDefault(a => (a as IGetGuid).Guid == _outputConnector.Guid);
+                            var outputConnectorViewModel = nodeViewModel.Outputs.SingleOrDefault(a => (a as IGetGuid).Guid == _outputConnector.Guid);
                             outputConnectorViewModel ??= container.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(_outputConnector.Guid, true, a.Key, nodeViewModel, a.Data));
                             outputConnectorViewModel.Node = nodeViewModel;
-                            nodeViewModel.Output.Add(outputConnectorViewModel);
+                            nodeViewModel.Outputs.Add(outputConnectorViewModel);
 
                             var outputConnections = connection.Query<Connection>("SELECT * FROM Connection WHERE OutputId = ?", _outputConnector.Guid);
                             foreach (var outputConnection in outputConnections)
@@ -259,13 +259,13 @@ namespace Utility.Nodify.Repository
                                         .Subscribe(inputNodeViewModel =>
                                         {
 
-                                            var inputConnectorViewModel = inputNodeViewModel.Input.SingleOrDefault(a => (a as IGetGuid).Guid == inputConnector.Guid);
+                                            var inputConnectorViewModel = inputNodeViewModel.Inputs.SingleOrDefault(a => (a as IGetGuid).Guid == inputConnector.Guid);
 
                                             if (inputConnectorViewModel == null)
                                             {
                                                 inputConnectorViewModel = container.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(inputConnector.Guid, false, al.Key, inputNodeViewModel, al.Data));
                                                 inputConnectorViewModel.Node = inputNodeViewModel;
-                                                inputNodeViewModel.Input.Add(inputConnectorViewModel);
+                                                inputNodeViewModel.Inputs.Add(inputConnectorViewModel);
                                             }
 
                                             var connection = container.Resolve<IViewModelFactory>().CreateConnection(outputConnectorViewModel, inputConnectorViewModel);
@@ -290,13 +290,13 @@ namespace Utility.Nodify.Repository
                             Node inputNode = connection.Query<Node>("SELECT * FROM Node WHERE Guid = ?", inputConnector.NodeId).Single();
 
                             {
-                                var inputConnectorViewModel = nodeViewModel.Input.SingleOrDefault(a => (a as IGetGuid).Guid == inputConnector.Guid);
+                                var inputConnectorViewModel = nodeViewModel.Inputs.SingleOrDefault(a => (a as IGetGuid).Guid == inputConnector.Guid);
 
                                 if (inputConnectorViewModel == null)
                                 {
                                     inputConnectorViewModel = container.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(inputConnector.Guid, false, al.Key, nodeViewModel, al.Data));
                                     inputConnectorViewModel.Node = nodeViewModel;
-                                    nodeViewModel.Input.Add(inputConnectorViewModel);
+                                    nodeViewModel.Inputs.Add(inputConnectorViewModel);
                                 }
                                 // Find the output node
 

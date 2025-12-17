@@ -7,7 +7,7 @@ namespace Utility.Nodify.Transitions.Demo
     {
         public IViewModelTree Create(object config)
         {
-            var node = new Utility.Nodes.NodeViewModel() { Data = config, Input = [], Output = [] };
+            var node = new Utility.Nodes.NodeViewModel() { Data = config, Inputs = [], Outputs = [] };
             //if (config is ISetNode iNode)
             //{
             //    iNode.SetNode(node);

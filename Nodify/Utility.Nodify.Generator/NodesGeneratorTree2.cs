@@ -102,7 +102,7 @@ namespace Nodify.Playground
                 if (flow == IO.Input)
                 {
 
-                    foreach (var x in nodeViewModel.Input.Where(a => a.Shape == shape))
+                    foreach (var x in nodeViewModel.Inputs.Where(a => a.Shape == shape))
                     {
                         return x;
                     }
@@ -110,7 +110,7 @@ namespace Nodify.Playground
                 else
                 {
 
-                    foreach (var x in nodeViewModel.Output.Where(a => a.Shape == shape))
+                    foreach (var x in nodeViewModel.Outputs.Where(a => a.Shape == shape))
                     {
                         return x;
                     }
@@ -157,7 +157,7 @@ namespace Nodify.Playground
                         var _node = new T { Data = model, Key = "0" };
                         var output = new ConnectorViewModel { Node = _node, Shape = FlatShape.Square, Flow = IO.Output, Key = "output", Data = null };
                         Shared.serviceConnectors.Add(_node, output);
-                        _node.Output.Add(output);
+                        _node.Outputs.Add(output);
                         output.Node = _node;
                         return _node;
                     }

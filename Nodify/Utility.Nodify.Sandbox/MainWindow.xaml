@@ -30,8 +30,8 @@
                                     BasedOn="{StaticResource {x:Type nodify:Node}}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsConnectorsReversed}" Value="True">
-                                <Setter Property="Footer" Value="{Binding Input}"></Setter>
-                                <Setter Property="Header" Value="{Binding Output}"></Setter>
+                                <Setter Property="Footer" Value="{Binding Inputs}"></Setter>
+                                <Setter Property="Header" Value="{Binding Outputs}"></Setter>
                             </DataTrigger>
 
                             <DataTrigger Binding="{Binding Data.IsActive}"
@@ -68,9 +68,9 @@
                                                 Value="Red" />
                             </DataTrigger>-->
                         </Style.Triggers>
-                        <Setter Property="Footer" Value="{Binding Output}" />
+                        <Setter Property="Footer" Value="{Binding Outputs}" />
 
-                        <Setter Property="Header" Value="{Binding Input}">
+                        <Setter Property="Header" Value="{Binding Inputs}">
 
                         </Setter>
                         <Setter Property="VerticalAlignment" Value="Stretch"></Setter>

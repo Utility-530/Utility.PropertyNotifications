@@ -57,24 +57,24 @@ namespace Utility.Nodify.Engine
                 {
                     Guid = guid,
                     IsInput = isInput,
-                    Key = "ObjectProp",
+                    Name = "ObjectProp",
                     Node = node,
                     Data = data
                 };
             }
             else if (dataContext is string _s)
             {
-                return new ConnectorViewModel() { Data = dataContext, Key = _s };
+                return new ConnectorViewModel() { Data = dataContext, Name = _s };
             }
 
-            return new ConnectorViewModel() { Data = dataContext, Key = "" };
+            return new ConnectorViewModel() { Data = dataContext, Name = "" };
         }
 
         public INodeViewModel CreateNode(object dataContext)
         {
             if(dataContext is InstanceKey instanceKey)
             {
-                return new NodeViewModel() {  Data = instanceKey.Data, Diagram = container.Resolve<IDiagramViewModel>(), Input = [], Output = [] };
+                return new NodeViewModel() {  Data = instanceKey.Data, Diagram = container.Resolve<IDiagramViewModel>(), Inputs = [], Outputs = [] };
             }
             else if (dataContext is IReadOnlyTree tree)
             {
@@ -83,8 +83,8 @@ namespace Utility.Nodify.Engine
                     var x = CreatePendingConnector(true);// new PendingConnectorViewModel() { IsInput = true };
                     var y = CreatePendingConnector(null);
 
-                    nodeViewModel.Input = new CollectionWithFixedLast<IConnectorViewModel>(x);
-                    nodeViewModel.Output = new CollectionWithFixedLast<IConnectorViewModel>(y);
+                    nodeViewModel.Inputs = new CollectionWithFixedLast<IConnectorViewModel>(x);
+                    nodeViewModel.Outputs = new CollectionWithFixedLast<IConnectorViewModel>(y);
 
                     x.Node = nodeViewModel;
                     y.Node = nodeViewModel;
@@ -95,7 +95,7 @@ namespace Utility.Nodify.Engine
             {
                 List<IConnectorViewModel> inputs = new();
                 List<IConnectorViewModel> outputs = new();
-                NodeViewModel nodeViewModel = new() { Data = methodInfo, Input = inputs, Output = outputs, Key = new GuidKey(Guid.NewGuid()) };
+                NodeViewModel nodeViewModel = new() { Data = methodInfo, Inputs = inputs, Outputs = outputs, Key = new GuidKey(Guid.NewGuid()) };
                 foreach (var parameter in methodInfo.GetParameters())
                 {
                     var input = new ConnectorViewModel() { Key = parameter.Name, Data = parameter, Flow = IO.Input, Node = nodeViewModel };
@@ -129,7 +129,7 @@ namespace Utility.Nodify.Engine
                         if (item is PropertyInfo propertyInfo)
                         {
                             var connectorViewModel = new ConnectorViewModel() { Data = propertyInfo, Key = propertyInfo.Name, Node = pending.Node };
-                            connectorViewModel.Node.Output.Add(connectorViewModel);
+                            connectorViewModel.Node.Outputs.Add(connectorViewModel);
                         }
                     }
                 }
@@ -137,14 +137,14 @@ namespace Utility.Nodify.Engine
                 {
                     foreach(var propertyInfo in a.OldItems)
                     {
-                        pending.Node.Output.RemoveBy(a => a is IGetData { Data: { } data } && data.Equals(propertyInfo));
+                        pending.Node.Outputs.RemoveBy(a => a is IGetData { Data: { } data } && data.Equals(propertyInfo));
                     }
                 }
             };
             pending.ConnectorAdded += propertyInfo =>
             {
                 var input = new ConnectorViewModel() { Data = propertyInfo, Key = propertyInfo.Name, Node = pending.Node, IsInput = true };
-                pending.Node.Input.Add(input);
+                pending.Node.Inputs.Add(input);
             };
             return pending;
         }

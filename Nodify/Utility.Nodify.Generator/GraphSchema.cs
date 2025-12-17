@@ -46,7 +46,9 @@ namespace Nodify.Playground
                 }
                 else if (target is NodeViewModel node)
                 {
-                    connection = AddConnection(source, node);
+                    var allConnectors = source.Flow == IO.Input ? node.Outputs : node.Inputs;
+                    var _connector = allConnectors.First(c => (c as ConnectorViewModel)?.AllowsNewConnections() == true);
+                    connection = AddConnection(source, _connector);
                     return true;
                 }
             }
@@ -65,13 +67,13 @@ namespace Nodify.Playground
             };
         }
 
-        private ConnectionViewModel AddConnection(IConnectorViewModel source, INodeViewModel target)
-        {
-            var allConnectors = source.Flow == IO.Input ? target.Output : target.Input;
-            var connector = allConnectors.First(c => (c as ConnectorViewModel)?.AllowsNewConnections() == true);
+        //private ConnectionViewModel AddConnection(IConnectorViewModel source, INodeViewModel target)
+        //{
+        //    var allConnectors = source.Flow == IO.Input ? target.Outputs : target.Inputs;
+        //    var connector = allConnectors.First(c => (c as ConnectorViewModel)?.AllowsNewConnections() == true);
 
-            return AddConnection(source, connector);
-        }
+        //    return AddConnection(source, connector);
+        //}
 
         #endregion
 

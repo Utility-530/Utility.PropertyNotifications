@@ -28,10 +28,9 @@
                 <ResourceDictionary Source="/Utility.WPF.Controls.Simulation;component/Themes/Generic.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            
             <Style x:Key="IconButton"
-                   TargetType="{x:Type Button}"
-                   BasedOn="{StaticResource {x:Type Button}}">
+                    TargetType="{x:Type Button}"
+                    BasedOn="{StaticResource {x:Type Button}}">
                 <Setter Property="Padding"
                 Value="1 2" />
                 <Setter Property="HorizontalAlignment"
@@ -120,10 +119,8 @@
                                 <Setter Property="Fill"
                                                                     Value="{DynamicResource ForegroundBrush}" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsActive}"
-                                                                             Value="True">
-                                        <Setter Property="Fill"
-                                                                            Value="{DynamicResource ActiveStateBrush}" />
+                                    <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                        <Setter Property="Fill" Value="{DynamicResource ActiveStateBrush}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>

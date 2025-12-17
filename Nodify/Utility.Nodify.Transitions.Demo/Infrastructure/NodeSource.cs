@@ -97,7 +97,7 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
                 }
                 else if (menuItem.Key == "Set" && menuItem.Reference is Ref4 { Type: { } type, ConnectionViewModel: { } _pending })
                 {
-                    var properties = typeof(ViewModelTree).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.DeclaredOnly);
+                    var properties = typeof(NodeViewModel).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.DeclaredOnly);
 
                     foreach (var item in properties.Where(a => a.PropertyType == type))
                     {

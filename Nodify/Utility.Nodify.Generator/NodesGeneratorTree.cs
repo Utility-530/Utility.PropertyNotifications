@@ -31,8 +31,8 @@ namespace Nodify.Playground
                         Data = item,
                         Location = settings.NodeLocationGenerator(settings, ++i),
                         Key = new Utility.Structs.Index(index).ToString(),
-                        Input = [],
-                        Output = []
+                        Inputs = [],
+                        Outputs = []
                     };
 
                     nodes.Add(node);
@@ -43,10 +43,10 @@ namespace Nodify.Playground
                     Shared.serviceConnectors.Add(item, output1);
                     Shared.modelConnectors.Add(item, output2);
 
-                    node.Output.Add(output1);
-                    node.Output.Add(output2);
+                    node.Outputs.Add(output1);
+                    node.Outputs.Add(output2);
                     //Shared.connectors.Add(rNode, output);
-                    node.Input.Add(input);
+                    node.Inputs.Add(input);
                     input.Node = node;
 
 
@@ -110,7 +110,7 @@ namespace Nodify.Playground
                 if (flow == IO.Input)
                 {
 
-                    foreach (var x in nodeViewModel.Input.Where(a => a.Shape == shape))
+                    foreach (var x in nodeViewModel.Inputs.Where(a => a.Shape == shape))
                     {
                         return x;
                     }
@@ -118,7 +118,7 @@ namespace Nodify.Playground
                 else
                 {
 
-                    foreach (var x in nodeViewModel.Output.Where(a => a.Shape == shape))
+                    foreach (var x in nodeViewModel.Outputs.Where(a => a.Shape == shape))
                     {
                         return x;
                     }
@@ -151,10 +151,10 @@ namespace Nodify.Playground
                 {
                     if (model.Parent() == null)
                     {
-                        var _node = new NodeViewModel { Data = model, Key = "0", Input = [], Output = [] };
+                        var _node = new NodeViewModel { Data = model, Key = "0", Inputs = [], Outputs = [] };
                         var output = new ConnectorViewModel { Node = _node, Shape = FlatShape.Square, Flow = IO.Output, Key = "output", Data = null };
                         Shared.serviceConnectors.Add(_node, output);
-                        _node.Output.Add(output);
+                        _node.Outputs.Add(output);
                         output.Node = _node;
                         return _node;
                     }

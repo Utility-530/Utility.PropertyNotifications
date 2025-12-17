@@ -51,7 +51,7 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
                     if (nodeViewModel is IGetData { Data : MethodInfo methodInfo })
                     {
                         Dictionary<string, object> previousValues = methodInfo.GetParameters().ToDictionary(a => a.Name, a => (object)null);
-                        nodeViewModel.Input.AndAdditions<IConnectorViewModel>().Subscribe(input =>
+                        nodeViewModel.Inputs.AndAdditions<IConnectorViewModel>().Subscribe(input =>
                         {
                             if (input is IGetData { Data: ParameterInfo parameterInfo })
                             {
@@ -63,7 +63,7 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
                                         try
                                         {
                                             var result = await Task.Run(() => methodInfo.Invoke(null, methodInfo.GetParameters().Select(a => previousValues[a.Name]).ToArray()));
-                                            if (nodeViewModel.Output.FirstOrDefault() is ISetValue setValue)
+                                            if (nodeViewModel.Outputs.FirstOrDefault() is ISetValue setValue)
                                             {
                                                 setValue.Value = result;
                                             }
@@ -79,7 +79,7 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
                     }
                     else if (nodeViewModel is IGetData { Data: PropertyDescriptor propertyDescriptor })
                     {
-                        nodeViewModel.Input.AndAdditions<IConnectorViewModel>().Subscribe(input =>
+                        nodeViewModel.Inputs.AndAdditions<IConnectorViewModel>().Subscribe(input =>
                         {
                             if (input is IValueConnectorViewModel { } valueConnector and IGetData { Data: PropertyInfo propertyInfo })
                             {
@@ -90,7 +90,7 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
                             }
                         });
 
-                        nodeViewModel.Output.AndAdditions<IConnectorViewModel>().Subscribe(output =>
+                        nodeViewModel.Outputs.AndAdditions<IConnectorViewModel>().Subscribe(output =>
                         {
                             if (output is IValueConnectorViewModel { } connector and IGetData { Data: PropertyInfo propertyInfo })
                             {

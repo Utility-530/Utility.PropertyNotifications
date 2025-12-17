@@ -1,4 +1,5 @@
-﻿using Utility.Helpers.Generic;
+﻿using System.Collections.ObjectModel;
+using Utility.Helpers.Generic;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Nodify.Base;
 
@@ -10,6 +11,8 @@ namespace Utility.Nodes
 
         public ConnectionViewModel()
         {
+            Inputs = new ObservableCollection<IConnectorViewModel>();
+            Outputs = new ObservableCollection<IConnectorViewModel>();
         }
 
         public IConnectorViewModel Input
