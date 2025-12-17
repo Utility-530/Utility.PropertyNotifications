@@ -30,7 +30,7 @@ namespace Utility.Entities
 
         public override string ToString()
         {
-            return $"payment ({CurrencySymbols.Map[Currency]}{AmountInGBP}) due for {Type.ToString()}";
+            return $"payment of {CurrencySymbols.Map[Currency]}{AmountInGBP} due for {Type.ToString()}";
         }
     }
 
@@ -44,7 +44,7 @@ namespace Utility.Entities
         public override string ToString()
         {
             var ops = string.Join(", ", Operations.Select(o => o.ToString()));
-            return $"{AssignedTo} {ops} on {ToString(Date)}";
+            return $"{AssignedTo}: {ops} on {ToString(Date)}";
         }
 
         static string ToString(DateTime dayOfWeek)

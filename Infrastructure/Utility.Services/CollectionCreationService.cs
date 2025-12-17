@@ -32,7 +32,7 @@ namespace Utility.Services
                 typeof(Utility.Persists.DatabaseHelper)
                     .GetMethod(nameof(Utility.Persists.DatabaseHelper.ToManager))
                     .MakeGenericMethod(instance.GetType())
-                    .Invoke(null, parameters: [instance, new Func<object, Guid>(a => (a as IId<Guid>).Id), Utility.Constants.DefaultModelsFilePath]);
+                    .Invoke(null, parameters: [instance, new Func<object, Guid>(a => (a as IId<Guid>).Id), Utility.Constants.Paths.DefaultModelsFilePath]);
             }
         }
 
