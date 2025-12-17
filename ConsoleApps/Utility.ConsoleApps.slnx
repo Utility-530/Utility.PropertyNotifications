@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/Apps/">
+    <Project Path="Utility.ConsoleApps.EmailCleaningReminder/Utility.ConsoleApps.EmailCleaningReminder.csproj" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="../Infrastructure/Utility.Constants/Utility.Constants.csproj" />
+    <Project Path="../Infrastructure/Utility.Entities/Utility.Entities.csproj" />
+    <Project Path="../Infrastructure/Utility.Globals/Utility.Globals.csproj" />
+    <Project Path="../Infrastructure/Utility.Services/Utility.Services.csproj" />
+    <Project Path="../Persists/Utility.Persists/Utility.Persists.csproj" />
+  </Folder>
+</Solution>
