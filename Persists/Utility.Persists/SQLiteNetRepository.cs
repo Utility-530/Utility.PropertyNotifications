@@ -43,10 +43,10 @@ namespace Utility.Persists
         public SQLiteNetRepository(Func<T, TId> getId, string? dbName = null, string? dbDirectory = null)
         {
             this.getId = getId;
-            dbDirectory ??= Directory.CreateDirectory(Constants.Default.Directory).FullName;
+            dbDirectory ??= Directory.CreateDirectory(Utility.Constants.Defaults.Directory).FullName;
             dbName ??= DatabaseEx.GetConnectionString(providerName, false);
             connection = new SQLiteConnection(string.IsNullOrEmpty(dbName) || string.IsNullOrWhiteSpace(dbName) ?
-                Path.Combine(dbDirectory, typeof(T).Name + "." + Constants.FileExtension.Sqlite) :
+                Path.Combine(dbDirectory, typeof(T).Name + "." + Constants.FileExtensions.Sqlite) :
                 dbName);
             connection.CreateTable<T>();
         }

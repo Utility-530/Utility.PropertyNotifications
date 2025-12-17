@@ -8,7 +8,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using LanguageExt;
 using SQLite;
 using Utility.Helpers.Reflection;
 using Utility.Interfaces.Generic;
@@ -43,18 +42,31 @@ namespace Utility.Persists
     {
         public static IDisposable ToManager<TCollection>(this TCollection observableCollection, Func<object, Guid> funcId, string? dbPath = null) where TCollection : IList, INotifyCollectionChanged
         {
-            string path = "../../../Data/models.sqlite";
             //string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             //string path = Path.Combine(userProfile, "Data", "models.sqlite");
 
-            return new SqliteManager<TCollection>(dbPath ?? path, observableCollection, funcId).Subscribe(observableCollection.GetType().InnerType());
+            return new SqliteManager<TCollection>(dbPath ?? Utility.Constants.Paths.DefaultModelsFilePath, observableCollection, funcId).Subscribe(observableCollection.GetType().InnerType());
+        }
+
+        public static IEnumerable ExtantItems(Type type, string? dbPath = null)
+        {
+            dbPath ??= Utility.Constants.Paths.DefaultModelsFilePath;
+            using var conn = new SQLiteConnection(dbPath, true);
+            conn.CreateTable(type, CreateFlags.ImplicitPK);
+            conn.CreateTable<Meta>();
+            conn.CreateTable<DataType>();
+            var mapping = conn.TableMappings.Single(a => a.TableName == type.Name);
+            var types = conn.Table<DataType>().ToList();
+            var typeString = TypeSerialization.TypeSerializer.Serialize(type);
+            var typeId = types.Single(a => a.Type == typeString).Id;
+            return conn.Query(mapping, string.Format(SqliteManager<List<object>>.extantItems, type.Name, nameof(Meta), typeId));
         }
     }
 
     public class SqliteManager<TCollection>(string dbPath, TCollection collection, Func<object, Guid> funcId) where TCollection : IList
     {
-        private const string extantItems = "SELECT * FROM '{0}' AS t LEFT JOIN (SELECT * from {1} WHERE Type = '{2}' AND Removed = '0') AS m ON t.Id = m.Id";
-        private const string removedItems = "SELECT * FROM '{0}' AS t JOIN (SELECT * from {1} WHERE Type = '{2}' AND Removed != '0') AS m ON t.Id = m.Id";
+        public const string extantItems = "SELECT * FROM '{0}' AS t LEFT JOIN (SELECT * from {1} WHERE Type = '{2}' AND Removed = '0') AS m ON t.Id = m.Id";
+        public const string removedItems = "SELECT * FROM '{0}' AS t JOIN (SELECT * from {1} WHERE Type = '{2}' AND Removed != '0') AS m ON t.Id = m.Id";
 
         private List<DataType> types = new();
 
@@ -71,7 +83,7 @@ namespace Utility.Persists
 
                 types = conn.Table<DataType>().ToList();
                 var typeString = TypeSerialization.TypeSerializer.Serialize(type);
-               
+
                 if (types.All(a => a.Type != typeString))
                 {
                     int max = types.Max(a => a.Id);
