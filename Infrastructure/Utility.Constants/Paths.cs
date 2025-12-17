@@ -1,8 +1,8 @@
 ﻿using static System.Environment;
 
-namespace Utility
+namespace Utility.Constants
 {
-    public class Constants
+    public class Paths
     {
         public const string DefaultDataPath = "O:\\Data";
         public const string DefaultModelsFileName = "models.sqlite";
