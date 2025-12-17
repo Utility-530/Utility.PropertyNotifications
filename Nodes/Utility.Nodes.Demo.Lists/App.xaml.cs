@@ -35,8 +35,6 @@ namespace Utility.Nodes.Demo.Lists
     /// </summary>
     public partial class App : Application
     {
-        public const string DatabasePath = "O:\\Users\\rytal\\Data\\models.sqlite";
-
         protected override void OnStartup(StartupEventArgs e)
         {
             CurrentMutable.RegisterLazySingleton<PlaybackService>(() => new PlaybackService());
