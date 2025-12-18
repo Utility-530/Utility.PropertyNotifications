@@ -21,8 +21,7 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
     internal class Registration
     {
         public static async void registerGlobals(IRegister register)
-        {
-            const string sqliteName = "O:\\source\\repos\\Utility\\Nodes\\Utility.Nodes.Demo.Editor\\Data\\first_7.sqlite";
+        {  
             const string diagramKey = "Master";
 
             register.Register(() => new PlayBackViewModel());
@@ -31,12 +30,12 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
             register.Register(() => new MainViewModel());
             register.Register<IPlaybackEngine>(() => new PlaybackEngine(Utility.Enums.Playback.Pause));
             register.Register(() => new PlaybackService());
-            register.Register<IFactory<Interfaces.Exs.IViewModelTree>>(() => new NodeFactory());
+            //register.Register<IFactory<Interfaces.Exs.IViewModelTree>>(() => new NodeFactory());
             register.Register<IServiceResolver>(() => new ServiceResolver());
             register.Register<IModelResolver>(() => new BasicModelResolver());
             //register.Register<IObservable<IReadOnlyTree>>(() => new TreeResolver());
             register.Register<ExceptionsViewModel>(() => new ExceptionsViewModel());
-            register.Register<ITreeRepository>(() => new TreeRepository(sqliteName));
+
             //register.Register(() => new DiagramRepository(container, "../../../Data"));
             var container = initialiseContainer();
             register.Register(container);
@@ -58,13 +57,14 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
         {
             var container = new Container(DiConfiguration.SetRules);
             Locator.CurrentMutable.RegisterConstant<IContainer>(container);
-            container.Register<IDiagramFactory, DiagramFactory>();
+            //Locator.CurrentMutable.RegisterLazySingleton<ITreeResolver>(()=> new TreeResolver());
+            container.Register<IDiagramFactory, DiagramFactory>();   
             container.Register<IViewModelFactory, ViewModelFactory>();
             container.Register<Utility.Nodify.Operations.Infrastructure.INodeSource, NodeSource>();
             container.Register<IMenuFactory, MenuFactory>();
             container.Register<CollectionViewService>();
             _ = Utility.Nodify.ViewModels.Infrastructure.Bootstrapper.Build(container);
-                      
+
             return container;
         }
 

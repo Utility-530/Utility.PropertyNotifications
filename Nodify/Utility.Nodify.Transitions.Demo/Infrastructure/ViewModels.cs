@@ -12,15 +12,15 @@ using Utility.Interfaces.Exs.Diagrams;
 
 namespace Utility.Nodify.Transitions.Demo.Infrastructure
 {
-    public class CommandsViewModel
-    {
-        public int GridRow => 0;
-        public ICommand AddCommand { get; } = new Command(() => 
-        Enumerable
-        .Repeat<PlaybackAction>(new(null, null, null) { Name = "a" }, 5)
-        .ForEach(a => Locator.Current.GetService<IPlaybackEngine>()
-        .OnNext(a)));
-    }
+//    public class CommandsViewModel
+//    {
+//        public int GridRow => 0;
+//        public ICommand AddCommand { get; } = new Command(() => 
+//        Enumerable
+//        .Repeat<PlaybackAction>(new(null, null, null) { Name = "a" }, 5)
+//        .ForEach(a => Locator.Current.GetService<IPlaybackEngine>()
+//        .OnNext(a)));
+//    }
 
 
 

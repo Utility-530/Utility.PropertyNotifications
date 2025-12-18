@@ -15,6 +15,7 @@
     <ProjectReference Include="..\..\Infrastructure\Utility.Services.Meta\Utility.Services.Meta.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.ServiceLocation\Utility.ServiceLocation.csproj" />
     <ProjectReference Include="..\..\Nodes\Models\Models.csproj" />
+    <ProjectReference Include="..\..\Nodes\Utility.Nodes.Meta\Utility.Nodes.Meta.csproj" />
     <ProjectReference Include="..\..\Repos\Utility.Repos\Utility.Repos.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Simulation\Utility.WPF.Controls.Simulation.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Core\Utility.Nodify.Models.csproj" />
