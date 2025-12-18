@@ -10,12 +10,11 @@ namespace Utility.Interfaces.Exs.Diagrams
     {
     }
 
-    public interface IConnectorViewModel : IGetKey, INotifyPropertyChanged, IGuid, IData
+    public interface IConnectorViewModel : INodeViewModel
     {
         bool IsConnected { get; set; }
         bool IsInput { get; set; }
         INodeViewModel Node { get; set; }
-        IReadOnlyCollection<IConnectionViewModel> Connections { get; }
         PointF Anchor { get; set; }
         IO Flow { get; }
         FlatShape Shape { get; }

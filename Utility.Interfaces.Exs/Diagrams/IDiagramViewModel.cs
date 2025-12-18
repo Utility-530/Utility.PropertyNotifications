@@ -1,11 +1,13 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Interfaces.Exs.Diagrams
 {
-    public interface IDiagramViewModel : IKey, IGuid
+    public interface IDiagramViewModel : INodeViewModel
     {
-        ObservableCollection<IConnectionViewModel> Connections { get; }
-        ObservableCollection<INodeViewModel> Nodes { get; }
+         ICollection<INodeViewModel> SelectedNodes { get; }
+
+         IConnectionViewModel PendingConnection { get; set; }
     }
 }
