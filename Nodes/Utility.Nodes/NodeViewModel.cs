@@ -16,6 +16,7 @@ namespace Utility.Nodes
         private object data;
         private ICollection<IConnectorViewModel> input;
         private ICollection<IConnectorViewModel> output;
+        private RangeObservableCollection<INodeViewModel> nodes = [];
 
         public NodeViewModel(object data) : this()
         {
@@ -47,6 +48,7 @@ namespace Utility.Nodes
                 NodeViewModel node = (NodeViewModel)(await ToTree(a));
                 node.Add(this);
             });
+            nodes.WhenAdded(x => x.Diagram = this);
         }
 
         public ICommand AddCommand { get; init; }
@@ -99,7 +101,7 @@ namespace Utility.Nodes
             }
         }
 
-        public IDiagramViewModel Diagram { get; set; }
+        public INodeViewModel Diagram { get; set; }
 
         public virtual ICollection<IConnectorViewModel> Inputs
         {
@@ -139,6 +141,13 @@ namespace Utility.Nodes
                 output = value;
             }
         }
+
+        public virtual ICollection<IConnectionViewModel> Connections
+        {
+            get; set;
+        }
+
+        public virtual ICollection<INodeViewModel> Nodes => nodes;
 
         public bool SuppressExceptions { get; set; }
         public bool SuppressKeyException { get; set; }

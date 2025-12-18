@@ -44,7 +44,7 @@
     <conv:PropertyNamesConverter x:Key="PropertyNamesConverter" />
     <conv:TypeNameConverter x:Key="TypeNameConverter" />
     <local:ValueChangeConverter x:Key="ValueChangeConverter" />
-    <local:ModelTemplateSelector x:Key="ModelTemplateSelector" />
+    <!--<local:ModelTemplateSelector x:Key="ModelTemplateSelector" />-->
 
 
     <HierarchicalDataTemplate

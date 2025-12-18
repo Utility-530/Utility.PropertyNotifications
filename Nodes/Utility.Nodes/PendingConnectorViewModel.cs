@@ -10,7 +10,7 @@ using Utility.PropertyNotifications;
 
 namespace Utility.Nodes
 {
-    public class PendingConnectorViewModel : NotifyPropertyClass, IConnectorViewModel, IPendingConnectorViewModel
+    public class PendingConnectorViewModel : NodeViewModel, IConnectorViewModel, IPendingConnectorViewModel
     {
         private bool isDropDownOpen;
         private object data;
@@ -59,15 +59,11 @@ namespace Utility.Nodes
 
         public bool IsDropDownOpen { get => isDropDownOpen; set => RaisePropertyChanged(ref isDropDownOpen, value); }
         public bool IsConnected { get; set; }
-        public object Data { get => data; set => RaisePropertyChanged(ref data, value); }
         public bool IsInput { get; set; }
         public INodeViewModel Node { get; set; }
-        public IReadOnlyCollection<IConnectionViewModel> Connections { get; }
         public PointF Anchor { get; set; }
         public IO Flow { get; }
         public FlatShape Shape { get; }
-        public string Key { get; }
-        public Guid Guid { get; set; }
 
         public ICommand AddConnectorCommand { get; }
         public ICommand ChangeConnectorsCommand { get; }

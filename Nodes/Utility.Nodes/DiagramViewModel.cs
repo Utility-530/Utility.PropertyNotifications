@@ -17,14 +17,15 @@ using Utility.Reactives;
 
 namespace Utility.Nodes
 {
-    public class DiagramViewModel : NotifyPropertyClass, IDiagramViewModel
+    public class DiagramViewModel : NodeViewModel, IDiagramViewModel
     {
         private readonly IContainer container;
         private IMenuViewModel menu;
-        private RangeObservableCollection<INodeViewModel> nodes = [];
         private RangeObservableCollection<INodeViewModel> _selectedOperations = [];
+        private RangeObservableCollection<IConnectionViewModel> connections = new();
 
         public int GridColumn = 1;
+        private PendingConnectionViewModel pendingConnection = new PendingConnectionViewModel();
 
         private INodeSource operations
         {
@@ -43,19 +44,19 @@ namespace Utility.Nodes
 
         public DiagramViewModel(IContainer container)
         {
+            Connections = connections;
             this.container = container;
 
             // Initialize commands
             CreateConnectionCommand = new Command<IConnectorViewModel>(
                 _ => CreateConnection(PendingConnection.Output, PendingConnection.Input),
                 _ => container.Resolve<IViewModelFactory>().CanCreateConnection(PendingConnection.Output, PendingConnection.Input));
-            StartConnectionCommand = new Command<object>(_ => PendingConnection.IsVisible = true);
+            StartConnectionCommand = new Command<object>(_ => pendingConnection.IsVisible = true);
             DisconnectConnectorCommand = new Command<IConnectorViewModel>(DisconnectConnector);
             DeleteSelectionCommand = new Command(DeleteSelection);
             GroupSelectionCommand = new Command(GroupSelectedOperations, () => SelectedNodes.Count > 0);
 
             // Setup collection behaviors
-            nodes.WhenAdded(x => x.Diagram = this);
 
             if (Connections is ThreadSafeObservableCollection<IConnectionViewModel> threadSafe)
                 threadSafe.WhenAdded(c =>
@@ -79,7 +80,7 @@ namespace Utility.Nodes
                     }
                 });
 
-            if (nodes is ThreadSafeObservableCollection<INodeViewModel> _threadSafe)
+            if (Nodes is ThreadSafeObservableCollection<INodeViewModel> _threadSafe)
                 _threadSafe.WhenAdded(x =>
                 {
                     if (x.Inputs is ThreadSafeObservableCollection<IConnectorViewModel> _tt_)
@@ -88,7 +89,7 @@ namespace Utility.Nodes
                     void RemoveConnection(IConnectorViewModel i)
                     {
                         var c = Connections.Where(con => con.Input == i || con.Output == i).ToArray();
-                        c.ForEach(con => Connections.Remove(con));
+                        c.ForEach(con => connections.Remove(con));
                     }
                 })
                 .WhenRemoved(x =>
@@ -108,10 +109,6 @@ namespace Utility.Nodes
                 });
         }
 
-        public Guid Guid { get; set; }
-
-        public virtual string Key { get; set; }
-
         public IMenuViewModel Menu
         {
             get
@@ -126,16 +123,11 @@ namespace Utility.Nodes
             }
         }
 
-        public Arrangement Arrangement { get; set; }
-
-        public ObservableCollection<INodeViewModel> Nodes => nodes;
-
         public ICollection<INodeViewModel> SelectedNodes => _selectedOperations;
 
-        public ObservableCollection<IConnectionViewModel> Connections { get; } = new RangeObservableCollection<IConnectionViewModel>();
+        public override ICollection<IConnectionViewModel> Connections { get; set; }
 
-        public PendingConnectionViewModel PendingConnection { get; set; } = new PendingConnectionViewModel();
-
+        public IConnectionViewModel PendingConnection { get => pendingConnection; set => pendingConnection = value as PendingConnectionViewModel; }
         public ICommand StartConnectionCommand { get; }
         public ICommand CreateConnectionCommand { get; }
         public ICommand DisconnectConnectorCommand { get; }
@@ -150,13 +142,13 @@ namespace Utility.Nodes
 
             if (menuItem.Content is IType { Type: { } type })
             {
-                if (pending.IsVisible)
+                if (pendingConnection.IsVisible)
                 {
                     connector = nodeViewModel.Inputs.FirstOrDefault(a => a is IGetData { Data: IType { Type: { } _type } } && _type == type);
                 }
             }
 
-            if (pending.IsVisible)
+            if (pendingConnection.IsVisible)
             {
                 connector = nodeViewModel.Inputs.FirstOrDefault();
             }
@@ -173,8 +165,8 @@ namespace Utility.Nodes
         {
             if (target == null)
             {
-                PendingConnection.IsVisible = true;
-                OpenAt(PendingConnection.TargetLocation);
+                pendingConnection.IsVisible = true;
+                OpenAt(pendingConnection.TargetLocation);
                 Menu.Closed += OnOperationsMenuClosed;
                 return;
             }
@@ -203,17 +195,17 @@ namespace Utility.Nodes
             var input = source.IsInput ? source : target;
             var output = target.IsInput ? source : target;
 
-            PendingConnection.IsVisible = false;
+            pendingConnection.IsVisible = false;
             DisconnectConnector(input);
 
             var connectionViewModel = container.Resolve<IViewModelFactory>().CreateConnection(input, output);
             container.RegisterInstanceMany(connectionViewModel);
-            Connections.Add(connectionViewModel);
+            connections.Add(connectionViewModel);
         }
 
         protected void OnOperationsMenuClosed()
         {
-            PendingConnection.IsVisible = false;
+            pendingConnection.IsVisible = false;
             Menu.Closed -= OnOperationsMenuClosed;
         }
 
@@ -247,7 +239,7 @@ namespace Utility.Nodes
         protected void DisconnectConnector(IConnectorViewModel connector)
         {
             var connections = Connections.Where(c => c.Input == connector || c.Output == connector).ToList();
-            connections.ForEach(c => Connections.Remove(c));
+            connections.ForEach(c => connections.Remove(c));
         }
 
         protected void DeleteSelection()

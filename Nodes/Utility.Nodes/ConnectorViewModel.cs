@@ -89,7 +89,7 @@ namespace Utility.Nodes
 
         public int MaxConnections { get; set; } = 2;
 
-        public IReadOnlyCollection<IConnectionViewModel> Connections => connections;
+        public override ICollection<IConnectionViewModel> Connections => connections;
 
         public object AnchorElement { get; set; }
 
