@@ -20,7 +20,7 @@ namespace Utility.Services.Meta
         });
         public IMethod Method => info.Value;
 
-        public ParameterInfo? Info => Name == string.Empty ? info.Value.MethodInfo.ReturnParameter : info.Value.MethodInfo.GetParameters().Single(a => a.Name == Name);
+        public ParameterInfo? Parameter => Name == string.Empty ? info.Value.MethodInfo.ReturnParameter : info.Value.MethodInfo.GetParameters().Single(a => a.Name == Name);
 
         static Method method(MethodInfo methodInfo, object? Instance = null)
         {
