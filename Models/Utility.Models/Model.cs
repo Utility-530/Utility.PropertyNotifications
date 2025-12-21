@@ -35,7 +35,7 @@ namespace Utility.Models
             this.value = value;
         }
 
-        public override object Data { get => typeof(T); set => throw new NotImplementedException("ds dd2111"); }
+        public override object Data { get; set; }
 
         public override object? Value
         {
@@ -49,6 +49,8 @@ namespace Utility.Models
                 return Get();
             return base.Get(name);
         }
+
+        public override Type Type => typeof(T);
 
         public override void Set(object value, string name)
         {
