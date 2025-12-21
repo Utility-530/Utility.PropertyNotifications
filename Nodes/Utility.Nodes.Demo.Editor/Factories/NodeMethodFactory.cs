@@ -55,17 +55,17 @@ namespace Utility.Nodes.Demo.Editor
         [Utility.Attributes.GuidAttribute(subGuid)]
         public Model BuildContainer()
         {
-            return 
+            return
                 new Model(() =>
                 [
                     new Model(() =>
                     [
                         new Model(proliferation: () => new Model<string>()
-                        { 
-                            Name = "File", 
-                            Guid = Guid.Parse(fileGuid), 
-                            DataTemplate ="StringTemplate", 
-                            SelectedItemTemplate="StringTemplate" 
+                        {
+                            Name = "File",
+                            Guid = Guid.Parse(fileGuid),
+                            DataTemplate ="StringTemplate",
+                            SelectedItemTemplate="StringTemplate"
                         })
                         {
                             Name = nameof(Files),
@@ -104,7 +104,8 @@ namespace Utility.Nodes.Demo.Editor
                                 case Utility.Changes.Type.Add:
                                     if(change.Value is NodeViewModel _nvm)
                                     {
-                                        attach.Add(_nvm);
+                                        if(attach.Contains(_nvm) == false)
+                                            attach.Add(_nvm);
                                     }
                                     break;
                                 case Utility.Changes.Type.Remove:
@@ -125,7 +126,6 @@ namespace Utility.Nodes.Demo.Editor
                         IsExpanded = true
                     }])
                 {
-                    Name = nameof(BuildContainer),
                     Orientation = Enums.Orientation.Vertical,
                     IsExpanded = true,
                     Key = subGuid,
