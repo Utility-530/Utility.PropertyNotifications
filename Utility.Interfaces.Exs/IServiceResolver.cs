@@ -11,6 +11,6 @@ namespace Utility.Interfaces.Exs
 
         void Observe<TParam>(IObservable<object> observable) where TParam : IParameter;
 
-        void ReactTo<TParam, TOutput>(IObserver<TOutput> observer) where TParam : IParameter;
+        void ReactTo<TParam, TOutput>(IObserver<object> observer) where TParam : IParameter;
     }
 }
