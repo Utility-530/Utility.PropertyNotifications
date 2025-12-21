@@ -32,7 +32,7 @@ internal class MethodDescriptor : MemberDescriptor, IMethodDescriptor
     {
         var descriptors = methodInfo
         .GetParameters()
-        .Select(a => new ParameterDescriptor(a, dictionary) { Inputs = [], Outputs = [] }).ToArray();
+        .Select(a => new ParameterDescriptor(a, dictionary) {  }).ToArray();
 
         foreach (var paramDescriptor in descriptors)
         {
