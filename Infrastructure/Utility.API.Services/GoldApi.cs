@@ -49,7 +49,7 @@ namespace Utility.API.Services
 
             static SQLiteConnection initialiseConnection()
             {
-                var connection = new SQLiteConnection(Utility.Constants.DefaultAPIFilePath);
+                var connection = new SQLiteConnection(Utility.Constants.Paths.DefaultAPIFilePath);
                 connection.CreateTable<Client>();
                 connection.CreateTable<Event>();
                 connection.CreateTable<MetalPrice>();

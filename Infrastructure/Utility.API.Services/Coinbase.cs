@@ -110,8 +110,8 @@ namespace Utility.API.Services
         {
             return Task.Run(() =>
             {
-                var csvFileDirectory = Path.Combine(Utility.Constants.DefaultDataPath, "Coinbase");
-                var connection = new SQLiteConnection(Utility.Constants.DefaultModelsFilePath);
+                var csvFileDirectory = Path.Combine(Utility.Constants.Paths.DefaultDataPath, "Coinbase");
+                var connection = new SQLiteConnection(Utility.Constants.Paths.DefaultModelsFilePath);
                 connection.CreateTable<Event>();
                 connection.CreateTable<Client>();
                 connection.CreateTable<CoinbaseTransaction>();

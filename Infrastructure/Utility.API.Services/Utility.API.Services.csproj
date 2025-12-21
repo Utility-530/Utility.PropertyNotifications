@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Utility.API.Entities\Utility.API.Entities.csproj" />
+    <ProjectReference Include="..\Utility.Constants\Utility.Constants.csproj" />
     <ProjectReference Include="..\Utility.Globals\Utility.Globals.csproj" />
     <ProjectReference Include="..\Utility.Services.Meta\Utility.Services.Meta.csproj" />
   </ItemGroup>
