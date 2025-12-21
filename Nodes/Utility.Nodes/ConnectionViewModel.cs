@@ -11,20 +11,18 @@ namespace Utility.Nodes
 
         public ConnectionViewModel()
         {
-            Inputs = new ObservableCollection<IConnectorViewModel>();
-            Outputs = new ObservableCollection<IConnectorViewModel>();
         }
 
         public IConnectorViewModel Input
         {
             get => Inputs.SingleOrDefault();
-            set => Inputs.Add(value);
+            set { Inputs.Add(value); if (Inputs.Count == 1) RaisePropertyChanged(); }
         }
 
         public IConnectorViewModel Output
         {
             get => Outputs.SingleOrDefault();
-            set => Outputs.Add(value);
+            set { Outputs.Add(value); if (Outputs.Count == 1) RaisePropertyChanged(); }
         }
 
 

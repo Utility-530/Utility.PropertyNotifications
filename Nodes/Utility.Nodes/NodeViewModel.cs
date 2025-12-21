@@ -14,8 +14,8 @@ namespace Utility.Nodes
     public partial class NodeViewModel : Tree, INodeViewModel
     {
         private object data;
-        private ICollection<IConnectorViewModel> input;
-        private ICollection<IConnectorViewModel> output;
+        private ICollection<IConnectorViewModel> inputs = new ObservableCollection<IConnectorViewModel>();
+        private ICollection<IConnectorViewModel> outputs = new ObservableCollection<IConnectorViewModel>();
         private RangeObservableCollection<INodeViewModel> nodes = [];
 
         public NodeViewModel(object data) : this()
@@ -106,10 +106,10 @@ namespace Utility.Nodes
         public virtual ICollection<IConnectorViewModel> Inputs
         {
             get =>
-                input;
+                inputs;
             set
             {
-                input = value;
+                inputs = value;
                 foreach (var inp in value)
                 {
                     addInput(inp);
@@ -126,7 +126,7 @@ namespace Utility.Nodes
 
         private void inputMethod()
         {
-            if (input is RangeObservableCollection<IConnectorViewModel> range)
+            if (inputs is RangeObservableCollection<IConnectorViewModel> range)
                 _ = range.WhenAdded(x =>
                 {
                     Add(x);
@@ -135,10 +135,10 @@ namespace Utility.Nodes
 
         public virtual ICollection<IConnectorViewModel> Outputs
         {
-            get => output;
+            get => outputs;
             set
             {
-                output = value;
+                outputs = value;
             }
         }
 

@@ -3,6 +3,8 @@ using System.Reflection;
 using Utility.Collections;
 using Utility.Enums;
 using Utility.Helpers.Generic;
+using Utility.Interfaces;
+using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 
@@ -37,27 +39,10 @@ namespace Utility.Nodes
             });
         }
 
-        public override Type Type => Data is ParameterInfo parameterInfo ?
-            parameterInfo.ParameterType :
-            Data is PropertyInfo propertyInfo ? propertyInfo.PropertyType :
-            throw new Exception("ds322d 11");
-
-
-        //public object Value
-        //{
-        //    get => this.value;
-        //    set
-        //    {
-        //        if (value?.Equals(default) == true && this.value?.Equals(default) == true)
-        //            return;
-        //        if (value?.Equals(this.value) == true)
-        //            return;
-
-        //        var _previousValue = this.value;
-        //        this.value = value;
-        //        RaisePropertyChanged(_previousValue, value, nameof(Value));
-        //    }
-        //}
+        public override Type Type => Data is Type type ? type : Data is IParameterInfo parameterInfo ?
+            parameterInfo?.Parameter?.ParameterType ?? typeof(string):
+            Data is PropertyInfo propertyInfo ? propertyInfo?.PropertyType :
+            typeof(string);//throw new Exception("ds322d 11");
 
         public bool IsConnected
         {

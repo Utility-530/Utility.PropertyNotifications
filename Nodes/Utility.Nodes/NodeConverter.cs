@@ -113,11 +113,11 @@ namespace Utility.Nodes
                 var type = Type.GetType(data["$type"].ToString());
                 Trace.WriteLine(type);
                 var _data = data.ToObject(type, serializer);
-                node = new NodeViewModel(_data) { Inputs = [], Outputs = [] };
+                node = new NodeViewModel(_data) { };
             }
             else
             {
-                node = new NodeViewModel() { Inputs = [], Outputs = [] };
+                node = new NodeViewModel() { };
             }
 
             node.Key = new GuidKey(Guid.Parse(jObject["Key"].ToString()));
