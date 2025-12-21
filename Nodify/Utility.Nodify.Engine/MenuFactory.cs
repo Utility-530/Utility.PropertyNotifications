@@ -18,7 +18,7 @@ namespace Utility.Nodify.Engine
         }
         public IMenuViewModel? CreateMenu()
         {
-            return new MenuViewModel() { Inputs = [], Outputs = [] };
+            return new MenuViewModel() {  };
         }
     }
 }
