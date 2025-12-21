@@ -4,9 +4,11 @@ using Utility.Changes;
 using Utility.Enums;
 using Utility.Helpers;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models.Diagrams;
 using Utility.Nodes;
+using Utility.Reactives;
 using Utility.ServiceLocation;
 
 namespace Nodify.Playground
@@ -14,9 +16,8 @@ namespace Nodify.Playground
 
     public class Shared
     {
-        public static Dictionary<object, ConnectorViewModel> serviceConnectors = new();
-
-        public static Dictionary<object, ConnectorViewModel> modelConnectors = new();
+        public static Dictionary<object, ConnectorViewModel> inputConnectors = new();
+        public static Dictionary<object, ConnectorViewModel> outputConnectors = new();
     }
 
     public class NodesGenerator
@@ -39,8 +40,6 @@ namespace Nodify.Playground
                                 Key = methodNode.MethodInfo.Name,
                                 Location = settings.NodeLocationGenerator(settings, ++i),
                                 Data = methodNode,
-                                Inputs = [],
-                                Outputs = []
                             };
 
                             nodes.Add(node);
@@ -48,7 +47,7 @@ namespace Nodify.Playground
                             methodNode.InValues.ForEach(a =>
                             {
                                 var input = new ConnectorViewModel { Shape = FlatShape.Circle, Key = a.Value.Key, Data = a.Value };
-                                Shared.serviceConnectors.Add(a.Value, input);
+                                Shared.inputConnectors.Add(a.Value, input);
                                 node.Inputs.Add(input);
                                 input.Node = node;
                             });
@@ -56,17 +55,15 @@ namespace Nodify.Playground
                             if (methodNode.OutValue is { })
                             {
                                 var output = new ConnectorViewModel { Shape = FlatShape.Circle, Key = methodNode.MethodInfo.Name + ".", Data = methodNode.OutValue };
-                                Shared.serviceConnectors.Add(methodNode.OutValue, output);
+                                Shared.outputConnectors.Add(methodNode.OutValue, output);
                                 node.Outputs.Add(output);
                                 output.Node = node;
                             }
-
                         }
                         else
                         {
 
                         }
-
                     }
                 });
 
@@ -76,32 +73,61 @@ namespace Nodify.Playground
                 {
                     foreach (var item in set)
                     {
-                        if (item is { Value: IObservable<object> rNode, Type: Utility.Changes.Type.Add })
+                        if (item is { Value: IObservable<object> connector, Type: Utility.Changes.Type.Add })
                         {
                             string _name = null;
-                            if (rNode is IGetReference { Reference: IGetName { Name: { } name } })
+                            if (connector is IGetReference
+                                { Reference: IGetName { Name: { } name } }
+                            and
+                                {
+                                    Reference: IGetData { Data: { } data }
+                            and INodeViewModel reference
+                                })
                             {
                                 _name = name;
                             }
-                            var node = new NodeViewModel
+                            else
                             {
-                                Data = rNode,
-                                //Location = settings.NodeLocationGenerator(settings, ++i),
-                                Key = _name ?? (++indexKey).ToString(),
-                                Inputs = [],
-                                Outputs = []
-                            };
+                                throw new Exception("DSF3d54645dfd");
+                            }
 
-                            nodes.Add(node);
+                            var output = new ConnectorViewModel { Node = reference, Shape = FlatShape.Circle, Flow = IO.Output, Key = "output", Data = connector };
+                            Shared.outputConnectors.Add(connector, output);
+                            reference.Outputs.Add(output);
+                            reference.Outputs.AndChanges<object>().Subscribe(a =>
+                            {
 
-                            var input = new ConnectorViewModel { Shape = FlatShape.Square, Flow = IO.Input, Node = node, Key = "input", Data = null };
-                            var output2 = new ConnectorViewModel { Node = node, Shape = FlatShape.Circle, Flow = IO.Output, Key = "output", Data = null };
-                            Shared.serviceConnectors.Add(rNode, output2);
+                            });
+                        }
+                    }
+                });
 
-                            node.Outputs.Add(output2);
-                            //Shared.connectors.Add(rNode, output);
-                            node.Inputs.Add(input);
-                            input.Node = node;
+            (Utility.Globals.Resolver.Resolve<IServiceResolver>() as IObservable<Set<IObserver<object>>>)
+                .Subscribe(set =>
+                {
+                    foreach (var item in set)
+                    {
+                        if (item is { Value: IObserver<object> connector, Type: Utility.Changes.Type.Add })
+                        {
+                            string _name = null;
+                            if (connector is IGetReference
+                                { Reference: IGetName { Name: { } name } }
+                            and
+                                {
+                                    Reference: IGetData { Data: { } data }
+                            and INodeViewModel reference
+                                })
+                            {
+                                _name = name;
+                            }
+                            else
+                            {
+                                throw new Exception("DSF3d54645dfd");
+                            }
+
+                            var input = new ConnectorViewModel { Shape = FlatShape.Square, Flow = IO.Input, Node = reference, Key = "input", Data = connector };
+                            Shared.inputConnectors.Add(connector, input);
+                            reference.Inputs.Add(input);
                         }
                     }
                 });
@@ -112,30 +138,46 @@ namespace Nodify.Playground
         public ObservableCollection<ConnectionViewModel> GenerateConnections()
         {
             HashSet<NodeViewModel> visited = new HashSet<NodeViewModel>(nodes.Count);
-            (Utility.Globals.Resolver.Resolve<IServiceResolver>() as IObservable<Set<IResolvableConnection>>).Subscribe(set =>
-            {
-                foreach (var item in set)
+            (Utility.Globals.Resolver.Resolve<IServiceResolver>() as IObservable<Set<IResolvableConnection>>)
+                .Subscribe(set =>
                 {
-                    if (item.Value is MethodConnection { In: MethodConnector, Out: MethodConnector } mConn && item.Type == Utility.Changes.Type.Add)
+                    foreach (var item in set)
                     {
-                        var input = Shared.serviceConnectors.SingleOrDefault(a => a.Key == mConn.In).Value;
-                        var output = Shared.serviceConnectors.SingleOrDefault(a => a.Key == mConn.Out).Value;
-                        var connection = new ConnectionViewModel
+                        if (item.Value is MethodConnection { In: { }, Out: { } } mConn && item.Type == Utility.Changes.Type.Add)
                         {
-                            Input = input,
-                            Output = output,
-                            Data = mConn
-                        };
+                            ObservableCollection<IConnectorViewModel> inConnectors = new();
+                            foreach (var x in mConn.In)
+                            {
+                                var input = Shared.inputConnectors.SingleOrDefault(a => a.Key == x).Value;
+                                if (input != null)
+                                    inConnectors.Add(input);
+                                else
+                                {
+                                    throw new Exception("DSV3ddd");
+                                }
+                            }
+                            var output = Shared.outputConnectors.SingleOrDefault(a => a.Key == mConn.Out).Value;
+                            if (output == null)
+                            {
+                                throw new Exception("sdsf32vdfd");
+                            }
+                            var connection = new ConnectionViewModel
+                            {
+                                Inputs = inConnectors,
+                                Output = output,
+                                Data = mConn,
+                                Key = Guid.NewGuid().ToString()
+                            };
 
-                        connections.Add(connection);
-                    }
-                    else
-                    {
+                            connections.Add(connection);
+                        }
+                        else
+                        {
 
+                        }
+                        //throw new Exception("E$$3");
                     }
-                    //throw new Exception("E$$3");
-                }
-            });
+                });
 
             return connections;
         }

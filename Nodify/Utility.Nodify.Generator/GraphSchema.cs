@@ -63,7 +63,8 @@ namespace Nodify.Playground
             return new ConnectionViewModel
             {
                 Input = sourceIsInput ? source : target,
-                Output = sourceIsInput ? target : source
+                Output = sourceIsInput ? target : source,
+                Key = Guid.NewGuid().ToString()
             };
         }
 

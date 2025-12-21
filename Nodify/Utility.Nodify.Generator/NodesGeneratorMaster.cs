@@ -21,17 +21,18 @@ namespace Nodify.Playground
                     {
                         if (item.Value is MethodConnection { In: { } @in, Out: { } @out } mConn && item.Type == Utility.Changes.Type.Add)
                         {
-                            if (@out is MethodConnector m && @in is MethodConnector mIn)
+                            if (@out is MethodConnector m && @in is { } mIn)
                             {
                                 continue;
                             }
-                            var input = Shared.serviceConnectors.SingleOrDefault(a => a.Key == @in).Value;
-                            var output = Shared.serviceConnectors.SingleOrDefault(a => a.Key == @out).Value;
+                            var input = Shared.outputConnectors.SingleOrDefault(a => a.Key == @in).Value;
+                            var output = Shared.outputConnectors.SingleOrDefault(a => a.Key == @out).Value;
                             var connection = new ConnectionViewModel
                             {
                                 Input = input,
                                 Output = output,
-                                Data = mConn
+                                Data = mConn,
+                                Key = Guid.NewGuid().ToString()
                             };
 
                             connections.Add(connection);

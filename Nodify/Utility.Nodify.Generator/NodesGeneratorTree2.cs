@@ -156,7 +156,7 @@ namespace Nodify.Playground
                     {
                         var _node = new T { Data = model, Key = "0" };
                         var output = new ConnectorViewModel { Node = _node, Shape = FlatShape.Square, Flow = IO.Output, Key = "output", Data = null };
-                        Shared.serviceConnectors.Add(_node, output);
+                        Shared.outputConnectors.Add(_node, output);
                         _node.Outputs.Add(output);
                         output.Node = _node;
                         return _node;
