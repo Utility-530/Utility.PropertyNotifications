@@ -15,6 +15,8 @@ namespace Utility.Interfaces.Exs
     public interface INodeSource : IObservableIndex<INodeViewModel>, IDisposable
     {
         IReadOnlyCollection<INodeViewModel> Nodes { get; }
+
+        bool Contains(string key);
     }
     public static class NodeStoreHelper
     {
