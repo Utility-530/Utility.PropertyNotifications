@@ -137,7 +137,7 @@ namespace Utility.Reactives
             throw new NotImplementedException();
         }
 
-        public void OnNext(T value)
+        public virtual void OnNext(T value)
         {
             Value = value;
         }
