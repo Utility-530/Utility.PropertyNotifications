@@ -2,10 +2,9 @@
 
 namespace Utility.Interfaces.Methods
 {
-    public interface IParameter
+    public interface IParameter:IParameterInfo
     {
         IMethod Method { get; }
-        ParameterInfo? Info { get; }
         public string Name { get; }
     }
 }
