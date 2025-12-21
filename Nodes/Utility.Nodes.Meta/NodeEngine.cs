@@ -52,7 +52,7 @@ namespace Utility.Nodes.Meta
             _dataInitialiser = new(valueRepository, x);
             this.childrenTracking = childrenTracking;
         }
-
+        List<INodeViewModel> inserting = new();
         public IObservable<INodeViewModel> Create(object instance)
         {
             return Observable.Create<INodeViewModel>(observer =>
@@ -71,7 +71,7 @@ namespace Utility.Nodes.Meta
 
                     if (node.Guid == default)
                     {
-                        throw new Exception("GFD£ d");
+                        throw new Exception("node missing guid!");
                     }
 
                     var existingNode = nodesStore.Find(node.Key());
@@ -81,11 +81,18 @@ namespace Utility.Nodes.Meta
                         observer.OnCompleted();
                         return Disposable.Empty;
                     }
-
+                    if(inserting.Contains(node))
+                    {
+                        observer.OnNext(node);
+                        observer.OnCompleted();
+                        return Disposable.Empty;
+                    }
+                    inserting.Add(node);
                     return repository
                            .InsertRoot(node.Guid, node.Name(), GetNodeType(node))
                            .Subscribe(key =>
                            {
+                               inserting.Remove(node);
                                if (key.HasValue == false)
                                    throw new Exception("Key is null");
                                keys.Add(key.Value);
@@ -131,7 +138,7 @@ namespace Utility.Nodes.Meta
 
             if (nodesStore.Find(node.Key()) != null)
                 return;
-
+            nodesStore.Add(node);
             addNodeToCollection(node);
 
             void handleNodeWithoutKey(INodeViewModel node)

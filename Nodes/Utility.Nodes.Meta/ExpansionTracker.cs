@@ -22,6 +22,7 @@ using Utility.PropertyNotifications;
 using Utility.Reactives;
 using Utility.ServiceLocation;
 using Utility.Services.Meta;
+using Utility.Structs.Repos;
 using CompositeDisposable = Utility.Observables.CompositeDisposable;
 using Key = Utility.Structs.Repos.Key;
 
@@ -119,8 +120,8 @@ namespace Utility.Nodes.Meta
                                         {
                                             if (change.Type == Changes.Type.Add)
                                                 processKey(node, change.Value, observer, ref childIndex);
-                                            else if(change.Type == Changes.Type.None)
-                                            {     
+                                            else if (change.Type == Changes.Type.None)
+                                            {
                                             }
                                             else throw new Exception("VD");
                                         },
@@ -271,6 +272,7 @@ namespace Utility.Nodes.Meta
         {
             return Observable.Create<INodeViewModel>(observer =>
             {
+                int i = 0;
                 return
                 repository
                 .Find()
@@ -279,30 +281,59 @@ namespace Utility.Nodes.Meta
                     if (change.Type != Changes.Type.Add)
                         throw new Exception("V33D");
                     var key = change.Value;
-         
+
                     this.keys.Add(key);
                     this.roots.Add(key);
                     var existingNode = nodesStore.Find(key.Guid.ToString());
-                    if (existingNode != null)
+                    if (existingNode == null)
                     {
-                        // if current value set then already created
-                    }
-                    else if (key.Removed.HasValue)
-                    {
+                        i++;
+                        if (this.nodesStore.Contains(key.Name))
+                            Create(key.Name).Subscribe(a =>
+                            {
+                                if (a != null)
+                                {
+                                    // if current value set then already created
+                                }
+                                else if (key.Removed.HasValue)
+                                {
 
+                                }
+                                else
+                                {                       
+                                    observer.OnNext(create(key));
+                                }
+                                observer.OnNext(a);
+                            }, () => { i--; if (i == 0) observer.OnCompleted(); });
+                        else if (key.Removed.HasValue)
+                        {
+                            i--;
+                        }
+                        else
+                        {
+                            observer.OnNext(create(key));
+                            i--;
+                        }
                     }
                     else
                     {
-                        var child = (INodeViewModel)dataActivator.Activate(key);
-                        validateKey(key);
-                        child.SetKey(new GuidKey(key.Guid));
-                        child.IsProliferable = true;
-                        Add(child);
-                        observer.OnNext(child);
+                        observer.OnNext(existingNode);
+                        i--;
                     }
 
-                }, () => observer.OnCompleted());
+                }, () => { if (i == 0) observer.OnCompleted(); });
             });
+
+            INodeViewModel create(Key key)
+            {
+                var child = (INodeViewModel)dataActivator.Activate(key);
+                validateKey(key);
+                child.SetKey(new GuidKey(key.Guid));
+                child.IsProliferable = true;
+                Add(child);
+                return child;
+            }
         }
+
     }
 }

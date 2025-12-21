@@ -45,6 +45,11 @@ namespace Utility.Nodes.Meta
             return iop;
         });
 
+        public bool Contains(string key)
+        {
+            return dict.Value.Contains(key);
+        }
+
         public System.IObservable<INodeViewModel> this[string key]
         {
             get
@@ -85,10 +90,13 @@ namespace Utility.Nodes.Meta
                             if (output is NodeViewModel node)
                             {
                                 dict.Value[key].Nodes.Add(node);
+                                if (node.Name != null)
+                                    throw new Exception($"Name gets assigned here ({nameof(NodesStore)}) automatically for top level nodes!");
+                                node.Name = key;
                                 observer.OnNext(node);
                                 observer.OnCompleted();
                                 return System.Reactive.Disposables.Disposable.Empty;
-                                //node.Name = key;
+                           
                             }
                             else if (output is IEnumerable<INodeViewModel> nodes)
                             {
@@ -150,7 +158,7 @@ namespace Utility.Nodes.Meta
                     }
                     else
                     {
-                        throw new Exception("fr343 df");
+                        throw new Exception($"potentially missing registration of {nameof(EnumerableMethodFactory)}");
                     }
 
                 });

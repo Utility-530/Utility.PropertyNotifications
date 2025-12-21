@@ -80,6 +80,13 @@ namespace Utility.Nodes.Meta
 
     public static class NodesStoreHelper
     {
+        public static void Add(this INodeSource nodeSource, INodeViewModel node)
+        {
+            if(nodeSource.Nodes is IList<INodeViewModel> nodes)
+                nodes.Add(node);
+            else
+                throw new InvalidOperationException("Nodes collection is not mutable.");
+        }
         public static void Remove(this INodeSource nodeSource, string key)
         {
             var node = nodeSource.Nodes.SingleOrDefault(a => a.Key() == key);
