@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.ObjectModel;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Nodes;
 
 namespace Utility.Nodify.Sandbox
@@ -29,14 +31,14 @@ namespace Utility.Nodify.Sandbox
 
         public MainViewModel()
         {
-            NodeViewModel nodeViewModel = new();
+            NodeViewModel nodeViewModel = new() { Inputs = new ObservableCollection<IConnectorViewModel>(), Outputs = new ObservableCollection<IConnectorViewModel>() };
 
-            nodeViewModel.Output.Add(new ConnectorViewModel() { Key = "A", Data = new object() });
-            nodeViewModel.Output.Add(new ConnectorViewModel() { Key = "C", Data = new object() });
-            nodeViewModel.Input.Add(new ConnectorViewModel() { Key = "B", Data = new object() });
-            nodeViewModel.Input.Add(new ConnectorViewModel() { Key = "B", Data = new object() });
-            nodeViewModel.Input.Add(new ConnectorViewModel() { Key = "B", Data = new object() });
-            nodeViewModel.Input.Add(new ConnectorViewModel() { Key = "B", Data = new object() });
+            nodeViewModel.Outputs.Add(new ConnectorViewModel() { Key = "A", Data = new object() });
+            nodeViewModel.Outputs.Add(new ConnectorViewModel() { Key = "C", Data = new object() });
+            nodeViewModel.Inputs.Add(new ConnectorViewModel() { Key = "B", Data = new object() });
+            nodeViewModel.Inputs.Add(new ConnectorViewModel() { Key = "B", Data = new object() });
+            nodeViewModel.Inputs.Add(new ConnectorViewModel() { Key = "B", Data = new object() });
+            nodeViewModel.Inputs.Add(new ConnectorViewModel() { Key = "B", Data = new object() });
 
             this.Node = nodeViewModel;
         }

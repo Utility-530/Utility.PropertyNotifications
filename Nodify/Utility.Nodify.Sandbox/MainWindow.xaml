@@ -7,7 +7,7 @@
         xmlns:views="clr-namespace:Utility.Nodify.Views.Infrastructure;assembly=Utility.Nodify.Views"
         xmlns:nodify="https://miroiu.github.io/nodify"
         xmlns:lsts="http://schemas.utility.com/lists"
-        xmlns:models="clr-namespace:Utility.Nodify.Models;assembly=Utility.Nodify.Models" 
+        xmlns:models="clr-namespace:Utility.Nodes;assembly=Utility.Nodes" 
         xmlns:ad="http://schemas.utility.com/adorners"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
