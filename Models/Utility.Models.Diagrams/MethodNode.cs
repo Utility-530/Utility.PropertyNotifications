@@ -14,62 +14,65 @@ namespace Utility.Models.Diagrams
 
         readonly Dictionary<string, object> values = new();
 
-        private readonly Lazy<Dictionary<string, MethodConnector>> inValues;
+        private Lazy<Dictionary<string, MethodConnector>> inValues;
         private MethodInfo method;
         private ParameterInfo[] parameters;
         public Action next;
         private bool isActive;
         private Exception exception;
         private object? instance;
+        MethodConnector outValue;
 
-        public MethodNode(MethodInfo method, object? instance = null)
+        public static MethodNode Create(MethodInfo method, object? instance = null)
         {
+            var node = new MethodNode();
+
             if (method.IsStatic == false)
             {
-                this.instance = instance ??= Locator.Current.GetService(method.DeclaringType);
+                node.instance = instance ??= Locator.Current.GetService(method.DeclaringType);
             }
-            this.method = method;
-            parameters = method.GetParameters();
+            node.method = method;
+            node.parameters = method.GetParameters();
             if (method.ReturnType != typeof(void))
             {
-                OutValue = new() { Key = "return" };
+                node.outValue = new() { Key = "return" };
             }
-            inValues = new(() =>
+            node.inValues = new(() =>
 
-            parameters.Count() == 0 ? new Dictionary<string, MethodConnector>
+            node.parameters.Count() == 0 ? new Dictionary<string, MethodConnector>
             {
                 { string.Empty, create() }
             } :
-            parameters.ToDictionary(a => a.Name ?? throw new Exception("s e!"), a =>
+            node.parameters.ToDictionary(a => a.Name ?? throw new Exception("s e!"), a =>
             {
                 var model = new MethodConnector { Key = a.Name, Parameter = a };
                 model
                 .Subscribe(value =>
                 {
                     Action? undoaction = new(() => { });
-                    bool contains = values.ContainsKey(a.Name);
-                    var previousResult = OutValue?.Value;
-                    if (values.TryGetValue(a.Name, out var oldValue))
+                    bool contains = node.values.ContainsKey(a.Name);
+                    var previousResult = node.OutValue?.Value;
+                    if (node.values.TryGetValue(a.Name, out var oldValue))
                     {
                         undoaction = new Action(() =>
                         {
                             if (contains)
-                                values[a.Name] = oldValue;
+                                node.values[a.Name] = oldValue;
                             else
-                                values.Remove(a.Name);
-                            if (previousResult == null && OutValue != null)
+                                node.values.Remove(a.Name);
+                            if (previousResult == null && node.OutValue != null)
                             {
-                                OutValue.Value = previousResult;
+                                node.OutValue.Value = previousResult;
                             }
                         });
                     }
 
-                    RaisePropertyChanged(nameof(IsActive));
+                    node.RaisePropertyChanged(nameof(IsActive));
                     Globals.Resolver.Resolve<IPlaybackEngine>().OnNext(
-                        new PlaybackAction(this,
+                        new PlaybackAction(node,
                         () => _action(a.Name, value),
                         undoaction,
-                        a => IsActive = a,
+                        a => node.IsActive = a,
                         new Dictionary<string, object> {
                             { "Value", value },
                             { "Name", a.Name },
@@ -82,6 +85,8 @@ namespace Utility.Models.Diagrams
                 return model;
             }));
 
+            return node;
+
             // where the method has no parameters but it is still desirable to execute it
             MethodConnector create()
             {
@@ -91,61 +96,64 @@ namespace Utility.Models.Diagrams
                 {
 
                     Action? undoaction = new(() => { });
-           
-                    var previousResult = OutValue?.Value;       
-            
 
-                    RaisePropertyChanged(nameof(IsActive));
+                    var previousResult = node.OutValue?.Value;
+
+
+                    node.RaisePropertyChanged(nameof(IsActive));
                     Globals.Resolver.Resolve<IPlaybackEngine>().OnNext(
-                        new PlaybackAction(this,
-                        () =>{
+                        new PlaybackAction(node,
+                        () =>
+                        {
                             try
                             {
-                                var result = this.Execute(values);
-                                if (OutValue == null)
+                                var result = node.Execute(node.values);
+                                if (node.OutValue == null)
                                     return;
-                                OutValue.Value = result;
+                                node.OutValue.Value = result;
                             }
                             catch (Exception ex)
                             {
-                                Exception = ex;
+                                node.Exception = ex;
                                 Globals.Exceptions.OnNext(ex);
                             }
                         },
                         undoaction,
-                        a => IsActive = a,
+                        a => node.IsActive = a,
                         new Dictionary<string, object> {
-                          
+
                             { "PreviousValue", previousResult }
                             }
                          )
-                        {  });
+                        { });
 
                 });
                 return model;
             }
-        }
 
-        public void _action(string name, object value)
-        {
-            next?.Invoke();
-            values[name] = value;
-            if (values.Count == parameters.Length)
+
+            void _action(string name, object value)
             {
-                try
+                node.next?.Invoke();
+                node.values[name] = value;
+                if (node.values.Count == node.parameters.Length)
                 {
-                    var result = this.Execute(values);
-                    if (OutValue == null)
-                        return;
-                    OutValue.Value = result;
-                }
-                catch (Exception ex)
-                {
-                    Exception = ex;
-                    Globals.Exceptions.OnNext(ex);
-                }
+                    try
+                    {
+                        var result = node.Execute(node.values);
+                        if (node.OutValue == null)
+                            return;
+                        node.OutValue.Value = result;
+                    }
+                    catch (Exception ex)
+                    {
+                        node.Exception = ex;
+                        Globals.Exceptions.OnNext(ex);
+                    }
 
+                }
             }
+
         }
 
         public bool IsActive { get => isActive; set => this.RaisePropertyChanged(ref isActive, value); }
@@ -158,7 +166,7 @@ namespace Utility.Models.Diagrams
             set => InValues[index].Value = value;
         }
 
-        public MethodConnector OutValue { get; }
+        public MethodConnector OutValue => outValue;
 
         public object? Instance => instance;
         public MethodInfo MethodInfo => method;

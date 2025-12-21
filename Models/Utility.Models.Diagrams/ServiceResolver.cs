@@ -20,7 +20,7 @@ namespace Utility.Models.Diagrams
     public class ServiceResolver : IObservable<Set<IResolvableNode>>, IObservable<Set<IResolvableConnection>>, IObservable<Set<IObserver<object>>>, IObservable<Set<IObservable<object>>>, IServiceResolver
     {
         readonly Dictionary<System.Type, IParameter> cache = [];
-        readonly ObservableDictionary<IMethod, MethodNode> methodNodes = [];
+        readonly ObservableCollection<MethodNode> methodNodes = [];
         readonly ObservableCollection<IObservable<object>> observables = [];
         readonly ObservableCollection<object> observers = [];
         readonly ObservableCollection<MethodConnection> connections = [];
@@ -28,13 +28,13 @@ namespace Utility.Models.Diagrams
 
         public ServiceResolver()
         {
-            methodNodes.DictionaryChanged += (s, e) =>
+            methodNodes.CollectionChanged += (s, e) =>
             {
-                if (e.Action == NotifyDictionaryChangedAction.Add)
+                if (e.Action == NotifyCollectionChangedAction.Add)
                 {
                     foreach (var item in e.NewItems)
                     {
-                        if (item.Value is MethodNode connection)
+                        if (item is MethodNode connection)
                         {
                             connection.next += () =>
                             {
@@ -51,7 +51,7 @@ namespace Utility.Models.Diagrams
         }
 
         public IReadOnlyDictionary<System.Type, IParameter> Cache => cache;
-        public IReadOnlyDictionary<IMethod, MethodNode> Nodes => methodNodes;
+        public IReadOnlyCollection<MethodNode> Nodes => methodNodes;
         public IReadOnlyCollection<MethodConnection> Connections => connections;
 
         public void Observe<TParam>(IObservable<object> observable) where TParam : IParameter
@@ -61,47 +61,31 @@ namespace Utility.Models.Diagrams
                 if (get(methodParameter) is MethodNode cache)
                 {
                     observables.Add(observable);
-                    if (methodParameter.Info == null && cache.Parameters.Count == 0)
+                    if (methodParameter.Parameter == null && cache.Parameters.Count == 0)
                     {
-                        connections.Add(MethodConnection.FromAction(a =>
-                        subscribe<TParam>(a, cache.InValues.Single().Value.OnNext), observable));
+                        connections.Add(new MethodConnection(cache.InValues.Single().Value, observable, typeof(TParam)));
                         return;
                     }
                     IDisposable? disposable = null;
-                    connections.Add(MethodConnection.FromAction(a =>
-                    {
-                        if (disposable != null)
-                            disposable.Dispose();
-                        disposable = subscribe<TParam>(a, cache.InValues[methodParameter.Name].OnNext);
-                    }, observable));
+                    connections.Add(new MethodConnection(cache.InValues[methodParameter.Name], observable, typeof(TParam)));
                 }
             }
         }
 
-        public void ReactTo<TParam, TOutput>(IObserver<TOutput> observer) where TParam : IParameter
+        public void ReactTo<TParam, TOutput>(IObserver<object> observer) where TParam : IParameter
         {
             if (get<TParam>() is IParameter methodParameter)
             {
                 if (get(methodParameter) is MethodNode cache)
                 {
                     observers.Add(observer);
-                    if (reactions.ContainsKey(methodParameter) == false)
+                    if (connections.SingleOrDefault(a => a.Out is MethodConnector { Parameter: { } param } && param == methodParameter.Parameter) is { } connection)
                     {
-                        reactions[methodParameter] = new List<object>();
-                        reactions[methodParameter].Add(observer);
-                        connections.Add(MethodConnection.FromAction(async a =>
-                        {
-                            convert<TOutput>(a)
-                            .Subscribe(a =>
-                            {
-                                foreach (IObserver<TOutput> observer in reactions[methodParameter])
-                                    observer.OnNext(a);
-                            });
-                        }, cache.OutValue));
+                        connection.In.Add(observer);
                     }
                     else
                     {
-                        reactions.Get(methodParameter, () => new List<object>()).Add(observer);
+                        connections.Add(new MethodConnection(observer, cache.OutValue, typeof(TParam)));
                     }
                 }
             }
@@ -118,44 +102,11 @@ namespace Utility.Models.Diagrams
                         if (get(methodParameterIn) is MethodNode cacheIn)
                         {
                             IDisposable? disposable = null;
-                            connections.Add(MethodConnection.FromAction(a =>
-                            {
-                                if (disposable != null)
-                                    disposable.Dispose();
-                                if (cacheIn.InValues.ContainsKey(methodParameterIn.Name) == false)
-                                {
-                                    throw new Exception($"Method, {cacheIn.MethodInfo.Name}, does not contain a parameter, {methodParameterIn.Name}!");
-                                }
-                                disposable = subscribe<TParamOut>(a, cacheIn.InValues[methodParameterIn.Name].OnNext);
-                            }, cache.OutValue));
+                            connections.Add(new MethodConnection(cacheIn.InValues[methodParameterIn.Name], cache.OutValue, typeof(TParamOut)));
                         }
                     }
                 }
             }
-        }
-
-        private IDisposable subscribe<TParamOut>(object a, Action<object> action) where TParamOut : IParameter
-        {
-            if (AttributeHelper.TryGetAttribute<ParamAttribute>(typeof(TParamOut), out var attr))
-            {
-                return listen(a, attr).Subscribe(_ =>
-                {
-                    action(a);
-                });
-            }
-            else if (Activator.CreateInstance<TParamOut>() is IParameter param && a.GetType().IsAssignableTo(param.Info.ParameterType))
-            {
-                action(a);
-            }
-            else if (trySubscribe(a, action, () => { }, e => Globals.Exceptions.OnNext(e)) is { } disposable)
-            {
-                return disposable;
-            }
-            else
-            {
-                throw new Exception("DFS£CDD£dkds");
-            }
-            return Disposable.Empty;
         }
 
         private IParameter get<TService>()
@@ -165,22 +116,27 @@ namespace Utility.Models.Diagrams
 
         private IResolvableNode get(IParameter methodParameter)
         {
-            return methodNodes.Get(methodParameter.Method, a => new MethodNode(a.MethodInfo, a.Instance) { });
+            var x = methodNodes.SingleOrDefault(a => a.MethodInfo == methodParameter.Method.MethodInfo);
+            if (x == null)
+                methodNodes.Add(x = MethodNode.Create(methodParameter.Method.MethodInfo, methodParameter.Method.Instance));
+            return x;
         }
 
         public IDisposable Subscribe(IObserver<Set<IResolvableNode>> observer)
         {
-            var set = new Set<IResolvableNode>([.. methodNodes.Select(a => Changes.Change.Add<IResolvableNode>(a.Value))]);
+            var set = new Set<IResolvableNode>([.. methodNodes.Select(a => Changes.Change.Add<IResolvableNode>(a))]);
             observer.OnNext(set);
 
             return methodNodes.Changes<IResolvableNode>().Subscribe(a => observer.OnNext(a));
         }
+
         public IDisposable Subscribe(IObserver<Set<IResolvableConnection>> observer)
         {
             var set = new Set<IResolvableConnection>([.. connections.Select(Changes.Change.Add<IResolvableConnection>)]);
             observer.OnNext(set);
             return connections.Changes<IResolvableConnection>().Subscribe(a => observer.OnNext(a));
         }
+
         public IDisposable Subscribe(IObserver<Set<IObservable<object>>> observer)
         {
 
@@ -189,138 +145,7 @@ namespace Utility.Models.Diagrams
 
         public IDisposable Subscribe(IObserver<Set<IObserver<object>>> observer)
         {
-
             return observers.AndChanges<IObserver<object>>().Subscribe(a => observer.OnNext(a));
-        }
-
-        private static IObservable<TOutput> convert<TOutput>(object a)
-        {
-            IObservable<TOutput> input = Observable.Empty<TOutput>();
-            if (a is Task<TOutput> task)
-                input = task.ToObservable();
-            else if (a is Task { Status: TaskStatus.Created } _task)
-            {
-                _task.Start();
-            }
-            else if (a is IObservable<TOutput> observable)
-                input = observable;
-            else
-                input = Observable.Return((TOutput)a);
-            return input;
-
-        }
-
-        private IObservable<object> listen(object a, ParamAttribute attribute)
-        {
-            TimeSpan interval = TimeSpan.FromMinutes(1.0 / attribute.RatePerMinute);
-
-            return Observable.Create<object>(observer =>
-            {
-                var cts = new CancellationTokenSource();
-                object? lastSnapshot = null;
-                var disposables = new CompositeDisposable();
-
-
-                if (attribute.Event.HasFlag(Enums.CLREvent.CollectionChanged) &&
-                    a is INotifyCollectionChanged collectionChanged)
-                {
-                    var sub = collectionChanged.NotificationChanges().Subscribe(async _ =>
-                    {
-                        await triggerIfChangedAsync((x, y) => false, cts.Token);
-                    });
-                    disposables.Add(sub);
-                }
-                else if (attribute.Event.HasFlag(Enums.CLREvent.PropertyChanged) &&
-                    a is INotifyPropertyChanged propertyChanged)
-                {
-                    PropertyChangedEventHandler handler = async (_, __) =>
-                    {
-                        await triggerIfChangedAsync((x, y) => false, cts.Token);
-                    };
-                    propertyChanged.PropertyChanged += handler;
-                    disposables.Add(Disposable.Create(() => propertyChanged.PropertyChanged -= handler));
-                }
-                else if (attribute.Event.HasFlag(Enums.CLREvent.CustomEvent))
-                {
-                    if (attribute.CustomEventName == null)
-                        throw new ArgumentException("CustomEventName must be provided when using CustomEvent flag.");
-                    if (a.GetType().GetEvent(attribute.CustomEventName) is { } eventInfo)
-                    {
-                        EventHandler handler = async (_, __) =>
-                        {
-                            await triggerIfChangedAsync((x, y) => false, cts.Token);
-                        };
-                        eventInfo.AddEventHandler(a, handler);
-                        disposables.Add(Disposable.Create(() => eventInfo.RemoveEventHandler(a, handler)));
-                    }
-                }
-
-                // Fallback to polling if no event types matched
-                if (disposables.Count == 0)
-                {
-                    var pollingTask = Task.Run(async () =>
-                    {
-                        while (!cts.Token.IsCancellationRequested)
-                        {
-                            await triggerIfChangedAsync((x, y) => false, cts.Token);
-                        }
-                    }, cts.Token);
-
-                    disposables.Add(Disposable.Create(() =>
-                    {
-                        cts.Cancel();
-                        cts.Dispose();
-                        _ = pollingTask.ContinueWith(t => _ = t.Exception, TaskContinuationOptions.OnlyOnFaulted);
-                    }));
-                }
-
-                return disposables;
-
-                async Task triggerIfChangedAsync(Func<object, object, bool> equals, CancellationToken token)
-                {
-                    try
-                    {
-                        if (token.IsCancellationRequested) return;
-
-                        if (!equals(a, lastSnapshot))
-                        {
-                            lastSnapshot = a;
-                            observer.OnNext(a);
-                        }
-                        await Task.Delay(interval, token);
-                    }
-                    catch (TaskCanceledException) { }
-                }
-
-            });
-
-        }
-        static IDisposable? trySubscribe(object obj, Action<object> action, Action? completed = null, Action<Exception>? aex = null)
-        {
-            var type = obj.GetType();
-
-            // Find IObservable<T>
-            var observableInterface = type
-                .GetInterfaces()
-                .FirstOrDefault(i =>
-                    i.IsGenericType &&
-                    i.GetGenericTypeDefinition() == typeof(IObservable<>));
-
-            if (observableInterface == null)
-                return null; // not observable
-
-            var t = observableInterface.GetGenericArguments()[0];
-
-            // Create an Observer<T> wrapper that forwards values to an IObserver<object>
-            var observerType = typeof(Utility.Reactives.Observer<>).MakeGenericType(t);
-            Delegate convertedAction = Delegate.CreateDelegate(typeof(Action<>).MakeGenericType(t), action.Target, action.Method);
-
-            var observer = Activator.CreateInstance(observerType, convertedAction, aex, completed);
-
-            // Call Subscribe(observer)
-            var subscribeMethod = observableInterface.GetMethod("Subscribe");
-            var disposable = (IDisposable)subscribeMethod.Invoke(obj, new[] { observer });
-            return disposable;
         }
     }
 }
