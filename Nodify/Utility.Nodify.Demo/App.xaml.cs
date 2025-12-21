@@ -1,11 +1,13 @@
 ﻿using DryIoc;
 using Splat;
+using System;
 using System.Windows;
 using Utility.Interfaces.Exs;
 using Utility.Nodify.Generator.Services;
 using Utility.ServiceLocation;
 using MainViewModel = Utility.Nodify.Demo.Infrastructure.MainViewModel;
 using Utility.Nodify.Demo.Infrastructure;
+using Utility.WPF.Helpers;
 
 namespace Utility.Nodify.Demo
 {
@@ -18,24 +20,32 @@ namespace Utility.Nodify.Demo
         {
             SQLitePCL.Batteries.Init();
 
-            Registration.registerGlobals(Globals.Register);
             Registration.initialise(Locator.CurrentMutable);
-            register();
+            Registration.registerGlobals(Globals.Register);
+            FactoryOne.connect(Globals.Resolver.Resolve<IServiceResolver>());
 
             var window = new Window()
             {
                 Content = Globals.Resolver.Resolve<MainViewModel>()
             };
+            window.ToLeft();
             window.Show();
+            var mainWindow = new Window()
+            {
+                ContentTemplate = this.FindResource("ContainerTemplate") as DataTemplate
+            };
+
+            Globals.Resolver
+                .Resolve<INodeRoot>()
+                .Create(nameof(FactoryOne.BuildContainer))
+                .Subscribe(node =>
+                {
+                    mainWindow.Content = node;
+                    //shadowWindow.Content = node;
+                });
+            mainWindow.Show();
+
             base.OnStartup(e);
         }
-
-        private void register()
-        {
-            FactoryOne.build(Globals.Resolver.Resolve<IModelResolver>());
-            FactoryOne.connect(Globals.Resolver.Resolve<IServiceResolver>(), Globals.Resolver.Resolve<IModelResolver>());
-            FactoryOne.initialise(Globals.Resolver.Resolve<IModelResolver>());
-        }
-
     }
 }

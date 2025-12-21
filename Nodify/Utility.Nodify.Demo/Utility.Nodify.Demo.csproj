@@ -14,6 +14,9 @@
     <ProjectReference Include="..\..\Infrastructure\Utility.Services.Meta\Utility.Services.Meta.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Simulation\Utility.Simulation.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
+    <ProjectReference Include="..\..\Nodes\Utility.Models.Templates\Utility.Models.Templates.csproj" />
+    <ProjectReference Include="..\..\Nodes\Utility.Nodes.Meta\Utility.Nodes.Meta.csproj" />
+    <ProjectReference Include="..\..\Nodes\Utility.Nodes.WPF\Utility.Nodes.WPF.csproj" />
     <ProjectReference Include="..\..\Nodes\Utility.Nodes\Utility.Nodes.csproj" />
     <ProjectReference Include="..\..\Repos\Utility.Repos\Utility.Repos.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Simulation\Utility.WPF.Controls.Simulation.csproj" />
@@ -26,5 +29,9 @@
   <ItemGroup>
     <Folder Include="Data\" />
   </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+	</ItemGroup>
 
 </Project>

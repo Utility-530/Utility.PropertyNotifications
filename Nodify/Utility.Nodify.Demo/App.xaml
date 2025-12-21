@@ -10,7 +10,13 @@
              xmlns:prop="clr-namespace:Utility.PropertyDescriptors;assembly=Utility.PropertyDescriptors"
              xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
              xmlns:propertynotifications="clr-namespace:Utility.PropertyNotifications;assembly=Utility.PropertyNotifications"
-             xmlns:vm="clr-namespace:Utility.Nodes;assembly=Utility.Nodes">
+             xmlns:vm="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
+             xmlns:ct="http://schemas.utility.com/trees"
+             xmlns:markup="http://schemas.utility.com/markup" 
+             xmlns:res="http://schemas.utility.com/resourcedictionary">
+
+
+
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -24,9 +30,23 @@
                 <ResourceDictionary Source="/Utility.Nodify.Views;component/DiagramView.xaml"/>
                 <ResourceDictionary Source="/Utility.Nodify.Views;component/MainView.xaml"/>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Simulation;component/Themes/Generic.xaml"/>
+
+                <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItem.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <inf:TemplateSelector 
+                x:Key="TemplateSelector"/>
 
+            <inf:ContainerStyleSelector
+        x:Key="ContainerStyleSelector"
+        />
+
+            <inf:ContainerTemplateSelector
+        x:Key="ContainerTemplateSelector"
+        />
+
+            
             <Style x:Key="IconButton"
                    TargetType="{x:Type Button}"
                    BasedOn="{StaticResource {x:Type Button}}">
@@ -136,7 +156,7 @@
                 </ItemsControl>
             </DataTemplate>
 
-            <inf:TemplateSelector x:Key="TemplateSelector"/>
+
 
             <DataTemplate DataType="{x:Type inf:MainViewModel}">
                 <ItemsControl ItemsSource="{Binding Collection}" ItemTemplateSelector="{StaticResource TemplateSelector}" >
@@ -160,7 +180,11 @@
 
 
             <DataTemplate DataType="{x:Type propertynotifications:NotifyPropertyClass}">
-                <TextBlock Text="{Binding Name}"></TextBlock>
+                <TextBlock Text="NotifyPropertyClass"></TextBlock>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type propertynotifications:PropertyObservable}">
+                <TextBlock Text="{Binding Reference}"></TextBlock>
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type tree:Tree}">
@@ -168,7 +192,10 @@
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type models:MethodNode}">
-                <TextBlock VerticalAlignment="Center" Text="{Binding Method.Name}" FontSize="16" FontWeight="DemiBold" ToolTip="{Binding Method.MethodInfo.ReflectedType.FullName}"></TextBlock>
+                <TextBlock Background="BlanchedAlmond"
+                           VerticalAlignment="Center" 
+                           Text="{Binding MethodInfo.Name}" 
+                           FontSize="16" FontWeight="DemiBold" ToolTip="{Binding Method.MethodInfo.ReflectedType.FullName}"></TextBlock>
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type prop:MemberDescriptor}">
@@ -192,6 +219,18 @@
                 </Grid>
 
             </DataTemplate>
+
+
+            <DataTemplate x:Key="ContainerTemplate" DataType="{x:Type vm:NodeViewModel}">
+                <ct:CustomTreeView
+               ItemContainerStyleSelector="{StaticResource ContainerStyleSelector}"
+               ItemTemplateSelector="{StaticResource ContainerTemplateSelector}"
+               ItemsSource="{markup:Array {Binding}}" />
+            </DataTemplate>
+            
+            <HierarchicalDataTemplate x:Key="EllipseTemplate" ItemsSource="{Binding Children}" >
+                <Ellipse Fill="Blue" Height="30" Width="30"/>
+            </HierarchicalDataTemplate>
 
         </ResourceDictionary>
     </Application.Resources>
