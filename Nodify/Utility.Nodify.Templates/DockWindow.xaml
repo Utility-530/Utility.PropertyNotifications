@@ -1,18 +1,16 @@
-﻿<Window x:Class="Utility.Nodify.Demo.DockWindow"
+﻿<!--<Window x:Class="Utility.Nodify.Demo.DockWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:avalondock="https://github.com/Dirkster99/AvalonDock"
-        xmlns:vm="clr-namespace:Utility.Nodify.ViewModels;assembly=Utility.Nodify.ViewModels"
-        mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance vm:MainViewModel}"
+        mc:Ignorable="d"        
         Title="DockWindow" Height="450" Width="800">
 
     <avalondock:DockingManager x:Name="dockingManager" AllowMixedOrientation="True">
-        <!--<DockingManager.Theme>
+        --><!--<DockingManager.Theme>
             <Vs2013LightTheme />
-        </DockingManager.Theme>-->
+        </DockingManager.Theme>--><!--
         <DockingManager.DocumentHeaderTemplate>
             <DataTemplate>
                 <StackPanel Orientation="Horizontal">
@@ -21,7 +19,7 @@
                 </StackPanel>
             </DataTemplate>
         </DockingManager.DocumentHeaderTemplate>
-        <!--<LayoutRoot >
+        --><!--<LayoutRoot >
                 <LayoutPanel Orientation="Horizontal">
  
                     <LayoutDocumentPaneGroup>
@@ -84,7 +82,7 @@
                         </LayoutAnchorGroup>
                     </LayoutAnchorSide>
                 </LayoutRoot.LeftSide>
-            </LayoutRoot>-->
+            </LayoutRoot>--><!--
 
         <avalondock:LayoutRoot>
             <avalondock:LayoutPanel Orientation="Horizontal">
@@ -93,9 +91,9 @@
                     <avalondock:LayoutAnchorable x:Name="Screen3" Title="Screen2">
                         <ContentControl Content="{Binding TabsViewModel}" ></ContentControl>
                     </avalondock:LayoutAnchorable>
-                    <!--<avalondock:LayoutAnchorable x:Name="Screen1" Title="Screen2" >
+                    --><!--<avalondock:LayoutAnchorable x:Name="Screen1" Title="Screen2" >
                         <ContentControl Content="{Binding InterfaceViewModel}" ></ContentControl>
-                    </avalondock:LayoutAnchorable>-->
+                    </avalondock:LayoutAnchorable>--><!--
                 </avalondock:LayoutAnchorablePane>
                 <avalondock:LayoutAnchorablePane DockWidth="200" >
                     <avalondock:LayoutAnchorable x:Name="Screen2" Title="Screen2" >
@@ -115,4 +113,4 @@
             </LayoutRoot.RightSide>
         </avalondock:LayoutRoot>
     </avalondock:DockingManager>
-</Window>
+</Window>-->
