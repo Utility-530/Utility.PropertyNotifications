@@ -61,7 +61,7 @@
         <Setter Property="ToggleButtonTemplate">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <materialDesign:PackIcon Kind="PlusBox" Foreground="LightCoral" Background="Transparent"></materialDesign:PackIcon>
+                    <materialDesign:PackIcon Kind="PlusBox" Foreground="Indigo" Background="Transparent"></materialDesign:PackIcon>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -183,7 +183,7 @@
                             <cb:ComboBoxTreeView     
                                 Height="14" Width="14"
                                 x:Name="PART_Connector"
-                                IsOpen="{Binding IsEditing, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}"
+                                IsDropDownOpen="{Binding IsEditing, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}"
                                 Style="{StaticResource EllipseStyle}"  
                                      VerticalAlignment="Center"
                                      HorizontalAlignment="Center"
@@ -199,9 +199,9 @@
                                 </i:Interaction.Triggers>
                                 <i:Interaction.Behaviors>
                                     <cb:PropertySelectorBehavior Type="{x:Type nodes:NodeViewModel}" Filter="{Binding Tag, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
-
+                                    <inf1:CloseWhenScrollingExceedControlsBounds />
+                                    <inf1:ScaleOnOpenClose />
                                 </i:Interaction.Behaviors>
-
                             </cb:ComboBoxTreeView>
                         </StackPanel>
                     </Grid>
@@ -311,13 +311,12 @@
                             <ContentPresenter ContentSource="Header" />
                             <cb:ComboBoxTreeView     
                                 Height="14" Width="14"
-                                x:Name="PART_Connector"
-                             
+                                x:Name="PART_Connector"                             
                                 Style="{StaticResource PropertyStyle}"  
-                                     VerticalAlignment="Center"
-                                     HorizontalAlignment="Center"
-                                     Background="Transparent"
-                                     BorderBrush="{TemplateBinding BorderBrush}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Background="Transparent"
+                                BorderBrush="{TemplateBinding BorderBrush}"
                                 Margin="5 0 0 0">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="CheckedItemsChanged">
@@ -328,7 +327,8 @@
                                 </i:Interaction.Triggers>
                                 <i:Interaction.Behaviors>
                                     <cb:PropertySelectorBehavior Type="{x:Type nodes:NodeViewModel}" />
-
+                                    <inf1:ScaleOnOpenClose></inf1:ScaleOnOpenClose>
+                                    <inf1:CloseWhenScrollingExceedControlsBounds />
                                 </i:Interaction.Behaviors>
 
                             </cb:ComboBoxTreeView>
@@ -625,12 +625,12 @@
                                            Location="{Binding Location, Converter={x:Static inf:PointConverter.Instance}}">
                         <ContentControl Content="{Binding}" Height="400" Width="400" Background="Aqua"/>
                     </nodify:DecoratorContainer>
-                </CompositeCollection>
+                </CompositeCollection>            
             </nodify:NodifyEditor>
 
             <Grid Background="{StaticResource LargeGridLinesDrawingBrush}"
               Panel.ZIndex="-2" />
-
+            
             <Button Content="Fit To Screen" Width="100" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
@@ -638,6 +638,18 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Button>
+
+            <inf1:DebugItemsControl VerticalAlignment="Bottom"  HorizontalAlignment="Right" 
+                                    Editor="{Binding ElementName=Editor}">
+                <inf1:DebugItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <WrapPanel>
+                            <TextBlock Text="{Binding Key}"></TextBlock>
+                            <TextBlock Text="{Binding Value}"></TextBlock>
+                        </WrapPanel>
+                    </DataTemplate>
+                </inf1:DebugItemsControl.ItemTemplate>
+            </inf1:DebugItemsControl>
         </Grid>
     </DataTemplate>
 
