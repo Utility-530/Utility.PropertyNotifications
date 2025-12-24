@@ -8,15 +8,33 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Interfaces.Exs
 {
-    public interface IViewModelTree : ITree, IIsExpanded, ICurrent<IViewModelTree>, IAdd, IKey, ILocalIndex, IIsEditable, IOrientation,
-        IRemoved, IIsVisible, IIsSelected, ISetIsSelected,
-        IIsRemovable, IIsReplicable, ISort, ISortOrder,
-        IName,
+    public interface IViewModelTree :
+        ITree, 
+        IIsExpanded, 
+        ICurrent<IViewModelTree>, 
+        IAdd, 
+        ILocalIndex, 
+        IIsEditable, 
+        IOrientation,
+        IRemoved, 
+        IIsVisible, 
+        IIsSelected, 
+        IIsRemovable,
+        IIsReplicable,
+        ISort, 
+        ISortOrder,      
         IIsChildrenRefreshed,
         IIsActive,
-        IArrangement, IRows, IColumns, IIsAugmentable, IErrors, IConnectorPosition, IDataTemplate,
-        ISelectedItemTemplate, IItemsPanelTemplate, ITitle,
-        IGetGuid,
+        IArrangement,
+        IRows,
+        IColumns, 
+        IIsAugmentable,
+        IErrors, 
+        IConnectorPosition,
+        IDataTemplate,
+        ISelectedItemTemplate,
+        IItemsPanelTemplate, 
+        ITitle,
         IIsReadOnly,
         ILocation,
         IGetIsSingular,
@@ -30,7 +48,8 @@ namespace Utility.Interfaces.Exs
         IIsProliferable,
         IIsLoaded,
         IStyle,
-        ILayout
+        ILayout,
+        IIsChecked
 
     //IHeight,
     //IWidth
@@ -180,5 +199,10 @@ namespace Utility.Interfaces.Exs
     public interface IItemsPanelTemplate
     {
         string ItemsPanelTemplate { get; set; }
+    }
+
+    public interface IIsChecked
+    {
+        bool IsChecked { get; set; }
     }
 }
