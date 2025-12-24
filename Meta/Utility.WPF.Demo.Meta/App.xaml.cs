@@ -12,6 +12,7 @@ namespace Utility.WPF.Demo.Meta
     {
         public App()
         {
+            InitializeComponent();
             var builder = new ContainerBuilder();
             //Resolver.Instance.AutoRegister();
             builder.UseAutofacDependencyResolver();
