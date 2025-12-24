@@ -19,7 +19,7 @@ using Utility.Observables.Generic;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
 using Utility.ServiceLocation;
-
+using Utility.Interfaces;
 namespace Utility.Nodes.Meta
 {
     public class NodeInterface
@@ -85,7 +85,7 @@ namespace Utility.Nodes.Meta
             if (instance is INodeViewModel node)
             {
                 Guid guid = default;
-                if (value is INodeViewModel { Guid: Guid _guid })
+                if (value is IGetGuid { Guid: Guid _guid })
                 {
                     if (node.Cast<INodeViewModel>().SingleOrDefault(a => a == value) is { } current)
                     {
@@ -96,7 +96,7 @@ namespace Utility.Nodes.Meta
                 }
                 else if (Guid.TryParse(value.ToString(), out Guid __guid))
                 {
-                    if (node.Cast<INodeViewModel>().SingleOrDefault(a => a.Guid == __guid) is { } current)
+                    if (node.Cast<IGetGuid>().SingleOrDefault(a => a.Guid == __guid) is INodeViewModel current)
                     {
                         node.Current = current;
                         return;
@@ -113,7 +113,7 @@ namespace Utility.Nodes.Meta
                 nodeSource.Value.Nodes.AndAdditions()
                     .Subscribe(a =>
                     {
-                        if (a.Guid == guid)
+                        if (a.Guid() == guid)
                         {
                             node.Current = a;
                             disposables.Dispose();

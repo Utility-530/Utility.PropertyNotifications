@@ -69,7 +69,7 @@ namespace Utility.Nodes.Meta
                 {
                     ObjectDisposedException.ThrowIf(_disposed, nameof(NodeEngine));
 
-                    if (node.Guid == default)
+                    if (node.Guid() == default)
                     {
                         throw new Exception("node missing guid!");
                     }
@@ -89,7 +89,7 @@ namespace Utility.Nodes.Meta
                     }
                     inserting.Add(node);
                     return repository
-                           .InsertRoot(node.Guid, node.Name(), GetNodeType(node))
+                           .InsertRoot(node.Guid(), node.Name(), GetNodeType(node))
                            .Subscribe(key =>
                            {
                                inserting.Remove(node);
