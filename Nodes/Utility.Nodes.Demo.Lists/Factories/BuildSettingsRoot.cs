@@ -21,7 +21,6 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     })
                     { Name = controls }])
                 {
-                    Name = nameof(BuildSettingsRoot),
                     IsExpanded = true,
                     Guid = settingsRootGuid,
                     Orientation = Orientation.Vertical

@@ -99,7 +99,6 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     }
                 ])
                 {
-                    Name = nameof(BuildListRoot),
                     IsExpanded = true,
                     Orientation = Orientation.Horizontal,
                     Guid = listRootGuid

@@ -67,7 +67,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     }
                 },
                 (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; })
-                { Name = main, Guid = guid };
+                { Guid = guid };
 
             static void buildNetwork(Guid guid)
             {
