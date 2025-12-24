@@ -17,16 +17,16 @@ using Utility.Keys;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Enums;
 using Utility.Interfaces.NonGeneric;
+using Utility.ServiceLocation;
 
 namespace Utility.Nodify.Engine
 {
     public class ViewModelFactory : IViewModelFactory
     {
-        private readonly DryIoc.IContainer container;
+     
 
-        public ViewModelFactory(DryIoc.IContainer container)
+        public ViewModelFactory()
         {
-            this.container = container;
         }
 
         public IConnectionViewModel CreateConnection(IConnectorViewModel source, IConnectorViewModel target)
@@ -74,13 +74,13 @@ namespace Utility.Nodify.Engine
         {
             if(dataContext is InstanceKey instanceKey)
             {
-                return new NodeViewModel() {  Data = instanceKey.Data, Diagram = container.Resolve<IDiagramViewModel>(), Inputs = [], Outputs = [] };
+                return new NodeViewModel() {  Data = instanceKey.Data, Diagram = Utility.Globals.Resolver.Resolve<IDiagramViewModel>() };
             }
             else if (dataContext is IReadOnlyTree tree)
             {
                 if (tree is NodeViewModel nodeViewModel)
                 {
-                    var x = CreatePendingConnector(true);// new PendingConnectorViewModel() { IsInput = true };
+                    var x = CreatePendingConnector(true);
                     var y = CreatePendingConnector(null);
 
                     nodeViewModel.Inputs = new CollectionWithFixedLast<IConnectorViewModel>(x);
@@ -128,7 +128,7 @@ namespace Utility.Nodify.Engine
                     {
                         if (item is PropertyInfo propertyInfo)
                         {
-                            var connectorViewModel = new ConnectorViewModel() { Data = propertyInfo, Key = propertyInfo.Name, Node = pending.Node };
+                            var connectorViewModel = new ConnectorViewModel() { Data = propertyInfo, Name = propertyInfo.Name, Guid = Guid.NewGuid(), Node = pending.Node };
                             connectorViewModel.Node.Outputs.Add(connectorViewModel);
                         }
                     }
