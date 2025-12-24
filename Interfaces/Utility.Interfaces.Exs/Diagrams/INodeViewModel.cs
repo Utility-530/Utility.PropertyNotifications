@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Interfaces.Exs.Diagrams
 {
-    public interface INodeViewModel : IViewModelTree, IAddCommand, IRemoveCommand
+    public interface INodeViewModel : IViewModelTree, IGuid, IName, IAddCommand, IRemoveCommand
     {
         ICollection<INodeViewModel> Nodes { get; }
         ICollection<IConnectionViewModel> Connections { get; }
