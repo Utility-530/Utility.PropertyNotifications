@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11123.170 d18.0
+VisualStudioVersion = 18.0.11123.170
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Demo", "Utility.Nodify.Demo\Utility.Nodify.Demo.csproj", "{D0F6166A-E27E-4518-A6E8-29C5E528F9EE}"
 EndProject
@@ -118,6 +118,16 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Meta", "..\Meta\Utility.Meta\Utility.Meta.csproj", "{CFE06300-40C1-866C-5534-C366EE07B845}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.SplitButtons", "..\WPF\Utility.WPF.Controls.SplitButton\Utility.WPF.Controls.SplitButtons.csproj", "{1CBBEC94-4295-6CC2-0238-C442DE703A8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodes.Meta", "..\Nodes\Utility.Nodes.Meta\Utility.Nodes.Meta.csproj", "{F05E5B8D-DE39-9755-947D-2041AADD42FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Models.Templates", "..\Nodes\Utility.Models.Templates\Utility.Models.Templates.csproj", "{0EEF772F-6BE0-9385-3216-CC7B5CA051D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodes.WPF", "..\Nodes\Utility.Nodes.WPF\Utility.Nodes.WPF.csproj", "{D78E2C4F-28AD-B43D-77AE-93850110A3CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Geometries", "..\WPF\Utility.WPF.Geometry\Utility.WPF.Geometries.csproj", "{F46F4637-81DB-F44B-6B52-FCC2E46BCEB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Colours", "..\WPF\Utility.WPF.Colours\Utility.WPF.Colours.csproj", "{17B1FEA0-4939-D4C0-BEB0-13E727A0A741}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -349,6 +359,26 @@ Global
 		{1CBBEC94-4295-6CC2-0238-C442DE703A8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CBBEC94-4295-6CC2-0238-C442DE703A8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CBBEC94-4295-6CC2-0238-C442DE703A8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F05E5B8D-DE39-9755-947D-2041AADD42FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F05E5B8D-DE39-9755-947D-2041AADD42FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F05E5B8D-DE39-9755-947D-2041AADD42FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F05E5B8D-DE39-9755-947D-2041AADD42FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EEF772F-6BE0-9385-3216-CC7B5CA051D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EEF772F-6BE0-9385-3216-CC7B5CA051D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EEF772F-6BE0-9385-3216-CC7B5CA051D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EEF772F-6BE0-9385-3216-CC7B5CA051D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D78E2C4F-28AD-B43D-77AE-93850110A3CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D78E2C4F-28AD-B43D-77AE-93850110A3CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D78E2C4F-28AD-B43D-77AE-93850110A3CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D78E2C4F-28AD-B43D-77AE-93850110A3CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F46F4637-81DB-F44B-6B52-FCC2E46BCEB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F46F4637-81DB-F44B-6B52-FCC2E46BCEB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F46F4637-81DB-F44B-6B52-FCC2E46BCEB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F46F4637-81DB-F44B-6B52-FCC2E46BCEB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17B1FEA0-4939-D4C0-BEB0-13E727A0A741}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17B1FEA0-4939-D4C0-BEB0-13E727A0A741}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17B1FEA0-4939-D4C0-BEB0-13E727A0A741}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17B1FEA0-4939-D4C0-BEB0-13E727A0A741}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -401,6 +431,11 @@ Global
 		{1CCE1662-DF5F-AC3E-B6E3-E687D59D7E91} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{CFE06300-40C1-866C-5534-C366EE07B845} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{1CBBEC94-4295-6CC2-0238-C442DE703A8D} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
+		{F05E5B8D-DE39-9755-947D-2041AADD42FA} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
+		{0EEF772F-6BE0-9385-3216-CC7B5CA051D6} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
+		{D78E2C4F-28AD-B43D-77AE-93850110A3CA} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
+		{F46F4637-81DB-F44B-6B52-FCC2E46BCEB8} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
+		{17B1FEA0-4939-D4C0-BEB0-13E727A0A741} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C218ADB7-210D-4A37-BC47-800268D4894F}
