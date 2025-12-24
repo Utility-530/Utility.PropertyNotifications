@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -9,6 +10,11 @@ using Utility.WPF.Controls.Trees;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
+    public class DropDownOpeningEventArgs : CancelEventArgs
+    {
+        // Add custom properties if needed
+    }
+
     public class ComboBoxTreeView : ComboBox
     {
         public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register("SelectedItems", typeof(IEnumerable), typeof(ComboBoxTreeView), new PropertyMetadata(null));
@@ -44,6 +50,10 @@ namespace Utility.WPF.Controls.ComboBoxes
             return baseValue;
         }
 
+        public event EventHandler<DropDownOpeningEventArgs> DropDownOpening;
+
+  
+
         private static void _changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is ComboBoxTreeView treeView && e.NewValue is bool b)
@@ -53,7 +63,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                     treeView.Focus();
                 }
                 //treeView.ToggleButton.IsChecked = b;
-                treeView.IsDropDownOpen = b;
+                //treeView.IsDropDownOpen = b;
                 treeView.Popup.IsOpen = b;
             }
         }
@@ -86,38 +96,34 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         public ComboBoxTreeView()
         {
-            this.DropDownOpened += ComboBoxTreeView_DropDownOpened;
             this.LostFocus += ComboBoxTreeView_LostFocus;
             SelectedItems = List;
         }
 
-        private void ComboBoxTreeView_DropDownOpened(object? sender, EventArgs e)
-        {
-        }
 
         private void ComboBoxTreeView_LostFocus(object sender, RoutedEventArgs e)
         {
-            IsOpen = false;
+            //IsOpen = false;
             //IsDropDownOpen = false;
         }
 
         protected override void OnMouseLeave(MouseEventArgs e)
         {
-            IsOpen = false;
+            //IsOpen = false;
             IsDropDownOpen = false;
             base.OnMouseLeave(e);
         }
 
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
-            IsOpen = false;
+            //IsOpen = false;
             IsDropDownOpen = false;
             base.OnMouseLeftButtonDown(e);
         }
 
         private void ComboBoxTreeView_DropDownClosed(object? sender, EventArgs e)
         {
-            IsOpen = false;
+            //IsOpen = false;
         }
 
         public CustomTreeView TreeView { get; set; }
@@ -138,8 +144,8 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         public override void OnApplyTemplate()
         {
-            this.DropDownClosed += ComboBoxTreeView_DropDownClosed;
-            Popup = (Popup)GetTemplateChild("Popup");
+            //this.DropDownClosed += ComboBoxTreeView_DropDownClosed;
+            Popup = (Popup)GetTemplateChild("PART_Popup");
             ToggleButton = (ToggleButton)GetTemplateChild("ToggleButton");
             ToggleButton.Checked += ToggleButton_Checked;
             TreeView = (CustomTreeView)GetTemplateChild("treeView");
@@ -148,6 +154,22 @@ namespace Utility.WPF.Controls.ComboBoxes
             TreeView.Checked += _treeView_OnChecked;
             if (TreeView.SelectedItem != null)
                 UpdateSelectedItems(TreeView.SelectedItem);
+
+            var popup = GetTemplateChild("PART_Popup") as Popup;
+            if (popup != null)
+            {
+            }
+
+
+ 
+            void Popup_Closed(object sender, EventArgs e)
+            {
+                // Manually raise the DropDownClosed event
+                OnDropDownClosed(EventArgs.Empty);
+            }
+
+
+            // Subscribe to the property change
             base.OnApplyTemplate();
         }
 
@@ -166,8 +188,19 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         private void ToggleButton_Checked(object sender, RoutedEventArgs e)
         {
-            if (ToggleButton.IsChecked == false)
+            if (ToggleButton.IsChecked == true)
             {
+                // Create cancelable event args
+                var args = new DropDownOpeningEventArgs();
+                DropDownOpening?.Invoke(this, args);
+
+                // Check if canceled
+                if (args.Cancel)
+                {
+                    // Prevent dropdown from opening
+                    IsDropDownOpen = false;
+                    return;
+                }
             }
         }
 
@@ -200,9 +233,11 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         protected override void OnDropDownOpened(EventArgs e)
         {
-            base.OnDropDownOpened(e);
             if (TreeView?.SelectedItem != null)
                 UpdateSelectedItems(TreeView.SelectedItem);
+
+            IsOpen = IsDropDownOpen;
+            base.OnDropDownOpened(e);          
         }
 
         /// <summary>

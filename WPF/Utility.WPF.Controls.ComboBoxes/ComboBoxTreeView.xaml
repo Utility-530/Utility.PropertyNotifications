@@ -95,8 +95,7 @@
                                       Template="{StaticResource ComboBoxToggleButton}"
                         Focusable="false"
                         ClickMode="Press"
-                        IsChecked="{Binding IsDropDownOpen, Mode=TwoWay,
-              RelativeSource={RelativeSource TemplatedParent}}" />
+                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}"></ToggleButton>
                                 <Grid            IsHitTestVisible="False">
                                     <base:CustomItemsControl x:Name="ContentSite"
                                                              AlternationCount="1000"
@@ -192,9 +191,9 @@
                    Background="Transparent"
                    Visibility="Hidden"
                    IsReadOnly="{TemplateBinding IsReadOnly}" />
-                                <Popup x:Name="Popup"
+                                <Popup x:Name="PART_Popup"
                  Placement="Bottom"
-                 IsOpen="{TemplateBinding IsDropDownOpen}"
+                 IsOpen="{Binding ElementName=ToggleButton, Path=IsChecked}"
                  AllowsTransparency="True"
                  Focusable="False"
                  PopupAnimation="Slide">
@@ -244,7 +243,7 @@
                             <Setter Property="ScrollViewer.CanContentScroll"
                     Value="false" />
                         </Trigger>
-                        <Trigger SourceName="Popup"
+                        <Trigger SourceName="PART_Popup"
                    Property="AllowsTransparency"
                    Value="true">
                             <Setter TargetName="DropDownBorder"

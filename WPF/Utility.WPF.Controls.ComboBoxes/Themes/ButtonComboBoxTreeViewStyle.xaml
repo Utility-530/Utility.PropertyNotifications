@@ -2,16 +2,20 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:trees="http://schemas.utility.com/trees"
-    xmlns:cb="clr-namespace:Utility.WPF.Controls.ComboBoxes">
+    xmlns:btns="http://schemas.utility.com/buttons"
+    xmlns:inf="clr-namespace:Utility.WPF.Controls.ComboBoxes.Infrastructure"
+    xmlns:cb="clr-namespace:Utility.WPF.Controls.ComboBoxes"
+    xmlns:conv="http://schemas.utility.com/converters"
+    xmlns:c="http://schemas.utility.com/colours" xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboBoxToggleButton.xaml" />
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml" />
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CheckableTreeViewItem.xaml" />
+        <ResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <ControlTemplate x:Key="ComboBox_ToggleButton" TargetType="{x:Type ToggleButton}">
-
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -76,36 +80,61 @@
                                     ClickMode="Press"
                                     Content="{TemplateBinding ToggleButtonContent}"
                                     Focusable="false"
+                                    IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                     Template="{TemplateBinding ToggleButtonTemplate}" />
 
                                 <Popup
-                                    x:Name="Popup"
+                                    x:Name="PART_Popup"
                                     AllowsTransparency="True"
                                     Focusable="False"
                                     IsOpen="{Binding ElementName=ToggleButton, Path=IsChecked}"
                                     Placement="Bottom"
                                     PopupAnimation="Slide"
-                                    StaysOpen="False">
+                                    StaysOpen="True">
 
-                                    <Grid
+                                    <Grid>
+                           
+                                        <Grid
                                         x:Name="DropDown"
+                                  
                                         MinWidth="{TemplateBinding ActualWidth}"
                                         MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                         Background="Transparent"
                                         SnapsToDevicePixels="True">
-                                        <Border
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
+                                            </Grid.RowDefinitions>
+
+                                   
+
+                                            <!--<Ellipse Width="32" Height="32" Fill="DarkOliveGreen"></Ellipse>-->
+                                            <btns:GeometryToggleButton Height="20"
+                                                                       Width="20"
+                                                                       Data="{StaticResource Cross}" 
+                                                                       Fill="Black"
+                                                                       StrokeThickness="4"
+                                                                       HoverForegroundBrush="{c:Blue}"    
+                                                                       PressedForegroundBrush="Gray"
+                                                                       HoverBackgroundBrush="{c:Amber}"
+                                                                       IsChecked="{Binding IsOpen, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                                                       HorizontalAlignment="Right" 
+                                                                       VerticalAlignment="Center" />
+                                            <Border
+                                                Grid.Row="1"
                                             x:Name="DropDownBorder"
                                             Background="Transparent"
                                             BorderThickness="1">
-                                            <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
-                                                <trees:CustomTreeView
+                                                <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">                                                  
+                                                    <trees:CustomTreeView
                                                     x:Name="treeView"
                                                     ItemContainerStyle="{TemplateBinding TreeItemContainerStyle}"
                                                     ItemTemplate="{TemplateBinding ItemTemplate}"
                                                     ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                                     ItemsSource="{TemplateBinding ItemsSource}" />
-                                            </ScrollViewer>
-                                        </Border>
+                                                </ScrollViewer>
+                                            </Border>
+                                        </Grid>
                                     </Grid>
                                 </Popup>
                             </Grid>
@@ -147,7 +176,7 @@
                         <Trigger Property="IsGrouping" Value="true">
                             <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
                         </Trigger>
-                        <Trigger SourceName="Popup" Property="AllowsTransparency" Value="true">
+                        <Trigger SourceName="PART_Popup" Property="AllowsTransparency" Value="true">
                             <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="4" />
                             <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0" />
                         </Trigger>
