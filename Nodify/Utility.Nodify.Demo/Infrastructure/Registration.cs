@@ -11,8 +11,8 @@ using Utility.Models;
 using Utility.Models.Diagrams;
 using Utility.Nodes;
 using Utility.Nodify.Base.Abstractions;
+using Utility.Nodify.Demo.Services;
 using Utility.Nodify.Engine;
-using Utility.Nodify.Generator.Services;
 using Utility.Nodify.ViewModels;
 using Utility.Nodify.ViewModels.Infrastructure;
 using Utility.Repos;
@@ -41,24 +41,14 @@ namespace Utility.Nodify.Demo.Infrastructure
             register.Register<Utility.Nodes.Meta.NodeInterface>();
             register.Register<INodeSource>(() => new Utility.Nodes.Meta.NodesStore());
             register.Register<ExceptionsViewModel>(() => new ExceptionsViewModel());
+            register.Register<IViewModelFactory, ViewModelFactory>();
             //Globals.Register.Register<ITreeRepository>(() => new TreeRepository(sqliteName));
             Globals.Exceptions.Subscribe(a => Globals.Resolver.Resolve<ExceptionsViewModel>().Collection.Add(a));
-            register.Register(() => new DiagramViewModel(initialiseContainer()) { Key = "Master", Arrangement = Utility.Enums.Arrangement.UniformRow });
+            register.Register(() => new DiagramViewModel() { Key = "Master", Arrangement = Utility.Enums.Arrangement.UniformRow });
             register.Register<INodeRoot>(() => new Utility.Nodes.Meta.NodeEngine(new TreeRepository("../../../Data"), new ValueRepository("../../../Data")));
-
+            register.Register<IMenuFactory, MenuFactory>();
             await new DiagramFactory().Build(Globals.Resolver.Resolve<DiagramViewModel>());
             //new Tracker().Track(Globals.Resolver.Resolve<DiagramViewModel>());
-        }
-
-        private static IContainer initialiseContainer()
-        {
-            var container = new Container(DiConfiguration.SetRules);
-            Locator.CurrentMutable.RegisterConstant<IContainer>(container);
-            //container.Register<IDiagramFactory, DiagramFactory>();
-            container.Register<IMenuFactory, MenuFactory>();
-            _ = Bootstrapper.Build(container);
-            //container.Register<IConverter, Converter>();
-            return container;
         }
 
 
