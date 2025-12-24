@@ -34,6 +34,7 @@ namespace Utility.Nodes
         public static readonly DateTime? Removed = default;
         public static readonly bool IsReplicable = default;
         public static readonly bool IsRemovable = default;
+        public static readonly bool IsChecked = default;
         public static readonly int Order = default;
         public static readonly bool IsAugmetable = default;
         public static readonly bool? IsContentVisible = true;
@@ -76,6 +77,7 @@ namespace Utility.Nodes
         private DateTime? removed = NodeViewModelConstants.Removed;
         private bool isReplicable = NodeViewModelConstants.IsReplicable;
         private bool isRemovable = NodeViewModelConstants.IsRemovable;
+        private bool isChecked = NodeViewModelConstants.IsChecked;
         private int order = NodeViewModelConstants.Order;
         private bool isAugmentable = NodeViewModelConstants.IsAugmetable;
         private bool? isContentVisible = NodeViewModelConstants.IsContentVisible;
@@ -307,6 +309,15 @@ namespace Utility.Nodes
             set => this.RaisePropertyReceived(ref this.isRemovable, value);
         }
 
+
+        public bool IsChecked
+        {
+            get { RaisePropertyCalled(isChecked); return isChecked; }
+            set => this.RaisePropertyReceived(ref this.isChecked, value);
+        }
+
+
+
         //TODO : Rename to Customisation/ or custom-style
         [FieldName(nameof(dataTemplate))]
         public string DataTemplate
@@ -423,6 +434,7 @@ namespace Utility.Nodes
                 case nameof(SelectedItemTemplate): this.selectedItemTemplate = (string)value; break;
                 case nameof(IsWithinWindowBounds): this.isWithinWindowBounds = (bool)value; break;
                 case nameof(IsAugmentable): this.isAugmentable = (bool)value; break;
+                case nameof(IsChecked): this.isChecked = (bool)value; break;
                 default: throw new ArgumentException($"Unknown field: {name}");
             }
             RaisePropertyChanged(name);
@@ -464,6 +476,7 @@ namespace Utility.Nodes
                 nameof(IsWithinWindowBounds) => isWithinWindowBounds,
                 nameof(IsProliferable) => isProliferable,
                 nameof(IsAugmentable) => isAugmentable,
+                nameof(IsChecked) => isChecked,
                 _ => throw new ArgumentException($"Unknown field: {name}")
             };
         }
@@ -530,6 +543,8 @@ namespace Utility.Nodes
                 yield return (nameof(SelectedItemTemplate), NodeViewModelConstants.SelectedItemTemplate, selectedItemTemplate);
             if (isWithinWindowBounds != NodeViewModelConstants.IsWithinWindowBounds)
                 yield return (nameof(IsWithinWindowBounds), NodeViewModelConstants.IsWithinWindowBounds, isWithinWindowBounds);
+            if (isChecked != NodeViewModelConstants.IsChecked)
+                yield return (nameof(IsChecked), NodeViewModelConstants.IsChecked, isChecked);
         }
     }
 

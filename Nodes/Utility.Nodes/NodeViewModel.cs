@@ -69,8 +69,6 @@ namespace Utility.Nodes
             return Task.FromResult((ITree)node);
         }
 
-        //public NodeState State { get; set; } = NodeState.None;
-
         public override object Data
         {
             get => data;
@@ -114,7 +112,6 @@ namespace Utility.Nodes
                 {
                     addInput(inp);
                 }
-                inputMethod();
             }
         }
 
@@ -124,14 +121,6 @@ namespace Utility.Nodes
             x.IsInput = true;
         }
 
-        private void inputMethod()
-        {
-            if (inputs is RangeObservableCollection<IConnectorViewModel> range)
-                _ = range.WhenAdded(x =>
-                {
-                    Add(x);
-                });
-        }
 
         public virtual ICollection<IConnectorViewModel> Outputs
         {

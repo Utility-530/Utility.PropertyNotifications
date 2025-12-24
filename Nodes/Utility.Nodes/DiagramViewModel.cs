@@ -14,12 +14,12 @@ using Utility.Nodify.Base.Abstractions;
 using Utility.Nodify.Operations.Infrastructure;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
+using Utility.ServiceLocation;
 
 namespace Utility.Nodes
 {
     public class DiagramViewModel : NodeViewModel, IDiagramViewModel
     {
-        private readonly IContainer container;
         private IMenuViewModel menu;
         private RangeObservableCollection<INodeViewModel> _selectedOperations = [];
         private RangeObservableCollection<IConnectionViewModel> connections = new();
@@ -33,7 +33,7 @@ namespace Utility.Nodes
             {
                 try
                 {
-                    return container.Resolve<INodeSource>();
+                    return Globals.Resolver.Resolve<Utility.Nodify.Operations.Infrastructure.INodeSource>();
                 }
                 catch (Exception ex)
                 {
@@ -42,15 +42,14 @@ namespace Utility.Nodes
             }
         }
 
-        public DiagramViewModel(IContainer container)
+        public DiagramViewModel()
         {
             Connections = connections;
-            this.container = container;
 
             // Initialize commands
             CreateConnectionCommand = new Command<IConnectorViewModel>(
                 _ => CreateConnection(PendingConnection.Output, PendingConnection.Input),
-                _ => container.Resolve<IViewModelFactory>().CanCreateConnection(PendingConnection.Output, PendingConnection.Input));
+                _ => Globals.Resolver.Resolve<IViewModelFactory>().CanCreateConnection(PendingConnection.Output, PendingConnection.Input));
             StartConnectionCommand = new Command<object>(_ => pendingConnection.IsVisible = true);
             DisconnectConnectorCommand = new Command<IConnectorViewModel>(DisconnectConnector);
             DeleteSelectionCommand = new Command(DeleteSelection);
@@ -116,7 +115,7 @@ namespace Utility.Nodes
                 if (menu == null)
                 {
                     //menu = new MenuViewModel() { Items = new RangeObservableCollection<IMenuViewModel>() };
-                    menu = container.Resolve<IMenuFactory>().CreateMenu();
+                    menu = Globals.Resolver.Resolve<IMenuFactory>().CreateMenu();
                     menu.Subscribe(a => OperationsMenu_MenuItemSelected(a.Item1, a.Item2));
                 }
                 return menu;
@@ -153,7 +152,7 @@ namespace Utility.Nodes
                 connector = nodeViewModel.Inputs.FirstOrDefault();
             }
 
-            if (pending.Output != null && container.Resolve<IViewModelFactory>().CanCreateConnection(pending.Output, pending.Input))
+            if (pending.Output != null && Globals.Resolver.Resolve<IViewModelFactory>().CanCreateConnection(pending.Output, pending.Input))
             {
                 CreateConnection(pending.Output, connector);
                 nodeViewModel.Location = location;
@@ -198,8 +197,8 @@ namespace Utility.Nodes
             pendingConnection.IsVisible = false;
             DisconnectConnector(input);
 
-            var connectionViewModel = container.Resolve<IViewModelFactory>().CreateConnection(input, output);
-            container.RegisterInstanceMany(connectionViewModel);
+            var connectionViewModel = Globals.Resolver.Resolve<IViewModelFactory>().CreateConnection(input, output);
+            //Globals.Resolver.RegisterInstanceMany(connectionViewModel);
             connections.Add(connectionViewModel);
         }
 
@@ -216,7 +215,7 @@ namespace Utility.Nodes
             {
                 var x = operations?
                     .Filter(PendingConnection)
-                    .Select(a => container.Resolve<IMenuFactory>().Create(a)) //new MenuItemViewModel() { Content = a, Guid = a.Guid });
+                    .Select(a => Globals.Resolver.Resolve<IMenuFactory>().Create(a)) //new MenuItemViewModel() { Content = a, Guid = a.Guid });
                     .ToArray();
                 if (x == null)
                     return;
@@ -227,7 +226,7 @@ namespace Utility.Nodes
             {
                 var x = operations
                     .Filter(null)
-           .Select(a => container.Resolve<IMenuFactory>().Create(a))
+           .Select(a => Globals.Resolver.Resolve<IMenuFactory>().Create(a))
                     .ToArray();
 
                 foreach (var y in x)
