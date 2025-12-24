@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using Utility.Models;
 using Utility.Services.Meta;
 
-namespace Utility.Nodify.Generator.Services
+namespace Utility.Nodify.Demo.Services
 {
 
     public record InstanceTypeParam() : Param<CollectionCreationService>(nameof(CollectionCreationService.Instance), "type");

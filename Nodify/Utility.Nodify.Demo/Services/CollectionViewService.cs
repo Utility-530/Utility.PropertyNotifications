@@ -5,7 +5,7 @@ using Utility.Models;
 using Utility.PropertyNotifications;
 using Utility.Services.Meta;
 
-namespace Utility.Nodify.Generator.Services
+namespace Utility.Nodify.Demo.Services
 {
     public record PredicateParam() : Param<CollectionViewService>(nameof(CollectionViewService.Set), "predicate", ParameterTypes: [typeof(Predicate<object>)]);
     public record ListInParam() : Param<CollectionViewService>(nameof(CollectionViewService.Create), "list");

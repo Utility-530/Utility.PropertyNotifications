@@ -1,7 +1,7 @@
 ﻿using Utility.Models;
 using Utility.Services.Meta;
 
-namespace Utility.Nodes.Demo.Lists.Services
+namespace Utility.Nodify.Demo.Services
 {
 
     public record BasePathParam() : Param<PathService>(nameof(PathService.FullPath), "basePath");
