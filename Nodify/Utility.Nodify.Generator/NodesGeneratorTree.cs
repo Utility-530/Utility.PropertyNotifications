@@ -8,6 +8,7 @@ using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes;
 using Utility.Nodify.Base;
+using Utility.Nodify.Base.Abstractions;
 using Utility.Reactives;
 using Utility.ServiceLocation;
 using Utility.Trees.Abstractions;
@@ -39,7 +40,7 @@ namespace Nodify.Playground
                                 Data = item,
                                 Location = settings.NodeLocationGenerator(settings, ++i),
                                 Key = new Utility.Structs.Index(index).ToString(),
-                            };
+                            };                          
                         }
                         else
                         {
@@ -52,7 +53,7 @@ namespace Nodify.Playground
                             node.Inputs.Add(input);
                         }
                         var output = new ConnectorViewModel { Node = node, Shape = FlatShape.Square, Flow = IO.Output, Key = "ouput2" };
-                        node.Outputs.Add(output);         
+                        node.Outputs.Add(output);
                         nodes.Add(node);
                     });
                 });
