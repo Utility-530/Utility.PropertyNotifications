@@ -1,64 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing;
-using System.Reactive.Subjects;
-using Utility.Nodes;
-using Utility.Nodify.Base.Abstractions;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Collections.ObjectModel;
+//using System.Drawing;
+//using System.Reactive.Subjects;
+//using Utility.Nodes;
+//using Utility.Nodify.Base.Abstractions;
 
-namespace Utility.Nodify.ViewModels
-{
-    public class MenuViewModel : NodeViewModel, IMenuViewModel
-    {
-        private RangeObservableCollection<IMenuItemViewModel> items = new RangeObservableCollection<IMenuItemViewModel>();
-        readonly ReplaySubject<(PointF, IMenuItemViewModel)> replaySubject = new();
+//namespace Utility.Nodify.ViewModels
+//{
+//    public class MenuViewModel : NodeViewModel, IMenuViewModel
+//    {
+//        private RangeObservableCollection<IMenuItemViewModel> items = new RangeObservableCollection<IMenuItemViewModel>();
+//        readonly ReplaySubject<(PointF, IMenuItemViewModel)> replaySubject = new();
 
-        public MenuViewModel()
-        {
-            IsVisible = false;
-            items
-                .WhenAdded(a =>
-            {
-                a.Selected += selected;
-            });
-        }
+//        public MenuViewModel()
+//        {
+//            IsVisible = false;
+//            items
+//                .WhenAdded(a =>
+//            {
+//                a.Selected += selected;
+//            });
+//        }
 
-        private void selected(IMenuItemViewModel obj)
-        {
-            replaySubject.OnNext((Location, obj));
-            Close();
-        }
+//        private void selected(IMenuItemViewModel obj)
+//        {
+//            replaySubject.OnNext((Location, obj));
+//            Close();
+//        }
 
-        public IList<IMenuItemViewModel> Items
-        {
-            get
-            {
-                return items;
-            }
-            set
-            {
-                foreach (var item in value)
-                    item.Selected += selected;
+//        public IList<IMenuItemViewModel> Items
+//        {
+//            get
+//            {
+//                return items;
+//            }
+//            set
+//            {
+//                foreach (var item in value)
+//                    item.Selected += selected;
 
-                items.AddRange(value);
-            }
-        }
+//                items.AddRange(value);
+//            }
+//        }
 
-        public void OpenAt(PointF targetLocation)
-        {
-            Close();
-            Location = targetLocation;
-            IsVisible = true;
-        }
+//        public void OpenAt(PointF targetLocation)
+//        {
+//            Close();
+//            Location = targetLocation;
+//            IsVisible = true;
+//        }
 
-        public void Close()
-        {
-            IsVisible = false;
-        }
+//        public void Close()
+//        {
+//            IsVisible = false;
+//        }
 
-        public IDisposable Subscribe(IObserver<(PointF, IMenuItemViewModel)> observer)
-        {
-            return replaySubject.Subscribe(observer);
-        }
-    }
-}
+//        public IDisposable Subscribe(IObserver<(PointF, IMenuItemViewModel)> observer)
+//        {
+//            return replaySubject.Subscribe(observer);
+//        }
+//    }
+//}
