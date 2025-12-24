@@ -63,14 +63,13 @@ namespace Utility.Nodify.Repository
     {
         private readonly SQLiteConnection connection;
         private readonly Task initialisationTask;
-        private readonly DryIoc.IContainer container;
-        private Converter converter;
+        private JsonReflectionConverter converter;
 
-        public DiagramRepository(DryIoc.IContainer container, string? dbDirectory = default)
+        public DiagramRepository(string? dbDirectory = default)
         {
             var collection = new Collection<IReadOnlyTree>();
 
-            converter = new Converter();
+            converter = new JsonReflectionConverter();
             //Globals.Resolver.Resolve<IObservable<IReadOnlyTree>>().Subscribe(a =>
             //{
             //    collection.Add(a);
@@ -101,7 +100,6 @@ namespace Utility.Nodify.Repository
             connection.CreateTable<Connector>();
             connection.CreateTable<Connection>();
             initialisationTask = Initialise();
-            this.container = container;
         }
 
         public bool IsInitialised { get; set; }
@@ -162,7 +160,7 @@ namespace Utility.Nodify.Repository
                             if ((input as IGetGuid).Guid == default)
                                 (input as ISetGuid).Guid = Guid.NewGuid();
                             if (input is IGetData { Data: { } data })
-                                Add(new Connector() { NodeId = input.Node.Guid, Guid = (input as IGetGuid).Guid, Key = converter.Convert(data), IsInput = true });
+                                Add(new Connector() { NodeId = input.Node.Guid(), Guid = (input as IGetGuid).Guid, Key = converter.Convert(data), IsInput = true });
                             else
                                 throw new Exception("Input Connector data is null");
                         }
@@ -175,7 +173,7 @@ namespace Utility.Nodify.Repository
                             if ((output as IGetGuid).Guid == default)
                                 (output as ISetGuid).Guid = Guid.NewGuid();
                             if (output is IGetData { Data: { } data })
-                                Add(new Connector() { NodeId = output.Node.Guid, Guid = (output as IGetGuid).Guid, Key = converter.Convert(data) });
+                                Add(new Connector() { NodeId = output.Node.Guid(), Guid = (output as IGetGuid).Guid, Key = converter.Convert(data) });
                             else
                                 throw new Exception("Output Connector data is null");
                         }
@@ -211,19 +209,19 @@ namespace Utility.Nodify.Repository
                 .Subscribe(data =>
                 {
                     INodeViewModel nodeViewModel;
-                    if (loadedNodes.Any(a => a.Guid == node.Guid))
+                    if (loadedNodes.Any(a => a.Guid() == node.Guid))
                     {
-                        observer.OnNext(loadedNodes.SingleOrDefault(a => a.Guid.ToString() == node.Guid.ToString()));
+                        observer.OnNext(loadedNodes.SingleOrDefault(a => a.Guid() == node.Guid));
                         return;
                     }
-                    else if (diagramViewModel.Nodes.Any(a => a.Guid == node.Guid))
+                    else if (diagramViewModel.Nodes.Any(a => a.Guid() == node.Guid))
                     {
-                        nodeViewModel = diagramViewModel.Nodes.SingleOrDefault(a => a.Guid.ToString() == node.Guid.ToString());
+                        nodeViewModel = diagramViewModel.Nodes.SingleOrDefault(a => a.Guid() == node.Guid);
                     }
                     else
                     {
                         //nodeViewModel = new NodeViewModel() { Key = data.Key, Data = data.Data };
-                        nodeViewModel = container.Resolve<IViewModelFactory>().CreateNode(data);
+                        nodeViewModel = Globals.Resolver.Resolve<IViewModelFactory>().CreateNode(data);
                         (nodeViewModel as ISetKey).Key = new GuidKey(node.Guid);
                         diagramViewModel.Nodes.Add(nodeViewModel);
                     }
@@ -238,7 +236,7 @@ namespace Utility.Nodify.Repository
                         .Subscribe(a =>
                         {
                             var outputConnectorViewModel = nodeViewModel.Outputs.SingleOrDefault(a => (a as IGetGuid).Guid == _outputConnector.Guid);
-                            outputConnectorViewModel ??= container.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(_outputConnector.Guid, true, a.Key, nodeViewModel, a.Data));
+                            outputConnectorViewModel ??= Globals.Resolver.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(_outputConnector.Guid, true, a.Key, nodeViewModel, a.Data));
                             outputConnectorViewModel.Node = nodeViewModel;
                             nodeViewModel.Outputs.Add(outputConnectorViewModel);
 
@@ -263,12 +261,12 @@ namespace Utility.Nodify.Repository
 
                                             if (inputConnectorViewModel == null)
                                             {
-                                                inputConnectorViewModel = container.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(inputConnector.Guid, false, al.Key, inputNodeViewModel, al.Data));
+                                                inputConnectorViewModel = Globals.Resolver.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(inputConnector.Guid, false, al.Key, inputNodeViewModel, al.Data));
                                                 inputConnectorViewModel.Node = inputNodeViewModel;
                                                 inputNodeViewModel.Inputs.Add(inputConnectorViewModel);
                                             }
 
-                                            var connection = container.Resolve<IViewModelFactory>().CreateConnection(outputConnectorViewModel, inputConnectorViewModel);
+                                            var connection = Globals.Resolver.Resolve<IViewModelFactory>().CreateConnection(outputConnectorViewModel, inputConnectorViewModel);
                                             (connection as ISetGuid).Guid = outputConnection.Guid;
                                             diagramViewModel.Connections.Add(connection);
                                         });
@@ -294,7 +292,7 @@ namespace Utility.Nodify.Repository
 
                                 if (inputConnectorViewModel == null)
                                 {
-                                    inputConnectorViewModel = container.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(inputConnector.Guid, false, al.Key, nodeViewModel, al.Data));
+                                    inputConnectorViewModel = Globals.Resolver.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(inputConnector.Guid, false, al.Key, nodeViewModel, al.Data));
                                     inputConnectorViewModel.Node = nodeViewModel;
                                     nodeViewModel.Inputs.Add(inputConnectorViewModel);
                                 }

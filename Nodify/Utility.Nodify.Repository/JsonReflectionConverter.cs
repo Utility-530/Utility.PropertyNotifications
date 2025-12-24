@@ -7,9 +7,8 @@ using Utility.Nodify.Base;
 
 namespace Utility.Nodify.Repository
 {
-    public class Converter
+    public class JsonReflectionConverter
     {
-
         public string Convert(object instance)
         {
             return instance switch
@@ -24,42 +23,26 @@ namespace Utility.Nodify.Repository
 
         public IObservable<InstanceKey> ConvertBack(string compositeKey)
         {
-            var (typePrefix, key) = ParseKey(compositeKey);
+            var (typePrefix, key) = parseKey(compositeKey);
 
             return Observable.Create<InstanceKey>(observer =>
             {
-                if (typePrefix == "PropertyDescriptor")
-                {
-                    var param = JsonConvert.DeserializeObject<PropertyDescriptor>(key);
-                    observer.OnNext(new InstanceKey(key, param));
-                    return Disposable.Empty;
-                }
-                else if (typePrefix == "MethodInfo")
-                {
-                    var param = JsonConvert.DeserializeObject<MethodInfo>(key);
-                    observer.OnNext(new InstanceKey(key, param));
-                    return Disposable.Empty;
-                }
-                else if (typePrefix == "PropertyInfo")
-                {
-                    var param = JsonConvert.DeserializeObject<PropertyInfo>(key);
-                    observer.OnNext(new InstanceKey(key, param));
-                    return Disposable.Empty;
-                }
-                else if (typePrefix == "ParameterInfo")
-                {
-                    var param = JsonConvert.DeserializeObject<ParameterInfo>(key);
-                    observer.OnNext(new InstanceKey(key, param));
-                    return Disposable.Empty;
-                }
-
-                throw new ArgumentException($"Unsupported type prefix: {typePrefix}");
+                observer.OnNext(new InstanceKey(key, JsonConvert.DeserializeObject(key, type(typePrefix))));
+                return Disposable.Empty;
             });
 
+            static Type type(string typePrefix) => typePrefix switch
+            {
+                "PropertyDescriptor" => typeof(PropertyDescriptor),
+                "MethodInfo" => typeof(MethodInfo),
+                "PropertyInfo" => typeof(PropertyInfo),
+                "ParameterInfo" => typeof(ParameterInfo),
+                _ => throw new ArgumentException($"Unsupported type prefix: {typePrefix}")
+            };
 
 
             // Two-way conversion helper methods
-            (string TypePrefix, string Key) ParseKey(string compositeKey)
+            static (string TypePrefix, string Key) parseKey(string compositeKey)
             {
                 var parts = compositeKey.Split('|', 2);
                 if (parts.Length != 2)
