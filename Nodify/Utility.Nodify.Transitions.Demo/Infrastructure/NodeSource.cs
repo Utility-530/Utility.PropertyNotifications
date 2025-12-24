@@ -22,8 +22,6 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
 {
     public class NodeSource : INodeSource
     {
-        private readonly DryIoc.IContainer container;
-
         record Ref(PropertyInfo Info, IConnectionViewModel ConnectionViewModel);
         record Ref2(Type Type, List<MethodInfo> MethodInfos);
         record Ref3(Type Type, MethodInfo MethodInfo) : IType;
@@ -36,9 +34,8 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
             }
         }
 
-        public NodeSource(DryIoc.IContainer container)
+        public NodeSource()
         {
-            this.container = container;
         }
 
         public IEnumerable<MenuItem> Filter(object viewModel)
@@ -50,14 +47,14 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
                     var asses = AssemblyHelper.GetNonSystemAssembliesInCurrentDomain().ToArray();
                     var set = asses.SelectMany(a => a.GetPublicStaticMethodsGroupedByClass(ca => ca.Any(da => da == _type))).ToArray();
                     foreach (var x in set)
-                        yield return new MenuItem(x.Key, Guid.NewGuid(), container.Resolve<INodeSource>()) { Reference = new Ref2(_type, x.Value) };
+                        yield return new MenuItem(x.Key, Guid.NewGuid(), this) { Reference = new Ref2(_type, x.Value) };
                 }
                 else if (pending.Output is IGetData { Data: ParameterInfo { ParameterType: Type type } })
                 {
                     var asses = AssemblyHelper.GetNonSystemAssembliesInCurrentDomain().ToArray();
                     var set = asses.SelectMany(a => a.GetPublicStaticMethodsGroupedByClass(ca => ca.Any(da => da == type))).ToArray();
                     foreach (var x in set)
-                        yield return new MenuItem(x.Key, Guid.NewGuid(), container.Resolve<INodeSource>()) { Reference = new Ref2(type, x.Value) };
+                        yield return new MenuItem(x.Key, Guid.NewGuid(), this) { Reference = new Ref2(type, x.Value) };
                 }
                 yield break;
             }
@@ -67,7 +64,7 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
                 {
                     foreach (var method in ref2.MethodInfos)
                     {
-                        yield return new MenuItem(method.Name, Guid.NewGuid(), container.Resolve<INodeSource>()) { Reference = new Ref3(ref2.Type, method) };
+                        yield return new MenuItem(method.Name, Guid.NewGuid(), this) { Reference = new Ref3(ref2.Type, method) };
                     }
                 }
                 else if (menuItem.Reference is Ref3 { MethodInfo: { } methodInfo })
@@ -81,7 +78,7 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
                         var asses = AssemblyHelper.GetNonSystemAssembliesInCurrentDomain().ToArray();
                         var set = asses.SelectMany(a => a.GetPublicStaticMethodsGroupedByClass(ca => ca.Any(da => da == _type))).ToArray();
                         foreach (var x in set)
-                            yield return new MenuItem(x.Key, Guid.NewGuid(), container.Resolve<INodeSource>()) { Reference = new Ref2(_type, x.Value) };
+                            yield return new MenuItem(x.Key, Guid.NewGuid(), this) { Reference = new Ref2(_type, x.Value) };
                     }
 
                 }
@@ -101,7 +98,7 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
 
                     foreach (var item in properties.Where(a => a.PropertyType == type))
                     {
-                        yield return new MenuItem(item.Name, Guid.NewGuid(), container.Resolve<INodeSource>()) { Reference = new Ref(item, _pending) };
+                        yield return new MenuItem(item.Name, Guid.NewGuid(), this) { Reference = new Ref(item, _pending) };
                     }
                 }
                 yield break;
@@ -114,7 +111,7 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
             if (guid is IGetReference { Reference: Ref3 { Type: { } _type, MethodInfo: { } methodInfo } })
             {
 
-                var nodeViewModel = container.Resolve<IViewModelFactory>().CreateNode(methodInfo);
+                var nodeViewModel = Globals.Resolver.Resolve<IViewModelFactory>().CreateNode(methodInfo);
                 return nodeViewModel;
             }
             throw new Exception("sd dd");

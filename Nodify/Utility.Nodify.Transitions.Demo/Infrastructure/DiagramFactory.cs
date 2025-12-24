@@ -29,14 +29,13 @@ namespace Utility.Nodify.Engine
     {
         Guid guid = new("004cf888-a762-4149-a3b9-7a0911cdf1a9");
         const string sqliteName = "O:\\source\\repos\\Utility\\Nodes\\Utility.Nodes.Demo.Editor\\Data\\first_7.sqlite";
-        private IContainer container;
+        //private IContainer container;
         private ITreeRepository repository;
         private readonly ObservableDictionary<string, Lazy<IReadOnlyTree>> _factories = [];
 
-        public DiagramFactory(IContainer container)
+        public DiagramFactory()
         {
             repository = new TreeRepository(sqliteName);
-            this.container = container;
         }
 
         public Task Build(IDiagramViewModel diagram)
@@ -53,8 +52,7 @@ namespace Utility.Nodify.Engine
             children(tree)
                 .Subscribe(item =>
                 {
-                    var node = container.Resolve<IViewModelFactory>().CreateNode(item);
-
+                    var node = Globals.Resolver.Resolve<IViewModelFactory>().CreateNode(item);
                     diagram.Nodes.Add(node);
                 }, () =>
                 {

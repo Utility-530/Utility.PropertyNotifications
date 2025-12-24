@@ -9,7 +9,6 @@ using Utility.Models.Diagrams;
 using Utility.Nodes;
 using Utility.Nodify.Base.Abstractions;
 using Utility.Nodify.Engine;
-using Utility.Nodify.Generator.Services;
 using Utility.Nodify.Repository;
 using Utility.Repos;
 using Utility.ServiceLocation;
@@ -32,41 +31,39 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
             register.Register(() => new PlaybackService());
             //register.Register<IFactory<Interfaces.Exs.IViewModelTree>>(() => new NodeFactory());
             register.Register<IServiceResolver>(() => new ServiceResolver());
-            register.Register<IModelResolver>(() => new BasicModelResolver());
-            //register.Register<IObservable<IReadOnlyTree>>(() => new TreeResolver());
             register.Register<ExceptionsViewModel>(() => new ExceptionsViewModel());
 
-            //register.Register(() => new DiagramRepository(container, "../../../Data"));
-            var container = initialiseContainer();
-            register.Register(container);
+            //var container = initialiseContainer();
+            //register.Register(container);
 
             Globals.Exceptions.Subscribe(a => Globals.Resolver.Resolve<ExceptionsViewModel>().Collection.Add(a));
-            var repo = new DiagramRepository(Globals.Resolver.Resolve<DryIoc.IContainer>(), "../../../Data");
-            //var diagramViewModel = Globals.Resolver.Resolve<DiagramRepository>().Convert(diagramKey);
-            var diagramViewModel = new DiagramViewModel(Globals.Resolver.Resolve<IContainer>()) { Key = diagramKey, Arrangement = Utility.Enums.Arrangement.UniformRow };
+            var repo = new DiagramRepository("../../../Data");
+            var diagramViewModel = new DiagramViewModel() { Key = diagramKey, Arrangement = Utility.Enums.Arrangement.UniformRow };
             register.Register<IDiagramViewModel>(diagramViewModel);
-            container.RegisterInstance<IDiagramViewModel>(diagramViewModel);
-            await Globals.Resolver.Resolve<DryIoc.IContainer>().Resolve<IDiagramFactory>().Build(diagramViewModel);
+            //container.RegisterInstance<IDiagramViewModel>(diagramViewModel);
+            register.Register<IDiagramFactory, DiagramFactory>();
+            register.Register<IViewModelFactory, ViewModelFactory>();
+            register.Register<IMenuFactory, MenuFactory>();
+            register.Register<Utility.Nodify.Operations.Infrastructure.INodeSource, NodeSource>();
+            await Globals.Resolver.Resolve<IDiagramFactory>().Build(diagramViewModel);
 
             repo.Track(diagramViewModel);
             repo.Convert(diagramViewModel);
-            new Tracker().Track(diagramViewModel);
+            //new Tracker().Track(diagramViewModel);
         }
 
-        public static IContainer initialiseContainer()
-        {
-            var container = new Container(DiConfiguration.SetRules);
-            Locator.CurrentMutable.RegisterConstant<IContainer>(container);
-            //Locator.CurrentMutable.RegisterLazySingleton<ITreeResolver>(()=> new TreeResolver());
-            container.Register<IDiagramFactory, DiagramFactory>();   
-            container.Register<IViewModelFactory, ViewModelFactory>();
-            container.Register<Utility.Nodify.Operations.Infrastructure.INodeSource, NodeSource>();
-            container.Register<IMenuFactory, MenuFactory>();
-            container.Register<CollectionViewService>();
-            _ = Utility.Nodify.ViewModels.Infrastructure.Bootstrapper.Build(container);
+        //public static IContainer initialiseContainer()
+        //{
+        //    var container = new Container(DiConfiguration.SetRules);
+        //    Locator.CurrentMutable.RegisterConstant<IContainer>(container);
 
-            return container;
-        }
+    
+      
+        //    container.Register<IMenuFactory, MenuFactory>();
+        //    _ = Utility.Nodify.ViewModels.Infrastructure.Bootstrapper.Build(container);
+
+        //    return container;
+        //}
 
         class DiConfiguration
         {
