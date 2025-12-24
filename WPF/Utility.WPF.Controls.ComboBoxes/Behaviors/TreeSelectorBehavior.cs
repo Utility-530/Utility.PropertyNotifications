@@ -6,6 +6,7 @@ using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
@@ -19,16 +20,27 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         protected override void OnAttached()
         {
-            hierarchicalDataTemplate = TemplateGenerator.CreateHierarcialDataTemplate(() =>
-            {
-                var contentControl = new ContentControl();
-                contentControl.SetBinding(ContentControl.ContentProperty, new Binding() { Path = new PropertyPath(nameof(IGetValue.Value)) });
-                return contentControl;
-            }, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Children)) });
-            AssociatedObject.ItemTemplate = hierarchicalDataTemplate;
+            AssociatedObject.ItemTemplateSelector = DataTemplateSelector();
+            AssociatedObject.SelectedItemTemplateSelector = SelectedTemplateSelector();
             AssociatedObject.ParentPath = nameof(IGetParent<>.Parent);
 
             base.OnAttached();
         }
+
+        public virtual DataTemplateSelector DataTemplateSelector()
+        {
+            DataTemplate hierarchicalDataTemplate = null;
+            return DataTemplateHelper.Create((a, b) =>
+            {
+                return hierarchicalDataTemplate ??= TemplateGenerator.CreateHierarcialDataTemplate(() =>
+                {
+                    var contentControl = new ContentControl();
+                    contentControl.SetBinding(ContentControl.ContentProperty, new Binding() { Path = new PropertyPath(nameof(IGetValue.Value)) });
+                    return contentControl;
+                }, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Children)) });
+            });
+        }
+
+        public virtual DataTemplateSelector SelectedTemplateSelector() => DataTemplateSelector();
     }
 }

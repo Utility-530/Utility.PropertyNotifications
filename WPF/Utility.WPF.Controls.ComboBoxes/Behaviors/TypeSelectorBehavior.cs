@@ -12,6 +12,7 @@ using Utility.Nodes.Ex;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Extensions;
 using Utility.WPF.Factorys;
+using Utility.WPF.Helpers;
 using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.ComboBoxes
@@ -43,7 +44,7 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         protected override void OnAttached()
         {
-            this.AssociatedObject.SelectedItemTemplateSelector = CustomItemTemplateSelector.Instance;
+
             this.AssociatedObject.ValueCoercing += (s, e) =>
             {
                 if (e.NewValue is not IGetValue { Value: Type { } type })
@@ -123,9 +124,8 @@ namespace Utility.WPF.Controls.ComboBoxes
             set { SetValue(UseEntryAssemblyProperty, value); }
         }
 
-        private class CustomItemTemplateSelector : DataTemplateSelector
-        {
-            public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        public override DataTemplateSelector SelectedTemplateSelector() =>
+            DataTemplateHelper.Create((item, b) =>
             {
                 if (item is IGetValue { Value: var value } tree)
                 {
@@ -148,9 +148,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                     return TemplateGenerator.CreateDataTemplate(() => new Ellipse { Fill = Brushes.Black, Height = 2, Width = 2, VerticalAlignment = VerticalAlignment.Bottom, ToolTip = new ContentControl { Content = value }, Margin = new Thickness(4, 0, 4, 0) });
                 }
                 throw new Exception("d ss!$sd");
-            }
+            });
 
-            public static CustomItemTemplateSelector Instance { get; } = new();
-        }
     }
 }
