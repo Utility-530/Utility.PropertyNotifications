@@ -51,7 +51,7 @@ namespace Utility.WPF.Demo.Buttons
 
         public PlayBackViewModel()
         {
-            Collection = [.. ProfileFactory.BuildPool().Select(a => new ViewModelTree { Data = a })];
+            Collection = [.. ProfileFactory.BuildPool().Select(a => new NodeViewModel { Data = a })];
         }
 
         public Enum Last
@@ -64,7 +64,7 @@ namespace Utility.WPF.Demo.Buttons
             }
         }
 
-        public ViewModelTree[] Collection { get; } = [];
+        public NodeViewModel[] Collection { get; } = [];
         public int Index { get; set; } = 0;
     }
 }
