@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Utility.WPF.Helpers
 {
@@ -29,6 +30,10 @@ namespace Utility.WPF.Helpers
                 }
             }
         }
+        public static DataTemplateSelector Create(Func<object, DependencyObject, DataTemplate> factory)
+        {
+            return new CustomDataTemplateSelector(factory);
+        }
 
         public static DataTemplate FindTemplate(this Type currentType, ResourceDictionary resourceDictionary)
         {
@@ -43,6 +48,20 @@ namespace Utility.WPF.Helpers
             }
 
             return baseTemplate;
+        }
+
+        private class CustomDataTemplateSelector: DataTemplateSelector
+        {
+            private readonly Func<object, DependencyObject, DataTemplate> create;
+
+            public CustomDataTemplateSelector(Func<object, DependencyObject, DataTemplate> create)
+            {
+                this.create = create;
+            }
+            public override DataTemplate SelectTemplate(object item, DependencyObject container)
+            {
+                return create(item, container);
+            }
         }
     }
 }
