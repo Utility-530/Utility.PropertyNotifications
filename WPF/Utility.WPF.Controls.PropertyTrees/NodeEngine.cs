@@ -44,9 +44,9 @@ namespace Utility.WPF.Controls.PropertyTrees
         public IReadOnlyCollection<INodeViewModel> Nodes => nodes;
         public ObservableCollection<KeyValuePair<string, PropertyChange>> DirtyNodes => dirtyNodes;
         public static NodeEngine Instance { get; } = new();
-        string INodeSource.New => New;
-
         public IObservable<INodeViewModel> Selections { get; }
+
+        public IObservable<INodeViewModel> this[string key] => throw new NotImplementedException();
 
         public IObservable<INodeViewModel?> Single(string key)
         {
@@ -251,6 +251,11 @@ namespace Utility.WPF.Controls.PropertyTrees
         }
 
         public bool CanRemove(INodeViewModel nodeViewModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains(string key)
         {
             throw new NotImplementedException();
         }
