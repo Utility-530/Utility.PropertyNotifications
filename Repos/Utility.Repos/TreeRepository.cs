@@ -130,6 +130,10 @@ namespace Utility.Repos
                             }
                         }
                     }
+                    else
+                    {
+                        observer.OnNext(new DateValue(guid, name, default, null));
+                    }
                     observer.OnCompleted();
                 });
             });
