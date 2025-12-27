@@ -35,14 +35,11 @@ namespace Utility.Interfaces
 
         public static void SetGuid(this ISetGuid setParent, Guid parent) => setParent.Guid = parent;
 
-        public static string Name(this ITree node)
-        {
-            if (node is IGetName getName)
-            {
+        public static string Name(this IGetName getName)
+        {      
                 return getName.Name;
-            }
-            return node.ToString();
         }
+        public static string SetName(this ISetName node, string name) => node.Name = name;
 
         public static System.Type toType(this object data)
         {
