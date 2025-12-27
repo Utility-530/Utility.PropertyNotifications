@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:trees="http://schemas.utility.com/trees"
     xmlns:btns="http://schemas.utility.com/buttons"
-    xmlns:inf="clr-namespace:Utility.WPF.Controls.ComboBoxes.Infrastructure"
     xmlns:cb="clr-namespace:Utility.WPF.Controls.ComboBoxes"
     xmlns:conv="http://schemas.utility.com/converters"
     xmlns:c="http://schemas.utility.com/colours" xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
@@ -15,6 +14,8 @@
         <ResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
+    
     <ControlTemplate x:Key="ComboBox_ToggleButton" TargetType="{x:Type ToggleButton}">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -80,7 +81,7 @@
                                     ClickMode="Press"
                                     Content="{TemplateBinding ToggleButtonContent}"
                                     Focusable="false"
-                                    IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                    IsChecked="{Binding IsDropDownOpen, Mode=OneWay, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                     Template="{TemplateBinding ToggleButtonTemplate}" />
 
                                 <Popup
@@ -109,8 +110,9 @@
                                    
 
                                             <!--<Ellipse Width="32" Height="32" Fill="DarkOliveGreen"></Ellipse>-->
-                                            <btns:GeometryToggleButton Height="20"
-                                                                       Width="20"
+                                            <btns:GeometryToggleButton Height="14"
+                                                                       Width="14"
+                                                                       Visibility="{TemplateBinding ShowCloseButton, Converter={StaticResource BooleanToVisibilityConverter}}"                                                               
                                                                        Data="{StaticResource Cross}" 
                                                                        Fill="Black"
                                                                        StrokeThickness="4"
@@ -125,7 +127,7 @@
                                             x:Name="DropDownBorder"
                                             Background="Transparent"
                                             BorderThickness="1">
-                                                <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">                                                  
+                                                <ScrollViewer SnapsToDevicePixels="True">                                                  
                                                     <trees:CustomTreeView
                                                     x:Name="treeView"
                                                     ItemContainerStyle="{TemplateBinding TreeItemContainerStyle}"
