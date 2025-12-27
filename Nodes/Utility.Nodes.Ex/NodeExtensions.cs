@@ -36,8 +36,9 @@ namespace Utility.Nodes.Ex
                 {
                     if (typePredicate?.Invoke(type) == false)
                         continue;
-                    var _tree = new TypeModel(type)
+                    var _tree = new Model() 
                     {
+                        Data = type,
                         Name = type.Name,
                         Parent = tree
                     };
