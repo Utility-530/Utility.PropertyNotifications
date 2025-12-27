@@ -164,8 +164,12 @@ namespace Utility.Models.Trees
         public AssemblyModel()
         {
         }
+        public AssemblyModel(Assembly assembly)
+        {
+            Data = assembly;
+        }
 
-        public Assembly Assembly => Value as Assembly;
+        public Assembly Assembly => Data as Assembly;
 
         public override string Name
         {
@@ -194,7 +198,7 @@ namespace Utility.Models.Trees
             }
         }
 
-        public static AssemblyModel Create(Assembly assembly) => new() { Value = assembly, Name = assembly.FullName };
+        public static AssemblyModel Create(Assembly assembly) => new(assembly);
 
         public override void SubtractDescendant(IReadOnlyTree node, int level)
         {
