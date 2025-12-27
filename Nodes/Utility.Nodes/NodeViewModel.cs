@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Utility.Commands;
 using Utility.Interfaces;
 using Utility.Interfaces.Exs.Diagrams;
+using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
 using Utility.Nodify.Base;
 using Utility.Trees;
@@ -159,5 +160,23 @@ namespace Utility.Nodes
         protected override void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
         {
         }
+
+        public override async Task<ITree> AsyncClone()
+        {
+            object clone = Data;
+            if (Data is IClone cln)
+            {
+                clone = cln.Clone();
+            }
+            if (Data is IAsyncClone asyncClone)
+            {
+                clone = await asyncClone.AsyncClone();
+            }
+
+            var cloneTree = (ITree)new NodeViewModel(clone);
+            //cloneTree.Key = this.Key;
+            return cloneTree;
+        }
+
     }
 }
