@@ -57,33 +57,7 @@ namespace Utility.Nodes.Meta
                     }
                 }
 
-            return Observable.Return(node);
-
-            return Observable.Create<INodeViewModel>(observer =>
-            {
-                return repository
-                .Get(Guid.Parse(node.Key()))
-                .Subscribe(_d =>
-                {
-                    if (_d.Name == nameof(IGetValue.Value) && _d.Value != null)
-                    {
-                        if (nodeInterface.Setter(_d.Name) is not { } setter)
-                        {
-                            throw new Exception($"no field for property, {_d.Name}");
-                        }
-                        //if (node is ISet set)
-                        //{
-                        //    set.Set(_d.Value, _d.Name);
-                        //    return;
-                        //}
-                        setter?.Set(node, _d.Value);
-                    }
-                }, () =>
-                {
-                    observer.OnNext(node);
-                    observer.OnCompleted();
-                });
-            });
+            return Observable.Return(node);         
         }
 
         public void Track(INodeViewModel node)
@@ -129,7 +103,8 @@ namespace Utility.Nodes.Meta
                     {
                         if (reception.Name == nameof(Model.Name))
                         {
-                            throw new Exception("ds2d cdd32");
+                            if (node is NodeViewModel { SuppressExceptions: false })
+                                throw new Exception("ds2d cdd32");
                             //(reception.Target as INotifyPropertyChanged).RaisePropertyChanged(reception.Name);
                             //repository.Value.UpdateName((GuidKey)(node as IGetParent<IReadOnlyTree>).Parent.Key(), (GuidKey)node.Key(), (string)reception.OldValue, (string)reception.Value);
                         }

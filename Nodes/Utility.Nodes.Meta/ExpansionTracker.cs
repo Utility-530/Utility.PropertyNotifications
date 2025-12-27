@@ -31,7 +31,6 @@ namespace Utility.Nodes.Meta
     public partial class NodeEngine
     {
         private const string ERROR_KEY_NOT_FOUND = "Key not found";
-        private readonly Utility.Observables.CompositeDisposable _compositeDisposable = new();
         private readonly Dictionary<INodeViewModel, List<INodeViewModel>> dictionary = new();
         private readonly IDataActivator dataActivator;
         private bool _disposed;
@@ -62,7 +61,7 @@ namespace Utility.Nodes.Meta
                     return Observable.Empty<INodeViewModel>();
                 })
                 .Subscribe(child => Globals.UI.Post((a) => node.Add(child), null))
-                .DisposeWith(_compositeDisposable);
+                .DisposeWith(childrenSubscriptions.Get(node.Key(), () => new CompositeDisposable()));
 
             IObservable<INodeViewModel> unloadChildren(INodeViewModel node)
             {
@@ -109,7 +108,7 @@ namespace Utility.Nodes.Meta
                     if (node is IYieldItems yieldItems)
                     {
                         processYieldItems(yieldItems, observer)
-                            .DisposeWith(disposables);
+                          .DisposeWith(childrenSubscriptions.Get(node.Key(), () => new CompositeDisposable()));
                     }
                     if (node.IsProliferable)
                     {
@@ -127,7 +126,7 @@ namespace Utility.Nodes.Meta
                                         },
                                         observer.OnError,
                                         () => { observer.OnCompleted(); }
-                                        ).DisposeWith(disposables);
+                                        ).DisposeWith(childrenSubscriptions.Get(node.Key(), () => new CompositeDisposable()));
                     }
 
                     return disposables;
@@ -135,25 +134,32 @@ namespace Utility.Nodes.Meta
 
                 void processKey(INodeViewModel node, Structs.Repos.Key? key, IObserver<INodeViewModel> observer, ref int childIndex)
                 {
-                    if (key.HasValue)
-                    {
-                        var child = nodesStore.Find(key.Value.Guid.ToString());
-
-                        if (child != null)
+                    if (node.IsSingular == false)
+                        if (key.HasValue)
                         {
-                            if (child.IsSingular == false)
+                            var child = nodesStore.Find(key.Value.Guid.ToString());
+
+                            if (child != null)
                             {
-                                throw new Exception("dddf33s xcc");
+                                if (child.IsSingular == false)
+                                {
+                                    throw new Exception("dddf33s xcc");
+                                }
+                            }
+                            else
+                            {
+                                findInRepository(node, key.Value.Guid)
+                                    .Where(a => a.IsSingular == false)
+                                    .Subscribe(observer.OnNext);
                             }
                         }
                         else
                         {
-                            findInRepository(node, key.Value.Guid).Subscribe(observer.OnNext);
+                            //"no child nodes created yet";
                         }
-                    }
                     else
                     {
-                        //"no child nodes created yet";
+
                     }
                     //throw new Exception("DSF 33443");
                 }
@@ -213,7 +219,6 @@ namespace Utility.Nodes.Meta
             });
         }
 
-
         public IObservable<INodeViewModel> FindChild(INodeViewModel node, Guid guid)
         {
             return Observable.Create<INodeViewModel>(observer =>
@@ -222,7 +227,7 @@ namespace Utility.Nodes.Meta
                 {
                     if (child != null)
                     {
-                        Add(child);
+                        add(child);
                         return Disposable.Empty;
                     }
                     else
@@ -236,16 +241,8 @@ namespace Utility.Nodes.Meta
                             observer.OnCompleted();
                         });
                     }
-                    //return new CompositeDisposable(repositorySubscription);
                 }
-                //_nodes.AndAdditions().Subscribe(addition =>
-                //{
-                //    if (addition.Guid == guid)
-                //    {
-                //        observer.OnNext(addition);
-                //        observer.OnCompleted();
-                //    }
-                //}).DisposeWith(_compositeDisposable);
+  
             });
         }
 
@@ -300,7 +297,7 @@ namespace Utility.Nodes.Meta
 
                                 }
                                 else
-                                {                       
+                                {
                                     observer.OnNext(create(key));
                                 }
                                 observer.OnNext(a);
@@ -330,7 +327,7 @@ namespace Utility.Nodes.Meta
                 validateKey(key);
                 child.SetKey(new GuidKey(key.Guid));
                 child.IsProliferable = true;
-                Add(child);
+                add(child);
                 return child;
             }
         }

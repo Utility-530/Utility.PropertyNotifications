@@ -38,21 +38,22 @@ namespace Utility.Nodes.Meta
         // nodes which already came with keys and therefore are not part of this engines repository
         HashSet<Key> keys = new();
         HashSet<Key> roots = new();
-
+        List<INodeViewModel> inserting = new();
         private readonly ITreeRepository repository;
         private readonly INodeSource nodesStore;
+        Dictionary<string, CompositeDisposable> childrenSubscriptions = new();
 
-        public NodeEngine(ITreeRepository? treeRepo = null, IValueRepository? valueRepository = null, IDataActivator? dataActivator = null, Predicate<INodeViewModel>? childrenTracking = null)
+        public NodeEngine(ITreeRepository? treeRepo = null, IValueRepository? valueRepository = null, IDataActivator? dataActivator = null, Predicate<INodeViewModel>? childrenTracking = null, INodeSource? nodeSource = null)
         {
             this.repository = treeRepo ?? Globals.Resolver.Resolve<ITreeRepository>() ?? throw new Exception("££SXXX");
-            valueRepository ??=  Globals.Resolver.Resolve<IValueRepository>() ?? throw new Exception("£3__SXXX");
+            valueRepository ??= Globals.Resolver.Resolve<IValueRepository>() ?? throw new Exception("£3__SXXX");
             this.dataActivator = dataActivator ?? Globals.Resolver.Resolve<IDataActivator>() ?? throw new Exception("£3__SXXX");
             var x = Globals.Resolver.Resolve<NodeInterface>();
-            nodesStore = Globals.Resolver.Resolve<INodeSource>();
+            nodesStore = nodeSource ?? Globals.Resolver.Resolve<INodeSource>();
             _dataInitialiser = new(valueRepository, x);
             this.childrenTracking = childrenTracking;
         }
-        List<INodeViewModel> inserting = new();
+
         public IObservable<INodeViewModel> Create(object instance)
         {
             return Observable.Create<INodeViewModel>(observer =>
@@ -81,7 +82,7 @@ namespace Utility.Nodes.Meta
                         observer.OnCompleted();
                         return Disposable.Empty;
                     }
-                    if(inserting.Contains(node))
+                    if (inserting.Contains(node))
                     {
                         observer.OnNext(node);
                         observer.OnCompleted();
@@ -97,7 +98,7 @@ namespace Utility.Nodes.Meta
                                    throw new Exception("Key is null");
                                keys.Add(key.Value);
 
-                               Add(node);
+                               add(node);
                                observer.OnNext(node);
                                observer.OnCompleted();
                            });
@@ -112,16 +113,15 @@ namespace Utility.Nodes.Meta
             {
                 ObjectDisposedException.ThrowIf(_disposed, nameof(NodeEngine));
                 var node = nodesStore.Find(key);
-
-                if (CanRemove(node))
-                {
-                    nodesStore.Remove(key);
-                }
-                repository.Remove((GuidKey)key);
+                Destroy(node);
+            }
+            else if(instance is INodeViewModel node)
+            {
+                remove(node);
             }
         }
 
-        private void Add(INodeViewModel node)
+        private void add(INodeViewModel node)
         {
             ObjectDisposedException.ThrowIf(_disposed, nameof(NodeEngine));
 
@@ -148,11 +148,11 @@ namespace Utility.Nodes.Meta
                     .Find((GuidKey)node.Parent().Key(), node.Name(), type: GetNodeType(node), index: index == 0 ? null : index)
                     .Subscribe(change =>
                     {
-                        if(change.Type == Changes.Type.Add)
+                        if (change.Type == Changes.Type.Add)
                         {
                             validateKey(change.Value);
                             node.SetKey(new GuidKey(change.Value.Guid));
-                            Add(node);
+                            add(node);
                         }
                         else
                             throw new Exception("Node not found in repository");
@@ -172,6 +172,17 @@ namespace Utility.Nodes.Meta
             //}
         }
 
+        private void remove(INodeViewModel node)
+        {
+            if (CanRemove(node))
+            {
+                nodesStore.Remove(node.Key());
+            }
+            repository.Remove((GuidKey)node.Key());
+            childrenSubscriptions[node.Key()].Dispose();
+            childrenSubscriptions.Remove(node.Key());
+        }
+
         void addNodeToCollection(INodeViewModel node)
         {
             _dataInitialiser
@@ -189,11 +200,12 @@ namespace Utility.Nodes.Meta
                         }
                     }
                 })
-                .DisposeWith(_compositeDisposable);
+                .DisposeWith(childrenSubscriptions.Get(node.Key(), () => new CompositeDisposable()));
 
             void configureNode(INodeViewModel node)
             {
             }
+
 
             void setupChildrenTracking(INodeViewModel node)
             {
@@ -206,14 +218,14 @@ namespace Utility.Nodes.Meta
                         switch (change.Type)
                         {
                             case Changes.Type.Add:
-                                addNodeToCollection(change.Value);
+                                add(change.Value);
                                 break;
                             case Changes.Type.Remove:
-                                repository.Remove((GuidKey)change.Value.Key());
+                                remove(change.Value);
                                 break;
                         }
                     })
-                    .DisposeWith(_compositeDisposable);
+                    .DisposeWith(childrenSubscriptions.Get(node.Key(), () => new CompositeDisposable()));
             }
         }
 
@@ -247,7 +259,8 @@ namespace Utility.Nodes.Meta
 
             if (disposing)
             {
-                _compositeDisposable?.Dispose();
+                childrenSubscriptions.ForEach(a => a.Value.Dispose());
+                childrenSubscriptions.Clear();
                 nodesStore.Dispose();
                 //_dirty?.Dispose();
             }
