@@ -1,4 +1,5 @@
-﻿using Utility.Meta;
+﻿using Utility.Interfaces.NonGeneric;
+using Utility.Meta;
 
 namespace Utility.PropertyDescriptors;
 
@@ -10,46 +11,17 @@ internal class ReferenceDescriptor<T>(string Name) : ReferenceDescriptor(new Roo
 {
 }
 
-internal class ReferenceDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor), IReferenceDescriptor, IGetType
+internal class ReferenceDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor, Instance), IReferenceDescriptor, IGetType
 {
-    private PropertiesDescriptor? propertiesDescriptor;
-
     public override IEnumerable Items()
     {
-        if (Instance is null)
-        {
-            int i = 0;
+        var descriptors = TypeDescriptor.GetProperties(Descriptor.PropertyType);
 
-            if (Descriptor.PropertyType.IsAssignableTo(typeof(IEnumerable)) && Descriptor.PropertyType.IsAssignableTo(typeof(string)) == false && this.CollectionItemPropertyType is Type _elementType)
-            {
-                var enumerable = (IEnumerable?)Activator.CreateInstance(Descriptor.PropertyType);
-                var collectionDescriptor = new CollectionDescriptor(Descriptor, _elementType, enumerable) { Parent = this, Inputs = [], Outputs = [], IsProliferable = true };
-                if (i++ > 0)
-                {
-                    yield break;
-                }
-                yield return collectionDescriptor;
-            }
-            else
-            {
-                var inst = ActivateAnything.Activate.New(Descriptor.PropertyType);
-                propertiesDescriptor = new PropertiesDescriptor(Descriptor, inst) { Parent = this, Inputs = [], Outputs = [] };
-                yield return propertiesDescriptor;
-            }
-        }
-        if (Instance is object obj)
+        foreach (Descriptor descriptor in descriptors)
         {
-            yield return new PropertiesDescriptor(Descriptor, Instance) { Inputs = [], Outputs = [] };
-        }
-        if (Instance is IEnumerable _enumerable && Instance is not string s && Instance.GetType() is Type _type && _type.ElementType() is Type elementType)
-        {
-            yield return new CollectionDescriptor(Descriptor, elementType, _enumerable) { Parent = this, Inputs = [], Outputs = [], IsProliferable = true };
+            yield return DescriptorConverter.ToDescriptor(descriptor, Instance);
         }
     }
-
-    public override int Count => TypeDescriptor.GetProperties(Instance).Count;
-
-    public object Instance { get; } = Instance;
 
     public new Type GetType()
     {

@@ -38,7 +38,7 @@ internal class CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeader
         }
     }
 
-    public object Item => null;
+    //public object Item => null;
 
     public override int Count => descriptors.Count;
 
@@ -80,7 +80,7 @@ internal class HeaderDescriptor : ChildlessMemberDescriptor, IHeaderDescriptor, 
     {
     }
 
-    public HeaderDescriptor(PropertyDescriptor descriptor) : base(descriptor)
+    public HeaderDescriptor(System.ComponentModel.PropertyDescriptor descriptor) : base(descriptor)
     {
     }
 

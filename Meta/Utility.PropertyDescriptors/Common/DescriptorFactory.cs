@@ -1,4 +1,6 @@
-﻿using Utility.Meta;
+﻿using Utility.Interfaces;
+using Utility.Interfaces.NonGeneric;
+using Utility.Meta;
 
 namespace Utility.PropertyDescriptors
 {
@@ -14,7 +16,8 @@ namespace Utility.PropertyDescriptors
         {
             var rootDescriptor = new RootDescriptor(instance.GetType(), name: name);
             rootDescriptor.SetValue(null, instance);
-            return DescriptorConverter.ToDescriptor(instance, rootDescriptor);
+            var descriptor = DescriptorConverter.ToDescriptor(rootDescriptor, instance);
+            return descriptor;
         }
 
         public static IDescriptor CreateMethodItem(object item, MethodInfo methodInfo, Type type)
@@ -26,7 +29,32 @@ namespace Utility.PropertyDescriptors
 
     public class DescriptorConverter
     {
-        public static MemberDescriptor ToDescriptor(object? value, Descriptor descriptor)
+        public static MemberDescriptor ToDescriptor(Descriptor descriptor, object? value)
+        {
+            if (descriptor.PropertyType.IsAssignableTo(typeof(IEnumerable)) && (descriptor.PropertyType != typeof(string)))
+            {
+                if (descriptor.PropertyType.ElementType() is { } elementType)
+                {
+                    var collection = descriptor.GetValue(value) as IEnumerable;
+                    var collectionDescriptor = new CollectionDescriptor(descriptor, elementType, collection ?? Array.CreateInstance(elementType, 0)) { IsProliferable = true };
+                    return collectionDescriptor;
+                }
+                else
+                    throw new NotSupportedException();
+            }
+            else if (descriptor.PropertyType.IsClass && descriptor.PropertyType != typeof(string))
+            {
+                var obj = descriptor.GetValue(value);
+                var propertiesDescriptor = new ReferenceDescriptor(descriptor, obj) { };
+                return propertiesDescriptor;
+            }
+            else
+            {
+                return new PropertyDescriptor(descriptor, value);
+            }
+        }
+
+        public static MemberDescriptor ToValueDescriptor(Descriptor descriptor, object? value)
         {
             MemberDescriptor _descriptor = descriptor.PropertyType switch
             {
@@ -51,11 +79,10 @@ namespace Utility.PropertyDescriptors
                 Type t when t == typeof(byte?) => new NullableByteValue(descriptor, value),
                 Type t when t == typeof(Guid?) => new NullableGuidValue(descriptor, value),
                 Type t when t == typeof(DateTime?) => new NullableDateTimeValue(descriptor, value),
-
                 //Type t when t == typeof(IDictionary) => new DictionaryValue(descriptor, value),
                 Type t when t.IsValueType => new StructValue(descriptor, value),
 
-                Type t when t.IsDerivedFrom<object>() && tryGetValue(descriptor, value, out var _value) => new ReferenceDescriptor(descriptor, _value),
+                //Type t when t.IsDerivedFrom<object>() && tryGetValue(descriptor, value, out var _value) => new ReferenceDescriptor(descriptor, _value),
 
                 _ => new NullValue(descriptor, value),
             };

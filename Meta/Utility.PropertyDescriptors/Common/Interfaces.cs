@@ -24,10 +24,6 @@
     {
     }
 
-    public interface IPropertiesDescriptor : IDescriptor
-    {
-    }
-
     public interface IReferenceDescriptor : IDescriptor, ICount
     {
         object Instance { get; }

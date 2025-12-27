@@ -1,8 +1,12 @@
 ﻿using Utility.Interfaces;
 
 namespace Utility.PropertyDescriptors;
-
-public abstract class BasePropertyDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor), IInstance, IPropertyDescriptor
+public class PropertyDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor, Instance), IInstance, IPropertyDescriptor
 {
-    public object Instance { get; } = Instance;
+    public override IEnumerable Items()
+    {        
+        var propertyDescriptor = DescriptorConverter.ToValueDescriptor(Descriptor, Instance);
+        //propertyDescriptor.Parent = this;
+        yield return propertyDescriptor;
+    }
 }

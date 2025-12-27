@@ -1,8 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive;
+using ActivateAnything;
 using Utility.Helpers.NonGeneric;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Meta;
+using Utility.Reactives;
 
 namespace Utility.PropertyDescriptors
 {
@@ -17,13 +20,11 @@ namespace Utility.PropertyDescriptors
         }
     }
 
-    internal class CollectionDescriptor(Descriptor PropertyDescriptor, Type ElementType, IEnumerable collection) : BasePropertyDescriptor(PropertyDescriptor, collection),
+    internal class CollectionDescriptor(Descriptor PropertyDescriptor, Type ElementType, IEnumerable collection) : MemberDescriptor(PropertyDescriptor, collection),
         ICollectionDescriptor,
         IRefresh,
         IGetType
     {
-        private Dictionary<IDescriptor, (object Item, int Index)> descriptors = new();
-
         private ObservableCollection<IDescriptor>? children;
 
         public static string _Name => "Collection";
@@ -34,10 +35,24 @@ namespace Utility.PropertyDescriptors
 
         public override IEnumerable Items()
         {
-            return children ??= new ObservableCollection<IDescriptor>(new[]
+            return children ??= build();
+
+            ObservableCollection<IDescriptor> build()
             {
-                new CollectionHeadersDescriptor(ElementType, Instance.GetType()) { Parent = this, Inputs = [], Outputs = [] } }
-            .Concat(addFromInstance()));
+                var _collection = new ObservableCollection<IDescriptor>(new[]
+                {
+                    new CollectionHeadersDescriptor(ElementType,Descriptor.PropertyType) { Parent = this }
+                });
+                foreach (var x in addFromInstance())
+                    _collection.Add(x);
+
+                //this.Collection.Additions().Subscribe(item =>
+                //{
+                //    int i = (descriptors.LastOrDefault().Value.Index) + 1;
+                //    children.Add(next(item, item.GetType(), Type, i));
+                //});
+                return _collection;
+            }
         }
 
         public override int Count => Instance is IEnumerable enumerable ? enumerable.Count() : 0;
@@ -67,14 +82,14 @@ namespace Utility.PropertyDescriptors
 
         public void OnNext(RefreshEventArgs value)
         {
-            foreach (var item in addFromInstance())
-                children.Add(item);
+            //foreach (var item in addFromInstance())
+            //    children.Add(item);
         }
 
         public void Refresh()
         {
-            foreach (var item in addFromInstance())
-                children.Add(item);
+            //foreach (var item in addFromInstance())
+            //    children.Add(item);
         }
 
         public new Type GetType()
@@ -96,31 +111,19 @@ namespace Utility.PropertyDescriptors
         public IEnumerable Proliferation()
         {
             var instance = Activator.CreateInstance(ElementType)!;
-            int i = (descriptors.LastOrDefault().Value.Index) + 1;
+            int i = (Children.Cast<INodeViewModel>().LastOrDefault().Index.Local) + 1;
             yield return next(instance, ElementType, Type, i);
         }
 
         private IEnumerable<IDescriptor> addFromInstance()
         {
+            int i = 0;
             foreach (var item in Collection)
             {
-                if (descriptors.Any(a => a.Value.Item == item) == false)
-                {
-                    int i = (descriptors.LastOrDefault().Value.Index) + 1;
-                    yield return next(item, item.GetType(), Type, i);
-                }
-                else
-                {
-                }
-            }
 
-            foreach (var descriptor in descriptors.ToArray())
-            {
-                //i++;
-                if (Contains(Collection, descriptor.Value.Item) == false)
-                {
-                    yield return descriptor.Key;
-                }
+                i++;
+                yield return next(item, item.GetType(), Type, i);
+  
             }
 
             bool Contains(IEnumerable source, object value)
@@ -134,11 +137,10 @@ namespace Utility.PropertyDescriptors
             }
 
         }
-         IDescriptor next(object item, Type type, Type parentType, int i, bool refresh = false, DateTime? removed = null)
+        IDescriptor next(object item, Type type, Type parentType, int i, bool refresh = false, DateTime? removed = null)
         {
-            var descriptor = DescriptorConverter.ToDescriptor(item, new RootDescriptor(type, parentType, type.Name + $" [{i}]"));
+            var descriptor = DescriptorConverter.ToDescriptor(new RootDescriptor(type, parentType, type.Name + $" [{i}]"), item);
             descriptor.Parent = this;
-            descriptors.Add(descriptor, (item, i));
             if (refresh)
                 descriptor.Initialise();
             return descriptor;

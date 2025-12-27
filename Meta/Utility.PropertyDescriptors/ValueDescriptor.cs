@@ -38,13 +38,11 @@ internal abstract class NullableValueDescriptor<T>(Descriptor Descriptor, object
     T? IGetValue<T?>.Value => Get() is T t ? t : default;
 }
 
-internal class ValueDescriptor(Descriptor Descriptor, object Instance) : ValueMemberDescriptor(Descriptor), IRaisePropertyChanged, IInstance
+internal class ValueDescriptor(Descriptor Descriptor, object Instance) : ValueMemberDescriptor(Descriptor, Instance), IRaisePropertyChanged, IInstance
 {
     public override IEnumerable Items() => Array.Empty<object>();
 
     public override bool HasChildren => false;
-
-    public object Instance { get; } = Instance;
 
     public override object? Get()
     {
