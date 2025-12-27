@@ -105,7 +105,7 @@ namespace Utility.Nodes.WPF
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value: TypeModel { Type: Type type } })
+            if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value: Model { Data: Type type } })
             {
                 return DescriptorFactory.CreateRoot(type);
             }
