@@ -5,6 +5,7 @@ using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
+using Utility.Structs;
 using Utility.Trees.Abstractions;
 using IIndex = Utility.Interfaces.Trees.IIndex;
 
@@ -159,7 +160,7 @@ namespace Utility.Trees
             m_items.Clear();
         }
 
-        public virtual async Task<Tree> AsyncClone()
+        public virtual async Task<ITree> AsyncClone()
         {
             object clone = Data;
             if (Data is IClone cln)
@@ -171,8 +172,8 @@ namespace Utility.Trees
                 clone = await asyncClone.AsyncClone();
             }
 
-            var cloneTree = await ToTree(clone) as Tree;
-            cloneTree.Key = this.Key;
+            var cloneTree = (ITree)new Tree(clone);
+            //cloneTree.Key = this.Key;
             return cloneTree;
         }
 
@@ -327,6 +328,15 @@ namespace Utility.Trees
         public virtual bool Equals(IEquatable? other)
         {
             return other?.Equals(this.Key) == true;
+        }
+        public override bool Equals(object other)
+        {
+            return other is IGetKey { Key: { } key } && key.Equals(this.key);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Key?.GetHashCode() ?? 0;
         }
 
         public virtual int Count => m_items.Count;
