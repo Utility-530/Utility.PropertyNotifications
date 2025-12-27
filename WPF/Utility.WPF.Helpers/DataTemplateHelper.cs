@@ -30,7 +30,7 @@ namespace Utility.WPF.Helpers
                 }
             }
         }
-        public static DataTemplateSelector Create(Func<object, DependencyObject, DataTemplate> factory)
+        public static DataTemplateSelector CreateSelector(Func<object, DependencyObject, DataTemplate> factory)
         {
             return new CustomDataTemplateSelector(factory);
         }
