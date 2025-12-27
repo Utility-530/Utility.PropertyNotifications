@@ -82,9 +82,8 @@
 
     <Style x:Key="TableStyle"  TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource PlusTreeViewItem}">
         <Style.Resources>
-            <local:ChildrenConverter x:Key="ChildrenConverter" />
             <DataTemplate x:Key="JsonTemplate">
-                <trees:CustomTreeView ItemsSource="{Binding Converter={StaticResource ChildrenConverter}}" 
+                <trees:CustomTreeView ItemsSource="{Binding Converter={x:Static  local:ChildrenConverter.Instance}}" 
                           ItemContainerStyleSelector="{Binding ItemContainerStyleSelector, RelativeSource={RelativeSource AncestorType=trees:CustomTreeViewItem}}"
                           ItemTemplateSelector="{Binding ItemTemplateSelector, RelativeSource={RelativeSource AncestorType=trees:CustomTreeViewItem}}">                    
                 </trees:CustomTreeView>
@@ -197,4 +196,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="HeadersStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource ItemsStyle}">
+    </Style>
+    
 </ResourceDictionary>

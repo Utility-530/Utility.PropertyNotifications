@@ -72,8 +72,7 @@ namespace Utility.WPF.Trees
                 new StringDecisionTree(new Decision<IReadOnlyTree>(item => item as IMethodDescriptor != null){  }, md => "ExpandedTreeViewItem"),
                     ///new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionDescriptor != null && (item.Data as ICollectionDescriptor).ElementType == typeof(Table)){  }, md=>"ComboStyle"),
                 new StringDecisionTree(new Decision<IReadOnlyTree>(item => item as ICollectionDescriptor != null){  }, md => "TableStyle"),
-                new StringDecisionTree(new Decision<IReadOnlyTree>(item => item as ICollectionHeadersDescriptor != null){  }, md => "ItemsStyle"),
-                new StringDecisionTree(new Decision<IReadOnlyTree>(item => item as IPropertiesDescriptor != null){  }, md => "ItemsStyle"),
+                new StringDecisionTree(new Decision<IReadOnlyTree>(item => item as ICollectionHeadersDescriptor != null){  }, md => "HeadersStyle"),
                 new StringDecisionTree(new Decision<IGetParent<IReadOnlyTree>>(item => item.Parent !=null && item.Parent is ICollectionDescriptor){  }, md => "RowStyle"),
                 new StringDecisionTree(new Decision<IReadOnlyTree>(item => item != null), md => "DefaultMemberStyle"),
             };

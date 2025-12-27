@@ -31,7 +31,6 @@ namespace Utility.WPF.Trees
                 {
                     new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item as IHeaderDescriptor!=null), md=> ()=>MakeHeaderTemplate(md, 1)),
                     new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item as IMethodDescriptor!=null){  },md=>()=>MakeButtonTemplate(md)),
-                    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item as IPropertiesDescriptor!=null){  },md=>()=>MakeEmptyTemplate(md)),
                     new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item as ICollectionDescriptor!=null){  },md=>()=>MakeEmptyTemplate(md)),
                     new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item as ICollectionHeadersDescriptor !=null){  },md=>()=>MakeEmptyTemplate(md)),
                     new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => (item as IReferenceDescriptor) != null),  md =>()=> MakeHeaderTemplate(md, md.Depth)),
@@ -47,8 +46,8 @@ namespace Utility.WPF.Trees
                         //    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => (((item.Parent ).Parent).Data as ICollectionItemDescriptor!=null)){  }, md=> MakeTemplate(md)),
                         //},
                     },
-                    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item as IValueDescriptor != null){  }, md=> ()=>MakeTemplate(md)),
-                    new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => (item as IPropertyDescriptor) != null), md =>()=> MakePropertyTemplate(md, md.Depth)),
+                    new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => item as IValueDescriptor != null){  }, md=> () => MakeTemplate(md)),
+                    new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => (item as IPropertyDescriptor) != null), md => ()=> MakePropertyTemplate(md, md.Depth)),
                     new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => true), md=> () => MakeVoidTemplate()),
                 };
         }

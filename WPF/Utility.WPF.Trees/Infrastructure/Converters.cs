@@ -3,30 +3,18 @@ using System.Windows;
 using Microsoft.Xaml.Behaviors;
 using NodaTime;
 using Utility;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
 using Utility.Nodes;
 using Utility.WPF.Trees;
+using Utility.Interfaces;
+using Utility.Trees.Extensions;
+using MoreLinq;
 
 namespace Utility.WPF.Trees
 {
-    //public class EditConverter : IValueConverter
-    //{
-    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        if(value is ICollectionDescriptor collectionDescriptor)
-    //        {
-    //            var instance = ActivateAnything.Activate.New(collectionDescriptor.ElementType);
-    //            return instance;
-    //        }
-    //        return DependencyProperty.UnsetValue;
-    //    }
 
-    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
 
     public class AddObjectAction : TriggerAction<FrameworkElement>
     {
@@ -40,8 +28,26 @@ namespace Utility.WPF.Trees
                 {
                     if (descriptor.Children is IList list)
                     {
-                        if (instance is ISetKey setKey)
-                            setKey.Key = (GuidKey)Guid.NewGuid();
+                        //if (instance is ISetKey setKey)
+                        //    setKey.Key = (GuidKey)Guid.NewGuid();
+                        if (instance is NodeViewModel nodeViewModel)
+                        {
+                            var (p, name) = ChildrenConverter.Instance.parentDict[nodeViewModel.Name()];
+                            nodeViewModel.SuppressExceptions = true;
+                            nodeViewModel.SetParent(p);
+                            nodeViewModel.SetName(name);    
+                            nodeViewModel.SetKey(null);
+                  
+                            nodeViewModel.SuppressExceptions = false;
+                            nodeViewModel.Descendants().OfType<NodeViewModel>().ForEach(nvm =>
+                            {
+                                nvm.AreChildrenLoaded = false;
+                                nvm.SuppressExceptions = true;                
+                                nvm.SetKey(null);
+                                nodeViewModel.SuppressExceptions = false;
+                            });
+                            nodeViewModel.AreChildrenLoaded = false;
+                        }
                         list?.Add(instance);
                         //descriptor.OnNext(new System.ComponentModel.RefreshEventArgs(instance));
                     }

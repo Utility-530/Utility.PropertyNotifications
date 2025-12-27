@@ -17,27 +17,6 @@ namespace Utility.WPF.Trees
             Predicate =
                  new TrueDecisionTree<IReadOnlyTree>(new Decision(item => true))
                  {
-                     // prevents child items of a parent Descriptor that is being shown as a Treeviewer from also being shown
-                     new TrueDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item) as IPropertiesDescriptor != null))
-                        {
-                            //new TrueDecisionTree<IReadOnlyTree>(new Decision(item => (((IReadOnlyTree)item).Data as IPropertiesDescriptor).Type == typeof(Table)))
-                            //{
-                            //    new TrueDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent == null), a => false)
-                            //    {
-                            //    },
-                            //    new TrueDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent != null), a => a.Parent)
-                            //    {
-                            //        new TrueDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent == null), a => false)
-                            //    {
-                            //    },
-                            //        new TrueDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent != null),a=>a.Parent)
-                            //        {
-                            //            new TrueDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Data as ICollectionDescriptor ==null), a => false),
-                            //        }
-                            //    }
-                            //}
-                        },
-
                       new TrueDecisionTree<IReadOnlyTree>(new Decision(item => true) { }, a => a)
                     {
                         new TrueDecisionTree(new Decision(item => item as IMethodDescriptor!=null){  })
@@ -46,10 +25,6 @@ namespace Utility.WPF.Trees
                         },
                         new TrueDecisionTree(new Decision(item => item as IDescriptor != null && (item as IDescriptor).ParentType!=null))
                         {
-                            new TrueDecisionTree(new Decision<IDescriptor>(item => item as IPropertiesDescriptor!=null))
-                            {
-                                new TrueDecisionTree(new Decision<IDescriptor>(item => item.Type.IsAssignableTo(typeof(IEnumerable))),  a=> false)
-                            },
                             //new TrueDecisionTree(new Decision<IDescriptor>(item => item as ICollectionItemDescriptor!=null))
                             //{
                             //    //new TrueDecisionTree(new Decision<IDescriptor>(item => (item as ICollectionItemDescriptor).Removed != null ),  a=> false)
