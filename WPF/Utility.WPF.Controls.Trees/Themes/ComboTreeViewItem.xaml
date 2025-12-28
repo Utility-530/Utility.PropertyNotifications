@@ -6,6 +6,7 @@
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:res="http://schemas.utility.com/resourcedictionary"
     xmlns:sys="clr-namespace:System;assembly=netstandard"
+    xmlns:inf="clr-namespace:Utility.WPF.Controls.Trees.Infrastructure"
     xmlns:trees="clr-namespace:Utility.WPF.Controls.Trees">
 
     <ResourceDictionary.MergedDictionaries>
@@ -356,9 +357,9 @@
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
-                                    <ScrollViewer>
+                                    <ScrollViewer x:Name="PART_ScrollViewer" >
 
-                                        <ContentPresenter x:Name="content_control" ContentSource="Edit">
+                                        <ContentPresenter x:Name="PART_ContentPresenter" Visibility="Collapsed" ContentSource="Edit">
                                             <FrameworkElement.Style>
                                                 <Style TargetType="{x:Type ContentPresenter}">
                                                     <Setter Property="Opacity" Value="0" />
@@ -474,8 +475,8 @@
                         </Grid>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <DataTrigger Binding="{Binding Path=IsChecked, ElementName=PlusButton}" Value="False">
-                            <Setter TargetName="content_control" Property="Height" Value="0" />
+                        <DataTrigger Binding="{Binding Path=IsChecked, ElementName=PlusButton}" Value="True">
+                            <Setter TargetName="PART_ScrollViewer" Property="Visibility" Value="Visible" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
