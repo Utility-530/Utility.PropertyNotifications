@@ -1,4 +1,6 @@
-﻿using System.Reactive.Linq;
+﻿using System.Drawing.Imaging;
+using System.IO;
+using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using Optional;
 using Utility.Changes;
@@ -11,6 +13,7 @@ using Utility.Models.Trees;
 using Utility.Nodes.Demo.Filters.Services;
 using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
+using Utility.Reactives;
 using Utility.ServiceLocation;
 
 namespace Utility.Nodes.Demo.Editor
@@ -87,7 +90,10 @@ namespace Utility.Nodes.Demo.Editor
                         {
                             dfm.WhenReceivedFrom(a => a.Current, includeNulls: false)
                             .OfType<Model<string>>()
-                            .Observe<EngineServiceInputParam, Model<string>>();
+                            .SelectMany(a=>a.WhenReceivedFrom(a => a.Value)
+                                            .Where(a=>a!=null)
+                                            .Select(value=> (a.Guid, Path.Combine(value + ".sqlite"))))
+                            .Observe<EngineServiceInputParam, (Guid, string)>();
                         }
                     })
                     {

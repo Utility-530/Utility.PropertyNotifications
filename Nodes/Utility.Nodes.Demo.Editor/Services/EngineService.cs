@@ -17,11 +17,11 @@ namespace Utility.Nodes.Demo.Filters.Services
     {
         private static readonly Dictionary<Guid, NodeEngine> dictionary = [];
 
-        public static INodeRoot Change(Model<string> dataFileModel)
+        public static INodeRoot Change((Guid guid, string path) dataFile)
         {
-            var engine = dictionary.Get(dataFileModel.Guid, a =>
+            var engine = dictionary.Get(dataFile.guid, a =>
             {
-                var engine = new NodeEngine(new TreeRepository(Path.Combine(dataFileModel.Value + ".sqlite")), new ValueRepository(Path.Combine(dataFileModel.Value + ".sqlite")));
+                var engine = new NodeEngine(new TreeRepository(dataFile.path), new ValueRepository(Path.Combine(dataFile.path)));
                 Globals.Register.Register<INodeRoot>(engine);  
                 return engine;
             });
