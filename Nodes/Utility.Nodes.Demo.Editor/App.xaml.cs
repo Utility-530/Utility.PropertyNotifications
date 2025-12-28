@@ -70,7 +70,8 @@ namespace Utility.Nodes.Demo.Editor
             Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new NodeMethodFactory());
             Locator.CurrentMutable.RegisterLazySingleton<IFactory<IId<Guid>>>(() => new ModelFactory());
             Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
-            Locator.CurrentMutable.RegisterLazySingleton<INodeRoot>(() => new NodeEngine(new TreeRepository("../../../Data/temp.sqlite"), new ValueRepository("../../../Data/temp.sqlite")));
+            Locator.CurrentMutable.RegisterLazySingleton<INodeSource>(() => new NodesStore(), "temp");
+            Locator.CurrentMutable.RegisterLazySingleton<INodeRoot>(() => new NodeEngine(new TreeRepository("../../../Data/temp.sqlite"), new ValueRepository("../../../Data/temp.sqlite"), nodeSource: Locator.Current.GetService<INodeSource>("temp")));
 
             initialiseGlobals(Globals.Register);
             initialiseConnections(Globals.Resolver.Resolve<IServiceResolver>());
