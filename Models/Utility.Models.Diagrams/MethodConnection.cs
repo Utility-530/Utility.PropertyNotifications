@@ -10,6 +10,8 @@ using Utility.Reactives;
 using System.ComponentModel;
 using System.Collections.Specialized;
 using System.Reflection;
+using Utility.Interfaces.NonGeneric;
+using Utility.Extensions;
 
 
 namespace Utility.Models.Diagrams
@@ -20,14 +22,14 @@ namespace Utility.Models.Diagrams
 
         public MethodConnection(IObserver<object> @in, IObservable<object> @out, Type? type = null)
         {
+            In = [@in];
+            Out = @out;
             Disposable = @out.Subscribe(a =>
             {
                 Transfer?.Invoke();
                 foreach (var @in in In)
-                    Subscribe(a, @in, type);      
+                    Subscribe(a, @in, type);
             });
-            In = [@in];
-            Out = @out;
         }
 
         public event Action Transfer;
@@ -51,13 +53,17 @@ namespace Utility.Models.Diagrams
                     action.OnNext(a);
                 });
             }
-            else if (action is MethodConnector { Parameter: ParameterInfo param} && a.GetType().IsAssignableTo(param.ParameterType))
+            else if (action is MethodConnector { Parameter: ParameterInfo param } && a.GetType().IsAssignableTo(param.ParameterType))
             {
                 action.OnNext(a);
             }
             else if (trySubscribe(a, action.OnNext, () => { }, e => Globals.Exceptions.OnNext(e)) is { } disposable)
             {
                 return disposable;
+            }
+            else if (action is IGetReference { Reference: Type _type } && a.GetType().IsAssignableTo(_type))
+            {
+                action.OnNext(a);
             }
             else
             {
@@ -146,37 +152,95 @@ namespace Utility.Models.Diagrams
                         }
                         catch (TaskCanceledException) { }
                     }
-
                 });
-
             }
+            
             static IDisposable? trySubscribe(object obj, Action<object> action, Action? completed = null, Action<Exception>? aex = null)
             {
                 var type = obj.GetType();
 
+                if (type.IsAssignableTo(typeof(Task)))
+                {
+                    return subscribeToTask((Task)obj, action, completed, aex);
+                }
+
                 // Find IObservable<T>
-                var observableInterface = type
-                    .GetInterfaces()
-                    .FirstOrDefault(i =>
+                return trySubscribeToObservable(obj, action, completed, aex);
+
+
+                static IDisposable? trySubscribeToObservable(object obj, Action<object> action, Action? completed = null, Action<Exception>? aex = null)
+                {
+
+                    var observableInterface = obj.GetType()
+                        .GetInterfaces()
+                        .FirstOrDefault(i =>
                         i.IsGenericType &&
                         i.GetGenericTypeDefinition() == typeof(IObservable<>));
 
-                if (observableInterface == null)
-                    return null; // not observable
+                    if (observableInterface == null)
+                        return null; // not observable
 
-                var t = observableInterface.GetGenericArguments()[0];
+                    var t = observableInterface.GetGenericArguments()[0];
 
-                // Create an Observer<T> wrapper that forwards values to an IObserver<object>
-                var observerType = typeof(Utility.Reactives.Observer<>).MakeGenericType(t);
-                Delegate convertedAction = Delegate.CreateDelegate(typeof(Action<>).MakeGenericType(t), action.Target, action.Method);
+                    // Create an Observer<T> wrapper that forwards values to an IObserver<object>
+                    var observerType = typeof(Utility.Reactives.Observer<>).MakeGenericType(t);
+                    Delegate convertedAction = Delegate.CreateDelegate(typeof(Action<>).MakeGenericType(t), action.Target, action.Method);
 
-                var observer = Activator.CreateInstance(observerType, convertedAction, aex, completed);
+                    var observer = Activator.CreateInstance(observerType, convertedAction, aex, completed);
 
-                // Call Subscribe(observer)
-                var subscribeMethod = observableInterface.GetMethod("Subscribe");
-                var disposable = (IDisposable)subscribeMethod.Invoke(obj, new[] { observer });
-                return disposable;
+                    // Call Subscribe(observer)
+                    var subscribeMethod = observableInterface.GetMethod("Subscribe");
+                    var disposable = (IDisposable)subscribeMethod.Invoke(obj, new[] { observer });
+                    return disposable;
+                }
+
+                static IDisposable subscribeToTask(Task task, Action<object> action, Action? completed = null, Action<Exception>? aex = null)
+                {
+                    var type = task.GetType();
+
+                    var cts = new CancellationTokenSource();
+
+                    if (type.IsGenericType)
+                    {
+                        task.ContinueWith(t =>
+                        {
+                            if (cts.Token.IsCancellationRequested) return;
+
+                            if (t.IsFaulted && aex != null)
+                            {
+                                aex(t.Exception?.GetBaseException() ?? t.Exception!);
+                            }
+                            else if (t.IsCompleted && !t.IsCanceled)
+                            {
+                                var resultProperty = type.GetProperty("Result");
+                                var result = resultProperty?.GetValue(t);
+                                if (result != null)
+                                    action(result);
+                                completed?.Invoke();
+                            }
+                        }, cts.Token);
+                    }
+                    else
+                    {
+                        task.ContinueWith(t =>
+                        {
+                            if (cts.Token.IsCancellationRequested) return;
+
+                            if (t.IsFaulted && aex != null)
+                            {
+                                aex(t.Exception?.GetBaseException() ?? t.Exception!);
+                            }
+                            else if (t.IsCompleted && !t.IsCanceled)
+                            {
+                                completed?.Invoke();
+                            }
+                        }, cts.Token);
+                    }
+
+                    return cts; // CancellationTokenSource implements IDisposable
+                }
             }
         }
     }
 }
+
