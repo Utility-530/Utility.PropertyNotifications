@@ -10,7 +10,7 @@ using Utility.ServiceLocation;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
-    public record EngineServiceInputParam() : Param<EngineService>(nameof(EngineService.Change), "dataFileModel");
+    public record EngineServiceInputParam() : Param<EngineService>(nameof(EngineService.Change), "dataFile");
     public record EngineServiceOutputParam() : Param<EngineService>(nameof(EngineService.Change));
 
     public class EngineService

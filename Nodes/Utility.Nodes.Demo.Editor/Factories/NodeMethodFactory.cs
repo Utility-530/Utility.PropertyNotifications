@@ -103,7 +103,7 @@ namespace Utility.Nodes.Demo.Editor
                     },
                     new Model(attach: attach =>
                     {
-                        attach.ReactTo<ComboServiceOutputParam, Change<INodeViewModel>>(setAction: change =>
+                        ServiceHelper.ReactTo<ComboServiceOutputParam, Change<INodeViewModel>>(setAction: change =>
                         {
                             switch(change.Type)
                             {
