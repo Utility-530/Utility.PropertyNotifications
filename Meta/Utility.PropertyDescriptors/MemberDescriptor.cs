@@ -18,17 +18,15 @@ public abstract class MemberDescriptor : NodeViewModel, IPropertyDescriptor, IIn
     public MemberDescriptor(Descriptor descriptor)
     {
         Descriptor = descriptor;
-        Inputs = new ObservableCollection<IConnectorViewModel>();
-        Outputs = new ObservableCollection<IConnectorViewModel>();
         isProliferable = false;
-        Name = Descriptor.Name; 
+        Name = Descriptor.Name;
     }
-    public MemberDescriptor(Descriptor descriptor, object instance)
+    public MemberDescriptor(Descriptor descriptor, object instance) : this(descriptor)
     {
         Instance = instance;
     }
 
-    public object Instance { get; } 
+    public object Instance { get; }
 
     public virtual Type ParentType => Descriptor.ComponentType;
     public override Type Type => Descriptor.PropertyType;
@@ -74,11 +72,11 @@ public abstract class MemberDescriptor : NodeViewModel, IPropertyDescriptor, IIn
 
 public abstract class ValueMemberDescriptor : MemberDescriptor, IValueDescriptor
 {
-    public ValueMemberDescriptor(Descriptor Descriptor):base(Descriptor)
+    public ValueMemberDescriptor(Descriptor Descriptor) : base(Descriptor)
     {
         Name = Descriptor.PropertyType.Name;
     }
-    public ValueMemberDescriptor(Descriptor descriptor, object instance):base(descriptor, instance)
+    public ValueMemberDescriptor(Descriptor descriptor, object instance) : base(descriptor, instance)
     {
         Name = descriptor.PropertyType.Name;
     }
