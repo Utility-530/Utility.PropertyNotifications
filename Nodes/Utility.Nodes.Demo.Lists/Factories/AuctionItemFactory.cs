@@ -74,7 +74,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     },
                     new Model(attach: listModel =>
                     {
-                        listModel.ReactTo<ListCollectionViewReturnParam, IEnumerable>(a => listModel.Collection = a, guid);
+                        ServiceHelper.ReactTo<ListCollectionViewReturnParam, IEnumerable>(a => listModel.Collection = a, guid);
                         listModel.Observe<SelectionParam>(guid);
                     }) {
                         Name = list1,
@@ -100,7 +100,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                                 eModel.WithChangesTo(a => a.RelativePath).Observe<FilePathParam, string>(guid: guid);
                             }
                         });
-                        editModel.ReactTo<OutValueParam>(setAction: (a) => { (editModel.Children as IList).Clear(); editModel.Add(a); }, guid: guid);
+                        ServiceHelper.ReactTo<OutValueParam>(setAction: (a) => { (editModel.Children as IList).Clear(); editModel.Add(a); }, guid: guid);
                     }, funcType: ()=>  typeof(AuctionItem)) {
                         Name = edit,
                         ShouldValueBeTracked = false,
@@ -119,7 +119,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     //    }, guid);
                     //    }, raisePropertyCalled:false, raisePropertyReceived:false) {Name = details, DataTemplate = "Json"},
                     new Model<string>(attach: a=>{
-                        a.ReactTo<GeneralOutStringParam>(setAction: _a =>
+                        ServiceHelper.ReactTo<GeneralOutStringParam>(setAction: _a =>
                         {
                             a.Set((string)_a);
                             a.RaisePropertyChanged("Value");
@@ -127,14 +127,14 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     }) { Name = html, DataTemplate=Templates.Html },
                     new Model<string>(attach: stringModel=>{
                               //stringModel.ReactTo<RazorFileReturnParam>(setAction: a => stringModel.Set((string)a), guid: guid);
-                              stringModel.ReactTo<GeneralOutStringParam>(setAction: _a =>    {
+                              ServiceHelper.ReactTo<GeneralOutStringParam>(setAction: _a =>    {
                             stringModel.Set((string)_a);
                             stringModel.RaisePropertyChanged("Value");
                         }, guid: guid);
                     }) { Name = html1, DataTemplate = Templates.HtmlEditor },
                     new Model<string>(attach: rstringModel =>{
                          //rstringModel.ReactTo<RazorFileReturnParam>(setAction: a => rstringModel.Set((string)a), guid: guid);
-                         rstringModel.ReactTo<GeneralOutStringParam>(setAction: _a => {
+                         ServiceHelper.ReactTo<GeneralOutStringParam>(setAction: _a => {
                              rstringModel.Set((string)_a);
                              rstringModel.RaisePropertyChanged("Value");
                          }, guid: guid);

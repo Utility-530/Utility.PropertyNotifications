@@ -4,6 +4,7 @@ using Utility.Entities;
 using Utility.Helpers.Reflection;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.Generic.Data;
+using static Utility.API.Services.Coinbase;
 
 namespace Utility.Nodes.Demo.Lists
 {
@@ -28,6 +29,10 @@ namespace Utility.Nodes.Demo.Lists
                 if (type == typeof(Transaction))
                 {
                     return new Transaction() { };
+                }
+                if (type == typeof(CoinbaseTransaction))
+                {
+                    return new CoinbaseTransaction() { };
                 }
                 if (Activator.CreateInstance(type) is IId<Guid> iid)
                 {

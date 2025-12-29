@@ -52,11 +52,11 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     if (addition is CommandModel { } commandModel)
                     {
                         Observable.FromEvent(a => commandModel.Executed += a, a => commandModel.Executed -= a).Observe<InputParam, Unit>(guid);
-                        commandModel.ReactTo<ReturnParam, Task>(setAction: async (a) => { commandModel.IsEnabled = false; await a; commandModel.IsEnabled = true; }, guid: guid);
+                        ServiceHelper.ReactTo<ReturnParam, Task>(setAction: async (a) => { commandModel.IsEnabled = false; await a; commandModel.IsEnabled = true; }, guid: guid);
                     }
                     if (addition is ListModel { } listModel)
                     {
-                        listModel.ReactTo<ListCollectionViewReturnParam, IEnumerable>(setAction: (a) => listModel.Collection = a, guid: guid);
+                        ServiceHelper.ReactTo<ListCollectionViewReturnParam, IEnumerable>(setAction: (a) => listModel.Collection = a, guid: guid);
                         listModel.Observe<SelectionParam>(guid);
                     }
                     //if (addition is StringModel { Name: summary } summaryModel)

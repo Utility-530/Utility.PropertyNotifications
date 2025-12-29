@@ -41,7 +41,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 {
                     if (addition is ListModel { } listModel)
                     {
-                        listModel.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a, guid: guid);
+                        ServiceHelper.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a, guid: guid);
                         listModel.Observe<SelectionParam>(guid);
                     }
 
@@ -75,7 +75,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     }
                     if (addition is Model<string> { Name: summary } searchModel)
                     {
-                        searchModel.ReactTo<ScheduleOutputParam>(setAction: a =>
+                        ServiceHelper.ReactTo<ScheduleOutputParam>(setAction: a =>
                         {
                             searchModel.Value = EmailReminderService.ToBody((Schedule)a);
                             searchModel.RaisePropertyChanged(nameof(Model.Value));

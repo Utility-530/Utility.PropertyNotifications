@@ -56,7 +56,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     },
                     new Model(attach: node =>
                     {
-                        node.ReactTo<ComboServiceOutputParam, Changes.Change<INodeViewModel>>(setAction: change =>
+                        ServiceHelper.ReactTo<ComboServiceOutputParam, Changes.Change<INodeViewModel>>(setAction: change =>
                         {
                             switch(change.Type)
                             {

@@ -30,7 +30,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     new ListModel(MetaDataFactory.loanType) { Name = list },
                     new Model(attach: node =>
                     {
-                        node.ReactTo<SelectionReturnParam>(setAction: (a) => { node.Value = a; node.RaisePropertyChanged(nameof(Model.Value)); }, guid: guid);
+                        ServiceHelper.ReactTo<SelectionReturnParam>(setAction: (a) => { node.Value = a; node.RaisePropertyChanged(nameof(Model.Value)); }, guid: guid);
                     })
                     {
                         Name = edit,
@@ -49,7 +49,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
 
                     if (addition is ListModel { } listModel)
                     {
-                        listModel.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a, guid: guid);
+                        ServiceHelper.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a, guid: guid);
 
                         listModel.WhenReceivedFrom(a => a.Add, includeNulls: false)
                         .Select(a => new Changes.Change(a, null, Changes.Type.Add))

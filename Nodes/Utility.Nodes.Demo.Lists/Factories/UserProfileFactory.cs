@@ -8,6 +8,7 @@ using Utility.Interfaces.Exs.Diagrams;
 using Utility.Models;
 using Utility.Models.Templates;
 using Utility.Models.Trees;
+using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
@@ -18,14 +19,15 @@ namespace Utility.Nodes.Demo.Lists.Factories
 {
     internal partial class NodeMethodFactory : EnumerableMethodFactory
     {
-        public INodeViewModel BuildUserProfileRoot(Guid guid, Type type)
+        public INodeViewModel BuildUserProfileRoot()
         {
+            var guid = Guid.Parse(MetaDataFactory.userProfileGuid);
             buildNetwork(guid);
 
             return 
                 new Model(() => [
                      new Model<string>() { Name = search,DataTemplate = Templates.SearchEditor },
-                     new ListModel(type) { Name = list },
+                     new ListModel(MetaDataFactory.userProfileType) { Name = list },
                      new Model {
                         Name = edit,
                         DataTemplate = Templates.EditTemplate,
@@ -36,7 +38,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 {
                     if (addition is Model { Name:edit } editModel)
                     {
-                        editModel.ReactTo<SelectionReturnParam>(setAction: (a) => { editModel.Value = a; editModel.RaisePropertyChanged(nameof(Model.Value)); }, guid: guid);
+                        ServiceHelper.ReactTo<SelectionReturnParam>(setAction: (a) => { editModel.Value = a; editModel.RaisePropertyChanged(nameof(Model.Value)); }, guid: guid);
                     }
 
                     if (addition is Model<string> { Name: search } searchModel)
@@ -46,7 +48,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
 
                     if (addition is ListModel { } listModel)
                     {
-                        listModel.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a, guid: guid);
+                        ServiceHelper.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a, guid: guid);
 
                         listModel.WhenReceivedFrom(a => a.Add, includeNulls: false)
                         .Select(a => new Changes.Change(a, null, Changes.Type.Add))
