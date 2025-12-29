@@ -48,10 +48,8 @@ namespace Utility.API.Services
             ProWithdrawal,
         }
 
-        public class CoinbaseTransaction
+        public class CoinbaseTransaction : Entity
         {
-            [PrimaryKey]
-            public Guid ID { get; set; }
             public DateTime Timestamp { get; set; }
             public TransactionType TransactionType { get; set; }
             public CryptoCoin Asset { get; set; }
@@ -68,7 +66,7 @@ namespace Utility.API.Services
         {
             public TransactionMap()
             {
-                Map(m => m.ID).Convert(args => parseID(args.Row));
+                Map(m => m.Id).Convert(args => parseID(args.Row));
                 Map(m => m.Timestamp).Convert(args => DateTime.Parse(args.Row.GetField("Timestamp").Replace(" UTC", ""), CultureInfo.InvariantCulture));
                 Map(m => m.TransactionType).Convert(args => parseTransactionType(args.Row));
                 Map(m => m.Asset).Convert(args => parseCryptoCoin(args.Row));
@@ -86,7 +84,7 @@ namespace Utility.API.Services
 
             Guid parseID(IReaderRow field)
             {
-                var raw = field.GetField("ID");
+                var raw = field.GetField("Id");
                 var padded = raw.PadRight(32, '0'); // Add trailing zeros
                 return Guid.ParseExact(padded, "N"); // No hyphens format
 
