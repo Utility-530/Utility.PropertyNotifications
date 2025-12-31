@@ -4,7 +4,6 @@ using System.Windows.Controls;
 using Utility.WPF.Abstract;
 using Utility.WPF.Controls.Base;
 using Utility.WPF.Controls.Lists.Infrastructure;
-using Utility.WPF.Models;
 using Utility.WPF.Templates;
 
 namespace Utility.WPF.Controls.Lists
