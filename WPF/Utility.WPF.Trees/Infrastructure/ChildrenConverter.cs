@@ -26,7 +26,7 @@ namespace Utility.WPF.Trees
 {
     public class ChildrenConverter : IValueConverter
     {
-        private INodeRoot? source;
+        public INodeRoot? source;
         public Dictionary<string, (INodeViewModel, string)> parentDict = new();
         private bool initialised;
 

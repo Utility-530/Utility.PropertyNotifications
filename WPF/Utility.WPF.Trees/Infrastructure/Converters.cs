@@ -32,6 +32,7 @@ namespace Utility.WPF.Trees
                         //    setKey.Key = (GuidKey)Guid.NewGuid();
                         if (instance is NodeViewModel nodeViewModel)
                         {
+                            ChildrenConverter.Instance.source.Destroy(nodeViewModel.Key());
                             var (p, name) = ChildrenConverter.Instance.parentDict[nodeViewModel.Name()];
                             nodeViewModel.SuppressExceptions = true;
                             nodeViewModel.SetParent(p);
