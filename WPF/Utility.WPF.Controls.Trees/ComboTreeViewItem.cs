@@ -7,29 +7,13 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
+using Utility.Interfaces.Generic;
+using Utility.WPF.Helpers;
 using Utility.WPF.Panels;
 using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.Trees
 {
-    internal static class CustomHelper
-    {
-        public static T Load<T>(Uri uri, string key) where T : class
-        {
-            ResourceDictionary res;
-            if (Application.Current.Resources.Contains(uri) == false)
-            {
-                Application.Current.Resources.Add(uri, res = Application.LoadComponent(uri) as ResourceDictionary);
-            }
-            else
-            {
-                res = Application.Current.Resources[uri] as ResourceDictionary;
-            }
-
-            return res[key] as T;
-        }
-    }
-
     public class ComboTreeView : TreeView
     {
         protected override DependencyObject GetContainerForItemOverride()
@@ -37,7 +21,7 @@ namespace Utility.WPF.Controls.Trees
             return new CustomTreeViewItem()
             {
                 ItemContainerStyleSelector = ItemContainerStyleSelector,
-                ItemContainerStyle = ItemContainerStyle ?? CustomHelper.Load<Style>(new Uri($"/{typeof(ComboTreeView).Assembly.GetName().Name};component/Themes/ComboTreeViewItem.xaml", UriKind.RelativeOrAbsolute), "ComboTreeViewItem"),
+                ItemContainerStyle = ItemContainerStyle ?? (new Uri($"/{typeof(ComboTreeView).Assembly.GetName().Name};component/Themes/ComboTreeViewItem.xaml", UriKind.RelativeOrAbsolute)).Load<Style>("ComboTreeViewItem"),
                 ItemTemplateSelector = ItemTemplateSelector,
                 TreeView = this
             };
@@ -48,43 +32,13 @@ namespace Utility.WPF.Controls.Trees
     {
         public ComboTreeViewItem()
         {
-            Style ??= CustomHelper.Load<Style>(new Uri($"/{typeof(ComboTreeView).Assembly.GetName().Name};component/Themes/ComboTreeViewItem.xaml", UriKind.RelativeOrAbsolute), "ComboTreeViewItem");
-            ItemContainerStyle ??= CustomHelper.Load<Style>(new Uri($"/{typeof(ComboTreeView).Assembly.GetName().Name};component/Themes/CustomTreeViewItem.xaml", UriKind.RelativeOrAbsolute), "CustomTreeViewItem");
+            Style ??= ResourceHelper.Load<Style>(new Uri($"/{typeof(ComboTreeView).Assembly.GetName().Name};component/Themes/ComboTreeViewItem.xaml", UriKind.RelativeOrAbsolute), "ComboTreeViewItem");
+            ItemContainerStyle ??= ResourceHelper.Load<Style>(new Uri($"/{typeof(ComboTreeView).Assembly.GetName().Name};component/Themes/CustomTreeViewItem.xaml", UriKind.RelativeOrAbsolute), "CustomTreeViewItem");
         }
     }
 
     public partial class CustomTreeViewItem : ISelection
     {
-        public static readonly RoutedEvent FinishEditEvent = EventManager.RegisterRoutedEvent(
-            name: "FinishEdit",
-            routingStrategy: RoutingStrategy.Bubble,
-            handlerType: typeof(FinishEditRoutedEventHandler),
-            ownerType: typeof(CustomTreeViewItem));
-
-        public static readonly RoutedEvent ChangeEvent = EventManager.RegisterRoutedEvent(
-          name: "Change",
-          routingStrategy: RoutingStrategy.Bubble,
-          handlerType: typeof(ChangeRoutedEventHandler),
-          ownerType: typeof(CustomTreeViewItem));
-
-        public static readonly RoutedEvent SelectionChangedEvent = EventManager.RegisterRoutedEvent(
-            name: "SelectionChanged",
-        routingStrategy: RoutingStrategy.Bubble,
-            handlerType: typeof(System.Windows.Controls.SelectionChangedEventHandler),
-            ownerType: typeof(CustomTreeViewItem));
-
-        public static readonly DependencyProperty IsDropDownOpenProperty = ComboBox.IsDropDownOpenProperty.AddOwner(typeof(CustomTreeViewItem), new FrameworkPropertyMetadata(
-                BooleanBoxes.FalseBox,
-                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-                new PropertyChangedCallback(OnIsDropDownOpenChanged),
-                new CoerceValueCallback(CoerceIsDropDownOpen)));
-
-        public static readonly DependencyProperty EditProperty = DependencyProperty.Register("Edit", typeof(object), typeof(CustomTreeViewItem), new PropertyMetadata());
-        public static readonly DependencyProperty MaxDropDownHeightProperty = ComboBox.MaxDropDownHeightProperty.AddOwner(typeof(CustomTreeViewItem));
-        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(object), typeof(CustomTreeViewItem), new PropertyMetadata());
-        public static readonly DependencyProperty SelectedItemTemplateSelectorProperty = DependencyProperty.Register("SelectedItemTemplateSelector", typeof(DataTemplateSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
-        public static readonly DependencyProperty SelectedItemTemplateProperty = DependencyProperty.Register("SelectedItemTemplate", typeof(DataTemplate), typeof(CustomTreeViewItem), new PropertyMetadata());
-        public static readonly DependencyProperty IsReadOnlyProperty = ComboBox.IsReadOnlyProperty.AddOwner(typeof(CustomTreeViewItem));
 
         static CustomTreeViewItem()
         {
@@ -190,77 +144,7 @@ namespace Utility.WPF.Controls.Trees
             RaiseEvent(routedEventArgs);
         }
 
-        #region events
 
-        public event FinishEditRoutedEventHandler FinishEdit
-        {
-            add { AddHandler(FinishEditEvent, value); }
-            remove { RemoveHandler(FinishEditEvent, value); }
-        }
-
-        public event ChangeRoutedEventHandler Change
-        {
-            add { AddHandler(ChangeEvent, value); }
-            remove { RemoveHandler(ChangeEvent, value); }
-        }
-
-        public event System.Windows.Controls.SelectionChangedEventHandler SelectionChanged
-        {
-            add { AddHandler(SelectionChangedEvent, value); }
-            remove { RemoveHandler(SelectionChangedEvent, value); }
-        }
-
-        #endregion events
-
-        #region properties
-
-        public object Edit
-        {
-            get { return (object)GetValue(EditProperty); }
-            set { SetValue(EditProperty, value); }
-        }
-
-        public double MaxDropDownHeight
-        {
-            get { return (double)GetValue(MaxDropDownHeightProperty); }
-            set { SetValue(MaxDropDownHeightProperty, value); }
-        }
-
-        /// <summary>
-        /// Used to allow custom binding for Selection.
-        /// If Selection was set directly then no way to set it to child property of the selected item
-        /// </summary>
-        public object SelectedItem
-        {
-            get { return (object)GetValue(SelectedItemProperty); }
-            set { SetValue(SelectedItemProperty, value); }
-        }
-
-        public DataTemplate SelectedItemTemplate
-        {
-            get { return (DataTemplate)GetValue(SelectedItemTemplateProperty); }
-            set { SetValue(SelectedItemTemplateProperty, value); }
-        }
-
-        public DataTemplateSelector SelectedItemTemplateSelector
-        {
-            get { return (DataTemplateSelector)GetValue(SelectedItemTemplateSelectorProperty); }
-            set { SetValue(SelectedItemTemplateSelectorProperty, value); }
-        }
-
-        public bool IsReadOnly
-        {
-            get { return (bool)GetValue(IsReadOnlyProperty); }
-            set { SetValue(IsReadOnlyProperty, value); }
-        }
-
-        public bool IsDropDownOpen
-        {
-            get { return (bool)GetValue(IsDropDownOpenProperty); }
-            set { SetValue(IsDropDownOpenProperty, value); }
-        }
-
-        #endregion properties
 
 
         protected override DependencyObject GetContainerForItemOverride()

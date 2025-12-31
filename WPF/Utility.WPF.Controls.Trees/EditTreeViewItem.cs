@@ -12,26 +12,7 @@ namespace Utility.WPF.Controls.Trees
 {
     public partial class CustomTreeViewItem
     {
-        public static readonly DependencyProperty CheckedCommandProperty =
-            DependencyProperty.Register("CheckedCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
 
-        public static readonly DependencyProperty SwapCommandProperty =
-            DependencyProperty.Register("SwapCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
-
-        public static readonly DependencyProperty UnCheckedCommandProperty =
-            DependencyProperty.Register("UnCheckedCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
-
-        public static readonly DependencyProperty CheckedPropertyNameProperty =
-            DependencyProperty.Register("CheckedPropertyName", typeof(string), typeof(CustomTreeViewItem), new PropertyMetadata("IsChecked", isCheckedChanged));
-
-        public static readonly DependencyProperty FinishEditCommandProperty =
-            DependencyProperty.Register("FinishEditCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
-
-        public static readonly DependencyProperty EditConverterProperty =
-            DependencyProperty.Register("EditConverter", typeof(IValueConverter), typeof(CustomTreeViewItem), new PropertyMetadata(new EditConverter()));
-
-        public static readonly DependencyProperty MaxHeightOfEditBoxProperty =
-            DependencyProperty.Register("MaxHeightOfEditBox", typeof(double), typeof(CustomTreeViewItem), new PropertyMetadata(300.0));
 
         private static void isCheckedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

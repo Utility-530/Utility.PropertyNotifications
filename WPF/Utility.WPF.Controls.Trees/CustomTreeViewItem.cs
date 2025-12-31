@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using Utility.Interfaces.Exs;
+using Utility.WPF.Panels;
 using Position2D = Utility.Enums.Position2D;
 
 namespace Utility.WPF.Controls.Trees
@@ -10,28 +12,18 @@ namespace Utility.WPF.Controls.Trees
     public partial class CustomTreeViewItem : TreeViewItem
     {
         public static readonly DependencyProperty AddCommandProperty = DependencyProperty.Register("AddCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
-        public static readonly DependencyProperty RemoveCommandProperty = DependencyProperty.Register("RemoveCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata(_removeChanged));
-
-        private static void _removeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-        }
-
+        public static readonly DependencyProperty RemoveCommandProperty = DependencyProperty.Register("RemoveCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty TreeViewProperty = DependencyProperty.Register("TreeView", typeof(TreeView), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty AddParentCommandProperty = DependencyProperty.Register("AddParentCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty EditCommandProperty = DependencyProperty.Register("EditCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty IsHighlightedProperty = DependencyProperty.Register("IsHighlighted", typeof(bool?), typeof(CustomTreeViewItem), new PropertyMetadata(null));
         public static readonly DependencyProperty IsEditingProperty = DependencyProperty.Register("IsEditing", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata(false, IsEditingChanged));
         public static readonly DependencyProperty IsValidProperty = DependencyProperty.Register("IsValid", typeof(bool?), typeof(CustomTreeViewItem), new PropertyMetadata());
-        public static readonly DependencyProperty EditTemplateProperty = DependencyProperty.Register("EditTemplate", typeof(DataTemplate), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty IsEditableProperty = DependencyProperty.Register("IsEditable", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata());
-        public static readonly DependencyProperty NodeTemplateProperty = DependencyProperty.Register("NodeTemplate", typeof(DataTemplate), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty IsShowingProperty = DependencyProperty.Register("IsShowing", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata(false));
-        public static readonly DependencyProperty NodeTemplateSelectorProperty = DependencyProperty.Register("NodeTemplateSelector", typeof(DataTemplateSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty NodeModelsProperty = DependencyProperty.Register("NodeModels", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
-        public static readonly DependencyProperty EditTemplateSelectorProperty = DependencyProperty.Register("EditTemplateSelector", typeof(DataTemplateSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty ChildrenSelectorProperty = DependencyProperty.Register("ChildrenSelector", typeof(IChildrenSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty NodeContainerStyleSelectorProperty = DependencyProperty.Register("NodeContainerStyleSelector", typeof(StyleSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
-        public static readonly DependencyProperty NodeItemsSourceProperty = DependencyProperty.Register("NodeItemsSource", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty SplitButtonStyleProperty = DependencyProperty.Register("SplitButtonStyle", typeof(Style), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty NodeContainerStyleProperty = DependencyProperty.Register("NodeContainerStyle", typeof(Style), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty ItemsPresenterVisibilityProperty = DependencyProperty.Register("ItemsPresenterVisibility", typeof(Visibility), typeof(CustomTreeViewItem), new PropertyMetadata(Visibility.Collapsed));
@@ -48,6 +40,61 @@ namespace Utility.WPF.Controls.Trees
         public static readonly DependencyProperty ItemsPanelTemplateProperty = DependencyProperty.Register("ItemsPanelTemplate", typeof(string), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty IsContentVisibleProperty = DependencyProperty.Register(nameof(IsContentVisible), typeof(bool?), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty CheckedCommandProperty = DependencyProperty.Register("CheckedCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty SwapCommandProperty = DependencyProperty.Register("SwapCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty UnCheckedCommandProperty = DependencyProperty.Register("UnCheckedCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty CheckedPropertyNameProperty = DependencyProperty.Register("CheckedPropertyName", typeof(string), typeof(CustomTreeViewItem), new PropertyMetadata("IsChecked", isCheckedChanged));
+        public static readonly DependencyProperty FinishEditCommandProperty = DependencyProperty.Register("FinishEditCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty EditConverterProperty = DependencyProperty.Register("EditConverter", typeof(IValueConverter), typeof(CustomTreeViewItem), new PropertyMetadata(new EditConverter()));
+        public static readonly DependencyProperty MaxHeightOfEditBoxProperty = DependencyProperty.Register("MaxHeightOfEditBox", typeof(double), typeof(CustomTreeViewItem), new PropertyMetadata(300.0));
+
+
+        public static readonly DependencyProperty NodeItemsSourceProperty = DependencyProperty.Register("NodeItemsSource", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty NodeTemplateProperty = DependencyProperty.Register("NodeTemplate", typeof(DataTemplate), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty NodeTemplateSelectorProperty = DependencyProperty.Register("NodeTemplateSelector", typeof(DataTemplateSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
+
+
+        public static readonly DependencyProperty EditProperty = DependencyProperty.Register("Edit", typeof(object), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty EditTemplateProperty = DependencyProperty.Register("EditTemplate", typeof(DataTemplate), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty EditTemplateSelectorProperty = DependencyProperty.Register("EditTemplateSelector", typeof(DataTemplateSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
+
+
+
+        public static readonly DependencyProperty IsDropDownOpenProperty = ComboBox.IsDropDownOpenProperty.AddOwner(typeof(CustomTreeViewItem), new FrameworkPropertyMetadata(
+        BooleanBoxes.FalseBox,
+        FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+        new PropertyChangedCallback(OnIsDropDownOpenChanged),
+        new CoerceValueCallback(CoerceIsDropDownOpen)));
+
+        public static readonly DependencyProperty MaxDropDownHeightProperty = ComboBox.MaxDropDownHeightProperty.AddOwner(typeof(CustomTreeViewItem));
+        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(object), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty SelectedItemTemplateSelectorProperty = DependencyProperty.Register("SelectedItemTemplateSelector", typeof(DataTemplateSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty SelectedItemTemplateProperty = DependencyProperty.Register("SelectedItemTemplate", typeof(DataTemplate), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty IsReadOnlyProperty = ComboBox.IsReadOnlyProperty.AddOwner(typeof(CustomTreeViewItem));
+
+
+        public static readonly RoutedEvent FinishEditEvent = EventManager.RegisterRoutedEvent(
+    name: "FinishEdit",
+    routingStrategy: RoutingStrategy.Bubble,
+    handlerType: typeof(FinishEditRoutedEventHandler),
+    ownerType: typeof(CustomTreeViewItem));
+
+        public static readonly RoutedEvent ChangeEvent = EventManager.RegisterRoutedEvent(
+          name: "Change",
+          routingStrategy: RoutingStrategy.Bubble,
+          handlerType: typeof(ChangeRoutedEventHandler),
+          ownerType: typeof(CustomTreeViewItem));
+
+        public static readonly RoutedEvent SelectionChangedEvent = EventManager.RegisterRoutedEvent(
+            name: "SelectionChanged",
+        routingStrategy: RoutingStrategy.Bubble,
+            handlerType: typeof(System.Windows.Controls.SelectionChangedEventHandler),
+            ownerType: typeof(CustomTreeViewItem));
+
+
+
+        // Using a DependencyProperty as the backing store for Filter.  This enables animation, styling, binding, etc...
+
 
         private static void _changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -259,7 +306,78 @@ namespace Utility.WPF.Controls.Trees
             set { SetValue(ItemsPanelTemplateProperty, value); }
         }
 
+
+        public object Edit
+        {
+            get { return (object)GetValue(EditProperty); }
+            set { SetValue(EditProperty, value); }
+        }
+
+        public double MaxDropDownHeight
+        {
+            get { return (double)GetValue(MaxDropDownHeightProperty); }
+            set { SetValue(MaxDropDownHeightProperty, value); }
+        }
+
+        /// <summary>
+        /// Used to allow custom binding for Selection.
+        /// If Selection was set directly then no way to set it to child property of the selected item
+        /// </summary>
+        public object SelectedItem
+        {
+            get { return (object)GetValue(SelectedItemProperty); }
+            set { SetValue(SelectedItemProperty, value); }
+        }
+
+        public DataTemplate SelectedItemTemplate
+        {
+            get { return (DataTemplate)GetValue(SelectedItemTemplateProperty); }
+            set { SetValue(SelectedItemTemplateProperty, value); }
+        }
+
+        public DataTemplateSelector SelectedItemTemplateSelector
+        {
+            get { return (DataTemplateSelector)GetValue(SelectedItemTemplateSelectorProperty); }
+            set { SetValue(SelectedItemTemplateSelectorProperty, value); }
+        }
+
+        public bool IsReadOnly
+        {
+            get { return (bool)GetValue(IsReadOnlyProperty); }
+            set { SetValue(IsReadOnlyProperty, value); }
+        }
+
+        public bool IsDropDownOpen
+        {
+            get { return (bool)GetValue(IsDropDownOpenProperty); }
+            set { SetValue(IsDropDownOpenProperty, value); }
+        }
+
+
         #endregion Properties
+
+        #region events
+
+        public event FinishEditRoutedEventHandler FinishEdit
+        {
+            add { AddHandler(FinishEditEvent, value); }
+            remove { RemoveHandler(FinishEditEvent, value); }
+        }
+
+        public event ChangeRoutedEventHandler Change
+        {
+            add { AddHandler(ChangeEvent, value); }
+            remove { RemoveHandler(ChangeEvent, value); }
+        }
+
+        public event System.Windows.Controls.SelectionChangedEventHandler SelectionChanged
+        {
+            add { AddHandler(SelectionChangedEvent, value); }
+            remove { RemoveHandler(SelectionChangedEvent, value); }
+        }
+
+        #endregion events
+
 
         private static void IsEditingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
