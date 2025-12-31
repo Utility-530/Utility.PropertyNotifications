@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 
-namespace Utility.WPF.Models
+namespace Utility.WPF
 {
     public class CheckedRoutedEventArgs : RoutedEventArgs
     {
