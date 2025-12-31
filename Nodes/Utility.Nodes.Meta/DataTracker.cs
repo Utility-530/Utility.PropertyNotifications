@@ -27,7 +27,7 @@ namespace Utility.Nodes.Meta
     {
 
         IValueRepository repository;
-        CompositeDisposable compositeDisposable = new();
+        Dictionary<string, CompositeDisposable> compositeDisposables = new();
         NodeInterface nodeInterface;
         private bool _disposed;
         private static IEnumerable<PropertyInfo> yieldProperties;
@@ -53,11 +53,11 @@ namespace Utility.Nodes.Meta
                                 {
                                     repository.Set((GuidKey)node.Key(), change.PropertyName, change.NewValue, DateTime.Now);
                                 }
-                            }).DisposeWith(compositeDisposable);
+                            }).DisposeWith(compositeDisposables.Get(node.Key()));
                     }
                 }
 
-            return Observable.Return(node);         
+            return Observable.Return(node);
         }
 
         public void Track(INodeViewModel node)
@@ -92,8 +92,8 @@ namespace Utility.Nodes.Meta
                                 return;
                             }
                             update(node, call, a.Value);
-                        }).DisposeWith(compositeDisposable);
-                    }).DisposeWith(compositeDisposable);
+                        }).DisposeWith(compositeDisposables.Get(node.Key()));
+                    }).DisposeWith(compositeDisposables.Get(node.Key()));
             }
             if (node is INotifyPropertyReceived received)
             {
@@ -130,13 +130,19 @@ namespace Utility.Nodes.Meta
                                 repository.Set((GuidKey)node.Key(), reception.Name, value, DateTime.Now);
                             }
                         }
-                    }).DisposeWith(compositeDisposable);
+                    }).DisposeWith(compositeDisposables.Get(node.Key()));
             }
 
             if (node is IDoesValueRequireSaving { DoesValueRequireSaving: true } and IGetValue { Value: { } value })
             {
                 repository.Set((GuidKey)node.Key(), nameof(IGetValue.Value), value, DateTime.Now);
             }
+        }
+
+        public void Untrack(string key)
+        {
+            compositeDisposables[key].Dispose();
+            compositeDisposables.Remove(key);
         }
 
         private void update(INodeViewModel node, PropertyCall call, object value)
@@ -192,7 +198,8 @@ namespace Utility.Nodes.Meta
             {
                 // Dispose managed state (managed objects).
                 // ...
-                compositeDisposable.Dispose();
+                compositeDisposables.ForEach(a => a.Value.Dispose());
+                compositeDisposables.Clear();
             }
 
             // Free unmanaged resources.

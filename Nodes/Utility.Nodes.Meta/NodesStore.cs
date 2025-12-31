@@ -82,20 +82,25 @@ namespace Utility.Nodes.Meta
     {
         public static void Add(this INodeSource nodeSource, INodeViewModel node)
         {
-            if(nodeSource.Nodes is IList<INodeViewModel> nodes)
-                nodes.Add(node);
+            if (nodeSource.Nodes is IList<INodeViewModel> nodes)
+            {
+                //Utility.Globals.UI.Post(a =>
+                //{
+                    nodes.Add(node);
+                //}, node);
+            }
             else
                 throw new InvalidOperationException("Nodes collection is not mutable.");
         }
         public static void Remove(this INodeSource nodeSource, string key)
         {
             var node = nodeSource.Nodes.SingleOrDefault(a => a.Key() == key);
-            if(nodeSource.Nodes is IList<INodeViewModel> nodes)
+            if (nodeSource.Nodes is IList<INodeViewModel> nodes)
                 nodes.Remove(node);
             else
                 throw new InvalidOperationException("Nodes collection is not mutable.");
         }
     }
-    
+
 
 }

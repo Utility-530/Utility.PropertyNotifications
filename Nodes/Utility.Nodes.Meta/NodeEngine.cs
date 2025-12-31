@@ -181,6 +181,8 @@ namespace Utility.Nodes.Meta
             repository.Remove((GuidKey)node.Key());
             childrenSubscriptions[node.Key()].Dispose();
             childrenSubscriptions.Remove(node.Key());
+            _dataInitialiser.Untrack(node.Key());
+
         }
 
         void addNodeToCollection(INodeViewModel node)
