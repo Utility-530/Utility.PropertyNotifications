@@ -1,12 +1,26 @@
 ﻿using Utility.Interfaces;
+using Utility.Meta;
 
 namespace Utility.PropertyDescriptors;
-public class PropertyDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor, Instance), IInstance, IPropertyDescriptor
+
+
+internal class PropertyDescriptor<T>(string Name) : PropertyDescriptor(new RootDescriptor(typeof(T), null, Name), null)
+{
+}
+
+
+public class PropertyDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor, Instance), IInstance, IPropertyDescriptor, IGetType
 {
     public override IEnumerable Items()
-    {        
+    {
         var propertyDescriptor = DescriptorConverter.ToValueDescriptor(Descriptor, Instance);
-        //propertyDescriptor.Parent = this;
         yield return propertyDescriptor;
+    }
+
+    public new Type GetType()
+    {
+        Type[] typeArguments = { Type };
+        Type genericType = typeof(PropertyDescriptor<>).MakeGenericType(typeArguments);
+        return genericType;
     }
 }
