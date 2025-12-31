@@ -9,7 +9,7 @@ namespace Utility.Meta
         public override Type[] GetTypes() => Types;
 
         public static readonly Type[] Types = new[]{
-                typeof(void),
+                //typeof(void),
                 typeof(string),
                 typeof(Enum),
                 typeof(bool),
@@ -20,6 +20,7 @@ namespace Utility.Meta
                 typeof(byte),
                 typeof(Guid),
                 typeof(DateTime),
+                typeof(Type),
                 typeof(object),
         };
 
