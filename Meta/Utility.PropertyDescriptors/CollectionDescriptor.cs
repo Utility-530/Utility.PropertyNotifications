@@ -110,8 +110,8 @@ namespace Utility.PropertyDescriptors
 
         public IEnumerable Proliferation()
         {
-            var instance = Activator.CreateInstance(ElementType)!;
-            int i = (Children.Cast<INodeViewModel>().LastOrDefault().Index.Local) + 1;
+            var instance = ActivateAnything.Activate.New(ElementType)!;
+            int i = ((Children.Cast<INodeViewModel>().LastOrDefault()?.Index.Local) ?? 0) + 1;
             yield return next(instance, ElementType, Type, i);
         }
 
@@ -123,7 +123,7 @@ namespace Utility.PropertyDescriptors
 
                 i++;
                 yield return next(item, item.GetType(), Type, i);
-  
+
             }
 
             bool Contains(IEnumerable source, object value)
