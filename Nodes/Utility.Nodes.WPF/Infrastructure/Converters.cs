@@ -107,7 +107,20 @@ namespace Utility.Nodes.WPF
         {
             if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value: Model { Data: Type type } })
             {
-                return DescriptorFactory.CreateRoot(type);
+                if(parameter is NodeViewModel { Children : { } children })
+                {
+                    if(children.Cast<NodeViewModel>().Last() is NodeViewModel { Value: bool isCollection })
+                    {
+                        if (isCollection)
+                        {
+                            Type openListType = typeof(List<>);   
+                            type = openListType.MakeGenericType(type);                     
+                        }
+
+                        return DescriptorFactory.CreateRoot(type);
+                    }
+                }
+                throw new Exception("Vds333f");
             }
             else if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value: AssemblyModel { Assembly: Assembly ass } })
             {

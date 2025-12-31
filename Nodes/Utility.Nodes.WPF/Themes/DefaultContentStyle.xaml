@@ -38,7 +38,7 @@
                                         <beh:InvokeCommandAction
                                             Command="{Binding AddCommand}"
                                             EventArgsConverter="{StaticResource SelectedNodeChangeConverter}"
-                                            EventArgsConverterParameter="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=TreeViewItem}}" />
+                                            EventArgsConverterParameter="{Binding Path=NodeItemsSource, RelativeSource={RelativeSource AncestorType=TreeViewItem}}" />
                                     </i:EventTrigger>
                                 </att:InteractivityItems.Triggers>
                             </att:InteractivityItems>
@@ -91,16 +91,30 @@
                 </local:EditTemplateSelector>
             </Setter.Value>
         </Setter>
-        <Setter Property="NodeTemplate">
+        <Setter Property="NodeTemplateSelector">
             <Setter.Value>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <Border
-                        Margin="1"
-                        BorderBrush="GhostWhite"
-                        BorderThickness="1">
-                        <ContentControl Content="{Binding Name}" />
-                    </Border>
-                </HierarchicalDataTemplate>
+                <local:CustomTemplateSelector>
+                    <local:CustomTemplateSelector.Default>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                            <Border
+                                Margin="1"
+                                BorderBrush="GhostWhite"
+                                BorderThickness="1">
+                                <ContentControl Content="{Binding Name}" />
+                            </Border>
+                        </HierarchicalDataTemplate>
+                    </local:CustomTemplateSelector.Default>
+                    <local:CustomTemplateSelector.Boolean>
+                        <DataTemplate>
+                            <Border
+                                Margin="1"
+                                BorderBrush="GhostWhite"
+                                BorderThickness="1">
+                                <CheckBox Content="{Binding Name, Mode=OneTime}" IsChecked="{Binding Value, Mode=TwoWay}" />
+                            </Border>
+                        </DataTemplate>                                       
+                    </local:CustomTemplateSelector.Boolean>
+                </local:CustomTemplateSelector>              
             </Setter.Value>
         </Setter>
         <Setter Property="ItemTemplate">

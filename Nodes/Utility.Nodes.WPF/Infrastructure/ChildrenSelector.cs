@@ -9,14 +9,18 @@ using Utility.Nodes.Ex;
 using Utility.WPF.Controls.Trees;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.NonGeneric;
+using Utility.Models;
 
 namespace Utility.Nodes.WPF
 {
     public class ChildrenSelector : IChildrenSelector
     {
+        public const string IsCollection = nameof(IsCollection);
         public IEnumerable Select(object data)
         {
-            return NodeExtensions.ToNodeViewModel([typeof(CustomModels.Controls).Assembly, new SystemAssembly()]);
+            var tree = NodeExtensions.ToNodeViewModel([typeof(CustomModels.Controls).Assembly, new SystemAssembly()]);
+            tree.Add(new Model { Name = IsCollection, Value = false });
+            return tree;
         }
     }
 
