@@ -6,6 +6,23 @@ namespace Utility.WPF.Helpers
 {
     public static class ResourceHelper
     {
+
+        public static T Load<T>(this Uri uri, string key) where T : class
+        {
+            ResourceDictionary res;
+            if (Application.Current.Resources.Contains(uri) == false)
+            {
+                Application.Current.Resources.Add(uri, res = Application.LoadComponent(uri) as ResourceDictionary);
+            }
+            else
+            {
+                res = Application.Current.Resources[uri] as ResourceDictionary;
+            }
+
+            return res[key] as T;
+        }
+
+
         public static T FindResource<T>(string directory, string key)
         {
             var resourceDictionary = new ResourceDictionary();
