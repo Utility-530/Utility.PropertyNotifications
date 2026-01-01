@@ -142,6 +142,11 @@
                 DragablzItemStyle="{StaticResource DragablzItemStyle}"></local:SelectedItemStyleSelector>-->
 
             <local:ContainerTemplateSelector x:Key="ContainerTemplateSelector" >
+                <local:ContainerTemplateSelector.TableTemplate>
+                    <HierarchicalDataTemplate DataType="{x:Type node:NodeViewModel}" ItemsSource="{Binding Children}">
+                        <!--<TextBlock Text="{Binding Name}" FontSize="14"></TextBlock>-->
+                    </HierarchicalDataTemplate>
+                </local:ContainerTemplateSelector.TableTemplate>
                 <local:ContainerTemplateSelector.TabTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type node:NodeViewModel}" ItemsSource="{Binding Children}">
                         <TextBlock Text="{Binding Name}" FontSize="14"></TextBlock>

@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Automation.Text;
+using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Models.Templates;
 using Utility.PropertyDescriptors;
@@ -13,6 +15,8 @@ namespace Utility.Nodes.Demo.Editor
         {
             return item switch
             {
+                NodeViewModel { Name: NodeMethodFactory.Slave } => TableTemplate,
+                NodeViewModel { Parent: IGetName { Name: NodeMethodFactory.Slave } } => TabTemplate,
                 MemberDescriptor => Utility.WPF.Trees.DataTemplateSelector.Instance.SelectTemplate(item, container),
                 //NodeViewModel { DataTemplate: "TabStyle" } => TabTemplate,            
                 Model => ModelTemplateSelector.SelectTemplate(item, container),       
@@ -20,6 +24,7 @@ namespace Utility.Nodes.Demo.Editor
             };
         }
 
+        public DataTemplate TableTemplate { get;set; }
         public DataTemplate TabTemplate { get;set; }
     }
 }

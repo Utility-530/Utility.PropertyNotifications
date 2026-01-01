@@ -112,7 +112,6 @@ namespace Utility.Nodes.Demo.Editor
             register.Register<NodeInterface>();
             register.Register<INodeSource>(() => new NodesStore());
             register.Register<IDataActivator>(() => new DataActivator());
-
         }
 
         private void initialiseConnections(IServiceResolver register)
