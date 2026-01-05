@@ -20,18 +20,25 @@ namespace Utility.PropertyDescriptors
         }
     }
 
-    internal class CollectionDescriptor(Descriptor PropertyDescriptor, Type ElementType, IEnumerable collection) : MemberDescriptor(PropertyDescriptor, collection),
+    internal class CollectionDescriptor : MemberDescriptor,
         ICollectionDescriptor,
         IRefresh,
         IGetType
     {
+
+        public CollectionDescriptor(Descriptor PropertyDescriptor, Type ElementType, IEnumerable collection): base(PropertyDescriptor, collection)
+        {
+            IsProliferable = true;
+            this.ElementType = ElementType;
+        }
+
         private ObservableCollection<IDescriptor>? children;
 
         public static string _Name => "Collection";
 
         public override string? Name => _Name;
 
-        public override IEnumerable Collection { get => collection; set => throw new Exception("FD£cwe"); }
+        public override IEnumerable Collection { get => (IEnumerable)Instance; set => throw new Exception("FD£cwe"); }
 
         public override IEnumerable Items()
         {
@@ -57,7 +64,7 @@ namespace Utility.PropertyDescriptors
 
         public override int Count => Instance is IEnumerable enumerable ? enumerable.Count() : 0;
 
-        public Type ElementType { get; } = ElementType;
+        public Type ElementType { get; } 
 
         public override void Finalise(object? item = null)
         {

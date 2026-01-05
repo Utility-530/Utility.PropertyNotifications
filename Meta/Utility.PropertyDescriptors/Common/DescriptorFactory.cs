@@ -36,7 +36,7 @@ namespace Utility.PropertyDescriptors
                 if (descriptor.PropertyType.ElementType() is { } elementType)
                 {
                     var collection = descriptor.GetValue(value) as IEnumerable;
-                    var collectionDescriptor = new CollectionDescriptor(descriptor, elementType, collection ?? Array.CreateInstance(elementType, 0)) { IsProliferable = true };
+                    var collectionDescriptor = new CollectionDescriptor(descriptor, elementType, collection ?? Array.CreateInstance(elementType, 0)) { };
                     return collectionDescriptor;
                 }
                 else
