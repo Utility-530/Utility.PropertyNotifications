@@ -260,7 +260,7 @@ HorizontalAlignment="Right"
             <!--<Trigger Property="IsSelected" Value="False">
                 <Setter Property="Opacity" Value="0" />
             </Trigger>-->
-            <Trigger Property="IsSelected" Value="False">
+            <Trigger Property="local:TreeTabHelper.IsSelected" Value="False">
 
                 <!-- When IsSelected becomes False -->
                 <Trigger.EnterActions>
