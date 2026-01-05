@@ -4,10 +4,6 @@ using Utility.Meta;
 
 namespace Utility.PropertyDescriptors;
 
-internal class ValueDescriptor<T, TR>(string name) : ValueDescriptor<T>(new RootDescriptor(typeof(T), typeof(TR), name), null)
-{
-}
-
 internal class ValueDescriptor<T>(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IGetValue<T>, IGetType
 {
     T IGetValue<T>.Value => Get() is T t ? t : default;
@@ -18,18 +14,9 @@ internal class ValueDescriptor<T>(Descriptor Descriptor, object Instance) : Valu
 
     public new Type GetType()
     {
-        if (ParentType == null)
-        {
             Type[] typeArguments = { Type };
             Type genericType = typeof(ValueDescriptor<>).MakeGenericType(typeArguments);
             return genericType;
-        }
-        else
-        {
-            Type[] typeArguments = { Type, ParentType };
-            Type genericType = typeof(ValueDescriptor<,>).MakeGenericType(typeArguments);
-            return genericType;
-        }
     }
 }
 
