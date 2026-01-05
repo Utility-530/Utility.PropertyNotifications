@@ -9,23 +9,23 @@
     xmlns:beh="http://schemas.utility.com/behaviors"
     xmlns:btns="http://schemas.utility.com/buttons"
     xmlns:controls="http://schemas.utility.com"
+    xmlns:conv="http://schemas.utility.com/converters"
     xmlns:ct="http://schemas.utility.com/trees"
+    xmlns:dragablz="http://schemas.utility.com/dragablz"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:inf="clr-namespace:Utility.Nodes.Meta;assembly=Utility.Nodes.Meta"
     xmlns:local="clr-namespace:Utility.Nodes.Demo.Editor"
     xmlns:markup="http://schemas.utility.com/markup"
+    xmlns:models="clr-namespace:Utility.Models;assembly=Utility.Models"
     xmlns:node="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
+    xmlns:obj="http://schemas.utility.com/objects"
     xmlns:res="http://schemas.utility.com/resourcedictionary"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
     xmlns:trees="clr-namespace:Utility.Models.Trees;assembly=Utility.Models.Trees"
     xmlns:utl="http://schemas.utility.com/utilitywpf"
-    xmlns:models="clr-namespace:Utility.Models;assembly=Utility.Models"
-    xmlns:dragablz="http://schemas.utility.com/dragablz" 
-    xmlns:wpf="clr-namespace:Utility.Nodes.WPF;assembly=Utility.Nodes.WPF"
-    xmlns:conv="http://schemas.utility.com/converters"
-    xmlns:obj="http://schemas.utility.com/objects">
+    xmlns:wpf="clr-namespace:Utility.Nodes.WPF;assembly=Utility.Nodes.WPF">
 
     <Application.Resources>
         <ResourceDictionary>
@@ -40,7 +40,7 @@
                 <res:SharedResourceDictionary Source="/Utility.Models.Templates;component/Templates.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <wpf:SerialiserSource x:Key="SerialiserSource"/>
+            <wpf:SerialiserSource x:Key="SerialiserSource" />
 
             <Style
                 x:Key="ComboEx2Style"
@@ -54,9 +54,12 @@
                             <StackPanel>
                                 <controls:LabelledContent Header="FilePath" Hint="Unnecessary">
                                     <Viewbox Height="20">
-                                        <TextBox  Width="200" Text="{Binding Value}" HorizontalAlignment="Stretch"/>
+                                        <TextBox
+                                            Width="200"
+                                            HorizontalAlignment="Stretch"
+                                            Text="{Binding Value}" />
                                     </Viewbox>
-                                </controls:LabelledContent>  
+                                </controls:LabelledContent>
                             </StackPanel>
                         </DataTemplate>
                     </Setter.Value>
@@ -90,7 +93,7 @@
                         <dragablz:InterTabController />
                     </Setter.Value>
                 </Setter>
-                -->
+            -->
             <!--<Setter Property="NewItemFactory">
                     <Setter.Value>
                         <local:NewItemFactory/>
@@ -100,22 +103,29 @@
             </Style>-->
 
 
-         
 
 
-            <Style x:Key="TabExControlStyle" TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource TabControlStyle}">
-                <Setter Property="ct:TreeTabHelper.SelectedItem" Value="{Binding Current, Mode=TwoWay}"></Setter>
-                <Setter Property="ct:TreeTabHelper.AddItemCallback" Value="{Binding Source={x:Static Application.Current}, Path='Add'}"></Setter>
-                <Setter Property="ct:TreeTabHelper.RemoveItemCallback" Value="{Binding Source={x:Static Application.Current}, Path='Remove'}"></Setter>
+
+            <Style
+                x:Key="TabExControlStyle"
+                BasedOn="{StaticResource TabControlStyle}"
+                TargetType="{x:Type TreeViewItem}">
+                <Setter Property="ct:TreeTabHelper.SelectedItem" Value="{Binding Current, Mode=TwoWay}" />
+                <Setter Property="ct:TreeTabHelper.AddItemCallback" Value="{Binding Source={x:Static Application.Current}, Path='Add'}" />
+                <Setter Property="ct:TreeTabHelper.RemoveItemCallback" Value="{Binding Source={x:Static Application.Current}, Path='Remove'}" />
                 <Setter Property="ct:TreeTabHelper.Edit">
                     <Setter.Value>
-                        <models:Model Name="new" Guid="{local:Guid}" DataTemplate = "TabStyle" IsProliferable="True"/>
+                        <models:Model
+                            Name="new"
+                            DataTemplate="TabStyle"
+                            Guid="{local:Guid}"
+                            IsProliferable="True" />
                     </Setter.Value>
                 </Setter>
                 <Setter Property="ct:TreeTabHelper.EditTemplate">
                     <Setter.Value>
                         <DataTemplate DataType="{x:Type node:NodeViewModel}">
-                            <TextBox Text="{Binding Name}"></TextBox>
+                            <TextBox Text="{Binding Name}" />
                         </DataTemplate>
                     </Setter.Value>
                 </Setter>
@@ -126,22 +136,22 @@
                         </HierarchicalDataTemplate>
                     </Setter.Value>
                 </Setter>-->
-                <Setter Property="Height" Value="1200"></Setter>
-                <Setter Property="Width" Value="1800"></Setter>
+                <Setter Property="Height" Value="1200" />
+                <Setter Property="Width" Value="1800" />
             </Style>
 
             <local:ContainerStyleSelector
                 x:Key="ContainerStyleSelector"
                 ComboStyle="{StaticResource ComboEx2Style}"
-                TableStyle="{StaticResource TabExControlStyle}"
+                DefaultStyle="{StaticResource DefaultStyle}"
                 TabStyle="{StaticResource TabStyle}"
-                DefaultStyle="{StaticResource DefaultStyle}" />
+                TableStyle="{StaticResource TabExControlStyle}" />
 
             <!--<local:SelectedItemStyleSelector
-                x:Key="SelectedItemStyleSelector" 
+                x:Key="SelectedItemStyleSelector"
                 DragablzItemStyle="{StaticResource DragablzItemStyle}"></local:SelectedItemStyleSelector>-->
 
-            <local:ContainerTemplateSelector x:Key="ContainerTemplateSelector" >
+            <local:ContainerTemplateSelector x:Key="ContainerTemplateSelector">
                 <local:ContainerTemplateSelector.TableTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type node:NodeViewModel}" ItemsSource="{Binding Children}">
                         <!--<TextBlock Text="{Binding Name}" FontSize="14"></TextBlock>-->
@@ -149,27 +159,25 @@
                 </local:ContainerTemplateSelector.TableTemplate>
                 <local:ContainerTemplateSelector.TabTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type node:NodeViewModel}" ItemsSource="{Binding Children}">
-                        <TextBlock Text="{Binding Name}" FontSize="14"></TextBlock>
+                        <TextBlock FontSize="14" Text="{Binding Name}" />
                     </HierarchicalDataTemplate>
                 </local:ContainerTemplateSelector.TabTemplate>
             </local:ContainerTemplateSelector>
-            
+
             <local:SelectedItemTemplateSelector x:Key="SelectedItemTemplateSelector" />
 
             <DataTemplate x:Key="ContainerTemplate" DataType="{x:Type node:NodeViewModel}">
                 <ct:CustomTreeView
                     ItemContainerStyleSelector="{StaticResource ContainerStyleSelector}"
                     ItemTemplateSelector="{StaticResource ContainerTemplateSelector}"
-                    SelectedItemTemplateSelector="{StaticResource SelectedItemTemplateSelector}"
-                    ItemsSource="{markup:Array {Binding}}" />
+                    ItemsSource="{markup:Array {Binding}}"
+                    SelectedItemTemplateSelector="{StaticResource SelectedItemTemplateSelector}" />
             </DataTemplate>
 
             <DataTemplate x:Key="ShadowTemplate" DataType="{x:Type node:NodeViewModel}">
                 <utl:SplitControl x:Name="splitcontrol">
                     <utl:SplitControl.Content>
-                        <ct:CustomTreeView
-                            ItemContainerStyle="{StaticResource DefaultContentStyle}"
-                            ItemsSource="{markup:Array {Binding}}" >
+                        <ct:CustomTreeView ItemContainerStyle="{StaticResource DefaultContentStyle}" ItemsSource="{markup:Array {Binding}}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectedItemChanged">
                                     <beh:SetSelectedItemAction PropertyName="DataContext" TargetObject="{Binding ElementName=splitcontrol, Path=Header}" />
@@ -177,12 +185,12 @@
                             </i:Interaction.Triggers>
                         </ct:CustomTreeView>
                     </utl:SplitControl.Content>
-                    <utl:SplitControl.Header>                      
-                            <obj:JsonControl>
-                                <i:Interaction.Behaviors>
-                                    <obj:ObjectBehavior  Object="{Binding }" JsonSerializer="{Binding Path=Serialiser, Source={StaticResource SerialiserSource}}"/>
-                                </i:Interaction.Behaviors>
-                            </obj:JsonControl>                    
+                    <utl:SplitControl.Header>
+                        <obj:JsonControl>
+                            <i:Interaction.Behaviors>
+                                <obj:ObjectBehavior JsonSerializer="{Binding Path=Serialiser, Source={StaticResource SerialiserSource}}" Object="{Binding}" />
+                            </i:Interaction.Behaviors>
+                        </obj:JsonControl>
                     </utl:SplitControl.Header>
                 </utl:SplitControl>
             </DataTemplate>
