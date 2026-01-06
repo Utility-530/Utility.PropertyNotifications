@@ -8,8 +8,9 @@ namespace Utility.Changes
         {
         }
 
-        public Set(Change<T> change) : base(new[] { change })
+        public Set(params Change<T>[] list) : base(list)
         {
         }
+
     }
 }
