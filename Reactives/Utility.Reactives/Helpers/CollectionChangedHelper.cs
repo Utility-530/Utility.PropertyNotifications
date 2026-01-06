@@ -139,6 +139,18 @@ namespace Utility.Reactives
                 return Disposable.Empty;
             });
         }
+        public static IObservable<Set<T>> Changes<T>(this IEnumerable collection, bool includeInitial = false)
+        {
+            return Observable.Create<Set<T>>(observer =>
+            {
+                if (includeInitial)
+                    observer.OnNext(new Set<T>([Change.None<T>()]));
+
+                if (collection is INotifyCollectionChanged notifyCollection)
+                    return Changes<T>(notifyCollection).Subscribe(observer);
+                return Disposable.Empty;
+            });
+        }
 
         public static IObservable<int> Counts(this IEnumerable collection, bool includeInitial = true)
         {
