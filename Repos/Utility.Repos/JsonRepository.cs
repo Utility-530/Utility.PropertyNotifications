@@ -33,7 +33,7 @@ namespace Utility.Repos
             throw new NotImplementedException();
         }
 
-        public IObservable<Change<Key>> Find(Guid? parentGuid = default, string? name = null, Guid? guid = null, Type? type = null, int? index = null)
+        public IObservable<Set<Key>> Find(Guid? parentGuid = default, string? name = null, Guid? guid = null, Type? type = null, int? index = null)
         {
             if (name != null)
             {
@@ -48,7 +48,7 @@ namespace Utility.Repos
                         if (names.Length > 0)
                         {
                             //return Observable.Return<Key?>(new Key { Guid = Guid.Parse(__token.Parent.Parent["Key"].Value<string>()), Name = name, ParentGuid = parentGuid, Type = Type.GetType(__token.Parent.First["$type"].Value<string>()) });
-                            return Observable.Empty<Change<Key>>();
+                            return Observable.Empty<Set<Key>>();
                         }
                         else
                         {
@@ -65,9 +65,9 @@ namespace Utility.Repos
                 if (!keys.ContainsKey(key))
                 {
                     keys[key] = Guid.NewGuid();
-                    return Observable.Return<Change<Key>>(Utility.Changes.Change.Add<Key>(new Key(keys[key], parentGuid.Value, type, name, index, null)));
+                    return Observable.Return<Set<Key>>(new(Utility.Changes.Change.Add<Key>(new Key(keys[key], parentGuid.Value, type, name, index, null))));
                 }
-                return Observable.Empty<Change<Key>>();
+                return Observable.Empty<Set<Key>>();
             }
 
             //else
@@ -80,7 +80,7 @@ namespace Utility.Repos
             //    //    .ToObservable();
             //}
 
-            return Observable.Return<Change<Key>>(Utility.Changes.Change.None<Key>());
+            return Observable.Empty<Set<Key>>();
         }
 
         public IObservable<Guid> insertByParent(Guid parentGuid, string name, string? table_name = null, int? typeId = null, int? index = null)

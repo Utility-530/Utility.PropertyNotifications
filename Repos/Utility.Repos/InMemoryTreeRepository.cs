@@ -49,11 +49,11 @@ namespace Utility.Repos
             throw new NotImplementedException();
         }
 
-        public IObservable<Changes.Change<Key>> Find(Guid? parentGuid = default, string? name = null, Guid? guid = null, System.Type? type = null, int? index = null)
+        public IObservable<Changes.Set<Key>> Find(Guid? parentGuid = default, string? name = null, Guid? guid = null, System.Type? type = null, int? index = null)
         {
             if (parentGuid == default)
                 throw new Exception($"{nameof(parentGuid)} is default");
-            return Observable.Create<Changes.Change<Key>>(observer =>
+            return Observable.Create<Changes.Set<Key>>(observer =>
             {
                 //return initialisationTask.ToObservable()
                 //    .Subscribe(a =>
@@ -77,7 +77,7 @@ namespace Utility.Repos
                 {
                     if (string.IsNullOrEmpty(name))
                     {
-                        observer.OnNext(Changes.Change.None<Key>());
+                        observer.OnNext(new Changes.Set<Key>());
                         observer.OnCompleted();
                         return Disposable.Empty;
                     }
@@ -86,7 +86,7 @@ namespace Utility.Repos
                     {
                         if (a is Guid guid)
                         {
-                            observer.OnNext(Changes.Change.Add(new Key(guid, parentGuid.Value, type, name, index, default)));
+                            observer.OnNext(new(Changes.Change.Add(new Key(guid, parentGuid.Value, type, name, index, default))));
                         }
                         else
                             throw new Exception("* 44 fd3323");
@@ -97,16 +97,19 @@ namespace Utility.Repos
                 {
                     var table = tables.Single();
                     setName(table.Guid, table_name);
-                    observer.OnNext(Changes.Change.Add(new Key(table.Guid, parentGuid.Value, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed)));
+                    observer.OnNext(new(Changes.Change.Add(new Key(table.Guid, parentGuid.Value, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed))));
                     observer.OnCompleted();
                 }
                 else if (name == null)
                 {
+                    List<Changes.Change<Key>> changes = new();
                     foreach (var table in tables)
                     {
                         setName(table.Guid, table_name);
-                        observer.OnNext(Changes.Change.Add(new Key(table.Guid, parentGuid.Value, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed)));
+                        changes.Add(Changes.Change.Add(new Key(table.Guid, parentGuid.Value, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed)));
                     }
+                    observer.OnNext(new());
+
                     observer.OnCompleted();
                 }
                 else if (name != null)
@@ -114,7 +117,7 @@ namespace Utility.Repos
                     var table = tables.SingleOrDefault(a => a.Name == name) ?? throw new Exception("FD £££££");
                     {
                         setName(table.Guid, table_name);
-                        observer.OnNext(Changes.Change.Add(new Key(table.Guid, parentGuid.Value, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed)));
+                        observer.OnNext(new(Changes.Change.Add(new Key(table.Guid, parentGuid.Value, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed))));
                     }
                     observer.OnCompleted();
                 }
@@ -123,7 +126,7 @@ namespace Utility.Repos
                     var table = tables.SingleOrDefault(a => a.Guid == guid.Value) ?? throw new Exception("3FD £2ui£££44£");
                     {
                         setName(guid.Value, table_name);
-                        observer.OnNext(Changes.Change.Add(new Key(table.Guid, parentGuid.Value, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed)));
+                        observer.OnNext(new(Changes.Change.Add(new Key(table.Guid, parentGuid.Value, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed))));
                     }
                     observer.OnCompleted();
                 }
