@@ -514,21 +514,21 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
         }
 
 
-        public IObservable<Utility.Changes.Change<Key>> Find(Guid? parentGuid = default, string? name = null, Guid? guid = null, Type? type = null, int? index = null)
+        public IObservable<Utility.Changes.Set<Key>> Find(Guid? parentGuid = default, string? name = null, Guid? guid = null, Type? type = null, int? index = null)
         {
             if (parentGuid.HasValue == false)
                 throw new ArgumentNullException(nameof(parentGuid), "Parent Guid cannot be null.");
 
             (var _parentGuid, var root, var parentName) = dictionary[parentGuid.Value];
 
-            return Observable.Create<Utility.Changes.Change<Key>>(observer =>
+            return Observable.Create<Utility.Changes.Set<Key>>(observer =>
             {
                 if (guid == null)
                     name = parentName;
                 else
                 {
                     (var _parentGuid, var root, var name) = dictionary[guid.Value];
-                    observer.OnNext(Change.Add(new Key(guid.Value, parentGuid.Value, null, name, default, default)));
+                    observer.OnNext(new(Change.Add(new Key(guid.Value, parentGuid.Value, null, name, default, default))));
                     observer.OnCompleted();
                     return Disposable.Empty;
                 }
@@ -538,26 +538,27 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
                 {
                     replay[(root, name)].OnNext(new DateValue(root, name + "." + "Value", default, a));
                 });
-
+                List<Utility.Changes.Change<Key>> changes = new();
                 if (name == nameof(AuctionItem))
                 {
-                    observer.OnNext(Change.Add(create(Constants.Title)));
-                    observer.OnNext(Change.Add(create(Constants.SubTitle)));
-                    observer.OnNext(Change.Add(create(Constants.Descriptions)));
-                    observer.OnNext(Change.Add(create(Constants.Images)));
-                    observer.OnNext(Change.Add(create(Constants.Measurements)));
-                    observer.OnNext(Change.Add(create(Constants.Disclaimers)));     
-                    observer.OnNext(Change.Add(create(Constants.HasShipping)));
+                    changes.Add(Change.Add(create(Constants.Title)));
+                    changes.Add(Change.Add(create(Constants.SubTitle)));
+                    changes.Add(Change.Add(create(Constants.Descriptions)));
+                    changes.Add(Change.Add(create(Constants.Images)));
+                    changes.Add(Change.Add(create(Constants.Measurements)));
+                    changes.Add(Change.Add(create(Constants.Disclaimers)));
+                    changes.Add(Change.Add(create(Constants.HasShipping)));
+                    observer.OnNext(new Utility.Changes.Set<Key>(changes));
                     observer.OnCompleted();
                 }
                 else if (name == Constants.Title)
                 {
-                    observer.OnNext(Change.Add(create(name + "." + Constants.Value)));
+                    observer.OnNext(new(Change.Add(create(name + "." + Constants.Value))));
                     observer.OnCompleted();
                 }
                 else if (name == Constants.SubTitle)
                 {
-                    observer.OnNext(Change.Add(create(name + "." + Constants.Value)));
+                    observer.OnNext(new(Change.Add(create(name + "." + Constants.Value))));
                     observer.OnCompleted();
                 }
                 else if (name == Constants.Descriptions)
@@ -566,12 +567,17 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
                     .Transform(a => create(a.Name))
                     .Subscribe(a =>
                     {
-                        observer.OnNext(a);
-                    }, () => observer.OnCompleted());
+                        changes.Add(a);
+                    },
+                    () =>
+                    {
+                        observer.OnNext(new(changes));
+                        observer.OnCompleted();
+                    });
                 }
                 else if (name.StartsWith(Constants.Description))
                 {
-                    observer.OnNext(Change.Add<Key>(create(name + "." + Constants.Value)));
+                    observer.OnNext(new(Change.Add<Key>(create(name + "." + Constants.Value))));
                     observer.OnCompleted();
                 }
                 else if (name == Constants.Images)
@@ -580,19 +586,25 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
                     .Transform(a => create(a.Name))
                     .Subscribe(a =>
                     {
-                        observer.OnNext(a);
-                    }, () => observer.OnCompleted());
+                        changes.Add(a);
+                    },
+                    () =>
+                    {
+                        observer.OnNext(new(changes));
+                        observer.OnCompleted();
+                    });
                 }
                 else if (name.StartsWith(Constants.Image))
                 {
-                    observer.OnNext(Change.Add(create(name + "." + Constants.Value)));
+                    observer.OnNext(new(Change.Add(create(name + "." + Constants.Value))));
                     observer.OnCompleted();
                 }
                 else if (name == Constants.Measurements)
                 {
-                    observer.OnNext(Change.Add(create(Constants.MeasurementHeader)));
-                    observer.OnNext(Change.Add(create(Constants.MeasurementCentimetres)));
-                    observer.OnNext(Change.Add(create(Constants.MeasurementInches)));
+                    changes.Add(Change.Add(create(Constants.MeasurementHeader)));
+                    changes.Add(Change.Add(create(Constants.MeasurementCentimetres)));
+                    changes.Add(Change.Add(create(Constants.MeasurementInches)));
+                    observer.OnNext(new Utility.Changes.Set<Key>(changes));
                     observer.OnCompleted();
                 }
                 else if (name.StartsWith(Constants.Measurement))
@@ -621,26 +633,29 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
 
                     if (name == Constants.MeasurementHeader)
                     {
-                        observer.OnNext(Change.Add(create(Constants.Unit)));
-                        observer.OnNext(Change.Add(create(Constants.PitToPit)));
-                        observer.OnNext(Change.Add(create(Constants.SleeveLength)));
-                        observer.OnNext(Change.Add(create(Constants.Length)));
+                        changes.Add(Change.Add(create(Constants.Unit)));
+                        changes.Add(Change.Add(create(Constants.PitToPit)));
+                        changes.Add(Change.Add(create(Constants.SleeveLength)));
+                        changes.Add(Change.Add(create(Constants.Length)));
+                        observer.OnNext(new Utility.Changes.Set<Key>(changes));
                         observer.OnCompleted();
                     }
                     else if (name == Constants.MeasurementCentimetres)
                     {
-                        observer.OnNext(Change.Add(create(Constants.inch)));
-                        observer.OnNext(Change.Add(create(Constants.PitToPitIn)));
-                        observer.OnNext(Change.Add(create(Constants.SleeveLengthIn)));
-                        observer.OnNext(Change.Add(create(Constants.LengthIn)));
+                        changes.Add(Change.Add(create(Constants.inch)));
+                        changes.Add(Change.Add(create(Constants.PitToPitIn)));
+                        changes.Add(Change.Add(create(Constants.SleeveLengthIn)));
+                        changes.Add(Change.Add(create(Constants.LengthIn)));
+                        observer.OnNext(new Utility.Changes.Set<Key>(changes));
                         observer.OnCompleted();
                     }
                     else if (name == Constants.MeasurementInches)
                     {
-                        observer.OnNext(Change.Add(create(Constants.centimetre)));
-                        observer.OnNext(Change.Add(create(Constants.PitToPitCm)));
-                        observer.OnNext(Change.Add(create(Constants.SleeveLengthCm)));
-                        observer.OnNext(Change.Add(create(Constants.LengthCm)));
+                        changes.Add(Change.Add(create(Constants.centimetre)));
+                        changes.Add(Change.Add(create(Constants.PitToPitCm)));
+                        changes.Add(Change.Add(create(Constants.SleeveLengthCm)));
+                        changes.Add(Change.Add(create(Constants.LengthCm)));
+                        observer.OnNext(new Utility.Changes.Set<Key>(changes));
                         observer.OnCompleted();
                     }
                 }
@@ -650,17 +665,17 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
                     .Transform(a => create(a.Name))
                     .Subscribe(a =>
                     {
-                        observer.OnNext(a);
+                        changes.Add(a);
                     }, () => observer.OnCompleted());
                 }
                 else if (name.StartsWith(Constants.Disclaimer))
                 {
-                    observer.OnNext(Change.Add(create(name + "." + Constants.Value)));
+                    observer.OnNext(new(Change.Add(create(name + "." + Constants.Value))));
                     observer.OnCompleted();
                 }
                 else if (name == Constants.HasShipping)
                 {
-                    observer.OnNext(Change.Add(create(name + "." + Constants.Value)));
+                    observer.OnNext(new(Change.Add(create(name + "." + Constants.Value))));
                     observer.OnCompleted();
                 }
                 else if (name == Constants.inch)
