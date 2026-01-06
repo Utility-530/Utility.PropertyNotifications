@@ -18,7 +18,7 @@ namespace Utility.Nodes
     public class NodeViewModelConstants
     {
         public static readonly bool? IsHighlighted = default;
-        public static readonly bool IsExpanded = default;
+        public static readonly bool IsExpanded = true;
         public static readonly Arrangement Arrangement = default;
         public static readonly int Column = default;
         public static readonly int Row = default;
