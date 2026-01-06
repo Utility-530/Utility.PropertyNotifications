@@ -117,7 +117,7 @@ namespace Utility.WPF.Controls.ComboBoxes
         }
 
         public DataTemplateSelector DataTemplateSelector() =>
-                 DataTemplateHelper.Create((item, b) =>
+                 DataTemplateHelper.CreateSelector((item, b) =>
                  {
                      if (item is IGetData { Data: var data } tree)
                      {

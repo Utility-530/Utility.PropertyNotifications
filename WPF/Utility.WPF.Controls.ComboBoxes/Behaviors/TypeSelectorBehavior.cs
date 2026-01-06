@@ -125,7 +125,7 @@ namespace Utility.WPF.Controls.ComboBoxes
         }
 
         public override DataTemplateSelector SelectedTemplateSelector() =>
-            DataTemplateHelper.Create((item, b) =>
+            DataTemplateHelper.CreateSelector((item, b) =>
             {
                 if (item is IGetValue { Value: var value } tree)
                 {

@@ -30,7 +30,7 @@ namespace Utility.WPF.Controls.ComboBoxes
         public virtual DataTemplateSelector DataTemplateSelector()
         {
             DataTemplate hierarchicalDataTemplate = null;
-            return DataTemplateHelper.Create((a, b) =>
+            return DataTemplateHelper.CreateSelector((a, b) =>
             {
                 return hierarchicalDataTemplate ??= TemplateGenerator.CreateHierarcialDataTemplate(() =>
                 {
