@@ -52,7 +52,8 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
                     {
                         //item.IsSelected = item == container;
                         var b = item.DataContext == e.NewValue;
-                        TreeTabHelper.SetIsSelected(item, b);
+                        if (TreeTabHelper.GetIsSelected(item) != b)
+                            TreeTabHelper.SetIsSelected(item, b);
                         if (b)
                             ZIndexAnimator.AnimateOnSelected(tabTree, item);
                         //TreeViewItemExtensions.SetIsSelectedReflective(item, item == container);
@@ -293,6 +294,14 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
 
         public static TreeTabHelper Instance { get; } = new TreeTabHelper();
 
+        class container
+        {
+            public int Index { get; set; }
+            public TreeViewItem Item { get; set; }
+            public double Width { get; set; }
+        }
+        static Dictionary<int, container> dictionary = new();
+
         private static void onTreeViewLoadedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is TreeViewItem _item && e.NewValue is true)
@@ -305,7 +314,7 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
 
             void TabTree_Loaded(TreeViewItem tabTree)
             {
-                double totalWidth = 0;
+                //double totalWidth = 0;
 
                 if (tabTree.Items is INotifyCollectionChanged incc)
                 {
@@ -345,13 +354,13 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
                                                 if (tabTree.ItemContainerGenerator.ContainerFromIndex(i) is TreeViewItem item)
                                                 {
                                                     //item.IsSelected = item == container;
-                                                    TreeTabHelper.SetIsSelected(item, item == container);
+                                                    if (TreeTabHelper.GetIsSelected(item) != (item == container))
+                                                        TreeTabHelper.SetIsSelected(item, item == container);
                                                     //TreeViewItemExtensions.SetIsSelectedReflective(item, item == container);
 
                                                 }
                                             }
-                                            ZIndexAnimator.AnimateOnSelected(tabTree, container);
-
+                                            //ZIndexAnimator.AnimateOnSelected(tabTree, container);
                                         };
 
                                         container.Observe(a => a.IsSelected)
@@ -379,8 +388,9 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
                             case NotifyCollectionChangedAction.Remove:
                                 break;
                             case NotifyCollectionChangedAction.Reset:
-                                totalWidth = 0;
-                                TreeTabHelper.SetTotalTabOffset(tabTree, new Thickness(totalWidth, 0, 0, 0));
+                                //totalWidth = 0;
+
+                                TreeTabHelper.SetTotalTabOffset(tabTree, new Thickness(0, 0, 0, 0));
                                 break;
                         }
                     });
@@ -390,7 +400,7 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
 
                 void initialise(bool first = false)
                 {
-                    totalWidth = 0;
+                    //totalWidth = 0;
                     for (int i = 0; i < tabTree.Items.Count; i++)
                     {
                         TreeViewItem lastItem;
@@ -473,13 +483,29 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
                     }
                 }
 
+
+
                 void update(TreeViewItem tvi, int i)
                 {
-                    TreeTabHelper.SetTabOffset(tvi, new Thickness(totalWidth, 0, 0, 0));
-                    totalWidth += VisualTreeExHelper.FindChild<Border>(tvi, "Bd").ActualWidth;
-                    Panel.SetZIndex(tvi, tabTree.Items.Count - i); // initial z-order                        
-                    tvi.SetValue(TreeTabHelper.DepthProperty, 1 - ((tabTree.Items.Count - i) / (tabTree.Items.Count * 1d)));
-                    TreeTabHelper.SetTotalTabOffset(tabTree, new Thickness(totalWidth, 0, 0, 0));
+
+                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        var border = VisualTreeExHelper.FindChild<Border>(tvi, "PART_Content");
+                        //totalWidth += border.ActualWidth;
+                        Panel.SetZIndex(tvi, tabTree.Items.Count - i); // initial z-order                        
+                        tvi.SetValue(TreeTabHelper.DepthProperty, 1 - ((tabTree.Items.Count - i) / (tabTree.Items.Count * 1d)));
+                        dictionary[i] = new container() { Index = i, Item = tvi, Width = border.ActualWidth };
+                        foreach (var x in dictionary)
+                        {
+                            if (x.Value.Index >= i)
+                            {
+                                TreeTabHelper.SetTabOffset(tvi, new Thickness(dictionary.Where(a => a.Value.Index < i).Sum(a => a.Value.Width), 0, 0, 0));
+                            }
+                        }
+                        TreeTabHelper.SetTotalTabOffset(tabTree, new Thickness(dictionary.Sum(a => a.Value.Width), 0, 0, 0));
+
+                    }), DispatcherPriority.Loaded);
+
                 }
 
                 CommandManager.RegisterClassCommandBinding(typeof(FrameworkElement), new CommandBinding(CloseItemCommand, CloseItemClassHandler, CloseItemCanExecuteClassHandler));
