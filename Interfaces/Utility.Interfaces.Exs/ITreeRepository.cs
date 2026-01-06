@@ -10,7 +10,7 @@ namespace Utility.Interfaces.Exs
 
         IEnumerable<Duplication> Duplicate(Guid oldGuid, Guid? newParentGuid = null);
 
-        IObservable<Utility.Changes.Change<Key>> Find(Guid? parentGuid = default, string? name = null, Guid? guid = null, Type? type = null, int? index = null);
+        IObservable<Utility.Changes.Set<Key>> Find(Guid? parentGuid = default, string? name = null, Guid? guid = null, Type? type = null, int? index = null);
 
         int? MaxIndex(Guid parentGuid, string? name = null);
 
