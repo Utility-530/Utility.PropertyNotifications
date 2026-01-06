@@ -42,6 +42,7 @@ namespace Utility.Nodes.Meta
         private readonly ITreeRepository repository;
         private readonly INodeSource nodesStore;
         Dictionary<string, CompositeDisposable> childrenSubscriptions = new();
+        private bool _disposed;
 
         public NodeEngine(ITreeRepository? treeRepo = null, IValueRepository? valueRepository = null, IDataActivator? dataActivator = null, Predicate<INodeViewModel>? childrenTracking = null, INodeSource? nodeSource = null)
         {
@@ -115,7 +116,7 @@ namespace Utility.Nodes.Meta
                 var node = nodesStore.Find(key);
                 Destroy(node);
             }
-            else if(instance is INodeViewModel node)
+            else if (instance is INodeViewModel node)
             {
                 remove(node);
             }
@@ -144,19 +145,24 @@ namespace Utility.Nodes.Meta
             void handleNodeWithoutKey(INodeViewModel node)
             {
                 var index = countSiblingNodesWithSameName(node);
-                var findSubscription = repository
+                IDisposable? findSubscription = null;
+                findSubscription = repository
                     .Find((GuidKey)node.Parent().Key(), node.Name(), type: GetNodeType(node), index: index == 0 ? null : index)
-                    .Subscribe(change =>
+                    .Take(1)
+                    .Subscribe(set =>
                     {
-                        if (change.Type == Changes.Type.Add)
+                        foreach (var change in set)
                         {
-                            validateKey(change.Value);
-                            node.SetKey(new GuidKey(change.Value.Guid));
-                            add(node);
+                            if (change.Type == Changes.Type.Add)
+                            {
+                                validateKey(change.Value);
+                                node.SetKey(new GuidKey(change.Value.Guid));
+                                add(node);
+                            }
+                            else
+                                throw new Exception("Node not found in repository");
                         }
-                        else
-                            throw new Exception("Node not found in repository");
-                    });
+                    }, () => findSubscription?.Dispose());
             }
 
             static bool shouldIgnoreNode(INodeViewModel node) => node is IIgnore;

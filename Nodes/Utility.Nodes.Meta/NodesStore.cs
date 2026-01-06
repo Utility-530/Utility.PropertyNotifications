@@ -84,10 +84,10 @@ namespace Utility.Nodes.Meta
         {
             if (nodeSource.Nodes is IList<INodeViewModel> nodes)
             {
-                //Utility.Globals.UI.Post(a =>
-                //{
+                Utility.Globals.UI.Post(a =>
+                {
                     nodes.Add(node);
-                //}, node);
+                }, node);
             }
             else
                 throw new InvalidOperationException("Nodes collection is not mutable.");

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -32,6 +33,8 @@ namespace Utility.Nodes.Meta
 {
     public partial class NodeEngine
     {
+
+
         class State : NotifyPropertyClass
         {
             private Progress value;
@@ -42,7 +45,6 @@ namespace Utility.Nodes.Meta
         private const string ERROR_KEY_NOT_FOUND = "Key not found";
         private readonly Dictionary<string, List<INodeViewModel>> dictionary = new();
         private readonly IDataActivator dataActivator;
-        private bool _disposed;
         Dictionary<string, State> states = new();
         Dictionary<string, CompositeDisposable> _childrenSubscriptions = new();
         private IDisposable unLoadDisposable;
@@ -52,11 +54,10 @@ namespace Utility.Nodes.Meta
             states[node.Key()] = new State { Value = Progress.UnStarted };
             node.WhenReceivedFrom(n => n.IsExpanded)
                 .DistinctUntilChanged()
-                //.Where(isExpanded => isExpanded)
-                .SelectMany(isEx =>
+                .SelectMany(isExpanded =>
                 {
                     unLoadDisposable?.Dispose();
-                    if (isEx)
+                    if (isExpanded)
                     {
                         dictionary.Get(node.Key());
                         if (states[node.Key()].Value == Progress.UnStarted)
@@ -114,29 +115,30 @@ namespace Utility.Nodes.Meta
                         .Subscribe(a =>
                         {
                             Change.Reset<INodeViewModel>();
+                            unLoadDisposable?.Dispose();
                         });
                         return unLoadDisposable;
                     }
                     return Disposable.Empty;
                 });
-
             }
 
             IObservable<Change<INodeViewModel>> reloadChildren(INodeViewModel node)
             {
                 return Observable.Create<Change<INodeViewModel>>(observer =>
                 {
-                    //_childrenSubscriptions[node.Key()]?.Dispose();  
                     if (dictionary.ContainsKey(node.Key()) == false)
                     {
                         throw new Exception("dfg434 cvd44");
                     }
                     else
                     {
+                        observer.OnNext(Change.Reset<INodeViewModel>());
                         foreach (INodeViewModel child in dictionary[node.Key()])
                         {
                             observer.OnNext(Change.Add<INodeViewModel>(child));
                         }
+                        observer.OnCompleted();
                     }
                     return Disposable.Empty;
                 });
@@ -152,61 +154,79 @@ namespace Utility.Nodes.Meta
 
                     if (node is IYieldItems yieldItems)
                     {
-                        processYieldItems(yieldItems, observer)
-                          .DisposeWith(childrenSubscriptions.Get(node.Key()));
+                        processYieldItems(yieldItems, observer).DisposeWith(disposables);
+                         
                     }
                     if (node.IsProliferable)
                     {
                         states[node.Key()].Value = Progress.HalfWay;
                         return repository
                                     .Find((GuidKey)node.Key())
+                                    .Take(1)
                                     .Subscribe(
-                                        change =>
+                                        set =>
                                         {
-                                            if (change.Type == Changes.Type.Add)
-                                                processKey(node, change.Value, observer, ref childIndex);
-                                            else if (change.Type == Changes.Type.None)
-                                            {
-                                            }
-                                            else throw new Exception("VD");
+                                            processKey(node, set, observer);
                                         },
                                         observer.OnError,
                                         () => { }
-                                        ).DisposeWith(childrenSubscriptions.Get(node.Key(), () => new CompositeDisposable()));
+                                        ).DisposeWith(disposables);
                     }
 
                     return disposables;
                 });
 
-                void processKey(INodeViewModel node, Structs.Repos.Key? key, IObserver<Change<INodeViewModel>> observer, ref int childIndex)
+                void processKey(INodeViewModel node, Set<Structs.Repos.Key> set, IObserver<Change<INodeViewModel>> observer)
                 {
-                    if (node.IsSingular == false)
-                        if (key.HasValue)
+                    int i = 0;
+                    foreach (var change in set)
+                    {
+                        i++;
+                        if (change is { Type: Changes.Type.None })
                         {
-                            var child = nodesStore.Find(key.Value.Guid.ToString());
-
-                            if (child != null)
+                            end();
+                        }
+                        else if (change is not { Type: Changes.Type.Add, Value: var key })
+                            throw new Exception("V33D d3D");
+                        else
+                        {
+                            if (node.IsSingular == false)
                             {
-                                if (child.IsSingular == false)
+                                var child = nodesStore.Find(key.Guid.ToString());
+
+                                if (child != null)
                                 {
-                                    throw new Exception("dddf33s xcc");
+                                    if (child.IsSingular == false)
+                                    {
+                                        throw new Exception("dddf33s xcc");
+                                    }
+                                }
+                                else
+                                {
+                                    findInRepository(node, key.Guid)
+                                        .Where(a => a.IsSingular == false)
+                                        .Select(a => Change.Add<INodeViewModel>(a))
+                                        .Subscribe(observer.OnNext, () =>
+                                        {
+                                            end();
+                                        });
                                 }
                             }
                             else
                             {
-                                findInRepository(node, key.Value.Guid)
-                                    .Where(a => a.IsSingular == false)
-                                    .Select(a => Change.Add<INodeViewModel>(a))
-                                    .Subscribe(observer.OnNext, () => { states[node.Key()].Value = Progress.Finished; observer.OnCompleted(); });
+                                //"no child nodes created yet";
+                                end();
                             }
                         }
-                        else
-                        {
-                            //"no child nodes created yet";
-                        }
-                    else
-                    {
+                    }
 
+                    void end()
+                    {
+                        if (i == set.Count)
+                        {
+                            states[node.Key()].Value = Progress.Finished;
+                            observer.OnCompleted();
+                        }
                     }
                     //throw new Exception("DSF 33443");
                 }
@@ -221,57 +241,69 @@ namespace Utility.Nodes.Meta
                     if (items.Length > 0)
                         items.ForEach(child => createChildNode(node, child, ++childIndex, observer).DisposeWith(composite));
                     else if (states[node.Key()].Value != Progress.HalfWay)
+                    {
                         states[node.Key()].Value = Progress.Finished;
-
-                    yieldItems
+                    }
+                    if (yieldItems is not INotifyCollectionChanged collectionChanged)
+                    {
+                        observer.OnCompleted();
+                        return Disposable.Empty;
+                    }
+                    CompositeDisposable? disposable = null;
+                    return yieldItems
                         .Items()
                         .Changes<INodeViewModel>()
                         .Subscribe(set =>
                         {
+                            disposable?.Dispose();
+                            disposable = new();
                             foreach (var item in set)
                                 switch (item.Type)
                                 {
                                     case Changes.Type.Add:
-                                        createChildNode(node, item.Value, ++childIndex, observer).DisposeWith(composite);
+                                        createChildNode(node, item.Value, ++childIndex, observer).DisposeWith(disposable);
                                         break;
                                     default:
                                         throw new Exception("Unsupported change type");
                                 }
                         });
 
-                    return composite;
-                    IDisposable createChildNode(INodeViewModel parent, INodeViewModel child, int index, IObserver<Change<INodeViewModel>> observer)
+                  
+                    IDisposable createChildNode(INodeViewModel parent, INodeViewModel child, int index, IObserver<Changes.Change<INodeViewModel>> observer)
                     {
                         if (child.Name() == null)
                             throw new Exception("child name is null");
 
-
-
                         return repository
                             .Find((GuidKey)parent.Key(), child.Name(), type: GetNodeType(child), index: index)
-                            .Subscribe(change =>
+                            .Take(1)
+                            .Subscribe(set =>
                             {
-                                if (change.Type != Changes.Type.Add)
-                                    throw new Exception("V33D");
-                                //if (change.Value == false)
-                                //    throw new Exception("Key is null");
-                                keys.Add(change.Value);
+                                foreach (var change in set)
+                                {
 
-                                var existingNode = nodesStore.Find(change.Value.Guid.ToString());
-                                if (existingNode != null)
-                                {
-                                    // if current value set then already created
-                                }
-                                else
-                                {
-                                    validateKey(change.Value);
-                                    child.SetKey(new GuidKey(change.Value.Guid));
-                                    dictionary.Get(parent.Key()).Add(child);
-                                    observer.OnNext(Change.Add<INodeViewModel>(child));
-                                }
-                                if (items.Length == index && states[node.Key()].Value != Progress.HalfWay)
-                                {
-                                    states[node.Key()].Value = Progress.Finished;
+                                    if (change.Type != Changes.Type.Add)
+                                        throw new Exception("V33D");
+                                    //if (change.Value == false)
+                                    //    throw new Exception("Key is null");
+                                    keys.Add(change.Value);
+
+                                    var existingNode = nodesStore.Find(change.Value.Guid.ToString());
+                                    if (existingNode != null)
+                                    {
+                                        // if current value set then already created
+                                    }
+                                    else
+                                    {
+                                        validateKey(change.Value);
+                                        child.SetKey(new GuidKey(change.Value.Guid));
+                                        dictionary.Get(parent.Key()).Add(child);
+                                        observer.OnNext(Change.Add<INodeViewModel>(child));
+                                    }
+                                    if (items.Length == index && states[node.Key()].Value != Progress.HalfWay)
+                                    {
+                                        states[node.Key()].Value = Progress.Finished;
+                                    }
                                 }
                             });
                     }
@@ -283,30 +315,27 @@ namespace Utility.Nodes.Meta
         {
             return repository
             .Find((GuidKey)node.Key(), guid: guid)
-            .SelectMany(change =>
+            .Take(1)
+            .Select(set =>
             {
-                if (change.Type != Changes.Type.Add)
+                if (set.Single() is not { Type: Utility.Changes.Type.Add, Value: Key value })
                     throw new Exception("V33d d3D");
-                return activateNode(node, change.Value);
+                return activateNode(node, value);
             });
 
-            IObservable<INodeViewModel> activateNode(INodeViewModel parent, Structs.Repos.Key? key)
+            INodeViewModel activateNode(INodeViewModel parent, Structs.Repos.Key? key)
             {
-                return Observable.Create<INodeViewModel>(observer =>
-                {
-                    if (key.HasValue == false)
-                        throw new Exception("Key is null");
-                    keys.Add(key.Value);
-                    validateKey(key);
+                if (key.HasValue == false)
+                    throw new Exception("Key is null");
+                keys.Add(key.Value);
+                validateKey(key);
 
-                    var newNode = (INodeViewModel)dataActivator.Activate(key);
-                    newNode.SetParent(parent);
-                    newNode.SetKey(new GuidKey(key.Value.Guid));
-                    newNode.Removed = key.Value.Removed;
-                    dictionary.Get(parent.Key()).Add(newNode);
-                    observer.OnNext(newNode);
-                    return Disposable.Empty;
-                });
+                var newNode = (INodeViewModel)dataActivator.Activate(key);
+                newNode.SetParent(parent);
+                newNode.SetKey(new GuidKey(key.Value.Guid));
+                newNode.Removed = key.Value.Removed;
+                dictionary.Get(parent.Key()).Add(newNode);
+                return newNode;
             }
 
         }
@@ -347,51 +376,54 @@ namespace Utility.Nodes.Meta
                 return
                 repository
                 .Find()
-                .Subscribe(change =>
+                .Take(1)
+                .Subscribe(set =>
                 {
-                    if (change.Type != Changes.Type.Add)
-                        throw new Exception("V33D");
-                    var key = change.Value;
-
-                    this.keys.Add(key);
-                    this.roots.Add(key);
-                    var existingNode = nodesStore.Find(key.Guid.ToString());
-                    if (existingNode == null)
+                    foreach (var change in set)
                     {
-                        i++;
-                        if (this.nodesStore.Contains(key.Name))
-                            Create(key.Name).Subscribe(a =>
-                            {
-                                if (a != null)
-                                {
-                                    // if current value set then already created
-                                }
-                                else if (key.Removed.HasValue)
-                                {
+                        if (change.Type != Changes.Type.Add)
+                            throw new Exception("V33D");
+                        var key = change.Value;
 
-                                }
-                                else
-                                {
-                                    observer.OnNext(create(key));
-                                }
-                                observer.OnNext(a);
-                            }, () => { i--; if (i == 0) observer.OnCompleted(); });
-                        else if (key.Removed.HasValue)
+                        this.keys.Add(key);
+                        this.roots.Add(key);
+                        var existingNode = nodesStore.Find(key.Guid.ToString());
+                        if (existingNode == null)
                         {
-                            i--;
+                            i++;
+                            if (this.nodesStore.Contains(key.Name))
+                                Create(key.Name).Subscribe(a =>
+                                {
+                                    if (a != null)
+                                    {
+                                        // if current value set then already created
+                                    }
+                                    else if (key.Removed.HasValue)
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        observer.OnNext(create(key));
+                                    }
+                                    observer.OnNext(a);
+                                }, () => { i--; if (i == 0) observer.OnCompleted(); });
+                            else if (key.Removed.HasValue)
+                            {
+                                i--;
+                            }
+                            else
+                            {
+                                observer.OnNext(create(key));
+                                i--;
+                            }
                         }
                         else
                         {
-                            observer.OnNext(create(key));
+                            observer.OnNext(existingNode);
                             i--;
                         }
                     }
-                    else
-                    {
-                        observer.OnNext(existingNode);
-                        i--;
-                    }
-
                 }, () => { if (i == 0) observer.OnCompleted(); });
             });
 
