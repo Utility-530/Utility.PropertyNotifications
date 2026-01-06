@@ -63,10 +63,10 @@ namespace Utility.Nodes.Demo.Editor
                 [
                     new Model(() =>
                     [
-                        new Model(proliferation: () => new Model<string>()
+                        new Model(proliferation: () => new Model()
                         {
                             Name = "File",
-                            Guid = Guid.Parse(fileGuid),
+                            //Guid = Guid.Parse(fileGuid),
                             DataTemplate ="StringTemplate",
                             SelectedItemTemplate="StringTemplate"
                         })
@@ -89,7 +89,7 @@ namespace Utility.Nodes.Demo.Editor
                         if(a is Model { Name:  nameof(Files)} dfm)
                         {
                             dfm.WhenReceivedFrom(a => a.Current, includeNulls: false)
-                            .OfType<Model<string>>()
+                            .OfType<Model>()
                             .SelectMany(a=>a.WhenReceivedFrom(a => a.Value)
                                             .Where(a=>a!=null)
                                             .Select(value=> (a.Guid, Path.Combine(value + ".sqlite"))))

@@ -19,7 +19,6 @@ namespace Utility.Nodes.Demo.Editor
                 NodeViewModel { Name: NodeMethodFactory.Files } => ComboStyle,
                 NodeViewModel { Name: NodeMethodFactory.Slave } => TableStyle,
                 NodeViewModel { Parent: IGetName { Name: NodeMethodFactory.Slave } } => TabStyle,
-                NodeViewModel<string> { } => DefaultStyle,
                 MemberDescriptor => Utility.WPF.Trees.StyleSelector.Instance.SelectStyle(item, container),
                 Model => DefaultStyle,
                 _ => base.SelectStyle(item, container),
