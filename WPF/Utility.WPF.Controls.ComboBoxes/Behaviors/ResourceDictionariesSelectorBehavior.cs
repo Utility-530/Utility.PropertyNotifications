@@ -15,7 +15,7 @@ using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
-    public class DataTemplateTreeSelectorBehavior : AssemblyTreeSelectorBehavior
+    public class DataTemplateTreeSelectorBehavior : ResourceDictionariesSelectorBehavior
     {
         public static readonly DependencyProperty DataTemplateProperty =
             DependencyProperty.Register("DataTemplate", typeof(DataTemplate), typeof(DataTemplateTreeSelectorBehavior), new PropertyMetadata());
@@ -38,7 +38,7 @@ namespace Utility.WPF.Controls.ComboBoxes
         }
     }
 
-    public class ItemsPanelTemplateTreeSelectorBehavior : AssemblyTreeSelectorBehavior
+    public class ItemsPanelTemplateTreeSelectorBehavior : ResourceDictionariesSelectorBehavior
     {
         public static readonly DependencyProperty ItemsPanelTemplateProperty = DependencyProperty.Register("ItemsPanelTemplate", typeof(ItemsPanelTemplate), typeof(ItemsPanelTemplateTreeSelectorBehavior), new PropertyMetadata());
 
@@ -60,7 +60,7 @@ namespace Utility.WPF.Controls.ComboBoxes
         }
     }
 
-    public class StyleTreeSelectorBehavior : AssemblyTreeSelectorBehavior
+    public class StyleTreeSelectorBehavior : ResourceDictionariesSelectorBehavior
     {
         public Style SelectedStyle
         {
@@ -83,13 +83,13 @@ namespace Utility.WPF.Controls.ComboBoxes
         }
     }
 
-    public class AssemblyTreeSelectorBehavior : TreeSelectorBehavior
+    public class ResourceDictionariesSelectorBehavior : TreeSelectorBehavior
     {
-        public static readonly DependencyProperty AssembliesProperty = DependencyProperty.Register("Assemblies", typeof(IEnumerable), typeof(AssemblyTreeSelectorBehavior), new PropertyMetadata(ChangedAS));
-        public static readonly DependencyProperty FrameworkElementKindProperty = DependencyProperty.Register("FrameworkElementKind", typeof(string), typeof(AssemblyTreeSelectorBehavior), new PropertyMetadata(ChangedAS));
-        public static readonly DependencyProperty TypeProperty = DependencyProperty.Register("Type", typeof(Type), typeof(AssemblyTreeSelectorBehavior), new PropertyMetadata(TypeChanged));
-        public static readonly DependencyProperty KeyProperty = DependencyProperty.Register("Key", typeof(object), typeof(AssemblyTreeSelectorBehavior), new PropertyMetadata(Changed2));
-        public static readonly DependencyProperty FullKeyProperty = DependencyProperty.Register("FullKey", typeof(string), typeof(AssemblyTreeSelectorBehavior), new PropertyMetadata(Changed3));
+        public static readonly DependencyProperty AssembliesProperty = DependencyProperty.Register("Assemblies", typeof(IEnumerable), typeof(ResourceDictionariesSelectorBehavior), new PropertyMetadata(ChangedAS));
+        public static readonly DependencyProperty FrameworkElementKindProperty = DependencyProperty.Register("FrameworkElementKind", typeof(string), typeof(ResourceDictionariesSelectorBehavior), new PropertyMetadata(ChangedAS));
+        public static readonly DependencyProperty TypeProperty = DependencyProperty.Register("Type", typeof(Type), typeof(ResourceDictionariesSelectorBehavior), new PropertyMetadata(TypeChanged));
+        public static readonly DependencyProperty KeyProperty = DependencyProperty.Register("Key", typeof(object), typeof(ResourceDictionariesSelectorBehavior), new PropertyMetadata(Changed2));
+        public static readonly DependencyProperty FullKeyProperty = DependencyProperty.Register("FullKey", typeof(string), typeof(ResourceDictionariesSelectorBehavior), new PropertyMetadata(Changed3));
 
         protected override void OnAttached()
         {
@@ -112,7 +112,7 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         private static void Changed3(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is AssemblyTreeSelectorBehavior { AssociatedObject.ItemsSource: IReadOnlyTree tree } typeSelector && e.NewValue is string type)
+            if (d is ResourceDictionariesSelectorBehavior { AssociatedObject.ItemsSource: IReadOnlyTree tree } typeSelector && e.NewValue is string type)
             {
                 typeSelector.ChangeFullKey(tree, type);
             }
@@ -156,7 +156,7 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         private static void TypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is AssemblyTreeSelectorBehavior { AssociatedObject.ItemsSource: IReadOnlyTree tree } typeSelector && e.NewValue is Type type)
+            if (d is ResourceDictionariesSelectorBehavior { AssociatedObject.ItemsSource: IReadOnlyTree tree } typeSelector && e.NewValue is Type type)
             {
                 typeSelector.ChangeType(tree, type);
             }
@@ -180,7 +180,7 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         private static void Changed2(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is AssemblyTreeSelectorBehavior { AssociatedObject.ItemsSource: IReadOnlyTree tree } typeSelector && e.NewValue is { } type)
+            if (d is ResourceDictionariesSelectorBehavior { AssociatedObject.ItemsSource: IReadOnlyTree tree } typeSelector && e.NewValue is { } type)
             {
                 typeSelector.Change(tree, type);
             }
@@ -218,13 +218,13 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         private static void ChangedAS(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is AssemblyTreeSelectorBehavior { FrameworkElementKind: string kind, Assemblies: IEnumerable enumerable } typeSelector)
+            if (d is ResourceDictionariesSelectorBehavior { FrameworkElementKind: string kind, Assemblies: IEnumerable enumerable } typeSelector)
             {
                 SetItemsSource(typeSelector, enumerable, kind);
             }
         }
 
-        private static void SetItemsSource(AssemblyTreeSelectorBehavior selector, IEnumerable enumerable, string filterType)
+        private static void SetItemsSource(ResourceDictionariesSelectorBehavior selector, IEnumerable enumerable, string filterType)
         {
             if (selector.AssociatedObject == null)
                 return;
@@ -247,7 +247,7 @@ namespace Utility.WPF.Controls.ComboBoxes
             }
         }
 
-        public AssemblyTreeSelectorBehavior()
+        public ResourceDictionariesSelectorBehavior()
         {
         }
 

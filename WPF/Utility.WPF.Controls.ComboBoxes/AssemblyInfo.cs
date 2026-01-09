@@ -11,3 +11,4 @@ using System.Windows.Markup;
 )]
 [assembly: XmlnsPrefix("http://schemas.utility.com/cboxes", "cbx")]
 [assembly: XmlnsDefinition("http://schemas.utility.com/cboxes", "Utility.WPF.Controls.ComboBoxes")]
+//[assembly: XmlnsDefinition("http://schemas.utility.com/cboxes", "Utility.WPF.Controls.ComboBoxes.Behaviors")]

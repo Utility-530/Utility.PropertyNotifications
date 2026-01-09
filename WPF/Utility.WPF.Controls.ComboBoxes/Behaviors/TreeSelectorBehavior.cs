@@ -23,7 +23,6 @@ namespace Utility.WPF.Controls.ComboBoxes
             AssociatedObject.ItemTemplateSelector = DataTemplateSelector();
             AssociatedObject.SelectedItemTemplateSelector = SelectedTemplateSelector();
             AssociatedObject.ParentPath = nameof(IGetParent<>.Parent);
-
             base.OnAttached();
         }
 
@@ -35,7 +34,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                 return hierarchicalDataTemplate ??= TemplateGenerator.CreateHierarcialDataTemplate(() =>
                 {
                     var contentControl = new ContentControl();
-                    contentControl.SetBinding(ContentControl.ContentProperty, new Binding() { Path = new PropertyPath(nameof(IGetValue.Value)) });
+                    contentControl.SetBinding(ContentControl.ContentProperty, new Binding() { Path = new PropertyPath(nameof(IGetData.Data)) });
                     return contentControl;
                 }, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Children)) });
             });

@@ -32,6 +32,11 @@ namespace Utility.WPF.Controls.ComboBoxes
         public static readonly DependencyProperty ShowCloseButtonProperty = DependencyProperty.Register(nameof(ShowCloseButton), typeof(bool), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty CloseOnCheckProperty = DependencyProperty.Register(nameof(CloseOnCheck), typeof(bool), typeof(ComboBoxTreeView), new PropertyMetadata());
 
+        public static readonly DependencyProperty FilterProperty = DependencyProperty.Register(nameof(Filter), typeof(object), typeof(ComboBoxTreeView), new PropertyMetadata());
+        public static readonly DependencyProperty FilterTemplateProperty = DependencyProperty.Register(nameof(FilterTemplate), typeof(DataTemplate), typeof(ComboBoxTreeView), new PropertyMetadata());
+        public static readonly DependencyProperty FilterTemplateSelectorProperty = DependencyProperty.Register(nameof(FilterTemplateSelector), typeof(DataTemplate), typeof(ComboBoxTreeView), new PropertyMetadata());
+
+
         public event EventHandler<ValueCoercingEventArgs>? ValueCoercing;
 
         private static object CoerceValueCallback(DependencyObject d, object baseValue)
@@ -232,7 +237,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                 }
                 if (CloseOnCheck)
                     IsDropDownOpen = false;
-
+                
                 RaiseEvent(args);
             }
         }
@@ -271,6 +276,22 @@ namespace Utility.WPF.Controls.ComboBoxes
         }
 
         #region properties
+
+        public object Filter
+        {
+            get { return (object)GetValue(FilterProperty); }
+            set { SetValue(FilterProperty, value); }
+        }
+        public DataTemplate FilterTemplate
+        {
+            get { return (DataTemplate)GetValue(FilterTemplateProperty); }
+            set { SetValue(FilterTemplateProperty, value); }
+        }
+        public DataTemplate FilterTemplateSelector
+        {
+            get { return (DataTemplate)GetValue(FilterTemplateSelectorProperty); }
+            set { SetValue(FilterTemplateSelectorProperty, value); }
+        }
 
         public bool IsOpen
         {

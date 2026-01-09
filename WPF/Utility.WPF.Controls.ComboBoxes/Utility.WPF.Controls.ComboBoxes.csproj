@@ -9,6 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<Compile Update="CheckBoxesComboControl.cs">
+	  <DependentUpon>CheckBoxesComboControl.xaml</DependentUpon>
+	</Compile>
 	<Compile Update="ComboBoxTreeView.cs">
 	  <DependentUpon>ComboBoxTreeView.xaml</DependentUpon>
 	</Compile>

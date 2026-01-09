@@ -134,7 +134,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                         {
                             var textBlock = new TextBlock { };
                             Binding binding = new() { Path = new PropertyPath(nameof(System.Type.Name)) };
-                            Binding binding2 = new() { Path = new PropertyPath(nameof(IGetValue.Value)) };
+                            Binding binding2 = new() { Path = new PropertyPath(nameof(IGetData.Data)) };
                             textBlock.SetBinding(TextBlock.TextProperty, binding);
                             textBlock.SetBinding(TextBlock.DataContextProperty, binding2);
                             return textBlock;

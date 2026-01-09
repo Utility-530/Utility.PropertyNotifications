@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Reflection;
 using System.Windows.Controls;
+using Splat;
+using Utility.Interfaces.Exs;
 using Utility.Meta;
 using Utility.Trees;
 
@@ -13,7 +15,9 @@ namespace Utility.WPF.Demo.ComboBoxes
     {
         public ComboBoxUserControl()
         {
+    
             InitializeComponent();
+    
             TypeSelector.Assemblies = new Assembly[] { Assembly.GetEntryAssembly(), typeof(Tree).Assembly };
             TypeSelector.Type = typeof(Tree);
 
@@ -23,6 +27,10 @@ namespace Utility.WPF.Demo.ComboBoxes
             DataTemplate2Selector.FullKey = "{\"Assembly\":\"Utility.WPF.Demo.Data\",\"ResourceDictionary\":\"datatemplate/character.baml\",\"Element\":\"CharacterBaseClass\"}";
 
             ItemsPanelTemplate2Selector.Key = "WrapPanel";
+            PropertySelector.Type = typeof(Tree);
+            ParameterSelector.NodeRoot = Locator.Current.GetService<INodeRoot>();
+            ParameterSelector.Assemblies = new Assembly[] { new SystemAssembly() };
+
         }
 
         public static Assembly[] Assemblies => new[] { typeof(Utility.WPF.Demo.Data.Model.Character).Assembly };

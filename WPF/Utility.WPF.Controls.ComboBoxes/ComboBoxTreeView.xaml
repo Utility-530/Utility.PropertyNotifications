@@ -5,7 +5,8 @@
                     xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:trees="http://schemas.utility.com/trees"
                      xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:att="http://schemas.utility.com/attached">
+                    xmlns:att="http://schemas.utility.com/attached"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboBoxToggleButton.xaml" />
@@ -201,7 +202,13 @@
                   SnapsToDevicePixels="True"
                   MinWidth="{TemplateBinding ActualWidth}"
                   MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <ContentPresenter ContentSource="Filter"/>
                                         <Border x:Name="DropDownBorder"
+                                                Grid.Row="1"
                                                 BorderThickness="1">
                                             <!--<Border.BorderBrush>
                                         <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
@@ -209,15 +216,16 @@
                                     <Border.Background>
                                         <SolidColorBrush Color="{DynamicResource ControlLightColor}" />
                                     </Border.Background>-->
-                                        </Border>
-                                        <ScrollViewer Margin="4,6,4,6"
+
+                                            <ScrollViewer Margin="4,6,4,6"
                                                       SnapsToDevicePixels="True">
-                                            <trees:CustomTreeView x:Name="treeView"
+                                                <trees:CustomTreeView x:Name="treeView"
                                                                     ItemContainerStyle="{TemplateBinding TreeItemContainerStyle }"
                                                                     ItemsSource="{TemplateBinding ItemsSource}"
                                                                     ItemTemplate="{TemplateBinding ItemTemplate}"
                                                                     ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}" />
-                                        </ScrollViewer>
+                                            </ScrollViewer>
+                                        </Border>
                                     </Grid>
                                 </Popup>
                             </Grid>

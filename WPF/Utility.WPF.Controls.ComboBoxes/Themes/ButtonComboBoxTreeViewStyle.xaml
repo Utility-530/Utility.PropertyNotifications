@@ -1,11 +1,12 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:trees="http://schemas.utility.com/trees"
     xmlns:btns="http://schemas.utility.com/buttons"
+    xmlns:c="http://schemas.utility.com/colours"
     xmlns:cb="clr-namespace:Utility.WPF.Controls.ComboBoxes"
     xmlns:conv="http://schemas.utility.com/converters"
-    xmlns:c="http://schemas.utility.com/colours" xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:trees="http://schemas.utility.com/trees">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboBoxToggleButton.xaml" />
@@ -14,8 +15,8 @@
         <ResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
-    
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
     <ControlTemplate x:Key="ComboBox_ToggleButton" TargetType="{x:Type ToggleButton}">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -53,7 +54,7 @@
     </ControlTemplate>
 
     <Style x:Key="ButtonComboBoxTreeViewStyle" TargetType="{x:Type cb:ComboBoxTreeView}">
-        <Setter Property="TreeItemContainerStyle" Value="{StaticResource CheckableTreeViewItemStyle}" />
+        <!--<Setter Property="TreeItemContainerStyle" Value="{StaticResource CheckableTreeViewItemStyle}" />-->
         <!--<Setter Property="SnapsToDevicePixels"
           Value="true" />-->
         <!--<Setter Property="OverridesDefaultStyle"
@@ -94,46 +95,44 @@
                                     StaysOpen="True">
 
                                     <Grid>
-                           
+
                                         <Grid
-                                        x:Name="DropDown"
-                                  
-                                        MinWidth="{TemplateBinding ActualWidth}"
-                                        MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                        Background="Transparent"
-                                        SnapsToDevicePixels="True">
+                                            x:Name="DropDown"
+                                            MinWidth="{TemplateBinding ActualWidth}"
+                                            MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                            Background="Transparent"
+                                            SnapsToDevicePixels="True">
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"></RowDefinition>
-                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="*" />
                                             </Grid.RowDefinitions>
 
-                                   
-
-                                            <!--<Ellipse Width="32" Height="32" Fill="DarkOliveGreen"></Ellipse>-->
-                                            <btns:GeometryToggleButton Height="14"
-                                                                       Width="14"
-                                                                       Visibility="{TemplateBinding ShowCloseButton, Converter={StaticResource BooleanToVisibilityConverter}}"                                                               
-                                                                       Data="{StaticResource Cross}" 
-                                                                       Fill="Black"
-                                                                       StrokeThickness="4"
-                                                                       HoverForegroundBrush="{c:Blue}"    
-                                                                       PressedForegroundBrush="Gray"
-                                                                       HoverBackgroundBrush="{c:Amber}"
-                                                                       IsChecked="{Binding IsOpen, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                                                       HorizontalAlignment="Right" 
-                                                                       VerticalAlignment="Center" />
+                                            <btns:GeometryToggleButton
+                                                Width="14"
+                                                Height="14"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                Data="{StaticResource Cross}"
+                                                Fill="Black"
+                                                HoverBackgroundBrush="{c:Amber}"
+                                                HoverForegroundBrush="{c:Blue}"
+                                                IsChecked="{Binding IsOpen, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                                PressedForegroundBrush="Gray"
+                                                StrokeThickness="4"
+                                                Visibility="{TemplateBinding ShowCloseButton,
+                                                                             Converter={StaticResource BooleanToVisibilityConverter}}" />
                                             <Border
+                                                x:Name="DropDownBorder"
                                                 Grid.Row="1"
-                                            x:Name="DropDownBorder"
-                                            Background="Transparent"
-                                            BorderThickness="1">
-                                                <ScrollViewer SnapsToDevicePixels="True">                                                  
+                                                Background="Transparent"
+                                                BorderThickness="1">
+                                                <ScrollViewer SnapsToDevicePixels="True">
                                                     <trees:CustomTreeView
-                                                    x:Name="treeView"
-                                                    ItemContainerStyle="{TemplateBinding TreeItemContainerStyle}"
-                                                    ItemTemplate="{TemplateBinding ItemTemplate}"
-                                                    ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                                    ItemsSource="{TemplateBinding ItemsSource}" />
+                                                        x:Name="treeView"
+                                                        ItemContainerStyle="{TemplateBinding TreeItemContainerStyle}"
+                                                        ItemTemplate="{TemplateBinding ItemTemplate}"
+                                                        ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                        ItemsSource="{TemplateBinding ItemsSource}" />
                                                 </ScrollViewer>
                                             </Border>
                                         </Grid>
