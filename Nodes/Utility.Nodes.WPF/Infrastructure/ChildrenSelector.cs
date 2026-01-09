@@ -18,7 +18,7 @@ namespace Utility.Nodes.WPF
         public const string IsCollection = nameof(IsCollection);
         public IEnumerable Select(object data)
         {
-            var tree = NodeExtensions.ToNodeViewModel([typeof(CustomModels.Controls).Assembly, new SystemAssembly()]);
+            var tree = NodeExtensions.ToNodeViewModel([typeof(CustomModels.Controls).Assembly, new SystemAssembly(), new ReflectionAssembly()]);
             tree.Add(new Model { Name = IsCollection, Value = false });
             return tree;
         }
