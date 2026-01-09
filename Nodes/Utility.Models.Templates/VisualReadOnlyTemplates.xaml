@@ -28,7 +28,6 @@
     xmlns:test="clr-namespace:TextBoxEx;assembly=TextBoxEx"
     xmlns:text="http://schemas.utility.com/texts"
     xmlns:ui="http://toniccomputing.com/patterns/ui"
-    xmlns:wpf1="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
     xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit" 
     xmlns:trees="http://schemas.utility.com/trees">
 
