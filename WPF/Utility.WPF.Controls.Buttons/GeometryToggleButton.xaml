@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Utility.WPF.Controls.Buttons"
+                    xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:wpf="http://schemas.utility.com/utilitywpf">
 
     <!--Control colors.-->
@@ -172,6 +173,14 @@
                 <!--<Setter TargetName="backgroundEllipse" Property="Fill" Value="{StaticResource PressedBackgroundBrush}" />-->
                 <Setter TargetName="Border" Property="BorderBrush" Value="{Binding PressedBackgroundBrush, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                 <Setter TargetName="ButtonPath" Property="Stroke" Value="{Binding PressedForegroundBrush, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                <Setter TargetName="ButtonPath" Property="Data">
+                    <Setter.Value>
+                        <MultiBinding Converter="{x:Static conv:NullCoalesceConverter.Instance}">                         
+                            <Binding Path="CheckedData" ConverterParameter="CheckedData" RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+                            <Binding Path="Data" ConverterParameter="Data" RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>

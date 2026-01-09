@@ -100,6 +100,8 @@ namespace Utility.WPF.Controls.Buttons
         public static readonly DependencyProperty PressedBorderBrushProperty = DependencyProperty.Register("PressedBorderBrush", typeof(Brush), typeof(GeometryToggleButton), new PropertyMetadata(Brushes.Black));
         public static readonly DependencyProperty PressedBackgroundBrushProperty = DependencyProperty.Register("PressedBackgroundBrush", typeof(Brush), typeof(GeometryToggleButton), new PropertyMetadata(Brushes.Silver));
         public static readonly DependencyProperty HoverForegroundBrushProperty = DependencyProperty.Register("HoverForegroundBrush", typeof(Brush), typeof(GeometryToggleButton), new PropertyMetadata(Brushes.Green));
+        public static readonly DependencyProperty CheckedDataProperty = DependencyProperty.Register(nameof(CheckedData), typeof(Geometry), typeof(GeometryToggleButton), new PropertyMetadata(null));
+
 
         static GeometryToggleButton()
         {
@@ -123,6 +125,12 @@ namespace Utility.WPF.Controls.Buttons
         {
             get => (Geometry)GetValue(DataProperty);
             set => SetValue(DataProperty, value);
+        }
+        
+        public Geometry CheckedData
+        {
+            get { return (Geometry)GetValue(CheckedDataProperty); }
+            set { SetValue(CheckedDataProperty, value); }
         }
 
         public Brush HoverBackgroundBrush
