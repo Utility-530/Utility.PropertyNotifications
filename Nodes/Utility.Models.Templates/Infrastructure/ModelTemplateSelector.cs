@@ -5,6 +5,7 @@ using Utility.Interfaces.Exs;
 using Utility.Models.Trees;
 using Utility.WPF.Helpers;
 using Utility.WPF.Templates;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Models.Templates
 {
@@ -22,6 +23,10 @@ namespace Utility.Models.Templates
                 {
                     return value;
                 }
+            }
+            if (item is IType { Type: { } type })
+            {
+                return ValueDataTemplateSelector.Instance.FromType(type);
             }
 
             DataTemplate baseTemplate = item.GetType().FindTemplate(Templates.Instance);
