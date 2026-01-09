@@ -11,6 +11,9 @@ namespace Utility.Meta
         public Guid Guid { get; set; }
 
         public PropertyMetaData[] Properties { get; set; }
+
+        public bool IsListType { get; set; } = true;
+
         public int Index { get; set; }
     }
 
