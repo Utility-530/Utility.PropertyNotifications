@@ -1,4 +1,5 @@
-﻿using System.Transactions;
+﻿using System.Reflection;
+using System.Transactions;
 using ICSharpCode.WpfDesign;
 using Utility.API.Services;
 using Utility.Entities;
@@ -19,6 +20,7 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
         public const string assetGuid = "f2a11e92-d1fe-4272-ae36-3a45b4a5571d";
         public const string coinbaseTransactionGuid = "4ec4c118-243e-47ca-a1a5-739bde9204eb";
         public const string paymentScheduleGuid = "5e71d381-f60c-491e-919a-0d9eae220cad";
+        public const string methodInfoGuid = "3A365187-47C0-464D-9ECD-F3D09479F9B1";
 
         public static readonly Type loanType = typeof(Loan);
         public static readonly Type auctionItemType = typeof(AuctionItem);
@@ -151,6 +153,14 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
                 Type =personType,
                 TransformationMethod = nameof(Factories.NodeMethodFactory.BuildPaymentScheduleRoot),
                 Index = 11,
+            },
+            new EntityMetaData
+            {
+                Guid = Guid.Parse(methodInfoGuid),
+                Type = typeof(MethodInfo),
+                TransformationMethod = nameof(Factories.NodeMethodFactory.BuildMethodRoot),
+                IsListType = false,
+                Index = 12,
             }
         ];
 
@@ -171,3 +181,4 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
         public static MetaDataFactory Instance { get; } = new();
     }
 }
+

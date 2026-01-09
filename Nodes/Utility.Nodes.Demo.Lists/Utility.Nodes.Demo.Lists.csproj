@@ -15,6 +15,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Conversions\Utility.Json.Newtonsoft\Utility.Conversions.Json.Newtonsoft.csproj" />
+		<ProjectReference Include="..\..\External\NetPrints\NetPrints\NetPrints.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.API.Services\Utility.API.Services.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Attributes\Utility.Attributes.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Services.Meta\Utility.Services.Meta.csproj" />

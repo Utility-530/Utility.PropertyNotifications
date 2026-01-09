@@ -26,7 +26,8 @@ namespace Utility.Nodes.Demo.Lists.Services
             var factory = Locator.Current.GetService<IFactory<EntityMetaData>>();
             var metaData = factory.Create(type);
             Globals.Register.Register<IServiceResolver>(() => new ServiceResolver(), metaData.Guid.ToString());
-            Observable.Return(type).Observe<InstanceTypeParam, Type>(metaData.Guid);
+            if (metaData.IsListType)
+                Observable.Return(type).Observe<InstanceTypeParam, Type>(metaData.Guid);
 
             return Observable.Create<Changes.Change<INodeViewModel>>(observer =>
             {
