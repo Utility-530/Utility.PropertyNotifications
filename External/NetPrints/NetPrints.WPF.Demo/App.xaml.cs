@@ -23,14 +23,14 @@ namespace NetPrints.WPF.Demo
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            Locator.CurrentMutable.RegisterLazySingleton<IReflectionProvider>(() => ReflectionProvider.From(Project.CreateNew("MyProject", "MyNamespace")));
-            Locator.CurrentMutable.RegisterLazySingleton(() => new CodeCompiler());
-            Locator.CurrentMutable.RegisterLazySingleton<IValueConverter>(() => new SuggestionListConverter());
-            Locator.CurrentMutable.RegisterLazySingleton<IBuiltInNodes>(() => BuiltInNodes.Instance);
+            Locator.CurrentMutable.RegisterLazySingleton<IReflectionProvider>(() => ReflectionProvider.Empty());
+            //Locator.CurrentMutable.RegisterLazySingleton(() => new CodeCompiler());
+            //Locator.CurrentMutable.RegisterLazySingleton<IValueConverter>(() => new SuggestionListConverter());
+            //Locator.CurrentMutable.RegisterLazySingleton<IBuiltInNodes>(() => BuiltInNodes.Instance);
             Locator.CurrentMutable.RegisterLazySingleton<ISpecifierConverter>(() => new SpecifierConverter());
             //Locator.CurrentMutable.RegisterLazySingleton<ITypesEnumerable>(() => new TypesEnumerable());
-            Locator.CurrentMutable.RegisterLazySingleton<ITypesEnumerable>(() => new VariableTypesEnumerable());
-            Locator.CurrentMutable.RegisterLazySingleton<IAssemblyReferences>(() => new DefaultReferences());
+            //Locator.CurrentMutable.RegisterLazySingleton<ITypesEnumerable>(() => new VariableTypesEnumerable());
+            //Locator.CurrentMutable.RegisterLazySingleton<IAssemblyReferences>(() => new DefaultReferences());
         }
     }
 
@@ -50,17 +50,24 @@ namespace NetPrints.WPF.Demo
 
         public IEnumerable<ITypesProvider> Types => types.Value;
     }
-    
+
     public class VariableTypesEnumerable : ITypesEnumerable
     {
         Lazy<IEnumerable<ITypesProvider>> types = new(() =>
         {
-            var methodQuery = Helper.CreateVariableQuery()
+            //var methodQuery = Helper.CreateVariableQuery()
+            //            //.WithArgumentType(TypeSpecifier.FromType<int>())
+            //            //.WithVisibleFrom(TypeSpecifier.FromType<string>())
+            //            //.WithReturnType(TypeSpecifier.FromType<string>())
+            //            //.WithStatic(true)
+            //            .WithType(TypeSpecifier.FromType<NetPrints.Core.BaseType>())
+            //            .AndName("Static Methods");
+            var methodQuery = Helper.CreateMethodQuery()
                         //.WithArgumentType(TypeSpecifier.FromType<int>())
                         //.WithVisibleFrom(TypeSpecifier.FromType<string>())
                         //.WithReturnType(TypeSpecifier.FromType<string>())
                         //.WithStatic(true)
-                        .WithType(TypeSpecifier.FromType<NetPrints.Core.BaseType>())
+                        .WithType(TypeSpecifier.FromType<int>())
                         .AndName("Static Methods");
 
             return [methodQuery];
@@ -73,10 +80,10 @@ namespace NetPrints.WPF.Demo
     {
         private static readonly IEnumerable<IAssemblyReference> references = new IAssemblyReference[]
         {
-            new FrameworkAssemblyReference(".NETFramework/v4.5/System.dll"),
-            new FrameworkAssemblyReference(".NETFramework/v4.5/System.Core.dll"),
-            new FrameworkAssemblyReference(".NETFramework/v4.5/mscorlib.dll"),
-            new AssemblyReference(@"O:\Users\rytal\source\repos\Utility\External\NetPrints\NetPrints.WPF.Demo\bin\Debug\net8.0-windows\\NetPrints.Core.dll")
+            //new FrameworkAssemblyReference(".NETFramework/v4.5/System.dll"),
+            //new FrameworkAssemblyReference(".NETFramework/v4.5/System.Core.dll"),
+            //new FrameworkAssemblyReference(".NETFramework/v4.5/mscorlib.dll"),
+            new AssemblyReference(@"O:\source\repos\Utility\External\NetPrints\NetPrints.WPF.Demo\bin\Debug\net10.0-windows\NetPrints.Core.dll")
         };
 
         public IEnumerable<IAssemblyReference> References => references;

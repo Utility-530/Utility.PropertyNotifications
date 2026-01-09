@@ -12,11 +12,7 @@
 
         <local:SuggestionListConverter x:Key="converter" />
 
-        <DataTemplate DataType="{x:Type vm:SearchableItemViewModel}">
-            <ContentControl Content="{Binding Converter={StaticResource converter}}"/>
-        </DataTemplate>
-
-        <DataTemplate DataType="{x:Type local:SuggestionListItem}">
+        <DataTemplate DataType="{x:Type vm:SearchableItemViewModel}">    
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -26,8 +22,8 @@
                     <RowDefinition Height="16" />
                 </Grid.RowDefinitions>
 
-                <Image Source="{Binding IconPath}" VerticalAlignment="Stretch" Grid.Column="0" />
-                <TextBlock Text="{Binding Text}" Height="Auto" Grid.Column="1" Margin="2,0,0,0" />
+                <Image Source="{Binding Converter={StaticResource converter}}" VerticalAlignment="Stretch" Grid.Column="0" />
+                <TextBlock Text="{Binding Converter={StaticResource converter}}" Height="Auto" Grid.Column="1" Margin="2,0,0,0" />
             </Grid>
         </DataTemplate>
     </FrameworkElement.Resources>

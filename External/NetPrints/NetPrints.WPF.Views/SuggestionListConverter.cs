@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace NetPrints.WPF.Views
 {
@@ -24,12 +25,21 @@ namespace NetPrints.WPF.Views
             {
                 throw new Exception("311 3");
             }
-            var (text, iconPath) = specifierConverter.Convert(specifier);
-
+            if (targetType == typeof(ImageSource))
+            {
+                var iconPath = specifierConverter.ConvertToIconPath(specifier);
+                var fullIconPath = $"pack://application:,,,/{Assembly.GetEntryAssembly().GetName().Name};component/Resources/{iconPath}";
+                return fullIconPath;
+            }
+            else
+            {
+                return specifierConverter.ConvertToText(specifier);
+            }
             // See https://docs.microsoft.com/en-us/dotnet/framework/wpf/app-development/pack-uris-in-wpf for format
-            var fullIconPath = $"pack://application:,,,/{Assembly.GetEntryAssembly().GetName().Name};component/Resources/{iconPath}";
+         
 
-            return new SuggestionListItem(text, fullIconPath);
+            return DependencyProperty.UnsetValue;
+            //return new SuggestionListItem(text, fullIconPath);
         }
 
 
@@ -40,15 +50,15 @@ namespace NetPrints.WPF.Views
         }
     }
 
-    public class SuggestionListItem
-    {
-        public string Text { get; }
-        public string IconPath { get; }
+    //public class SuggestionListItem
+    //{
+    //    public string Text { get; }
+    //    public string IconPath { get; }
 
-        public SuggestionListItem(string text, string iconPath)
-        {
-            Text = text;
-            IconPath = iconPath;
-        }
-    }
+    //    public SuggestionListItem(string text, string iconPath)
+    //    {
+    //        Text = text;
+    //        IconPath = iconPath;
+    //    }
+    //}
 }

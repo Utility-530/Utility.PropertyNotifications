@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NetPrints.Core\NetPrints.Core.csproj" />
+    <ProjectReference Include="..\NetPrints\NetPrints.csproj" />
   </ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="morelinq" Version="4.4.0" />
