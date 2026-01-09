@@ -32,10 +32,10 @@ namespace NetPrints.Core
     public class Project : IProject
     {
 
-        Lazy<ICodeCompiler> codeCompiler = new(() => Locator.Current.GetService<ICodeCompiler>());
-        Lazy<ISerialisationHelper> serialisationHelper = new(() => Locator.Current.GetService<ISerialisationHelper>());
-        Lazy<IClassTranslator> classTranslator = new(() => Locator.Current.GetService<IClassTranslator>());
-        static Lazy<IAssemblyReferences> assemblyReferences = new(() => Locator.Current.GetService<IAssemblyReferences>());
+        ICodeCompiler codeCompiler => Locator.Current.GetService<ICodeCompiler>();
+        ISerialisationHelper serialisationHelper => Locator.Current.GetService<ISerialisationHelper>();
+        IClassTranslator classTranslator => Locator.Current.GetService<IClassTranslator>();
+        //static IAssemblyReferences assemblyReferences => Locator.Current.GetService<IAssemblyReferences>();
 
 
         //ClassTranslator classTranslator = new ClassTranslator();
@@ -189,7 +189,7 @@ namespace NetPrints.Core
 
             if (addDefaultReferences)
             {
-                project.References.AddRange(assemblyReferences.Value.References.Cast<ICompilationReference>());
+                project.References.AddRange(Locator.Current.GetService<IAssemblyReferences>().References.Cast<ICompilationReference>());
             }
 
             return project;
@@ -213,7 +213,7 @@ namespace NetPrints.Core
 
                 Parallel.ForEach(project.ClassPaths, classPath =>
                 {
-                    IClassGraph cls = serialisationHelper.Value.LoadClass(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(project.Path), classPath));
+                    IClassGraph cls = serialisationHelper.LoadClass(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(project.Path), classPath));
                     cls.Project = project;
                     classes.Add(cls);
                 });
@@ -342,7 +342,7 @@ namespace NetPrints.Core
                     string code;
                     try
                     {
-                        code = classTranslator.Value.TranslateClass(cls);
+                        code = classTranslator.TranslateClass(cls);
                     }
                     catch (Exception ex)
                     {
@@ -390,7 +390,7 @@ namespace NetPrints.Core
                     .Distinct()
                     .ToArray();
 
-                ICodeCompileResults compilationResults = codeCompiler.Value.CompileSources(
+                ICodeCompileResults compilationResults = codeCompiler.CompileSources(
                     outputPath, assemblyPaths, sources, generateExecutable);
 
                 // Delete the output binary if we don't want it.
@@ -447,7 +447,7 @@ namespace NetPrints.Core
                 string code;
                 try
                 {
-                    code = classTranslator.Value.TranslateClass(cls);
+                    code = classTranslator.TranslateClass(cls);
                 }
                 catch (Exception ex)
                 {

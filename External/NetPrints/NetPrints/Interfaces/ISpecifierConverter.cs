@@ -4,6 +4,7 @@ namespace NetPrintsEditor.Converters
 {
     public interface ISpecifierConverter
     {
-        (string text, string iconPath) Convert(ISpecifier value);
+        string ConvertToIconPath(ISpecifier value);
+        string ConvertToText(ISpecifier value);
     }
 }

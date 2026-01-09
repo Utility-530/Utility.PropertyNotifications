@@ -13,8 +13,13 @@ namespace NetPrints.Interfaces
         bool? Static { get; set; }
     }
 
+    public interface INameLike
+    {
+        string? NameLike { get; set; }
+    }
 
-    public interface IReflectionProviderQuery: IType, IStatic
+
+    public interface IReflectionProviderQuery: IType, IStatic, INameLike
     {
         ITypeSpecifier VisibleFrom { get; set; }
 

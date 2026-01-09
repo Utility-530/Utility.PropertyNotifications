@@ -46,7 +46,7 @@ namespace NetPrints.WPF.Demo
                 //if (typeSpecifier is TypeSpecifier pinTypeSpec)
                 //{
                 // Add make delegate
-                yield return new Basic("NetPrints", new DelegateSpecifier(byType, visibleFrom));
+                yield return new NetPrints.Reflection.Basic("NetPrints", new DelegateSpecifier(byType, visibleFrom));
 
                 // Add variables and methods of the pin type
                 yield return Helper.CreateVariableQuery()
@@ -264,10 +264,10 @@ namespace NetPrints.WPF.Demo
 
     public static class ReflectionHelper2
     {
-        public static Basic ByGraphType(string name, GraphType graphType)
+        public static NetPrints.Reflection.Basic ByGraphType(string name, GraphType graphType)
         {
             var builtInNodes = Locator.Current.GetService<IBuiltInNodes>();
-            return new Basic(name, builtInNodes[graphType]);
+            return new NetPrints.Reflection.Basic(name, builtInNodes[graphType]);
         }
 
 

@@ -3,7 +3,7 @@ using System;
 using System.Globalization;
 using System.Reflection;
 
-namespace NetPrintsEditor.Converters
+namespace NetPrints.Core.Converters
 {
     public class MethodSpecifierConverter 
     {

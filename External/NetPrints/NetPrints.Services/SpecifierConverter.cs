@@ -1,4 +1,5 @@
 ﻿using NetPrints.Core;
+using NetPrints.Core.Converters;
 using NetPrints.Graph;
 using NetPrintsEditor.Dialogs;
 using System;

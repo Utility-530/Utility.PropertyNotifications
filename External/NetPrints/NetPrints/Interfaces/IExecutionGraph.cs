@@ -8,6 +8,5 @@ namespace NetPrints.Interfaces
         IExecutionEntryNode EntryNode { get; }
         MemberVisibility Visibility { get; }
                 
-        IClassGraph Class { get; }
     }
 }

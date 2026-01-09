@@ -57,8 +57,7 @@ namespace NetPrints.Reflection
 
     public class VariableTypes(IReflectionProviderVariableQuery Query, string Name) : TypesProvider(Name)
     {
-        static Lazy<IReflectionProvider> reflectionProvider = new(() => Locator.Current.GetService<IReflectionProvider>());
-        public override IEnumerable<ISpecifier> types() => reflectionProvider.Value.GetVariables(Query);
+        public override IEnumerable<ISpecifier> types() => Locator.Current.GetService<IReflectionProvider>().GetVariables(Query);
     }
 
 

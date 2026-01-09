@@ -119,6 +119,7 @@ namespace NetPrintsEditor.Reflection
             [RefKind.Ref] = MethodParameterPassType.Reference,
             [RefKind.Out] = MethodParameterPassType.Out,
             [RefKind.In] = MethodParameterPassType.In,
+            [RefKind.RefReadOnlyParameter] = MethodParameterPassType.Reference,
         };
 
         public static MethodParameter MethodParameterFromSymbol(in IParameterSymbol paramSymbol)
