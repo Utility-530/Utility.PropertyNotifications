@@ -167,6 +167,7 @@
             Foreground="{c:Amber}"
             Fill="{c:Red}"
                     Data="{StaticResource ChevronGeometry2}"
+            CheckedData="{StaticResource Cancel_Rounded}"
             Background="{c:Blue}"
             StrokeThickness="12"
             CheckedBackgroundBrush="{c:Red}"
@@ -183,6 +184,7 @@
               StrokeThickness="1"
                     Height="60"
                     Data="{StaticResource Tick_Rounded}"
+                 CheckedData="{StaticResource Cancel_Rounded}"
             CheckedBackgroundBrush="{c:Red}"
                     HoverBackgroundBrush="{c:BlueGrey}" />
 
