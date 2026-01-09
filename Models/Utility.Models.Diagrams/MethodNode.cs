@@ -43,23 +43,24 @@ namespace Utility.Models.Diagrams
             {
                 { string.Empty, create() }
             } :
-            node.parameters.ToDictionary(a => a.Name ?? throw new Exception("s e!"), a =>
+            node.parameters.ToDictionary(a => a.Name ?? throw new Exception("s e!"), param =>
             {
-                var model = new MethodConnector { Key = a.Name, Parameter = a };
+                var model = new MethodConnector { Key = param.Name, Parameter = param };
+       
                 model
                 .Subscribe(value =>
                 {
                     Action? undoaction = new(() => { });
-                    bool contains = node.values.ContainsKey(a.Name);
+                    bool contains = node.values.ContainsKey(param.Name);
                     var previousResult = node.OutValue?.Value;
-                    if (node.values.TryGetValue(a.Name, out var oldValue))
+                    if (node.values.TryGetValue(param.Name, out var oldValue))
                     {
                         undoaction = new Action(() =>
                         {
                             if (contains)
-                                node.values[a.Name] = oldValue;
+                                node.values[param.Name] = oldValue;
                             else
-                                node.values.Remove(a.Name);
+                                node.values.Remove(param.Name);
                             if (previousResult == null && node.OutValue != null)
                             {
                                 node.OutValue.Value = previousResult;
@@ -70,18 +71,23 @@ namespace Utility.Models.Diagrams
                     node.RaisePropertyChanged(nameof(IsActive));
                     Globals.Resolver.Resolve<IPlaybackEngine>().OnNext(
                         new PlaybackAction(node,
-                        () => _action(a.Name, value),
+                        () => _action(param.Name, value),
                         undoaction,
                         a => node.IsActive = a,
                         new Dictionary<string, object> {
                             { "Value", value },
-                            { "Name", a.Name },
+                            { "Name", param.Name },
                             { "PreviousValue", previousResult }
                             }
                          )
-                        { Name = a.Name });
+                        { Name = param.Name });
 
                 });
+
+                if (param.DefaultValue != DBNull.Value)
+                {
+                    model.OnNext(param.DefaultValue);
+                }
                 return model;
             }));
 
