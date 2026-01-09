@@ -7,7 +7,7 @@
     xmlns:res="http://schemas.utility.com/resourcedictionary"
     xmlns:sys="clr-namespace:System;assembly=netstandard"
     xmlns:inf="clr-namespace:Utility.WPF.Controls.Trees.Infrastructure"
-    xmlns:trees="clr-namespace:Utility.WPF.Controls.Trees">
+    xmlns:trees="clr-namespace:Utility.WPF.Controls.Trees" xmlns:att="http://schemas.utility.com/attached">
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml" />
@@ -270,7 +270,7 @@
     <Style
         x:Key="PlusTreeViewItem"
         BasedOn="{StaticResource GenericTreeViewItem}"
-        TargetType="{x:Type trees:CustomTreeViewItem}">
+        TargetType="{x:Type trees:CustomTreeViewItem}">       
         <Style.Resources>
             <DataTemplate x:Key="EditTemplate">
                 <Grid Name="rootElement" Background="#DCDCDC">
@@ -278,6 +278,19 @@
                 </Grid>
             </DataTemplate>
         </Style.Resources>
+        <att:InteractivitySetter Property="att:InteractivityItems.Template">
+            <Setter.Value>
+                <att:InteractivityTemplate>
+                    <att:InteractivityItems>
+                        <att:InteractivityItems.Triggers>
+                            <inf:CustomEventTrigger EventName="FinishEdit">
+                                <inf:AddObjectAction />
+                            </inf:CustomEventTrigger>
+                        </att:InteractivityItems.Triggers>
+                    </att:InteractivityItems>
+                </att:InteractivityTemplate>
+            </Setter.Value>
+        </att:InteractivitySetter>
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
