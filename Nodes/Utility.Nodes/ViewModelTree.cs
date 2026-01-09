@@ -54,6 +54,8 @@ namespace Utility.Nodes
         public static readonly bool IsEnabled = true;
         public static readonly bool IsProliferable = true;
         public static readonly bool IsWithinWindowBounds = false;
+        public static readonly int ColumnSpan = 1;
+        public static readonly int RowSpan = 1;
     }
 
     public partial class NodeViewModel : Tree, INodeViewModel, ISet, IGet
@@ -100,7 +102,8 @@ namespace Utility.Nodes
         public bool isEnabled = NodeViewModelConstants.IsEnabled;
         protected bool isProliferable = NodeViewModelConstants.IsProliferable;
         protected bool isWithinWindowBounds = NodeViewModelConstants.IsWithinWindowBounds;
-
+        private int rowSpan = NodeViewModelConstants.RowSpan;
+        private int columnSpan = NodeViewModelConstants.ColumnSpan;
 
         protected override IList CreateChildren()
         {
@@ -289,6 +292,17 @@ namespace Utility.Nodes
         {
             get { RaisePropertyCalled(column); return column; }
             set => this.RaisePropertyReceived(ref this.column, value);
+        }
+        public int RowSpan
+        {
+            get { RaisePropertyCalled(rowSpan); return rowSpan; }
+            set => this.RaisePropertyReceived(ref this.rowSpan, value);
+        }
+
+        public int ColumnSpan
+        {
+            get { RaisePropertyCalled(columnSpan); return columnSpan; }
+            set => this.RaisePropertyReceived(ref this.columnSpan, value);
         }
 
         public int Order
