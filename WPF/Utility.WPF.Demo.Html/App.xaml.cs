@@ -29,7 +29,7 @@ namespace Utility.WPF.Demo.Html
                 Header = treeSel
             };
 
-            var button = new DirectionButton() { Movement = Enums.XYMovement.RightToLeft, HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Top };
+            var button = new DirectionButton() { Movement = Enums.XYTraversal.RightToLeft, HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Top };
             splitControl.SetBinding(SplitControl.MovementProperty, new Binding(nameof(DirectionButton.Movement)) { Source = button });
 
             treeSel.LoadSamples();
