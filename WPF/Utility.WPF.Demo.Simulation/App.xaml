@@ -8,9 +8,9 @@
                 <ResourceDictionary Source="/Utility.WPF.Controls.Simulation;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <DataTemplate DataType="{x:Type models:MethodAction}">
+            <!--<DataTemplate DataType="{x:Type models:MethodAction}">
                 <Ellipse Fill="Red" Height="20" Width="20"></Ellipse>
-            </DataTemplate>
+            </DataTemplate>-->
 
             <DataTemplate DataType="{x:Type local:CommandsViewModel}">
                 <Button Command="{Binding AddCommand}">Add</Button>
