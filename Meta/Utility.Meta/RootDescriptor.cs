@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace Utility.Meta
@@ -54,6 +55,10 @@ namespace Utility.Meta
                 if (type == typeof(string))
                 {
                     return string.Empty;
+                }
+                if (type == typeof(Assembly))
+                {
+                    return null;
                 }
                 return Activator.CreateInstance(type);
             }
