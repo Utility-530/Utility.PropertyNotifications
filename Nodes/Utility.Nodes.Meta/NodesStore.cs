@@ -56,6 +56,36 @@ namespace Utility.Nodes.Meta
                     });
             });
         }
+
+        HashSet<INodeViewModel> _pending = new();
+
+        public void Add(INodeViewModel node)
+        {
+            if (_pending.Contains(node))
+                return;
+
+            _pending.Add(node);
+            Utility.Globals.UI.Post(a =>
+            {
+                _pending.Remove(node);
+                _nodes.Add(node);
+            }, node);
+
+        }
+
+        public void Remove(string key)
+        {
+            var node = Nodes.SingleOrDefault(a => a.Key() == key);
+            _nodes.Remove(node);
+        }
+
+
+        public INodeViewModel? Find(string key)
+        {
+            return _pending.SingleOrDefault(a => a.Key() == key) ??
+                _nodes.SingleOrDefault(a => a.Key() == key);
+        }
+
         #region disposepattern
         public void Dispose()
         {
@@ -77,30 +107,5 @@ namespace Utility.Nodes.Meta
         }
         #endregion disposepattern
     }
-
-    public static class NodesStoreHelper
-    {
-        public static void Add(this INodeSource nodeSource, INodeViewModel node)
-        {
-            if (nodeSource.Nodes is IList<INodeViewModel> nodes)
-            {
-                Utility.Globals.UI.Post(a =>
-                {
-                    nodes.Add(node);
-                }, node);
-            }
-            else
-                throw new InvalidOperationException("Nodes collection is not mutable.");
-        }
-        public static void Remove(this INodeSource nodeSource, string key)
-        {
-            var node = nodeSource.Nodes.SingleOrDefault(a => a.Key() == key);
-            if (nodeSource.Nodes is IList<INodeViewModel> nodes)
-                nodes.Remove(node);
-            else
-                throw new InvalidOperationException("Nodes collection is not mutable.");
-        }
-    }
-
 
 }
