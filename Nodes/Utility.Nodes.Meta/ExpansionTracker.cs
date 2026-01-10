@@ -391,7 +391,7 @@ namespace Utility.Nodes.Meta
                         if (existingNode == null)
                         {
                             i++;
-                            if (this.nodesStore.Contains(key.Name))
+                            if (this.nodesStore.KeyExistsInCode(key.Name))
                                 Create(key.Name).Subscribe(a =>
                                 {
                                     if (a != null)

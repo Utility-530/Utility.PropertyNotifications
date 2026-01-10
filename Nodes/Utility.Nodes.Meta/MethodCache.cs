@@ -18,7 +18,7 @@ namespace Utility.Nodes.Meta
     public class IOP
     {
         public Dictionary<string, MethodValue> _methods = new();
-
+     
         public void Add(string key, object instance, Method value)
         {
             _methods.Add(key, new MethodValue() { Instance = instance, Method = value });
@@ -37,7 +37,7 @@ namespace Utility.Nodes.Meta
 
     public partial class NodesStore : INodeSource
     {
-        private Lazy<IOP> dict = new(() =>
+        private Lazy<IOP> lazyIOP = new(() =>
         {
             var iop = new IOP();
             var factories = Locator.Current.GetServices<IEnumerableFactory<Method>>();
@@ -45,9 +45,9 @@ namespace Utility.Nodes.Meta
             return iop;
         });
 
-        public bool Contains(string key)
+        public bool KeyExistsInCode(string key)
         {
-            return dict.Value.Contains(key);
+            return lazyIOP.Value.Contains(key);
         }
 
         public System.IObservable<INodeViewModel> this[string key]
@@ -60,7 +60,7 @@ namespace Utility.Nodes.Meta
                     {
                         if (this.Find(key) is not { } child)
                         {
-                            foreach (var x in dict.Value._methods.Values)
+                            foreach (var x in lazyIOP.Value._methods.Values)
                             {
                                 if (x.Guid == guid)
                                 {
@@ -81,15 +81,15 @@ namespace Utility.Nodes.Meta
                         }, () => observer.OnCompleted());
                     }
 
-                    if (dict.Value.Contains(key))
+                    if (lazyIOP.Value.Contains(key))
                     {
-                        if (dict.Value[key].IsAccessed == false)
+                        if (lazyIOP.Value[key].IsAccessed == false)
                         {
-                            dict.Value[key].Nodes ??= [];
-                            object output = dict.Value.Invoke(key);
+                            lazyIOP.Value[key].Nodes ??= [];
+                            object output = lazyIOP.Value.Invoke(key);
                             if (output is NodeViewModel node)
                             {
-                                dict.Value[key].Nodes.Add(node);
+                                lazyIOP.Value[key].Nodes.Add(node);
                                 if (node.Name != null)
                                     throw new Exception($"Name gets assigned here ({nameof(NodesStore)}) automatically for top level nodes!");
                                 node.Name = key;
@@ -102,7 +102,7 @@ namespace Utility.Nodes.Meta
                             {
                                 foreach (var _node in nodes)
                                 {
-                                    dict.Value[key].Nodes.Add(_node);
+                                    lazyIOP.Value[key].Nodes.Add(_node);
                                     observer.OnNext(_node);
                                 }
                                 observer.OnCompleted();
@@ -113,7 +113,7 @@ namespace Utility.Nodes.Meta
 
                                 return nodeObservable.Subscribe(_node =>
                                 {
-                                    dict.Value[key].Nodes.Add(_node);
+                                    lazyIOP.Value[key].Nodes.Add(_node);
 
                                     //_node.Name = key;
                                     //Add(_node);
@@ -123,15 +123,15 @@ namespace Utility.Nodes.Meta
                             }
                             else if (output is Task task)
                             {
-                                if (dict.Value[key].Task == null)
+                                if (lazyIOP.Value[key].Task == null)
                                 {
-                                    dict.Value[key].Task = task;
+                                    lazyIOP.Value[key].Task = task;
                                 }
 
-                                return dict.Value[key].Task.ToObservable().Subscribe(a =>
+                                return lazyIOP.Value[key].Task.ToObservable().Subscribe(a =>
                                 {
-                                    var result = (INodeViewModel)dict.Value[key].Task.GetType().GetProperty("Result").GetValue(dict.Value[key].Task);
-                                    dict.Value[key].Nodes.Add(result);
+                                    var result = (INodeViewModel)lazyIOP.Value[key].Task.GetType().GetProperty("Result").GetValue(lazyIOP.Value[key].Task);
+                                    lazyIOP.Value[key].Nodes.Add(result);
                                     //Add(result);
                                     observer.OnNext(result);
                                 }, () => observer.OnCompleted());
@@ -147,7 +147,7 @@ namespace Utility.Nodes.Meta
                         }
                         else
                         {
-                            foreach (var x in dict.Value[key].Nodes)
+                            foreach (var x in lazyIOP.Value[key].Nodes)
                             {
                                 //Add(x);
                                 observer.OnNext(x);
@@ -167,7 +167,7 @@ namespace Utility.Nodes.Meta
 
         public bool Contains(string key, Guid? guid)
         {
-            return dict.Value[key].IsAccessed;
+            return lazyIOP.Value[key].IsAccessed;
         }
     }
 
