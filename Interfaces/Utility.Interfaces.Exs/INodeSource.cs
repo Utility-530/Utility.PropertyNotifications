@@ -15,14 +15,13 @@ namespace Utility.Interfaces.Exs
     public interface INodeSource : IObservableIndex<INodeViewModel>, IDisposable
     {
         IReadOnlyCollection<INodeViewModel> Nodes { get; }
+        
+        void Add(INodeViewModel node);
 
-        bool Contains(string key);
-    }
-    public static class NodeStoreHelper
-    {
-        public static INodeViewModel? Find(this INodeSource nodeStore, string key)
-        {
-            return nodeStore.Nodes.SingleOrDefault(a => a.Key() == key);
-        }
+        void Remove(string key);
+
+        bool KeyExistsInCode(string key);
+
+        INodeViewModel? Find(string key);
     }
 }
