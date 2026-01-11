@@ -1,6 +1,6 @@
 [![NuGet version (Newtonsoft.Json.Bson)](https://img.shields.io/nuget/v/Utility.Enums)](https://www.nuget.org/packages/Utility.Enums/)
 
-# Utility.Enums
+# Utility Enums
 
 Enums:
 -	AbsoluteOrder
