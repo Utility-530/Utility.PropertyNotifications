@@ -26,7 +26,7 @@
 
     public enum XAMLPanel
     {
-        StackPanel, 
+        StackPanel,
         Grid,
         Canvas,
     }

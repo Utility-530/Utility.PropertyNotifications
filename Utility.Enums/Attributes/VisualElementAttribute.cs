@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Utility.Enums.VisualElements;
 
 namespace Utility.Enums.Attributes
@@ -120,7 +118,7 @@ namespace Utility.Enums.Attributes
             var attribute = Attribute<VisualElementAttribute, VisualLayout>(element);
             if (attribute == null)
                 return default;
-            return (T)map(typeof(T), attribute);      
+            return (T)map(typeof(T), attribute);
         }
 
         static object map(Type type, VisualElementAttribute attribute)
