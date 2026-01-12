@@ -44,10 +44,10 @@ namespace Utility.Enums
         [Type(typeof(ulong))]
         ULong,
 
-        [Type(typeof(string))]
+        [Type(typeof(string))]  
         String,
 
-        [Type(typeof(object))]
+        [Type(typeof(object))]  
         Object,
     }
 

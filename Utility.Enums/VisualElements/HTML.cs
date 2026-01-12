@@ -6,9 +6,9 @@ namespace Utility.Enums.VisualElements
 {
     public class HtmlAttribute : Attribute
     {
-        public HtmlAttribute(string element)
-        {
-            this.Element = element;
+        public HtmlAttribute(string element) 
+        { 
+            this.Element = element; 
         }
 
         public string Element { get; set; }

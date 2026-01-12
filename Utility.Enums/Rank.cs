@@ -11,6 +11,6 @@
         Septenary,
         Octonary,
         Nonary,
-        Denary
+        Denary 
     }
 }

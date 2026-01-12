@@ -4,7 +4,7 @@ using Utility.Enums.VisualElements;
 namespace Utility.Enums
 {
     public enum VisualLayout
-    {
+    { 
         [VisualElement(
             "Structured grid of rows and columns for data display.",
             UIElementCategory.DataPresentation,
@@ -21,19 +21,19 @@ namespace Utility.Enums
         Table = 26,
 
 
-        [VisualElement(
-        "Generic container panel",
-        UIElementCategory.Structural,
-        UISubCategory.Container,
-        HTML.div,
-        ReactNative.View,
-        XAML.ItemsControl,
-        Flutter.Container,
-        Qt.QWidget,
-        Swing.JPanel,
-        JavaFX.Pane,
-        GTK.GtkBox,
-        Markup.Section)]
+            [VisualElement(
+            "Generic container panel",
+            UIElementCategory.Structural,
+            UISubCategory.Container,
+            HTML.div,
+            ReactNative.View,
+            XAML.ItemsControl,
+            Flutter.Container,
+            Qt.QWidget,
+            Swing.JPanel,
+            JavaFX.Pane,
+            GTK.GtkBox,
+            Markup.Section)]
         Panel = 1,
 
         [VisualElement(
@@ -280,7 +280,7 @@ namespace Utility.Enums
             Markup.Tabular)]
         TableHeader = 27,
 
-
+   
         // -------------------------------------------------------
         // TABLE CELL (merged from both enums)
         // -------------------------------------------------------
@@ -360,7 +360,7 @@ namespace Utility.Enums
             Markup.Itemize)]
         Timeline = 36,
 
-
+    
         [VisualElement(
             "Data visualization component for charts and graphs.",
             UIElementCategory.DataPresentation,
@@ -452,7 +452,7 @@ namespace Utility.Enums
         //    Markup.Paragraph)]
         //TextArea = 54,
 
-
+        
         [VisualElement(
             "Checkbox allowing multiple selections.",
             UIElementCategory.Input,
@@ -468,7 +468,7 @@ namespace Utility.Enums
             Markup.Itemize)]
         CheckBox = 55,
 
-
+    
         [VisualElement(
             "Radio button allowing a single selection in a group.",
             UIElementCategory.Input,
@@ -483,7 +483,7 @@ namespace Utility.Enums
             GTK.GtkRadioButton,
             Markup.Itemize)]
         RadioButton = 56,
-
+      
         [VisualElement(
             "A dropdown allowing selection from a list of options.",
             UIElementCategory.Input,
@@ -528,7 +528,7 @@ namespace Utility.Enums
             GTK.GtkCheckButton,
             Markup.Itemize)]
         ToggleSwitch = 59,
-
+       
         [VisualElement(
             "Calendar-based date selector.",
             UIElementCategory.Input,
@@ -544,7 +544,7 @@ namespace Utility.Enums
             Markup.Paragraph)]
         DatePicker = 60,
 
-
+       
         [VisualElement(
             "Time selection control.",
             UIElementCategory.Input,
@@ -559,7 +559,7 @@ namespace Utility.Enums
             GTK.GtkEntry,
             Markup.Paragraph)]
         TimePicker = 61,
-
+       
         [VisualElement(
             "File selection input.",
             UIElementCategory.Input,
@@ -634,7 +634,7 @@ namespace Utility.Enums
             GTK.GtkTextView,
             Markup.Paragraph)]
         RichTextEditor = 66,
-
+ 
         [VisualElement(
             "Command button executed on user click.",
             UIElementCategory.Input,
@@ -679,7 +679,7 @@ namespace Utility.Enums
             GTK.GtkBox,
             Markup.Section)]
         Form = 69,
-
+        
         [VisualElement(
             "Search input with built-in query semantics.",
             UIElementCategory.Input,
