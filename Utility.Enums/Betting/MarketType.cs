@@ -1,4 +1,6 @@
-﻿namespace Utility.Enums.Betting
+﻿using Utility.Enums.Attributes;
+
+namespace Utility.Enums.Betting
 {
     //Order affects databases
     public enum MarketType : byte

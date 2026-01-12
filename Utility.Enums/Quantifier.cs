@@ -43,13 +43,10 @@ namespace Utility.Enums
 
         [Description("2, 3, or 4")]
         Several,
-
-
     }
 
     public enum NSelector
     {
-
         [Description("A fixed number of elements (e.g., 'exactly 3')")]
         Exactly,
 
@@ -65,7 +62,6 @@ namespace Utility.Enums
 
     public enum OptionSelector
     {
-
         [Description("One of two options")]
         Either,
 

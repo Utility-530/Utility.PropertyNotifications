@@ -1,7 +1,13 @@
-﻿namespace Utility.Enums
+﻿using System;
+
+namespace Utility.Enums
 {
+    [Flags]
     public enum Playback
     {
-        Back, Forward, Play, Pause
+        Pause = 0,
+        Backward = 1,
+        Forward = 2,
+        Play = 4
     }
 }

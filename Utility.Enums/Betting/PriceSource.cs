@@ -1,4 +1,6 @@
-﻿namespace Utility.Enums.Betting
+﻿using Utility.Enums.Attributes;
+
+namespace Utility.Enums.Betting
 {
     public enum PriceSource : short
     {

@@ -5,11 +5,14 @@
         Stack,
         Grid,
         AutoGrid,
-        Wrap, 
-        Uniform, 
-        Custom, 
-        UniformStack, 
+        Wrap,
+        Uniform,
+        Custom,
+        UniformStack,
         Dock,
-        TreeMap
+        TreeMap,
+        Tree,
+        UniformRow,
+        Standard
     }
 }

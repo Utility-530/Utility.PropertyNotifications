@@ -6,7 +6,7 @@ namespace Utility.Enums
     public enum Position
     {
         None,
-        In = 1, 
+        In = 1,
         Out = 2
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace Utility.Enums
 {
     public enum AndOr
-    { 
-        And, 
+    {
+        And,
         Or,
         Nor,
         Xor

@@ -8,8 +8,9 @@ namespace Utility.Enums
         None,
         Backward = 1,
         Forward = 2,
-        Walk = 4,
-        Wait = 8,
-        All = Backward | Forward | Walk | Wait
+        In = 4,
+        Out = 8,
+        Over = 16,
+        All = Backward | Forward | In | Out
     }
 }
