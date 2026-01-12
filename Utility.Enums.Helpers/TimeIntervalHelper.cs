@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Utility.Enums.Helpers
+﻿namespace Utility.Enums.Helpers
 {
     internal class TimeIntervalHelper
     {

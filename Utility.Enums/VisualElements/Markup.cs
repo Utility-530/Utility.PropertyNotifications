@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Linq;
-using Utility.Enums.Attributes;
-
-namespace Utility.Enums.VisualElements
+﻿namespace Utility.Enums.VisualElements
 {
 
     public enum Markup
