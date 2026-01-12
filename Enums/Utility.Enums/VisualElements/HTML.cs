@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using System.Xml.Serialization;
 
 namespace Utility.Enums.VisualElements
 {
-    public class HtmlAttribute:Attribute
+    public class HtmlAttribute : Attribute
     {
         public HtmlAttribute(string element) 
         { 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Utility.Enums.Attributes;
+﻿using Utility.Enums.Attributes;
 using Utility.Enums.VisualElements;
 
 namespace Utility.Enums
