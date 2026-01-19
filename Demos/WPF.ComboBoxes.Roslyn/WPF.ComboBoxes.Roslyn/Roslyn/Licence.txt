@@ -1,0 +1,6 @@
+LICENSE NOTICE
+
+Derived from the .NET Roslyn compiler project
+https://github.com/dotnet/roslyn
+
+MIT License – © .NET Foundation
