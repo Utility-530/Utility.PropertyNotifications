@@ -5,7 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.Xaml.Behaviors;
-using WPF.ComboBoxes.Roslyn;
 
 namespace WPF.ComboBoxes.Roslyn
 {
@@ -19,14 +18,14 @@ namespace WPF.ComboBoxes.Roslyn
 
             var grid = new UniformGrid() {  };
             var window = new Window() { Content = grid };
+            var compilation = Compiler.Compile(Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>());
             grid.Children.Add(makeContent(hcc =>
             {
                 hcc.Header = "filters types";
             }, c =>
             {
-
                 var behaviors = Interaction.GetBehaviors(c);
-                behaviors.Add(new TypeSymbolBehavior());
+                behaviors.Add(new SymbolBehavior() { Compilation = compilation, Kind = Kind.Type });
             }));
             grid.Children.Add(makeContent(hcc =>
             {
@@ -34,25 +33,25 @@ namespace WPF.ComboBoxes.Roslyn
             }, c =>
             {
                 var behaviors = Interaction.GetBehaviors(c);
-                behaviors.Add(new MethodSymbolBehavior());
+                behaviors.Add(new SymbolBehavior() { Compilation = compilation, Kind = Kind.Method });
             }));
             grid.Children.Add(makeContent(hcc =>
             {
-                hcc.Header = "filters types then displays their interfaces";
+                hcc.Header = "filters types with debugging";
             }, c =>
             {
-                c.SetValue(FilteringBehavior.IsSelectionSecondOrderProperty, true);
+                c.SetValue(FilterBehavior.IsDebuggingProperty, true);
                 var behaviors = Interaction.GetBehaviors(c);
-                behaviors.Add(new TypeSymbolBehavior());
+                behaviors.Add(new SymbolBehavior() {  Compilation = compilation, Kind = Kind.Type});
             }));
             grid.Children.Add(makeContent(hcc=>
             {
-                hcc.Header = "filters methods then displays their parameters";
+                hcc.Header = "filters methods then displays their parameters on selection";
             },c =>
             {
-                c.SetValue(FilteringBehavior.IsSelectionSecondOrderProperty, true);
+                c.SetValue(FilterBehavior.IsSelectionSecondOrderProperty, true);
                 var behaviors = Interaction.GetBehaviors(c);
-                behaviors.Add(new MethodSymbolBehavior());
+                behaviors.Add(new SymbolBehavior() { Compilation = compilation, Kind = Kind.Method, SecondaryKind = Kind.Parameters });
             }));
             window.Show();
             base.OnStartup(e);
@@ -76,12 +75,10 @@ namespace WPF.ComboBoxes.Roslyn
             comboBox.SetValue(VirtualizingPanel.ScrollUnitProperty, ScrollUnit.Pixel);
             comboBox.SetValue(VirtualizingPanel.VirtualizationModeProperty, VirtualizationMode.Recycling);
             var behaviors = Interaction.GetBehaviors(comboBox);
-            behaviors.Add(new FilteringBehavior());
+            behaviors.Add(new FilterBehavior());
   
             action?.Invoke(comboBox);
             return comboBox;
         }
-
-        public static CSharpCompilation Compilation { get; set; } = Compiler.Compile(Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>());
     }
 }

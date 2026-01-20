@@ -7,7 +7,6 @@ using System.Windows.Data;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using WPF.ComboBoxes.Roslyn;
 
 namespace WPF.ComboBoxes.Roslyn
 {

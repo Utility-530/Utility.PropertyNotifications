@@ -110,7 +110,7 @@ namespace WPF.ComboBoxes.Roslyn
         private static readonly Dictionary<ITypeSymbol, List<ISymbol>> allMembersCache = new Dictionary<ITypeSymbol, List<ISymbol>>();
 
 
-        public static IEnumerable<ISymbol> GetAllMembers(this ITypeSymbol symbol)
+        public static IReadOnlyCollection<ISymbol> GetAllMembers(this ITypeSymbol symbol)
         {
             if (allMembersCache.TryGetValue(symbol, out var allMembers))
             {

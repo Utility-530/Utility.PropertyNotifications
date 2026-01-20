@@ -11,37 +11,26 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Microsoft.CodeAnalysis;
-
 
 namespace WPF.ComboBoxes.Roslyn
 {
-
-    class Paraphernalia
-    {
-        public AsyncIntelliSenseEngine asyncEngine;
-        public TelemetryTracker telemetry;
-        public MruTracker mru;
-    }
     /// <summary>
     /// Attached behavior for ComboBox that enables filtering with IntelliSense-style sorting
     /// </summary>
-    public partial class FilteringBehavior
+    public partial class FilterBehavior
     {
-        static Dictionary<ComboBox, Paraphernalia> pairs = new();
-
         private static readonly DependencyProperty IsUpdatingTextProperty =
             DependencyProperty.RegisterAttached(
                 "IsUpdatingText",
                 typeof(bool),
-                typeof(FilteringBehavior),
+                typeof(FilterBehavior),
                 new PropertyMetadata(false));
 
         public static readonly DependencyProperty SelectedItemProperty =
             DependencyProperty.RegisterAttached(
                 "SelectedItem",
                 typeof(object),
-                typeof(FilteringBehavior),
+                typeof(FilterBehavior),
                 new FrameworkPropertyMetadata(changed));
 
         public static object GetSelectedItem(DependencyObject obj)
@@ -54,35 +43,19 @@ namespace WPF.ComboBoxes.Roslyn
             obj.SetValue(SelectedItemProperty, value);
         }
 
-        public static readonly DependencyProperty SourceProperty =
-            DependencyProperty.RegisterAttached(
-                "Source",
-                typeof(IEnumerable),
-                typeof(FilteringBehavior),
-                new PropertyMetadata(null, sourceChanged));
-
-        public static IEnumerable GetSource(DependencyObject obj)
-        {
-            return (IEnumerable)obj.GetValue(SourceProperty);
-        }
-
-        public static void SetSource(DependencyObject obj, IEnumerable value)
-        {
-            obj.SetValue(SourceProperty, value);
-        }
 
         private static readonly DependencyProperty FilterTimerProperty =
             DependencyProperty.RegisterAttached(
                 "FilterTimer",
                 typeof(DispatcherTimer),
-                typeof(FilteringBehavior),
+                typeof(FilterBehavior),
                 new PropertyMetadata(null));
 
         public static readonly DependencyProperty SearchTextProperty =
      DependencyProperty.RegisterAttached(
          "SearchText",
          typeof(string),
-         typeof(FilteringBehavior),
+         typeof(FilterBehavior),
          new PropertyMetadata(string.Empty));
 
         public static string GetSearchText(DependencyObject obj)
@@ -99,7 +72,7 @@ namespace WPF.ComboBoxes.Roslyn
             DependencyProperty.RegisterAttached(
                 "Index",
                 typeof(int),
-                typeof(FilteringBehavior),
+                typeof(FilterBehavior),
                 new FrameworkPropertyMetadata(
                     -1,
                     FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsArrange,
@@ -115,11 +88,28 @@ namespace WPF.ComboBoxes.Roslyn
             obj.SetValue(IndexProperty, value);
         }
 
+        public static readonly DependencyProperty ConverterProperty =
+            DependencyProperty.RegisterAttached(
+                "Converter",
+                typeof(IValueConverter),
+                typeof(FilterBehavior),
+                new FrameworkPropertyMetadata());
+
+        public static IValueConverter GetConverter(DependencyObject obj)
+        {
+            return (IValueConverter)obj.GetValue(ConverterProperty);
+        }
+
+        public static void SetConverter(DependencyObject obj, IValueConverter value)
+        {
+            obj.SetValue(ConverterProperty, value);
+        }
+
         public static readonly DependencyProperty IsDebuggingProperty =
             DependencyProperty.RegisterAttached(
         "IsDebugging",
         typeof(bool),
-        typeof(FilteringBehavior),
+        typeof(FilterBehavior),
          new FrameworkPropertyMetadata(
             false,
             changed));
@@ -138,7 +128,7 @@ namespace WPF.ComboBoxes.Roslyn
             DependencyProperty.RegisterAttached(
         "IsSelectionSecondOrder",
         typeof(bool),
-        typeof(FilteringBehavior),
+        typeof(FilterBehavior),
          new FrameworkPropertyMetadata(
             false,
             changed));
@@ -162,7 +152,7 @@ namespace WPF.ComboBoxes.Roslyn
     DependencyProperty.RegisterAttached(
         "Progress",
         typeof(double),
-        typeof(FilteringBehavior),
+        typeof(FilterBehavior),
         new PropertyMetadata(0d));
 
         public static double GetProgress(DependencyObject obj)
@@ -175,48 +165,6 @@ namespace WPF.ComboBoxes.Roslyn
             obj.SetValue(ProgressProperty, value);
         }
 
-        private static async void sourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is ComboBox comboBox && e.NewValue is IEnumerable objects)
-            {
-                List<IndexedSymbol> symbols = new List<IndexedSymbol>();
-                var count = objects.Count();
-                var paraphernalia = new Paraphernalia();
-                pairs.Add(comboBox, paraphernalia);
-                IProgress<double> progress = new Progress<double>(p =>
-                {
-
-                    paraphernalia.telemetry = new TelemetryTracker();
-                    paraphernalia.mru = new MruTracker();
-                    var session = new IntelliSenseSession(symbols.ToArray(), paraphernalia.mru, paraphernalia.telemetry);
-                    paraphernalia.asyncEngine = new AsyncIntelliSenseEngine(session, new AsyncRankingController());
-                    SetProgress(comboBox, p);
-                });
-
-                await Task.Run(() =>
-                {
-                    foreach (ISymbol item in objects)
-                    {
-                        var text = item?.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
-                        var token = new PatternToken(text);
-                        var kind = IntelliSenseSymbolKind.Type;
-                        var fullname = text;
-                        symbols.Add(new IndexedSymbol(item, token, kind, fullname));
-
-                        if (symbols.Count % 100 == 0 || symbols.Count == count)
-                        {
-                            progress.Report(100.0 * symbols.Count / count);
-                        }
-                    }
-                });
-
-                setupFiltering(comboBox, findTextBox(comboBox));
-                setupHoverTracking(comboBox);
-
-            }
-        }
-
-
         #region Event Handlers
 
 
@@ -227,71 +175,81 @@ namespace WPF.ComboBoxes.Roslyn
                 SetIndex(comboBox, 0);
                 comboBox.SetValue(IsUpdatingTextProperty, true);
                 if (e.AddedItems.Count > 0)
-                    // Set flag to ignore the TextChanged event that happens when selection updates the text    
-                    if (e.AddedItems[0] is IntelliSenseResult { Symbol.Item: ISymbol symbol } result)
-                    {
-                        comboBox.SetValue(FilteringBehavior.SelectedItemProperty, result);
-                        findTextBox(comboBox).Text = symbol?.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
-                        SetIndex(comboBox, comboBox.SelectedIndex);
-                        var paraphernalia = pairs[comboBox];
-                        paraphernalia.telemetry.MarkUsed(symbol);
-                        paraphernalia.mru.MarkUsed(symbol);
+                {         
+                    SetIndex(comboBox, comboBox.SelectedIndex);
+                    if (GetConverter(comboBox)?.Convert(e.AddedItems[0], typeof(string), null, null) is string conversion)
+                        findTextBox(comboBox).Text = conversion;
+                    comboBox.SetValue(FilterBehavior.SelectedItemProperty, e.AddedItems[0]);
 
-                        if (GetIsSelectionSecondOrder(comboBox))
-                        {
-                            if (symbol is IMethodSymbol methodSymbol)
-                            {
-                                comboBox.ItemsSource = methodSymbol.Parameters;
-                                comboBox.IsDropDownOpen = true;
-                            }
-                            if (symbol is ITypeSymbol typeSymbol)
-                            {
-                                comboBox.ItemsSource = typeSymbol.AllInterfaces;
-                                comboBox.IsDropDownOpen = true;
-                            }
-                        }
-                        else
-                        {
-                            findPopup(comboBox).IsOpen = false;
-                        }
-                        comboBox.SetValue(IsUpdatingTextProperty, false);
-                    }
-                    else if (e.AddedItems[0] is ISymbol _symbol)
-                    {
-                        comboBox.SetValue(FilteringBehavior.SelectedItemProperty, _symbol);
-                        findPopup(comboBox).IsOpen = false;
-                        comboBox.SetValue(IsUpdatingTextProperty, false);
-                    }
-                    else
-                        throw new Exception("FilteringBehavior only supports items of type ITypeSpecifier.");
+                    // Set flag to ignore the TextChanged event that happens when selection updates the text    
+                    //if (e.AddedItems[0] is IntelliSenseResult { Symbol.Item: ISymbol symbol } result)
+                    //{
+                    //    findTextBox(comboBox).Text = symbol?.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+                    //    //SetIndex(comboBox, comboBox.SelectedIndex);
+                    //    var paraphernalia = pairs[comboBox];
+                    //    paraphernalia.telemetry.MarkUsed(symbol);
+                    //    paraphernalia.mru.MarkUsed(symbol);
+
+                    //    if (GetIsSelectionSecondOrder(comboBox))
+                    //    {
+                    //        if (symbol is IMethodSymbol methodSymbol)
+                    //        {
+                    //            comboBox.ItemsSource = methodSymbol.Parameters;
+                    //            comboBox.IsDropDownOpen = true;
+                    //        }
+                    //        if (symbol is ITypeSymbol typeSymbol)
+                    //        {
+                    //            comboBox.ItemsSource = typeSymbol.AllInterfaces;
+                    //            comboBox.IsDropDownOpen = true;
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        findPopup(comboBox).IsOpen = false;
+                    //    }
+                    //}
+                    //else if (e.AddedItems[0] is ISymbol _symbol)
+                    //{
+                    //    comboBox.SetValue(FilterBehavior.SelectedItemProperty, _symbol);
+                    //}
+                    //else
+                    //    throw new Exception("FilterBehavior only supports items of type ITypeSpecifier.");
+                }
                 else
                 {
-                    comboBox.SetValue(IsUpdatingTextProperty, false);
+
+                }
+                comboBox.SetValue(IsUpdatingTextProperty, false);
+                if (comboBox.StaysOpenOnEdit)
+                {
+                    findPopup(comboBox).IsOpen = false;
                 }
             }
             else
                 throw new Exception("ds 3 s");
         }
 
-        private static void ComboBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            if (sender is ComboBox comboBox)
-            {
-                // Open dropdown on focus
-                if (!comboBox.IsDropDownOpen)
-                {
-                    //comboBox.IsDropDownOpen = true;
-                }
+        //private static void ComboBox_GotFocus(object sender, RoutedEventArgs e)
+        //{
+        //    if (sender is ComboBox comboBox)
+        //    {
+        //        // Open dropdown on focus
+        //        if (!comboBox.IsDropDownOpen)
+        //        {
+        //            //comboBox.IsDropDownOpen = true;
+        //        }
 
-                // Select all text for easy replacement
-                var textBox = findTextBox(comboBox);
-                if (textBox != null)
-                {
+        //        // Select all text for easy replacement
+        //        var textBox = findTextBox(comboBox);
+        //        setupFiltering(comboBox, findTextBox(comboBox));
+        //        setupHoverTracking(comboBox);
+        //        //if (textBox != null)
+        //        //{
 
-                    //textBox.SelectAll();
-                }
-            }
-        }
+        //        //    //textBox.SelectAll();
+        //        //}
+        //    }
+        //}
 
         private static void ComboBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -442,10 +400,12 @@ namespace WPF.ComboBoxes.Roslyn
                     popup.RemoveHandler(UIElement.PreviewMouseMoveEvent, enterHandler);
                     comboBox.DropDownClosed -= closedHandler;
                 };
-                //comboBox.DropDownClosed += closedHandler;
+                comboBox.DropDownClosed += closedHandler;
 
 
             }
+
+
         }
         //private static int GetContainerIndexAtPointUsingHitTest(ComboBox comboBox, System.Windows.Point point)
         //{
@@ -537,28 +497,37 @@ namespace WPF.ComboBoxes.Roslyn
             if (findTextBox(comboBox) is not TextBox textBox)
                 return;
 
-            SetIndex(comboBox, 0);
+            bool flag = false;
+
+            if (comboBox.ItemsSource != null)
+                foreach (var item in comboBox.ItemsSource)
+                {
+                    if (item == comboBox.SelectedItem)
+                        flag = true;
+                }
+            if (flag == false)
+                SetIndex(comboBox, 0);
 
             string searchText = textBox.Text ?? string.Empty;
             //string filterProperty = GetFilterProperty(comboBox);
-
-            SetSearchText(comboBox, searchText);
-
-            var results = await pairs[comboBox].asyncEngine.UpdateAsync(searchText, fast =>
-            {
-                comboBox.Dispatcher.Invoke(() =>
-                {
-                    var array = fast.Take(10).ToArray();
-                    comboBox.ItemsSource = array;
-               
-                });
-            });
-            comboBox.ItemsSource = results.Take(10).ToArray();
-
             if (!string.IsNullOrEmpty(searchText))
             {
-                comboBox.IsDropDownOpen = true;
+                findPopup(comboBox).IsOpen = true;
             }
+            SetSearchText(comboBox, searchText);
+
+            //var results = await pairs[comboBox].asyncEngine.UpdateAsync(searchText, fast =>
+            //{
+            //    comboBox.Dispatcher.Invoke(() =>
+            //    {
+            //        var array = fast.Take(10).ToArray();
+            //        comboBox.ItemsSource = array;
+
+            //    });
+            //});
+            //comboBox.ItemsSource = results.Take(10).ToArray();
+
+
         }
     }
 }

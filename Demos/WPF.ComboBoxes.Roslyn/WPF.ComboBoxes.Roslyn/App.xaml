@@ -4,14 +4,11 @@
              xmlns:local="clr-namespace:WPF.ComboBoxes.Roslyn"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:ref="clr-namespace:System.Reflection;assembly=System.Reflection"
-             xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"             
-           >
-
+             xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
 
     <Application.Resources>
         <local:SymbolConverter x:Key="SymbolConverter"/>
         <local:HighlightTextConverter x:Key="HighlightTextConverter"/>
-        <!--<local:ProgressToBooleanConverter x:Key="ProgressToBooleanConverter"                                       />-->
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <local:IndexItemConverter x:Key="IndexItemConverter"/>
 
@@ -28,7 +25,7 @@
                         <MultiBinding Converter="{StaticResource HighlightTextConverter}" 
                        ConverterParameter="Name">
                             <Binding Path="."/>
-                            <Binding Path="(local:FilteringBehavior.SearchText)" RelativeSource="{RelativeSource AncestorType=ComboBox}"/>
+                            <Binding Path="(local:FilterBehavior.SearchText)" RelativeSource="{RelativeSource AncestorType=ComboBox}"/>
                         </MultiBinding>
                     </ItemsControl.ItemsSource>
                     <ItemsControl.ItemsPanel>
@@ -69,13 +66,14 @@
 
 
 
-        <Style x:Key="VisualStudio_Roslyn_Style" TargetType="ComboBox">
+        <Style x:Key="VisualStudio_Roslyn_Style" TargetType="{x:Type ComboBox}">
+            <Setter Property="StaysOpenOnEdit" Value="True"></Setter>
             <Setter Property="Height" Value="24"></Setter>
             <Setter Property="Width" Value="400"></Setter>
             <Setter Property="ItemTemplate" Value="{StaticResource HighlightTemplate}"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="ComboBox">
+                    <ControlTemplate TargetType="{x:Type ComboBox}">
                         <Grid>
                             <ToggleButton x:Name="ToggleButton"
                                       Grid.Column="0"
@@ -111,30 +109,27 @@
                                 </ToggleButton.Style>
                             </ToggleButton>
 
-                             
-                                    <!-- Use ItemTemplate for selected item -->
-                                    <ContentPresenter x:Name="ContentSite"
+
+                            <ContentPresenter x:Name="ContentSite"
                                                             Margin="6,3,3,3"
-                                                            Content="{Binding Path=(local:FilteringBehavior.SelectedItem), RelativeSource={RelativeSource AncestorType=ComboBox}}"
-                                                            
+                                                            Content="{Binding Path=(local:FilterBehavior.SelectedItem), RelativeSource={RelativeSource AncestorType=ComboBox}}"
                                                             VerticalAlignment="Center"
-                                                            HorizontalAlignment="Left"
-                                                          
+                                                            HorizontalAlignment="Left"                                                          
                                                             IsHitTestVisible="False">
-                                        <ContentPresenter.ContentTemplate>
-                                            <DataTemplate>
-                                                <TextBlock FontSize="12" 
+                                <ContentPresenter.ContentTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="12" 
                                                                  FontWeight="ExtraBold"
                                                                  FontFamily="Consolas"
                                                                  Text="{Binding Converter={StaticResource SymbolConverter}, ConverterParameter='Name'}">
 
-                                                </TextBlock>
-                                            </DataTemplate>
-                                        </ContentPresenter.ContentTemplate>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ContentPresenter.ContentTemplate>
 
-                                    </ContentPresenter>
+                            </ContentPresenter>
 
-                                    <TextBox x:Name="PART_Custom_EditableTextBox"
+                            <TextBox x:Name="PART_Custom_EditableTextBox"
                                              Margin="3,3,3,3"
                                              Background="Transparent"                                      
                                              FontSize="12" 
@@ -143,27 +138,32 @@
                                              IsEnabled="True"
                                              IsReadOnly="{TemplateBinding IsReadOnly}"
                                              Focusable="True"/>
-                            
 
-                                <WrapPanel Margin="0,30,0,0" Visibility="{Binding Path=(local:FilteringBehavior.IsDebugging) , RelativeSource={RelativeSource AncestorType=ComboBox}, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <TextBlock FontSize="8" Text="IsEditing"></TextBlock>
-                                    <CheckBox   HorizontalAlignment="Right" IsChecked="{Binding Path=(local:FilteringBehavior.IsEditing) , RelativeSource={RelativeSource AncestorType=ComboBox}}"></CheckBox>
-                                    <TextBlock FontSize="8" Text="Index"></TextBlock>
-                                    <TextBlock   HorizontalAlignment="Right" Text="{Binding Path=(local:FilteringBehavior.Index) , RelativeSource={RelativeSource AncestorType=ComboBox}}"></TextBlock>
-                                </WrapPanel>
-                                <ProgressBar Height="2" HorizontalAlignment="Stretch" 
+
+                            <WrapPanel HorizontalAlignment="Right" Visibility="{Binding Path=(local:FilterBehavior.IsDebugging) , RelativeSource={RelativeSource AncestorType=ComboBox}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <TextBlock FontSize="8" Text="IsEditing"></TextBlock>
+                                <CheckBox   HorizontalAlignment="Right" IsChecked="{Binding Path=(local:FilterBehavior.IsEditing) , RelativeSource={RelativeSource AncestorType=ComboBox}}"></CheckBox>
+                                <TextBlock FontSize="8" Text="Index"></TextBlock>
+                                <TextBlock  HorizontalAlignment="Right" Text="{Binding Path=(local:FilterBehavior.Index) , RelativeSource={RelativeSource AncestorType=ComboBox}}"></TextBlock>
+                                <TextBlock FontSize="8" Text="Progress"></TextBlock>
+                                <TextBlock   HorizontalAlignment="Right" Text="{Binding Path=(local:FilterBehavior.Progress) , RelativeSource={RelativeSource AncestorType=ComboBox}}"></TextBlock>
+                                <TextBlock FontSize="8" Text="SearchText"></TextBlock>
+                                <TextBlock  HorizontalAlignment="Right" Text="{Binding Path=(local:FilterBehavior.SearchText) , RelativeSource={RelativeSource AncestorType=ComboBox}}"></TextBlock>
+                            </WrapPanel>
+                            <ProgressBar Height="2" HorizontalAlignment="Stretch" 
                                              VerticalAlignment="Bottom"
                                              Minimum="0" Maximum="100" 
-                                             Value="{Binding Path=(local:FilteringBehavior.Progress), 
+                                             Foreground="#4EC9B0"
+                                             Value="{Binding Path=(local:FilterBehavior.Progress), 
                                                 FallbackValue=50,
                                                 TargetNullValue=50,
                                                 RelativeSource={RelativeSource AncestorType=ComboBox}}">
-                                </ProgressBar>
-                        
+                            </ProgressBar>
+
                             <Popup x:Name="Popup"
                                  Placement="Bottom"
-                            
-                                         StaysOpen="True"
+                                   Width="{TemplateBinding Width}"
+                                   StaysOpen="True"
                                  AllowsTransparency="True"
                                  Focusable="False"
                                  PopupAnimation="Slide">
@@ -182,20 +182,20 @@
                         <ControlTemplate.Triggers>
                             <!-- Use DataTrigger instead of Trigger -->
                             <DataTrigger 
-                                      Binding="{Binding Path=(local:FilteringBehavior.IsEditing), 
+                                      Binding="{Binding Path=(local:FilterBehavior.IsEditing), 
                                  RelativeSource={RelativeSource Self}}" 
                                       Value="False">
                                 <Setter TargetName="PART_Custom_EditableTextBox" Property="Visibility" Value="Collapsed"/>
                                 <Setter TargetName="ContentSite" Property="Visibility" Value="Visible"/>
                             </DataTrigger>
 
-                            <DataTrigger Binding="{Binding Path=(local:FilteringBehavior.IsEditing), 
+                            <DataTrigger Binding="{Binding Path=(local:FilterBehavior.IsEditing), 
                                  RelativeSource={RelativeSource Self}}" 
                                                Value="True">
                                 <Setter TargetName="PART_Custom_EditableTextBox" Property="Visibility" Value="Visible"/>
                                 <Setter TargetName="ContentSite" Property="Visibility" Value="Collapsed"/>
                             </DataTrigger>
-                            <!--<DataTrigger Binding="{Binding Path=(local:FilteringBehavior.Progress),                                        
+                            <!--<DataTrigger Binding="{Binding Path=(local:FilterBehavior.Progress),                                        
                                       RelativeSource={RelativeSource Self}}" 
                                                Value='100'>
                                       <Setter TargetName="PART_Custom_EditableTextBox" Property="IsEnabled" Value="True"/>
@@ -251,7 +251,7 @@ RenderOptions.EdgeMode="Aliased" />
                                                 <MultiBinding Converter="{StaticResource IndexItemConverter}">
                                                     <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" />
                                                     <Binding RelativeSource="{RelativeSource Self}" />
-                                                    <Binding Path="(local:FilteringBehavior.Index)" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" />
+                                                    <Binding Path="(local:FilterBehavior.Index)" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" />
                                                 </MultiBinding>
                                             </DataTrigger.Binding>
                                             <Setter TargetName="Border" Property="Background" Value="#094771"/>
@@ -279,9 +279,10 @@ RenderOptions.EdgeMode="Aliased" />
                         <Border Background="#F5F5F5" CornerRadius="4">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="0.5*"/>
+                                    <RowDefinition Height="0.1*"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
+                                    <RowDefinition Height="0.5*"/>
                                 </Grid.RowDefinitions>
 
                                 <Border Grid.Row="1" Background="GhostWhite" 

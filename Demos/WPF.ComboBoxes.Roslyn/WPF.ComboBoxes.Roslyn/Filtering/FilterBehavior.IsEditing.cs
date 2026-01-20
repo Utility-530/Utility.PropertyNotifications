@@ -9,16 +9,25 @@ using Microsoft.Xaml.Behaviors;
 namespace WPF.ComboBoxes.Roslyn
 {
 
-    public partial class FilteringBehavior : Behavior<ComboBox>
+    public partial class FilterBehavior : Behavior<ComboBox>
     {
         public static readonly DependencyProperty IsEditingProperty =
             DependencyProperty.RegisterAttached(
                 "IsEditing",
                 typeof(bool),
-                typeof(FilteringBehavior),
+                typeof(FilterBehavior),
                 new PropertyMetadata(false, _changed));
 
 
+        public static bool GetIsEditing(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(IsEditingProperty);
+        }
+
+        private static void SetIsEditing(DependencyObject obj, bool value)
+        {
+            obj.SetValue(IsEditingProperty, value);
+        }
         private static void _changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is ComboBox comboBox)
@@ -36,32 +45,6 @@ namespace WPF.ComboBoxes.Roslyn
             }
         }
 
-        //public static readonly DependencyProperty TrackEditStateProperty =
-        //    DependencyProperty.RegisterAttached(
-        //        "TrackEditState",
-        //        typeof(bool),
-        //        typeof(FilteringBehavior),
-        //        new PropertyMetadata(false, OnTrackEditStateChanged));
-
-        public static bool GetIsEditing(DependencyObject obj)
-        {
-            return (bool)obj.GetValue(IsEditingProperty);
-        }
-
-        private static void SetIsEditing(DependencyObject obj, bool value)
-        {
-            obj.SetValue(IsEditingProperty, value);
-        }
-
-        //public static bool GetTrackEditState(DependencyObject obj)
-        //{
-        //    return (bool)obj.GetValue(TrackEditStateProperty);
-        //}
-
-        //public static void SetTrackEditState(DependencyObject obj, bool value)
-        //{
-        //    obj.SetValue(TrackEditStateProperty, value);
-        //}
 
         protected override void OnAttached()
         {
@@ -80,7 +63,8 @@ namespace WPF.ComboBoxes.Roslyn
             AssociatedObject.PreviewKeyDown += ComboBox_PreviewKeyDown;
 
             // Open dropdown on focus
-            AssociatedObject.GotFocus += ComboBox_GotFocus;
+            AssociatedObject.GotFocus += (s, args) => { 
+            };
             AssociatedObject.DropDownOpened += (s, args) =>
             {
                 findPopup(AssociatedObject).IsOpen = true;
@@ -89,6 +73,10 @@ namespace WPF.ComboBoxes.Roslyn
             {
 
             };
+
+            var textBox = findTextBox(AssociatedObject);
+            setupFiltering(AssociatedObject, findTextBox(AssociatedObject));
+            setupHoverTracking(AssociatedObject);
         }
 
         private static void ComboBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)

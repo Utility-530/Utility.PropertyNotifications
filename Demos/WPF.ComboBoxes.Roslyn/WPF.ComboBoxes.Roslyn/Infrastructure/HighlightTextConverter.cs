@@ -1,15 +1,13 @@
 ﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using WPF.ComboBoxes.Roslyn;
 
 namespace WPF.ComboBoxes.Roslyn
 {
+
     public class HighlightTextConverter : IMultiValueConverter
     {
-
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values == null || values.Length < 2 || values[0] == null || parameter == null)
@@ -18,20 +16,8 @@ namespace WPF.ComboBoxes.Roslyn
  
             string searchText = values[1] as string ?? string.Empty;
 
-            string displayText = null;
-            IReadOnlyList<TextSpan> spans = null;
-            if (values[0] is IntelliSenseResult { Symbol.Item: ISymbol typeSymbol } specifier)
-            {
-                displayText = typeSymbol?.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
-                spans = specifier.Match.MatchedSpans;
-            }
-            else if (values[0] is ISymbol symbol)
-            {
-                displayText = symbol?.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
-                spans = new[] { new TextSpan(0, displayText.Length) {  } };
-            }
-            else
-                throw new Exception("R R$dfg c");
+            string displayText = SymbolStringConverter.ToString(values[0]);
+            IReadOnlyList<TextSpan> spans = SymbolStringConverter.ToSpans(values[0]);
 
             if (string.IsNullOrEmpty(displayText))
                 return new List<HighlightTextSegment>();
