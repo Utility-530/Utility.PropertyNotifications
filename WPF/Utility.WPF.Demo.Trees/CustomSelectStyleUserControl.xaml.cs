@@ -1,18 +1,24 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
-using MintPlayer.ObservableCollection;
 using Utility.Commands;
 using Utility.Extensions;
 using Utility.Helpers.Ex;
-
+using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
+using Utility.Models;
+using Utility.Nodes.Meta;
+using Utility.Structs.Repos;
 using Utility.WPF.Demo.Common.ViewModels;
 using Utility.WPF.Reactives;
+using Utility.Interfaces;
 
 namespace Utility.WPF.Demo.Trees
 {
@@ -21,9 +27,13 @@ namespace Utility.WPF.Demo.Trees
     /// </summary>
     public partial class CustomSelectStyleUserControl : UserControl
     {
+        NodeEngine engine = new NodeEngine(new Repository(), new ValueRepository(), new DataActivator(), null, new NodeInterface(), new NodeSource());
+
+
         public CustomSelectStyleUserControl()
         {
             InitializeComponent();
+            build();
             this.Loaded += CustomStyleUserControl_Loaded;
 
             void CustomStyleUserControl_Loaded(object sender, RoutedEventArgs e)
@@ -69,7 +79,42 @@ namespace Utility.WPF.Demo.Trees
                 }
             }
         }
+
+
+        void build()
+        {
+            var node = new Model(() =>
+            [
+                new Model(() =>
+                [
+                    new Model(){
+                        Name="a.1",
+                        IsProliferable=false
+                    },
+                    new Model(){
+                        Name="a.2",
+                        IsProliferable=false
+                    },
+                ])
+                {
+                    Name = "a",
+                    IsProliferable=false
+                }
+            ])
+            {
+                Guid = Guid.NewGuid(),
+                Name = "Root",
+                IsExpanded = true,
+                IsProliferable = false
+            };
+
+            engine.Create(node).Subscribe(a =>
+            {
+                MyTreeView.ItemsSource = new INodeViewModel[] { a };
+            });
+        }
     }
+
 
     public class CustomTreeItemContainerStyleSelector : StyleSelector
     {
@@ -83,5 +128,110 @@ namespace Utility.WPF.Demo.Trees
         public Style Current { get; set; }
 
         public static CustomTreeItemContainerStyleSelector Instance { get; } = new();
+    }
+
+    public class Repository : ITreeRepository
+    {
+        public IEnumerable<Duplication> Duplicate(Guid oldGuid, Guid? newParentGuid = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IObservable<Changes.Set<Structs.Repos.Key>> Find(Guid? parentGuid = null, string? name = null, Guid? guid = null, Type? type = null, int? index = null)
+        {
+            return Observable.Return<Changes.Set<Structs.Repos.Key>>(new(
+                [new Changes.Change<Structs.Repos.Key>(new Structs.Repos.Key(Guid.NewGuid(), parentGuid.Value, typeof(Model), name, default, default), default, Changes.Type.Add)]));
+        }
+
+        public IObservable<Structs.Repos.Key> FindRecursive(Guid parentGuid, int? maxIndex = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IObservable<Structs.Repos.Key?> InsertRoot(Guid guid, string name, Type type)
+        {
+            return Observable.Return<Structs.Repos.Key?>(new Structs.Repos.Key(guid, default, null, name, null, null));
+        }
+
+        public int? MaxIndex(Guid parentGuid, string? name = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DateTime Remove(Guid guid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Reset()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateName(Guid parentGuid, Guid guid, string name, string newName)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class ValueRepository : IValueRepository
+    {
+        public void Copy(Guid guid, Guid newGuid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IObservable<DateValue> Get(Guid guid, string? name = null)
+        {
+            return Observable.Return(new DateValue(guid, name, DateTime.Now, null));
+        }
+
+        public void Set(Guid guid, string name, object value, DateTime dateTime)
+        {
+            //throw new NotImplementedException();
+        }
+
+
+    }
+
+    public class DataActivator : IDataActivator
+    {
+        public object Activate(Structs.Repos.Key? a)
+        {
+            throw new Exception("DSsd");
+        }
+    }
+
+    public class NodeSource : INodeSource
+    {
+        Collection<INodeViewModel> nodes = new();
+        public IObservable<INodeViewModel> this[string key] => throw new NotImplementedException();
+
+        public IReadOnlyCollection<INodeViewModel> Nodes => nodes;
+
+        public void Add(INodeViewModel node)
+        {
+            nodes.Add(node);
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
+        public INodeViewModel? Find(string key)
+        {
+            return nodes.SingleOrDefault(a => a.Key() == key);
+        }
+
+        public bool KeyExistsInCode(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(string key)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

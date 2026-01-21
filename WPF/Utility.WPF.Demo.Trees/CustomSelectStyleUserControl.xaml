@@ -4,7 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:trees="http://schemas.utility.com/trees"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Utility.WPF.Demo.Trees"
+             xmlns:local="clr-namespace:Utility.WPF.Demo.Trees" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:model="clr-namespace:Utility.Models;assembly=Utility.Models"
+             xmlns:obj="http://schemas.utility.com/objects" xmlns:beh="http://schemas.utility.com/behaviors"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.Resources>
@@ -13,9 +16,14 @@
                 <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <local:SerialiserSource x:Key="SerialiserSource"></local:SerialiserSource>
             <!--<Style x:Key="DefaultStyle" TargetType="{x:Type trees:trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:trees:CustomTreeViewItem}}">
                 --><!--<Setter Property="ChildrenSelector" Value="{StaticResource ChildrenSelector}" />--><!--
             </Style>-->
+
+            <HierarchicalDataTemplate DataType="{x:Type model:Model}" ItemsSource="{Binding Children}">
+                <Ellipse Fill="Lavender" Height="20" Width="20" Stroke="Black" StrokeThickness="1"/> 
+            </HierarchicalDataTemplate>
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
@@ -29,9 +37,20 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
+        <obj:JsonControl MinWidth="600">
+            <i:Interaction.Behaviors>
+                <obj:ObjectBehavior x:Name="ObjectBehavior" JsonSerializer="{Binding Path=Serialiser, Source={StaticResource SerialiserSource}}"
+                                  />
+            </i:Interaction.Behaviors>
+        </obj:JsonControl>
         <trees:CustomTreeView x:Name="MyTreeView"
             AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}">
-            <trees:CustomTreeViewItem Header="Item2">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectedItemChanged">
+                    <beh:SetSelectedItemAction PropertyName="Object" TargetObject="{Binding ElementName=ObjectBehavior}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <!--<trees:CustomTreeViewItem Header="Item2">
                 <trees:CustomTreeViewItem Header="SubItem1" />
                 <trees:CustomTreeViewItem Header="SubItem2" />
             </trees:CustomTreeViewItem>
@@ -47,7 +66,7 @@
                     <trees:CustomTreeViewItem Header="SubSubItem3" />
                     <trees:CustomTreeViewItem Header="SubSubItem4" />
                 </trees:CustomTreeViewItem>
-            </trees:CustomTreeViewItem>
+            </trees:CustomTreeViewItem>-->
         </trees:CustomTreeView>
     </DockPanel>
 </UserControl>
