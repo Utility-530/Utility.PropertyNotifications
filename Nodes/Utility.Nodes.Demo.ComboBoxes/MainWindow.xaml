@@ -127,7 +127,7 @@
 
             <cb:ComboBoxTreeView Style="{StaticResource PropertyStyle}">
                 <i:Interaction.Behaviors>
-                    <cb:PropertySelectorBehavior Type="{x:Type nodes:ViewModelTree}" />
+                    <cb:PropertySelectorBehavior Type="{x:Type nodes:NodeViewModel}" />
                 </i:Interaction.Behaviors>
             </cb:ComboBoxTreeView>
 
