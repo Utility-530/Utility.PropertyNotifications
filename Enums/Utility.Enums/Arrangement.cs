@@ -1,4 +1,4 @@
-﻿namespace Utility.Enums
+namespace Utility.Enums
 {
     public enum Arrangement
     {
@@ -13,6 +13,7 @@
         TreeMap,
         Tree,
         UniformRow,
-        Standard
+        Standard,
+        MasterSlave
     }
 }
