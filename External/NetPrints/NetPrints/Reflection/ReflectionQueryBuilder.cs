@@ -1,7 +1,7 @@
 ﻿using NetPrints.Core;
 using NetPrints.Interfaces;
 using NetPrints.WPF.Demo;
-using NetPrintsEditor.Reflection;
+using NetPrints.Reflection;
 using Splat;
 using System;
 using System.Collections.Generic;
@@ -61,7 +61,7 @@ namespace NetPrints.Reflection
     }
 
 
-    public class Basic(string Name, params ISpecifier[] Query) : TypesProvider(Name)
+    public class BasicTypes(string Name, params ISpecifier[] Query) : TypesProvider(Name)
     {
         public override IEnumerable<ISpecifier> types() => Query;
     }

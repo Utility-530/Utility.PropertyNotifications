@@ -1,34 +1,69 @@
-﻿using Microsoft.CodeAnalysis;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using NetPrints.Core;
+using NetPrints.Interfaces;
 
-namespace NetPrintsEditor.Reflection
+namespace NetPrints.Reflection
 {
-    public class DocumentationUtil
+    public static partial class ReflectionHelper
     {
-        private readonly Dictionary<string, XmlDocument> cachedDocuments =
+        private static readonly Dictionary<string, XmlDocument> cachedDocuments =
             new Dictionary<string, XmlDocument>();
 
-        private readonly Dictionary<string, string> cachedMethodSummaries =
+        private static readonly Dictionary<string, string> cachedMethodSummaries =
             new Dictionary<string, string>();
 
-        private readonly Dictionary<Tuple<string, string>, string> cachedMethodParameterInfos =
+        private static readonly Dictionary<Tuple<string, string>, string> cachedMethodParameterInfos =
             new Dictionary<Tuple<string, string>, string>();
 
-        private readonly Dictionary<string, string> cachedMethodReturnInfo =
+        private static readonly Dictionary<string, string> cachedMethodReturnInfo =
             new Dictionary<string, string>();
 
-        private readonly Microsoft.CodeAnalysis.Compilation compilation;
+        //private readonly Microsoft.CodeAnalysis.Compilation compilation;
 
-        public DocumentationUtil(Microsoft.CodeAnalysis.Compilation compilation)
+        public static string GetMethodDocumentation(this CSharpCompilation compilation, IMethodSpecifier methodSpecifier)
         {
-            this.compilation = compilation;
+            IMethodSymbol methodInfo = (IMethodSymbol)compilation.GetSymbolFromSpecifier(methodSpecifier);
+
+            if (methodInfo == null)
+            {
+                return null;
+            }
+
+            return compilation.GetMethodSummary(methodInfo);
         }
 
-        private string GetAssemblyPath(IAssemblySymbol assembly)
+        public static string GetMethodParameterDocumentation(this CSharpCompilation compilation, IMethodSpecifier methodSpecifier, int parameterIndex)
+        {
+            IMethodSymbol methodInfo = (IMethodSymbol)compilation.GetSymbolFromSpecifier(methodSpecifier);
+
+            if (methodInfo == null)
+            {
+                return null;
+            }
+
+            return compilation.GetMethodParameterInfo(methodInfo.Parameters[parameterIndex]);
+        }
+
+        public static string GetMethodReturnDocumentation(this CSharpCompilation compilation, IMethodSpecifier methodSpecifier, int returnIndex)
+        {
+            IMethodSymbol methodInfo = (IMethodSymbol)compilation.GetSymbolFromSpecifier(methodSpecifier);
+
+            if (methodInfo == null)
+            {
+                return null;
+            }
+
+            return compilation.GetMethodReturnInfo(methodInfo);
+        }
+
+
+        private static string GetAssemblyPath(this CSharpCompilation compilation, IAssemblySymbol assembly)
         {
             MetadataReference reference = compilation.GetMetadataReference(assembly);
             if (reference is PortableExecutableReference peReference)
@@ -38,7 +73,7 @@ namespace NetPrintsEditor.Reflection
             return null;
         }
 
-        private string GetMethodInfoKey(IMethodSymbol methodInfo)
+        private static string GetMethodInfoKey(this IMethodSymbol methodInfo)
         {
             string key = $"M:{methodInfo.ContainingType.GetFullName()}.{methodInfo.Name}";
 
@@ -52,9 +87,9 @@ namespace NetPrintsEditor.Reflection
             return key;
         }
 
-        private string GetAssemblyDocumentationPath(IAssemblySymbol assembly)
+        private static string GetAssemblyDocumentationPath(this CSharpCompilation compilation, IAssemblySymbol assembly)
         {
-            string assemblyPath = GetAssemblyPath(assembly);
+            string assemblyPath = compilation.GetAssemblyPath(assembly);
 
             if (assemblyPath != null)
             {
@@ -82,9 +117,9 @@ namespace NetPrintsEditor.Reflection
             return null;
         }
 
-        private XmlDocument GetAssemblyDocumentationDocument(IAssemblySymbol assembly)
+        private static XmlDocument GetAssemblyDocumentationDocument(this CSharpCompilation compilation, IAssemblySymbol assembly)
         {
-            string assemblyPath = GetAssemblyPath(assembly);
+            string assemblyPath = compilation.GetAssemblyPath(assembly);
             if (assemblyPath != null)
             {
                 string key = Path.GetFileNameWithoutExtension(assemblyPath);
@@ -96,7 +131,7 @@ namespace NetPrintsEditor.Reflection
 
                 try
                 {
-                    string docPath = GetAssemblyDocumentationPath(assembly);
+                    string docPath = compilation.GetAssemblyDocumentationPath(assembly);
                     if (docPath != null)
                     {
                         XmlDocument doc = new XmlDocument();
@@ -118,7 +153,7 @@ namespace NetPrintsEditor.Reflection
         /// </summary>
         /// <param name="methodInfo">Method to get summary text for.</param>
         /// <returns>Summary text for a method.</returns>
-        public string GetMethodSummary(IMethodSymbol methodInfo)
+        public static string GetMethodSummary(this CSharpCompilation compilation, IMethodSymbol methodInfo)
         {
             string methodKey = GetMethodInfoKey(methodInfo);
 
@@ -129,7 +164,7 @@ namespace NetPrintsEditor.Reflection
 
             string documentation = null;
 
-            XmlDocument doc = GetAssemblyDocumentationDocument(methodInfo.ContainingAssembly);
+            XmlDocument doc = compilation.GetAssemblyDocumentationDocument(methodInfo.ContainingAssembly);
             if (doc != null)
             {
                 XmlNodeList nodes = doc.SelectNodes($"doc/members/member[@name='{methodKey}']/summary");
@@ -150,7 +185,7 @@ namespace NetPrintsEditor.Reflection
         /// </summary>
         /// <param name="parameterSymbol">Parameter to get the summary text for.</param>
         /// <returns>Summary text of a method's parameter.</returns>
-        public string GetMethodParameterInfo(IParameterSymbol parameterSymbol)
+        public static string GetMethodParameterInfo(this CSharpCompilation compilation, IParameterSymbol parameterSymbol)
         {
             IMethodSymbol methodSymbol = (IMethodSymbol)parameterSymbol.ContainingSymbol;
             string methodKey = GetMethodInfoKey(methodSymbol);
@@ -162,7 +197,7 @@ namespace NetPrintsEditor.Reflection
 
             string documentation = null;
 
-            XmlDocument doc = GetAssemblyDocumentationDocument(methodSymbol.ContainingAssembly);
+            XmlDocument doc = compilation.GetAssemblyDocumentationDocument(methodSymbol.ContainingAssembly);
             if (doc != null)
             {
                 string searchName = $"M:{methodSymbol.ContainingType.GetFullName()}.{methodSymbol.Name}";
@@ -191,7 +226,7 @@ namespace NetPrintsEditor.Reflection
         /// </summary>
         /// <param name="methodSymbol">Method to get return information for.</param>
         /// <returns>Return information for the method.</returns>
-        public string GetMethodReturnInfo(IMethodSymbol methodSymbol)
+        public static string GetMethodReturnInfo(this CSharpCompilation compilation, IMethodSymbol methodSymbol)
         {
             string methodKey = GetMethodInfoKey(methodSymbol);
 
@@ -202,7 +237,7 @@ namespace NetPrintsEditor.Reflection
 
             string documentation = null;
 
-            XmlDocument doc = GetAssemblyDocumentationDocument(methodSymbol.ContainingType.ContainingAssembly);
+            XmlDocument doc = compilation.GetAssemblyDocumentationDocument(methodSymbol.ContainingType.ContainingAssembly);
 
             if (doc != null)
             {

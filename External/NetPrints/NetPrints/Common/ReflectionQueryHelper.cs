@@ -4,7 +4,7 @@ using NetPrints.Interfaces;
 using Splat;
 using System.Linq;
 
-namespace NetPrintsEditor.Reflection
+namespace NetPrints.Reflection
 {
 
     public static class ReflectionQueryHelper

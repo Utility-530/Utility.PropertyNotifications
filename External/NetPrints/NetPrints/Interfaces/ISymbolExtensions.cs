@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.CodeAnalysis;
 
-namespace NetPrintsEditor.Reflection
+namespace NetPrints.Interfaces
 {
     public static class ISymbolExtensions
     {

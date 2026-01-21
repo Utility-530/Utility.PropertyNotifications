@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NetPrintsEditor.Reflection
+namespace NetPrints.Reflection
 {
     /// <summary>
     /// Helper class for converting from Roslyn symbols to NetPrints specifiers.

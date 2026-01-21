@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
@@ -12,24 +13,23 @@ using Microsoft.CodeAnalysis.Emit;
 using NetPrints.Core;
 using NetPrints.Enums;
 using NetPrints.Interfaces;
-using NetPrints.Reflection;
 
-namespace NetPrintsEditor.Reflection
+namespace NetPrints.Reflection
 {
 
-
-
-    public class ReflectionProvider : IReflectionProvider
+    public static class ReflectionProvider 
     {
-        private readonly Lazy<ReflectionHelpers> reflectionHelpers;
-        private readonly List<IMethodSymbol> extensionMethods;
+        //private readonly Lazy<ReflectionHelper> reflectionHelper;
+        private static IList<IMethodSymbol> extensionMethods;
+        //private readonly Lazy<IList<INamedTypeSymbol>> types;
+
 
         /// <summary>
         /// Creates a ReflectionProvider given paths to assemblies and source files.
         /// </summary>
         /// <param name="assemblyPaths">Paths to assemblies.</param>
         /// <param name="sourcePaths">Paths to source files.</param>
-        public ReflectionProvider(IEnumerable<string> assemblyPaths, IEnumerable<string> sourcePaths, IEnumerable<string> sources)
+        public static CSharpCompilation Compile(IEnumerable<string> assemblyPaths, IEnumerable<string> sourcePaths, IEnumerable<string> sources)
         {
             string targetFramework = Helpers.GetTargetFrameworkFromEntryAssembly();
 
@@ -46,31 +46,87 @@ namespace NetPrintsEditor.Reflection
 
 
             // Create syntax trees from sources
-            sources = sources.Concat(sourcePaths.Select(path => File.ReadAllText(path))).Distinct();
+            sources = sources/*.Concat(sourcePaths.Select(path => File.ReadAllText(path)))*/.Distinct();
             var syntaxTrees = sources.Select(source => Helpers.ParseSyntaxTree(source));
 
             var compilation = CSharpCompilation.Create("C", syntaxTrees, assemblyReferences, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
             // Try to compile, on success create a new compilation that references the created assembly instead of the sources.
             // The compilation will fail eg. if the sources have references to the not-yet-compiled assembly.
-            (EmitResult compilationResults, Stream stream) = Helpers.CompileInMemory(compilation);
-
+            (EmitResult compilationResults, Stream stream) = compilation.CompileInMemory();
+            //IEnumerable<INamedTypeSymbol> allTypes;
             if (compilationResults.Success)
             {
                 assemblyReferences = assemblyReferences.Concat(new[] { MetadataReference.CreateFromStream(stream) });
                 compilation = CSharpCompilation.Create("C", references: assemblyReferences);
+                return compilation;
+                // Get all types from all assemblies
+                //allTypes = compilation.References
+                //    .Select(r => compilation.GetAssemblyOrModuleSymbol(r) as IAssemblySymbol)
+                //    .Where(a => a != null)
+                //    .SelectMany(a => getAllTypes(a.GlobalNamespace));
             }
-            var documentationUtil = new DocumentationUtil(compilation);
-            reflectionHelpers = new(() => new ReflectionHelpers(compilation, documentationUtil));
+            else
+            {
+                throw new Exception("DSF 3c 2a");
+                // Get types from the compilation even if it failed
+                //allTypes = getAllTypes(compilation.Assembly.GlobalNamespace);
+            }
 
-            extensionMethods = new List<IMethodSymbol>(reflectionHelpers.Value.GetValidTypes().SelectMany(t => t.GetMethods().Where(m => m.IsExtensionMethod)));
+            //types = new(() => allTypes.ToList());
 
-            documentationUtil = new DocumentationUtil(compilation);
+
+            //reflectionHelper = new(() => new ReflectionHelper(compilation));
+            //extensionMethods = new(() =>
+            //{
+
+            //    return reflectionHelper.Value.GetValidTypes().SelectMany(t => t.GetMethods().Where(m => m.IsExtensionMethod)).ToArray();
+
+            //});
         }
 
 
+        //public IReflectionHelper ReflectionHelper => reflectionHelper.Value;
 
-        public IEnumerable<IMethodSpecifier> GetMethods(IReflectionProviderMethodQuery? query)
+
+        // Helper method to recursively get all types
+        public static IEnumerable<INamedTypeSymbol> GetAllTypes(this CSharpCompilation compilation, INamespaceSymbol namespaceSymbol)
+        {
+            foreach (var type in namespaceSymbol.GetTypeMembers())
+            {
+                yield return type;
+
+                // Get nested types
+                foreach (var nestedType in getNestedTypes(type))
+                {
+                    yield return nestedType;
+                }
+            }
+
+            foreach (var childNamespace in namespaceSymbol.GetNamespaceMembers())
+            {
+                foreach (var type in compilation.GetAllTypes(childNamespace))
+                {
+                    yield return type;
+                }
+            }
+
+            static IEnumerable<INamedTypeSymbol> getNestedTypes( INamedTypeSymbol type)
+            {
+                foreach (var nestedType in type.GetTypeMembers())
+                {
+                    yield return nestedType;
+                    foreach (var deeplyNested in getNestedTypes(nestedType))
+                    {
+                        yield return deeplyNested;
+                    }
+                }
+            }
+
+        }
+
+
+        public static IEnumerable<IMethodSpecifier> GetMethods(this CSharpCompilation compilation, IReflectionProviderMethodQuery? query)
         {
 
             IEnumerable<IMethodSymbol> methodSymbols;
@@ -79,7 +135,7 @@ namespace NetPrintsEditor.Reflection
             if (query.Type is not null)
             {
                 // Get all methods of the type
-                ITypeSymbol type = reflectionHelpers.Value.GetTypeFromSpecifier(query.Type);
+                ITypeSymbol type = (ITypeSymbol)compilation.GetSymbolFromSpecifier(query.Type);
 
                 if (type == null)
                 {
@@ -88,7 +144,9 @@ namespace NetPrintsEditor.Reflection
 
                 methodSymbols = type.GetMethods();
 
-                var extensions = extensionMethods.Where(m => type.IsSubclassOf(m.Parameters[0].Type)).ToList();
+                var extensions = (extensionMethods ??= compilation.GetValidTypes().SelectMany(t => t.GetMethods().Where(m => m.IsExtensionMethod)).ToArray())
+                    .Where(m => type.IsSubclassOf(m.Parameters[0].Type))
+                    .ToList();
 
                 // Add applicable extension methods
                 methodSymbols = methodSymbols.Concat(extensions);
@@ -96,7 +154,7 @@ namespace NetPrintsEditor.Reflection
             else
             {
                 // Get all methods of all public types
-                methodSymbols = reflectionHelpers.Value.GetValidTypes()
+                methodSymbols = compilation.GetValidTypes()
                                 .Where(t => t.IsPublic())
                                 .SelectMany(t => t.GetMethods());
             }
@@ -127,13 +185,13 @@ namespace NetPrintsEditor.Reflection
                 methodSymbols = methodSymbols.Where(m => NetPrintsUtil.IsVisible(query.VisibleFrom,
                     ReflectionConverter.TypeSpecifierFromSymbol(m.ContainingType),
                     ReflectionConverter.VisibilityFromAccessibility(m.DeclaredAccessibility),
-                    reflectionHelpers.Value.TypeSpecifierIsSubclassOf));
+                    compilation.TypeSpecifierIsSubclassOf));
             }
 
             // Check argument type
             if (query.ArgumentType is not null)
             {
-                var searchType = reflectionHelpers.Value.GetTypeFromSpecifier(query.ArgumentType);
+                var searchType = compilation.GetSymbolFromSpecifier(query.ArgumentType);
 
                 if (searchType != null)
                     methodSymbols = methodSymbols
@@ -153,7 +211,7 @@ namespace NetPrintsEditor.Reflection
             // Check return type
             if (query.ReturnType is not null)
             {
-                var searchType = reflectionHelpers.Value.GetTypeFromSpecifier(query.ReturnType);
+                var searchType = compilation.GetSymbolFromSpecifier(query.ReturnType);
                 if (searchType != null)
                     methodSymbols = methodSymbols
                         .Where(m =>
@@ -199,7 +257,7 @@ namespace NetPrintsEditor.Reflection
         }
 
 
-        public IEnumerable<IVariableSpecifier> GetVariables(IReflectionProviderVariableQuery query)
+        public static IEnumerable<IVariableSpecifier> GetVariables(this CSharpCompilation compilation, IReflectionProviderVariableQuery query)
         {
             // Note: Currently we handle fields and properties in this function
             //       so there is some extra logic for handling the fields.
@@ -220,7 +278,7 @@ namespace NetPrintsEditor.Reflection
                 if (query.Type is not null)
                 {
                     // Get all properties of the type
-                    ITypeSymbol type = reflectionHelpers.Value.GetTypeFromSpecifier(query.Type);
+                    ITypeSymbol type = (ITypeSymbol)compilation.GetSymbolFromSpecifier(query.Type);
 
                     if (type == null)
                     {
@@ -233,7 +291,7 @@ namespace NetPrintsEditor.Reflection
                 else
                 {
                     // Get all properties of all public types
-                    propertySymbols = reflectionHelpers.Value.GetValidTypes()
+                    propertySymbols = compilation.GetValidTypes()
                         .SelectMany(t => t.GetAllMembers()
                             .Where(m => m.Kind == SymbolKind.Property || m.Kind == SymbolKind.Field));
                 }
@@ -250,13 +308,13 @@ namespace NetPrintsEditor.Reflection
                     propertySymbols = propertySymbols.Where(p => NetPrintsUtil.IsVisible(query.VisibleFrom,
                         ReflectionConverter.TypeSpecifierFromSymbol(p.ContainingType),
                         ReflectionConverter.VisibilityFromAccessibility(p.DeclaredAccessibility),
-                        reflectionHelpers.Value.TypeSpecifierIsSubclassOf));
+                        compilation.TypeSpecifierIsSubclassOf));
                 }
 
                 // Check property type
                 if (query.VariableType is not null)
                 {
-                    var searchType = reflectionHelpers.Value.GetTypeFromSpecifier(query.VariableType);
+                    var searchType = (ITypeSymbol)compilation.GetSymbolFromSpecifier(query.VariableType);
 
                     propertySymbols = propertySymbols.Where(p => query.VariableTypeDerivesFrom ?
                         TypeSymbolFromFieldOrProperty(p).IsSubclassOf(searchType) :
@@ -281,38 +339,61 @@ namespace NetPrintsEditor.Reflection
             }
         }
 
-        public IEnumerable<ITypeSpecifier> GetTypes()
+        public static IEnumerable<ITypeSpecifier> GetTypes(this CSharpCompilation compilation)
         {
-            return reflectionHelpers.Value.GetValidTypes().Where(
-                    t => t.IsPublic() && !(t.IsAbstract && t.IsSealed))
+            return compilation
+                .GetValidTypes()
+                .Where(t => t.IsPublic() && !(t.IsAbstract && t.IsSealed))
                 .OrderBy(t => t.ContainingNamespace?.Name)
                 .ThenBy(t => t.Name)
                 .Select(t => ReflectionConverter.TypeSpecifierFromSymbol(t));
         }
 
 
-        public static ReflectionProvider From(IProject project) => Helpers.From(project);
-        public static ReflectionProvider Empty() => Helpers.Empty();
+        public static CSharpCompilation From(IProject project)
+        {
+
+            var references = project.References;
+
+            // Add referenced assemblies
+            var assemblyPaths = references.OfType<AssemblyReference>().Select(assemblyRef => assemblyRef.AssemblyPath);
+
+            // Add source files
+            var sourcePaths = references.OfType<SourceDirectoryReference>().SelectMany(directoryRef => directoryRef.SourceFilePaths);
+
+            // Add our own sources
+            var sources = project.GenerateClassSources();
+
+            //App.ReloadReflectionProvider(assemblyPaths, sourcePaths, sources);
+            return Compile(assemblyPaths, sourcePaths, sources);
+
+        }
+        public static CSharpCompilation Empty()
+        {
+            //App.ReloadReflectionProvider(assemblyPaths, sourcePaths, sources);
+            return Compile([], [], []);
+
+        }
     }
 
 
-    class ReflectionHelpers
+    public static partial class ReflectionHelper
     {
-        private readonly CSharpCompilation compilation;
+        //private readonly CSharpCompilation compilation;
 
 
-        private readonly Dictionary<ITypeSpecifier, ITypeSymbol> cachedTypeSpecifierSymbols = new Dictionary<ITypeSpecifier, ITypeSymbol>();
+        private static readonly Dictionary<ISpecifier, ISymbol> cachedSpecifierSymbols = new Dictionary<ISpecifier, ISymbol>();
 
 
-        public ReflectionHelpers(CSharpCompilation compilation, DocumentationUtil documentationUtil)
+        //public ReflectionHelper(CSharpCompilation compilation)
+        //{
+        //    this.compilation = compilation;
+        //}
+
+
+        public static IEnumerable<IMethodSpecifier> GetPublicMethodOverloads(this CSharpCompilation compilation, IMethodSpecifier methodSpecifier)
         {
-            this.compilation = compilation;
-        }
-
-
-        public IEnumerable<IMethodSpecifier> GetPublicMethodOverloads(IMethodSpecifier methodSpecifier)
-        {
-            ITypeSymbol type = GetTypeFromSpecifier(methodSpecifier.DeclaringType);
+            ITypeSymbol type = (ITypeSymbol)compilation.GetSymbolFromSpecifier(methodSpecifier.DeclaringType);
 
             // TODO: Get a better way to determine is a method specifier is an operator.
             bool isOperator = methodSpecifier.Name.StartsWith("op_");
@@ -338,9 +419,9 @@ namespace NetPrintsEditor.Reflection
             }
         }
 
-        public IEnumerable<IConstructorSpecifier> GetConstructors(ITypeSpecifier typeSpecifier)
+        public static IEnumerable<IConstructorSpecifier> GetConstructors(this CSharpCompilation compilation, ITypeSpecifier typeSpecifier)
         {
-            var symbol = GetTypeFromSpecifier<INamedTypeSymbol>(typeSpecifier);
+            var symbol = compilation.GetSymbolFromSpecifier<INamedTypeSymbol>(typeSpecifier);
 
             if (symbol != null)
             {
@@ -350,9 +431,9 @@ namespace NetPrintsEditor.Reflection
             return new ConstructorSpecifier[0];
         }
 
-        public IEnumerable<string> GetEnumNames(ITypeSpecifier typeSpecifier)
+        public static IEnumerable<string> GetEnumNames(this CSharpCompilation compilation, ITypeSpecifier typeSpecifier)
         {
-            var symbol = GetTypeFromSpecifier(typeSpecifier);
+            var symbol = (ITypeSymbol)compilation.GetSymbolFromSpecifier(typeSpecifier);
 
             if (symbol != null)
             {
@@ -364,85 +445,54 @@ namespace NetPrintsEditor.Reflection
             return new string[0];
         }
 
-        public bool TypeSpecifierIsSubclassOf(ITypeSpecifier a, ITypeSpecifier b)
+        public static bool TypeSpecifierIsSubclassOf(this CSharpCompilation compilation, ITypeSpecifier a, ITypeSpecifier b)
         {
-            ITypeSymbol typeA = GetTypeFromSpecifier(a);
-            ITypeSymbol typeB = GetTypeFromSpecifier(b);
+            ITypeSymbol typeA = (ITypeSymbol)compilation.GetSymbolFromSpecifier(a);
+            ITypeSymbol typeB = (ITypeSymbol)compilation.GetSymbolFromSpecifier(b);
 
             return typeA != null && typeB != null && typeA.IsSubclassOf(typeB);
         }
 
-        public T GetTypeFromSpecifier<T>(ITypeSpecifier specifier)
+        public static T GetSymbolFromSpecifier<T>(this CSharpCompilation compilation, ITypeSpecifier specifier)
         {
-            return (T)GetTypeFromSpecifier(specifier);
+            return (T)compilation.GetSymbolFromSpecifier(specifier);
         }
 
-        public IMethodSymbol GetMethodInfoFromSpecifier(IMethodSpecifier specifier)
+        public static ISymbol GetSymbolFromSpecifier(this CSharpCompilation compilation, ISpecifier specifier)
         {
-            INamedTypeSymbol declaringType = GetTypeFromSpecifier<INamedTypeSymbol>(specifier.DeclaringType);
-            return declaringType?.GetMethods().FirstOrDefault(
-                    m => m.Name == specifier.Name
-                    && m.Parameters.Select(p => ReflectionConverter.BaseTypeSpecifierFromSymbol(p.Type)).SequenceEqual(specifier.ArgumentTypes));
-        }
-
-        public ITypeSymbol GetTypeFromSpecifier(ITypeSpecifier specifier)
-        {
-            if (cachedTypeSpecifierSymbols.TryGetValue(specifier, out var symbol))
+            if (cachedSpecifierSymbols.TryGetValue(specifier, out var symbol))
             {
                 return symbol;
             }
 
-            string lookupName = specifier.Name;
+            if (specifier is IMethodSpecifier methodSpecifier)
+            {
+                INamedTypeSymbol declaringType = compilation.GetSymbolFromSpecifier<INamedTypeSymbol>(methodSpecifier.DeclaringType);
+
+
+                var methodSymbol = declaringType?.GetMethods().FirstOrDefault(
+                        m => m.Name == methodSpecifier.Name
+                        && m.Parameters.Select(p => ReflectionConverter.BaseTypeSpecifierFromSymbol(p.Type)).SequenceEqual(methodSpecifier.ArgumentTypes));
+                cachedSpecifierSymbols.Add(methodSpecifier, methodSymbol);
+                return methodSymbol;
+            }
+
+            if (specifier is not ITypeSpecifier typeSpecifier)
+            {
+                throw new Exception("R f4effds");
+            }
 
             // Find array ranks and remove them from the lookup name.
             // Example: int[][,] -> arrayRanks: { 1, 2 }, lookupName: int
             Stack<int> arrayRanks = new Stack<int>();
-            while (lookupName.EndsWith("]"))
-            {
-                lookupName = lookupName.Remove(lookupName.Length - 1);
-                int arrayRank = 1;
-                while (lookupName.EndsWith(","))
-                {
-                    arrayRank++;
-                    lookupName = lookupName.Remove(lookupName.Length - 1);
-                }
-                arrayRanks.Push(arrayRank);
-
-                if (lookupName.Last() != '[')
-                {
-                    throw new Exception("Expected [ in lookupName");
-                }
-
-                lookupName = lookupName.Remove(lookupName.Length - 1);
-            }
-
-            if (specifier.GenericArguments.Count > 0)
-                lookupName += $"`{specifier.GenericArguments.Count}";
-
-            IEnumerable<INamedTypeSymbol> types = GetValidTypes(lookupName);
 
             ITypeSymbol foundType = null;
 
-            foreach (INamedTypeSymbol t in types)
+            var x = namedTypeSymbols().GetEnumerator();
+            while (foundType == null && x.MoveNext())
             {
-                if (t != null)
-                {
-                    if (specifier.GenericArguments.Count > 0)
-                    {
-                        var typeArguments = specifier.GenericArguments
-                            .Select(baseType => baseType is TypeSpecifier typeSpec ?
-                                GetTypeFromSpecifier(typeSpec) :
-                                t.TypeArguments[specifier.GenericArguments.IndexOf(baseType)])
-                            .ToArray();
-                        foundType = t.Construct(typeArguments);
-                    }
-                    else
-                    {
-                        foundType = t;
-                    }
-
-                    break;
-                }
+                if (x.Current is INamedTypeSymbol _symbol)
+                    foundType = convert(_symbol);
             }
 
             if (foundType != null)
@@ -456,19 +506,65 @@ namespace NetPrintsEditor.Reflection
                 }
             }
 
-            cachedTypeSpecifierSymbols.Add(specifier, foundType);
+            cachedSpecifierSymbols.Add(typeSpecifier, foundType);
 
             return foundType;
+
+            INamedTypeSymbol convert(INamedTypeSymbol t)
+            {
+                if (typeSpecifier.GenericArguments.Count > 0)
+                {
+                    var typeArguments = typeSpecifier.GenericArguments
+                        .Select(baseType => baseType is TypeSpecifier typeSpec ?
+                            (ITypeSymbol)compilation.GetSymbolFromSpecifier(typeSpec) :
+                            t.TypeArguments[typeSpecifier.GenericArguments.IndexOf(baseType)])
+                        .ToArray();
+                    return t.Construct(typeArguments);
+                }
+                else
+                {
+                    return t;
+                }
+            }
+
+            IEnumerable<INamedTypeSymbol> namedTypeSymbols()
+            {
+                string lookupName = typeSpecifier.Name;
+                while (lookupName.EndsWith("]"))
+                {
+                    lookupName = lookupName.Remove(lookupName.Length - 1);
+                    int arrayRank = 1;
+                    while (lookupName.EndsWith(","))
+                    {
+                        arrayRank++;
+                        lookupName = lookupName.Remove(lookupName.Length - 1);
+                    }
+                    arrayRanks.Push(arrayRank);
+
+                    if (lookupName.Last() != '[')
+                    {
+                        throw new Exception("Expected [ in lookupName");
+                    }
+
+                    lookupName = lookupName.Remove(lookupName.Length - 1);
+                }
+
+                if (typeSpecifier.GenericArguments.Count > 0)
+                    lookupName += $"`{typeSpecifier.GenericArguments.Count}";
+
+                return compilation.GetValidTypes(lookupName);
+            }
+
         }
 
 
 
-        public bool HasImplicitCast(ITypeSpecifier fromType, ITypeSpecifier toType)
+        public static bool HasImplicitCast(this CSharpCompilation compilation, ITypeSpecifier fromType, ITypeSpecifier toType)
         {
             // Check if there exists a conversion that is implicit between the types.
 
-            ITypeSymbol fromSymbol = GetTypeFromSpecifier(fromType);
-            ITypeSymbol toSymbol = GetTypeFromSpecifier(toType);
+            ITypeSymbol fromSymbol = (ITypeSymbol)compilation.GetSymbolFromSpecifier(fromType);
+            ITypeSymbol toSymbol = (ITypeSymbol)compilation.GetSymbolFromSpecifier(toType);
 
             return fromSymbol != null && toSymbol != null
                 && compilation.ClassifyConversion(fromSymbol, toSymbol).IsImplicit;
@@ -479,7 +575,7 @@ namespace NetPrintsEditor.Reflection
         /// Useful for when they can not be compiled into assemblies because
         /// of errors and we still want their symbols.
         /// </summary>
-        public IEnumerable<INamedTypeSymbol> GetSyntaxTreeTypes()
+        public static IEnumerable<INamedTypeSymbol> GetSyntaxTreeTypes(this CSharpCompilation compilation)
         {
             foreach (var syntaxTree in compilation.SyntaxTrees)
             {
@@ -493,26 +589,13 @@ namespace NetPrintsEditor.Reflection
             }
         }
 
-        public IEnumerable<INamedTypeSymbol> GetTypeNestedTypes(INamedTypeSymbol typeSymbol)
+        public static IEnumerable<INamedTypeSymbol> GetValidTypes(this CSharpCompilation compilation)
         {
-            var typeMembers = typeSymbol.GetTypeMembers();
-            return typeMembers.Concat(typeMembers.SelectMany(t => GetTypeNestedTypes(t)));
+            return compilation.SourceModule.ReferencedAssemblySymbols.SelectMany(module => module.GlobalNamespace.GetNamespaceTypes())
+                .Concat(compilation.GetSyntaxTreeTypes());
         }
 
-        public IEnumerable<INamedTypeSymbol> GetNamespaceTypes(INamespaceSymbol namespaceSymbol)
-        {
-            IEnumerable<INamedTypeSymbol> types = namespaceSymbol.GetTypeMembers();
-            types = types.Concat(types.SelectMany(t => GetTypeNestedTypes(t)));
-            return types.Concat(namespaceSymbol.GetNamespaceMembers().SelectMany(ns => GetNamespaceTypes(ns)));
-        }
-
-        public IEnumerable<INamedTypeSymbol> GetValidTypes()
-        {
-            return compilation.SourceModule.ReferencedAssemblySymbols.SelectMany(module => GetNamespaceTypes(module.GlobalNamespace))
-                .Concat(GetSyntaxTreeTypes());
-        }
-
-        public IEnumerable<INamedTypeSymbol> GetValidTypes(string name)
+        public static IEnumerable<INamedTypeSymbol> GetValidTypes(this CSharpCompilation compilation, string name)
         {
             return compilation.SourceModule.ReferencedAssemblySymbols.Select(module =>
             {
@@ -520,115 +603,24 @@ namespace NetPrintsEditor.Reflection
                 catch { return null; }
             })
             .Where(t => t != null)
-            .Concat(GetSyntaxTreeTypes().Where(t => t.GetFullName() == name)); // TODO: Correct full name
+            .Concat(compilation.GetSyntaxTreeTypes().Where(t => t.GetFullName() == name)); // TODO: Correct full name
         }
 
 
 
-        public IEnumerable<IMethodSpecifier> GetOverridableMethodsForType(ITypeSpecifier typeSpecifier)
+        public static IEnumerable<IMethodSpecifier> GetOverridableMethods(this CSharpCompilation compilation, ITypeSpecifier typeSpecifier)
         {
-            ITypeSymbol type = GetTypeFromSpecifier(typeSpecifier);
-
-            if (type != null)
+            if (compilation.GetSymbolFromSpecifier(typeSpecifier) is ITypeSymbol typeSymbol)
             {
                 // Get all overridable methods, ignore special ones (properties / events)
 
-                return type.GetMethods()
-                    .Where(m =>
-                        (m.IsVirtual || m.IsOverride || m.IsAbstract)
-                        && m.MethodKind == MethodKind.Ordinary)
-                    .OrderBy(m => m.ContainingNamespace?.Name)
-                    .ThenBy(m => m.ContainingType?.Name)
-                    .ThenBy(m => m.Name)
-                    .Select(m => ReflectionConverter.MethodSpecifierFromSymbol(m));
+                return typeSymbol.GetOverridableMethods();
             }
             else
             {
-                return new MethodSpecifier[0];
+                return new IMethodSpecifier[0];
             }
         }
-    }
-
-
-    class ZZ
-    {
-        private DocumentationUtil documentationUtil;
-        private ReflectionHelpers z;
-
-        public ZZ(DocumentationUtil documentationUtil, ReflectionHelpers z)
-        {
-            this.documentationUtil = documentationUtil;
-            this.z = z;
-        }
-
-        public string GetMethodDocumentation(IMethodSpecifier methodSpecifier)
-        {
-            IMethodSymbol methodInfo = z.GetMethodInfoFromSpecifier(methodSpecifier);
-
-            if (methodInfo == null)
-            {
-                return null;
-            }
-
-            return documentationUtil.GetMethodSummary(methodInfo);
-        }
-
-        public string GetMethodParameterDocumentation(IMethodSpecifier methodSpecifier, int parameterIndex)
-        {
-            IMethodSymbol methodInfo = z.GetMethodInfoFromSpecifier(methodSpecifier);
-
-            if (methodInfo == null)
-            {
-                return null;
-            }
-
-            return documentationUtil.GetMethodParameterInfo(methodInfo.Parameters[parameterIndex]);
-        }
-
-        public string GetMethodReturnDocumentation(IMethodSpecifier methodSpecifier, int returnIndex)
-        {
-            IMethodSymbol methodInfo = z.GetMethodInfoFromSpecifier(methodSpecifier);
-
-            if (methodInfo == null)
-            {
-                return null;
-            }
-
-            return documentationUtil.GetMethodReturnInfo(methodInfo);
-        }
-
-    }
-
-
-
-    static class Helpers
-    {
-        public static ReflectionProvider From(this IProject project)
-        {
-
-            var references = project.References;
-
-            // Add referenced assemblies
-            var assemblyPaths = references.OfType<AssemblyReference>().Select(assemblyRef => assemblyRef.AssemblyPath);
-
-            // Add source files
-            var sourcePaths = references.OfType<SourceDirectoryReference>().SelectMany(directoryRef => directoryRef.SourceFilePaths);
-
-            // Add our own sources
-            var sources = project.GenerateClassSources();
-
-            //App.ReloadReflectionProvider(assemblyPaths, sourcePaths, sources);
-            return new ReflectionProvider(assemblyPaths, sourcePaths, sources);
-
-        }
-        public static ReflectionProvider Empty()
-        {
-
-            //App.ReloadReflectionProvider(assemblyPaths, sourcePaths, sources);
-            return new ReflectionProvider([], [], []);
-
-        }
-
 
         public static (EmitResult, Stream) CompileInMemory(this CSharpCompilation compilation)
         {
@@ -637,8 +629,40 @@ namespace NetPrintsEditor.Reflection
             stream.Seek(0, SeekOrigin.Begin);
             return (compilationResults, stream);
         }
+    }
 
 
+
+
+    static class Helpers
+    {
+        //public static ISymbol ToSymbol(this ISpecifier specifier)
+        //{
+        //    return 
+        //}
+
+        public static IEnumerable<INamedTypeSymbol> GetTypeNestedTypes(this INamedTypeSymbol typeSymbol)
+        {
+            var typeMembers = typeSymbol.GetTypeMembers();
+            return typeMembers.Concat(typeMembers.SelectMany(t => GetTypeNestedTypes(t)));
+        }
+
+        public static IEnumerable<INamedTypeSymbol> GetNamespaceTypes(this INamespaceSymbol namespaceSymbol)
+        {
+            IEnumerable<INamedTypeSymbol> types = namespaceSymbol.GetTypeMembers();
+            types = types.Concat(types.SelectMany(t => GetTypeNestedTypes(t)));
+            return types.Concat(namespaceSymbol.GetNamespaceMembers().SelectMany(ns => GetNamespaceTypes(ns)));
+        }
+
+        public static IEnumerable<IMethodSpecifier> GetOverridableMethods(this ITypeSymbol typeSymbol)
+        {
+            return typeSymbol.GetMethods()
+                  .Where(m => (m.IsVirtual || m.IsOverride || m.IsAbstract) && m.MethodKind == MethodKind.Ordinary)
+                  .OrderBy(m => m.ContainingNamespace?.Name)
+                  .ThenBy(m => m.ContainingType?.Name)
+                  .ThenBy(m => m.Name)
+                  .Select(m => ReflectionConverter.MethodSpecifierFromSymbol(m));
+        }
         public static SyntaxTree ParseSyntaxTree(string source)
         {
             // LanguageVersion.Preview is not defined in the Roslyn version used
@@ -650,8 +674,6 @@ namespace NetPrintsEditor.Reflection
             // Return a syntax tree of our source code
             return CSharpSyntaxTree.ParseText(source, new CSharpParseOptions(languageVersion: previewVersion));
         }
-
-
 
 
         public static string GetTargetFrameworkFromEntryAssembly()

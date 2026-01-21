@@ -3,7 +3,7 @@ using System.Linq;
 using NetPrints.Core;
 using NetPrints.Enums;
 
-namespace NetPrintsEditor.Reflection
+namespace NetPrints.Reflection
 {
     public static class DefaultOperatorSpecifiers
     {
