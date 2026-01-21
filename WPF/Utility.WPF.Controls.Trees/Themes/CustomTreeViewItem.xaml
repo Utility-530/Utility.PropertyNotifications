@@ -129,7 +129,11 @@
         <Setter Property="Padding" Value="1,0,0,0" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}" />
-        <!--<Setter Property="ItemsPanelTemplate" Value="{Binding ItemsPanelTemplate}" />-->
+
+        <Setter Property="att:ItemsPanelHelpers.Rows" Value="{Binding Rows, Mode=TwoWay}" />
+        <Setter Property="att:ItemsPanelHelpers.Columns" Value="{Binding Columns, Mode=TwoWay}" />
+        <Setter Property="att:ItemsPanelHelpers.Orientation" Value="{Binding Orientation, Mode=TwoWay}" />
+        <Setter Property="att:ItemsPanelHelpers.Arrangement" Value="{Binding Arrangement, Mode=TwoWay}" />
         <Setter Property="Rows" Value="{Binding Rows}" />
         <Setter Property="Columns" Value="{Binding Columns}" />
         <Setter Property="Errors" Value="{Binding Errors}" />

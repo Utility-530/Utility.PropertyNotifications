@@ -32,10 +32,7 @@
         <Setter Property="att:ActualVisibility.IsWithinWindowBounds" Value="{Binding IsWithinWindowBounds}" />
         <Setter Property="att:ActualVisibility.IsLoaded" Value="{Binding IsLoaded}" />
 
-        <Setter Property="trees:ItemsPanelHelpers.Rows" Value="{Binding Rows, Mode=TwoWay}" />
-        <Setter Property="trees:ItemsPanelHelpers.Columns" Value="{Binding Columns, Mode=TwoWay}" />
-        <Setter Property="trees:ItemsPanelHelpers.Orientation" Value="{Binding Orientation, Mode=TwoWay}" />
-        <Setter Property="trees:ItemsPanelHelpers.Arrangement" Value="{Binding Arrangement, Mode=TwoWay}" />
+  
        
         <!--<Setter Property="Header" Value="{Binding Data}"/>-->
         <Setter Property="ToolTip" Value="{Binding Key}" />
