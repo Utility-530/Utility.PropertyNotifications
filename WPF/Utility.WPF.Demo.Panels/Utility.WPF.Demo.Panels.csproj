@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	      <OutputType>WinExe</OutputType>	  
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
@@ -16,6 +16,8 @@
 
   <ItemGroup>
 	  <ProjectReference Include="..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
+	  <ProjectReference Include="..\Utility.WPF.Controls.Lists\Utility.WPF.Controls.Lists.csproj" />
+	  <ProjectReference Include="..\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
     <ProjectReference Include="..\Utility.WPF.Markup\Utility.WPF.Markup.csproj" />
 	  <ProjectReference Include="..\..\Meta\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
     <ProjectReference Include="..\Utility.WPF.Panels\Utility.WPF.Panels.csproj" />
