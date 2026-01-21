@@ -40,6 +40,8 @@ namespace Utility.WPF.Factorys
                 }),
 
                 (Arrangement.TreeMap, _) => CreateItemsPanelTemplate<TreeMapPanel>(),
+                (Arrangement.MasterSlave, Orientation.Horizontal) => CreateItemsPanelTemplate<MasterSlavePanel>(a => a.SetValue(MasterSlavePanel.MasterPositionProperty, Dock.Left)),
+                (Arrangement.MasterSlave, Orientation.Vertical) => CreateItemsPanelTemplate<MasterSlavePanel>(a=> a.SetValue(MasterSlavePanel.MasterPositionProperty, Dock.Top)),
                 //(Arrangement.TreeStack, _) => CreateItemsPanelTemplate<TreeStackPanel>(),
                 (_, Orientation.Vertical) =>
                 CreateItemsPanelTemplate<UniformGrid>(factory =>
