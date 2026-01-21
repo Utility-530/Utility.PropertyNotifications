@@ -10,6 +10,20 @@
 
 ![me](https://github.com/dtaylor-530/WPF.ComboBoxes.Roslyn/blob/main/Assets/FilterMethodsWithParamSelection.gif)
 
+### Project Structure
+
+- App.xaml: the styles for the controls used
+- App.xaml.cs: the factory for constructing the demo project
+- Common 
+   - Helper: general extension methods
+   - Compiler: methods for generating the CSharpCompilation class that is used to derived methods and types
+- Filtering
+   - FilterBehavior: a behavior class containing many attached properties for interfacing between the combobox's parts so their actions synchronise
+- Infrastructure
+   - Classes related to displaying the specific kind of data from CSharpCompilation in the ComboBox
+- Roslyn
+   - Classes related to the algorithm that efficiently filters the data from the CSharpCompilation object
+    
 ### Building the Project
 
 1. Clone the repository:
