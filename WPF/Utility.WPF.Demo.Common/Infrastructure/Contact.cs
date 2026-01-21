@@ -22,6 +22,10 @@ namespace Utility.WPF.Demo.Common.Infrastructure
     // Class to represent each row of data
     public record Contact(string Name, string Phone, string Company)
     {
+        public Contact() : this(string.Empty, string.Empty, string.Empty)
+        {
+        }
+
         public bool IsPlaceholder => false;
 
         public override string ToString()
