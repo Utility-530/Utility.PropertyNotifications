@@ -1,10 +1,14 @@
 # WPF ComboBoxes Roslyn
 
+[![.NET 10](https://img.shields.io/badge/.NET-10.0-blue?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
+![WPF](https://img.shields.io/badge/WPF-Desktop%20App-blue?style=for-the-badge&logo=windows&logoColor=white)
+![Roslyn](https://img.shields.io/badge/Roslyn-Compiler-purple?style=for-the-badge&logo=c%23&logoColor=white)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
 *A demonstration project for*
 
 - Integration of Roslyn's `Microsoft.CodeAnalysis` APIs into the WPF ComboBox control
 - WPF data binding and MVVM patterns for UI updates
-
 
 ![me](https://github.com/dtaylor-530/WPF.ComboBoxes.Roslyn/blob/main/Assets/FilterTypesWithDebugging.gif)
 
@@ -35,19 +39,9 @@ git clone https://github.com/dtaylor-530/WPF.ComboBoxes.Roslyn.git
 
 3. Restore NuGet packages and build the solution
 
-## Specifications
-- .NET 10
-
-## Architecture
-The project structure includes:
-
-## License
-MIT 
-
 ## Acknowledgements
 - [Roslyn](https://github.com/dotnet/roslyn)
 - [Basic.Reference.Assemblies](https://github.com/jaredpar/basic-reference-assemblies)
-
 
 ## Related Resources
 - [Code Completion with Roslyn](https://docs.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/syntax-analysis)
