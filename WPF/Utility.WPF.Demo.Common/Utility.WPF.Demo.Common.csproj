@@ -13,6 +13,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Dragablz" Version="0.0.3.223" />
+		<PackageReference Include="MaterialDesignThemes" Version="5.3.0" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
 
 	</ItemGroup>
