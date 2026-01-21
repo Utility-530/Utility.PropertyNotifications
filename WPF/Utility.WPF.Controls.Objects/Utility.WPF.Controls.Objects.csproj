@@ -30,7 +30,6 @@
     <ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
     <ProjectReference Include="..\Utility.WPF.Geometry\Utility.WPF.Geometries.csproj" />
     <ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
-    <ProjectReference Include="..\Utility.WPF.Demo.Panels\Utility.WPF.Demo.Panels.csproj" />
     <ProjectReference Include="..\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
     <ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />
   </ItemGroup>
