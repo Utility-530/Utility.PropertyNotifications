@@ -15,7 +15,7 @@ using Utility.Structs;
 using Utility.WPF.Factorys;
 using Orientation = Utility.Enums.Orientation;
 
-namespace Utility.WPF.Controls.Trees.Infrastructure
+namespace Utility.WPF.Attached
 {
     public static class ItemsPanelHelpers
     {
@@ -112,7 +112,7 @@ namespace Utility.WPF.Controls.Trees.Infrastructure
             {
                 if (ic.IsLoaded)
                 {
-                    load(false);
+                    load(true);
                 }
                 else if (GetIsLoadedSet(ic) == false)
                 {
