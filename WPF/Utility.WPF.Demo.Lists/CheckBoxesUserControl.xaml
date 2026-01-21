@@ -121,7 +121,7 @@
                     IsCheckedPath="IsChecked"
                     Orientation="{Binding ElementName=ToggleButton, Path=Content}">
                 </view:CheckBoxesListControl>
-                <DataGrid ItemsSource="{Binding CollectionViewModel.Collection}" />
+                <DataGrid ItemsSource="{Binding CollectionViewModel.Children}" />
             </DockPanel>
         </GroupBox>
     </UniformGrid>
