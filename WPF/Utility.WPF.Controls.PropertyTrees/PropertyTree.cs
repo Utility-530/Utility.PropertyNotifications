@@ -30,7 +30,7 @@ namespace Utility.WPF.Controls.PropertyTrees
             {
                 var root = DescriptorFactory.CreateRoot(obj, tree._key);
                 var reflectionNode = new NodeViewModel(root) { IsExpanded = true };
-                NodeEngine.Instance.Add(reflectionNode);
+                //NodeEngine.Instance.Add(reflectionNode);
                 return reflectionNode;
             }
         }
