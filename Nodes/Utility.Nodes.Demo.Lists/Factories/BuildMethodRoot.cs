@@ -17,6 +17,7 @@ using Utility.Nodes.Meta;
 using Utility.Services;
 using Utility.Services.Meta;
 using Utility.ServiceLocation;
+using Utility.Collections;
 
 namespace Utility.Nodes.Demo.Lists.Factories
 {
@@ -28,14 +29,13 @@ namespace Utility.Nodes.Demo.Lists.Factories
             Locator.CurrentMutable.RegisterLazySingleton<ISpecifierConverter>(() => new SpecifierConverter());
 
             var guid = Guid.Parse(MetaDataFactory.methodInfoGuid);
-            //buildNetwork(guid);
+            buildNetwork(guid);
 
             return new Model(() => [
                 new Model(()=>[
                      new Model(attach: model => model.Observe<nameInputParam>(guid:guid)){
                           Name = "Search",
                           DataTemplate = Templates.SearchEditor,
-                          ColumnSpan =2,
                       },
 
                       new Model(attach: model=>{
@@ -60,12 +60,13 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     ])
                 {
                     Name="Variables",
-                    Arrangement = Enums.Arrangement.Grid
+                    Arrangement = Enums.Arrangement.MasterSlave,
+                    Orientation = Enums.Orientation.Vertical,
                 },
                 new Model(attach:
                 model =>
                 {
-                    model.ReactTo<SpecifiersReturnParam, ISpecifier[]>(guid: guid);
+                    model.ReactTo<collectionReturnParam, ExtendableWindowedCollection<ISpecifier>>(guid: guid);
                 })
                 {
                     Name = "Items",
@@ -80,6 +81,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
         static void buildNetwork(Guid guid)
         {
             var serviceResolver = Globals.Resolver.Resolve<IServiceResolver>(guid.ToString());
+            serviceResolver.Connect<specifiersReturnParam, specifiersInputParam>();
         }
     }
 
@@ -87,11 +89,13 @@ namespace Utility.Nodes.Demo.Lists.Factories
     public record nameInputParam() : Param<Service>(nameof(Service.Specifiers), "name");
     public record argumentTypeInputParam() : Param<Service>(nameof(Service.Specifiers), "argumentType");
     public record returnTypeInputParam() : Param<Service>(nameof(Service.Specifiers), "returnType");
-    public record SpecifiersReturnParam() : Param<Service>(nameof(Service.Specifiers));
-
+    public record specifiersReturnParam() : Param<Service>(nameof(Service.Specifiers));
+    public record specifiersInputParam() : Param<Service>(nameof(Service.ToCollection), "specifiers");
+    public record collectionReturnParam() : Param<Service>(nameof(Service.ToCollection));
+  
     public class Service
     {
-        public static ISpecifier[] Specifiers(bool? isStatic = default, string? name = null, Type argumentType = null, Type returnType = null)
+        public static IEnumerable<ISpecifier> Specifiers(bool? isStatic = default, string? name = null, Type argumentType = null, Type returnType = null)
         {
             return Locator.Current.GetService<IReflectionProvider>()
             .GetMethods(
@@ -100,9 +104,12 @@ namespace Utility.Nodes.Demo.Lists.Factories
                       //.WithVisibleFrom(TypeSpecifier.FromType<string>())
                       .WithReturnType(returnType == null ? null : TypeSpecifier.FromType(returnType))
                       .WithNameLike(name)
-                      .WithStatic(isStatic))
-            .Take(10)
-            .ToArray();
+                      .WithStatic(isStatic));
+        }
+
+        public static ExtendableWindowedCollection<ISpecifier> ToCollection(IEnumerable<ISpecifier> specifiers)
+        {
+            return new ExtendableWindowedCollection<ISpecifier>(specifiers, new object(), 10);
         }
     }
 }

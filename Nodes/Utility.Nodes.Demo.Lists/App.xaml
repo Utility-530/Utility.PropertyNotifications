@@ -50,32 +50,32 @@
 
             <local:SuggestionListConverter x:Key="converter" />
             
-            <DataTemplate x:Key="CustomDataGridTemplate">
-                <DataGrid 
+            <DataTemplate x:Key="CustomDataGridTemplate">                
+                <ListBox Width="600"
+
                     ItemsSource="{Binding Value, Mode=OneWay}"
                     Style="{StaticResource searchListStyle}">
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn >
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid Width="200" Height="25">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="16" />
-                                        </Grid.RowDefinitions>
-
-                                        <Image Source="{Binding Converter={StaticResource converter}}" VerticalAlignment="Stretch" Grid.Column="0" />
-                                        <TextBlock Text="{Binding Converter={StaticResource converter}}" Height="Auto" Grid.Column="1" Margin="2,0,0,0" />
-                                    </Grid>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>       
-                
-                </DataGrid>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid  Height="18">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="16" />
+                                </Grid.RowDefinitions>
+                                <Image Source="{Binding Converter={StaticResource converter}}" VerticalAlignment="Stretch" Grid.Column="0" />
+                                <TextBlock Text="{Binding Converter={StaticResource converter}}" Height="Auto" Grid.Column="1" Margin="2,0,0,0" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <i:Interaction.Behaviors>
+                        <beh:VirtualisationBehavior
+                            FirstVisible="{Binding Value.FirstVisible, Mode=TwoWay}"
+                            VisibleCount="{Binding Value.VisibleCount, Mode=TwoWay}"/>
+                    </i:Interaction.Behaviors>
+                </ListBox>  
             </DataTemplate>
 
            

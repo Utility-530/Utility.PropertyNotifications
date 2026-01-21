@@ -34,16 +34,16 @@
             CheckedData="{StaticResource S}"/>
     </DataTemplate>
 
-    <Style TargetType="{x:Type DataGrid}" x:Key="searchListStyle">
+    <Style TargetType="{x:Type ItemsControl}" x:Key="searchListStyle">
         <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True" />
         <Setter Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="True" />
         <Setter Property="VirtualizingPanel.IsContainerVirtualizable" Value="True" />
         <Setter Property="VirtualizingPanel.ScrollUnit" Value="Item" />
         <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="HeadersVisibility" Value="None" />
-        <Setter Property="AutoGenerateColumns" Value="False" />
-        <Setter Property="IsReadOnly" Value="True" />
+        <!--<Setter Property="HeadersVisibility" Value="None" />
+        <Setter Property="AutoGenerateColumns" Value="False" />-->
+        <!--<Setter Property="IsReadOnly" Value="True" />-->
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
@@ -63,14 +63,14 @@
                 </Style>
             </Setter.Value>
         </Setter>-->
-        <Setter Property="CellStyle">
+        <!--<Setter Property="ItemContainerStyle">
             <Setter.Value>
-                <Style TargetType="{x:Type DataGridCell}" >
+                <Style TargetType="{x:Type ContentPresenter}" >
                     <Setter Property="Template">
                         <Setter.Value>
-                            <!--<ControlTemplate TargetType="{x:Type DataGridCell}">
+                            --><!--<ControlTemplate TargetType="{x:Type DataGridCell}">
                   <local:SuggestionListItem DataContext="{Binding Converter={StaticResource converter}}" />
-              </ControlTemplate>-->
+              </ControlTemplate>--><!--
                             <ControlTemplate TargetType="{x:Type DataGridCell}">
                                 <ContentControl Content="{Binding }"></ContentControl>
                             </ControlTemplate>
@@ -78,7 +78,7 @@
                     </Setter>
                 </Style>
             </Setter.Value>
-        </Setter>
+        </Setter>-->
         <!--<Setter Property="GroupStyleSelector">
                     <Setter.Value>
 
