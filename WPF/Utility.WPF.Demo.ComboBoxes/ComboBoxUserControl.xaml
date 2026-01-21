@@ -143,12 +143,18 @@
                 <local:ParameterSelectorBehavior x:Name="ParameterSelector" />
             </i:Interaction.Behaviors>
         </controls:ComboBoxTreeView>
+        
+        <controls:ComboBoxTreeView Width="400" Height="28" >
+            <i:Interaction.Behaviors>
+                <local:AssemblySelectorBehavior x:Name="AssemblySelector" />
+            </i:Interaction.Behaviors>
+        </controls:ComboBoxTreeView>
 
         <trees:CustomTreeView x:Name="MyTreeView">
             <trees:CustomTreeViewItem Header="Item2" IsEditable="True"  Style="{StaticResource CustomComboTreeViewItemStyle}"/>
             <trees:CustomTreeViewItem Header="SubItem1" />
             <trees:CustomTreeViewItem Header="SubItem2" />
         </trees:CustomTreeView>
-
+        
     </StackPanel>
 </UserControl>

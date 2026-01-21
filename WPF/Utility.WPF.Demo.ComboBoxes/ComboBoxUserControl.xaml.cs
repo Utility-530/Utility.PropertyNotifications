@@ -30,6 +30,7 @@ namespace Utility.WPF.Demo.ComboBoxes
             PropertySelector.Type = typeof(Tree);
             ParameterSelector.NodeRoot = Locator.Current.GetService<INodeRoot>();
             ParameterSelector.Assemblies = new Assembly[] { new SystemAssembly() };
+            AssemblySelector.NodeRoot = Locator.Current.GetService<INodeRoot>();
 
         }
 
