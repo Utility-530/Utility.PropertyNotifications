@@ -14,12 +14,12 @@ namespace UtilityEnum.App
             if (args == null)
             {
                 Console.WriteLine("Provide assembly path");
-                assemblyPath = Console.ReadLine();
+                assemblyPath = cleanPath(Console.ReadLine());
             }
             if (args.Length == 0)
             {
                 Console.WriteLine("Provide assembly path");
-                assemblyPath = Console.ReadLine();
+                assemblyPath = cleanPath(Console.ReadLine());
             }
             else if (args.Length > 1)
             {
@@ -27,7 +27,7 @@ namespace UtilityEnum.App
             }
             else
             {
-                assemblyPath = args[0];
+                assemblyPath = cleanPath(args[0]);
             }
 
 
@@ -80,5 +80,10 @@ namespace UtilityEnum.App
                 Console.ReadLine();
             }
         }
+
+        static string cleanPath(string rawInput)=> rawInput
+    .Trim('"')                    // Remove outer quotes
+    .Replace("\\\\", "\\")        // Fix double-escaped backslashes
+    .Replace("\\\"", "\"");       // Fix escaped quotes
     }
 }

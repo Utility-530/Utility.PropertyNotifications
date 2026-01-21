@@ -39,7 +39,6 @@ namespace ProjectFileEdit
                 stringBuilder.Append("- " +aType.Name + Environment.NewLine);
             }
 
-            stringBuilder.Remove(stringBuilder.Length - 2, 2);
             stringBuilder.Append(Environment.NewLine + appendage);
 
             return stringBuilder.ToString();
