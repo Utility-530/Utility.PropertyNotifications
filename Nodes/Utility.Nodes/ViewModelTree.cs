@@ -263,11 +263,7 @@ namespace Utility.Nodes
             get { RaisePropertyCalled(orientation); return orientation; }
             set
             {
-                if (this.orientation != value)
-                {
-                    this.RaisePropertyReceived(ref this.orientation, value);
-                    this.RaisePropertyChanged();
-                }
+                this.RaisePropertyReceived(ref this.orientation, value);
             }
         }
 
