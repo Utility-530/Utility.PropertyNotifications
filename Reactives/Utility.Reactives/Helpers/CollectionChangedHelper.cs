@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading;
 using Utility.Changes;
 using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
@@ -267,14 +268,43 @@ namespace Utility.Reactives
         {
             var obs = new ObservableCollection<T>();
 
-            observable
-                .Subscribe(a =>
-                {
-                    if (scheduler == null)
-                        obs.Add(a);
-                    else
-                        scheduler.Schedule(() => obs.Add(a));
-                });
+            if (scheduler != null)
+                observable
+                    .ObserveOn(scheduler)
+                    .Subscribe(a =>
+                    {                  
+                            obs.Add(a);
+             
+                    });
+            else
+                observable
+                    .Subscribe(a =>
+                    {
+                            obs.Add(a);
+                      
+                    });
+
+            return obs;
+        }
+        public static ObservableCollection<T> ToObservableCollection<T>(this IObservable<T> observable, SynchronizationContext scheduler)
+        {
+            var obs = new ObservableCollection<T>();
+
+            if (scheduler != null)
+                observable
+                    .ObserveOn(scheduler)
+                    .Subscribe(a =>
+                    {                  
+                            obs.Add(a);
+             
+                    });
+            else
+                observable
+                    .Subscribe(a =>
+                    {
+                            obs.Add(a);
+                      
+                    });
 
             return obs;
         }
