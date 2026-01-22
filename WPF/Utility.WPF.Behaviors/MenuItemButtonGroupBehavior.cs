@@ -84,17 +84,17 @@ namespace Utility.WPF.Behaviors
         private static IObservable<MenuItem[]> CheckableSubMenuItems(ItemsControl menuItem)
         {
             return menuItem
-                .Observe(a => a.Items)
-                .CombineLatest(menuItem.ItemContainerGenerator.ContainersGeneratedChanges(), (a, b) => a)
-                .Select(items =>
-                {
-                    var ret = items
-                    .Cast<object>()
-                    .Select((a) => a is MenuItem ? a : menuItem.ItemContainerGenerator.ContainerFromItem(a))
-                        .OfType<MenuItem>()
-                        .ToArray();
-                    return ret;
-                });
+                 .Observe(a => a.Items)
+                 .CombineLatest(menuItem.ItemContainerGenerator.ContainersGeneratedChanges(), (a, b) => a)
+                 .Select(items =>
+                 {
+                     var ret = items
+                     .Cast<object>()
+                     .Select((a) => a is MenuItem ? a : menuItem.ItemContainerGenerator.ContainerFromItem(a))
+                         .OfType<MenuItem>()
+                         .ToArray();
+                     return ret;
+                 });
         }
     }
 }

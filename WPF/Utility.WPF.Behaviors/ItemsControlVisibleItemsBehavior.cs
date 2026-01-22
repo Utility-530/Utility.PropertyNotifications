@@ -70,7 +70,8 @@ namespace Utility.WPF.Behaviors
                 if (MouseFactor > 1)
                     scrollViewer.ScrollChanged += AssociatedObject_ScrollChanged;
 
-                if (VisualTreeExHelper.FindVisualChildren<ScrollBar>(scrollViewer).Single(s => s.Orientation == Orientation.Vertical) is ScrollBar verticalScrollBar)
+                if (VisualTreeExHelper.FindVisualChildren<ScrollBar>(scrollViewer)
+                    .Single(s => s.Orientation == Orientation.Vertical) is ScrollBar verticalScrollBar)
 
                     scrollViewer
                         .Changes()
