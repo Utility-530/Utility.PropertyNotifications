@@ -34,7 +34,7 @@ public static class ResolverMixins
         if (resolution is T t)
             return t;
         else if (resolution is Func<T> method)
-            return (T?)method();
+            throw new Exception("DFS3d2");
         return default;
     }
 
@@ -157,7 +157,7 @@ public static class ResolverMixins
     {
         resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
 
-        var val = new Lazy<object?>(valueFactory, LazyThreadSafetyMode.ExecutionAndPublication);
+        var val = new Lazy<object?>(()=> valueFactory.Invoke(), LazyThreadSafetyMode.ExecutionAndPublication);
         resolver.Register(() => val.Value, serviceType, contract);
     }
 
