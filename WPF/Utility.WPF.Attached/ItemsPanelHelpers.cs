@@ -20,7 +20,7 @@ namespace Utility.WPF.Attached
     public static class ItemsPanelHelpers
     {
         public static readonly DependencyProperty IsLoadedSetProperty =
-    DependencyProperty.RegisterAttached(
+        DependencyProperty.RegisterAttached(
         "IsLoadedSet",
         typeof(bool),
         typeof(ItemsPanelHelpers),
@@ -36,7 +36,22 @@ namespace Utility.WPF.Attached
             obj.SetValue(IsLoadedSetProperty, value);
         }
 
+        public static readonly DependencyProperty IgnoreProperty =
+        DependencyProperty.RegisterAttached(
+        "Ignore",
+        typeof(bool),
+        typeof(ItemsPanelHelpers),
+        new PropertyMetadata());
 
+        public static bool GetIgnore(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(IgnoreProperty);
+        }
+
+        public static void SetIgnore(DependencyObject obj, bool value)
+        {
+            obj.SetValue(IgnoreProperty, value);
+        }
 
         public static readonly DependencyProperty OrientationProperty =
             DependencyProperty.RegisterAttached(
@@ -122,6 +137,10 @@ namespace Utility.WPF.Attached
 
                 void load(bool b)
                 {
+                    if (GetIgnore(d))
+                    {
+                        return;
+                    }
                     var rows = GetRows(ic);
                     var columns = GetColumns(ic);
                     var orientation = GetOrientation(ic) switch
