@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Utility.Enums;
+using Utility.Helpers;
 
 namespace Utility.Entities
 {
@@ -44,13 +45,8 @@ namespace Utility.Entities
         public override string ToString()
         {
             var ops = string.Join(", ", Operations.Select(o => o.ToString()));
-            return $"{AssignedTo}: {ops} on {ToString(Date)}";
-        }
-
-        static string ToString(DateTime dayOfWeek)
-        {
-            return (DateTime.Now.AddDays(1) == dayOfWeek) ? "tomorrow" : dayOfWeek.ToString();
-        }
+            return $"{AssignedTo}: {ops} on {DateTimeHelper.ToString(Date)}";
+        }   
     }
 
     public class Schedule
