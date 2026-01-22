@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
     <ProjectReference Include="..\..\Nodes\Utility.Nodes\Utility.Nodes.csproj" />
     <ProjectReference Include="..\Utility.WPF.Behaviors\Utility.WPF.Behaviors.csproj" />
