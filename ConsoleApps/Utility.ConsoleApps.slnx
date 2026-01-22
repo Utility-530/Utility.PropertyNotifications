@@ -4,6 +4,7 @@
     <Project Path="Utility.LibraryDescriptionWriter/Utility.LibraryDescriptionWriter.csproj" Id="3be4672c-4ca2-4347-a306-e7fd1a8636e6" />
   </Folder>
   <Folder Name="/Infrastructure/">
+    <Project Path="../Helpers/Utility.Helpers/Utility.Helpers.csproj" />
     <Project Path="../Infrastructure/Utility.Constants/Utility.Constants.csproj" />
     <Project Path="../Infrastructure/Utility.Entities/Utility.Entities.csproj" />
     <Project Path="../Infrastructure/Utility.Globals/Utility.Globals.csproj" />
