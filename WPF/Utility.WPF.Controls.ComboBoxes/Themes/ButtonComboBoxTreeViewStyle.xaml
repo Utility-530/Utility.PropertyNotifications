@@ -113,10 +113,10 @@
                                                 HorizontalAlignment="Right"
                                                 VerticalAlignment="Center"
                                                 Data="{StaticResource Cross}"
-                                                Fill="Black"
+                                                Foreground="Black"
                                                 HoverBackgroundBrush="{c:Amber}"
                                                 HoverForegroundBrush="{c:Blue}"
-                                                IsChecked="{Binding IsOpen, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                                IsChecked="{Binding ElementName=ToggleButton, Path=IsChecked, Converter={x:Static conv:InverseBooleanConverter.Instance}}"
                                                 PressedForegroundBrush="Gray"
                                                 StrokeThickness="4"
                                                 Visibility="{TemplateBinding ShowCloseButton,
