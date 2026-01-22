@@ -6,7 +6,7 @@
     <RootNamespace>Itenso.Windows.Controls.ListViewLayout</RootNamespace>
     <Title>WPF.ListViewLayoutManager</Title>
     <AssemblyName>Itenso.Windows.Controls.ListViewLayout</AssemblyName>
-    <TargetFrameworks>net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>net10.0-windows</TargetFrameworks>
 	<LangVersion>latest</LangVersion>
     <UseWPF>true</UseWPF>
     <OutputType>Library</OutputType>
