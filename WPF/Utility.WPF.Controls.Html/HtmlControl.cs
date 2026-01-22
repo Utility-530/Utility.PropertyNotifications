@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using TheArtOfDev.HtmlRenderer.WPF;
+using Microsoft.Web.WebView2.Wpf;
 using Utility.WPF.Controls.Base;
 
 namespace Utility.WPF.Controls.Html
@@ -14,7 +14,7 @@ namespace Utility.WPF.Controls.Html
     public class HtmlControl : SplitControl, IHtmlControl
     {
         private bool _updateLock;
-        private HtmlPanel? _htmlPanel;
+        private WebView2? _htmlPanel;
         private System.Windows.Controls.WebBrowser _webBrowser;
         private bool applyFlag = false;
         private bool update = false;
@@ -43,7 +43,7 @@ namespace Utility.WPF.Controls.Html
         public override void OnApplyTemplate()
         {
             //this.Movement = Enums.XYMovement.TopToBottom;
-            _htmlPanel = this.Content as HtmlPanel;
+            _htmlPanel = this.Content as WebView2;
             _webBrowser = this.Header as WebBrowser;
             applyFlag = true;
             if (update == true)
@@ -51,7 +51,7 @@ namespace Utility.WPF.Controls.Html
             base.OnApplyTemplate();
         }
 
-        private void Update(string s)
+        private async void Update(string s)
         {
             update = true;
             if (applyFlag == false)
@@ -67,8 +67,9 @@ namespace Utility.WPF.Controls.Html
 
             try
             {
+                await _htmlPanel.EnsureCoreWebView2Async();
                 //_htmlPanel.AvoidImagesLateLoading = !sample.FullName.Contains("Many images");
-                _htmlPanel.Text = s;
+                _htmlPanel.NavigateToString(s);
             }
             catch (Exception ex)
             {

@@ -17,9 +17,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using TheArtOfDev.HtmlRenderer.Core.Entities;
-using TheArtOfDev.HtmlRenderer.Demo.WPF;
-using TheArtOfDev.HtmlRenderer.WPF;
+using static System.Net.Mime.MediaTypeNames;
+//using TheArtOfDev.HtmlRenderer.Core.Entities;
+//using TheArtOfDev.HtmlRenderer.Demo.WPF;
+//using TheArtOfDev.HtmlRenderer.WPF;
 
 namespace Utility.WPF.Controls.Html
 {
@@ -69,16 +70,16 @@ namespace Utility.WPF.Controls.Html
         {
             InitializeComponent();
 
-            _htmlPanel.RenderError += OnRenderError;
-            _htmlPanel.LinkClicked += OnLinkClicked;
-            _htmlPanel.StylesheetLoad += HtmlRenderingHelper.OnStylesheetLoad;
-            _htmlPanel.ImageLoad += HtmlRenderingHelper.OnImageLoad;
-            _htmlPanel.LoadComplete += (sender, args) => _htmlPanel.ScrollToElement("C4");
+            //_htmlPanel.RenderError += OnRenderError;
+            //_htmlPanel.LinkClicked += OnLinkClicked;
+            //_htmlPanel.StylesheetLoad += HtmlRenderingHelper.OnStylesheetLoad;
+            //_htmlPanel.ImageLoad += HtmlRenderingHelper.OnImageLoad;
+            //_htmlPanel.LoadComplete += (sender, args) => _htmlPanel.ScrollToElement("C4");
 
-            _htmlTooltipLabel.AvoidImagesLateLoading = true;
-            _htmlTooltipLabel.StylesheetLoad += HtmlRenderingHelper.OnStylesheetLoad;
-            _htmlTooltipLabel.ImageLoad += HtmlRenderingHelper.OnImageLoad;
-            _htmlTooltipLabel.Text = "<div class='htmltooltip'>" + TheArtOfDev.HtmlRenderer.Demo.Common.Resources.Tooltip + "</div>";
+            //_htmlTooltipLabel.AvoidImagesLateLoading = true;
+            //_htmlTooltipLabel.StylesheetLoad += HtmlRenderingHelper.OnStylesheetLoad;
+            //_htmlTooltipLabel.ImageLoad += HtmlRenderingHelper.OnImageLoad;
+            //_htmlTooltipLabel.Text = "<div class='htmltooltip'>" + TheArtOfDev.HtmlRenderer.Demo.Common.Resources.Tooltip + "</div>";
 
             _updateHtmlTimer = new Timer(OnUpdateHtmlTimerTick);
         }
@@ -104,28 +105,28 @@ namespace Utility.WPF.Controls.Html
         /// <summary>
         /// Update the html shown in the web browser
         /// </summary>
-        public void UpdateWebBrowserHtml()
-        {
-            if (_webBrowser.IsVisible)
-            {
-                _webBrowser.NavigateToString(_useGeneratedHtml ? _htmlPanel.GetHtml() : GetFixedHtml());
-            }
-        }
+        //public void UpdateWebBrowserHtml()
+        //{
+        //    if (_webBrowser.IsVisible)
+        //    {
+        //        _webBrowser.NavigateToString(_useGeneratedHtml ? _htmlPanel.GetHtml() : GetFixedHtml());
+        //    }
+        //}
 
-        public string GetHtml()
-        {
-            return _useGeneratedHtml ? _htmlPanel.GetHtml() : GetHtmlEditorText();
-        }
+        //public string GetHtml()
+        //{
+        //    return _useGeneratedHtml ? _htmlPanel.GetHtml() : GetHtmlEditorText();
+        //}
 
-        public void SetHtml(string html)
-        {
-            _htmlPanel.Text = html;
-            if (string.IsNullOrWhiteSpace(html))
-            {
-                _htmlPanel.InvalidateMeasure();
-                _htmlPanel.InvalidateVisual();
-            }
-        }
+        //public void SetHtml(string html)
+        //{
+        //    _htmlPanel.Text = html;
+        //    if (string.IsNullOrWhiteSpace(html))
+        //    {
+        //        _htmlPanel.InvalidateMeasure();
+        //        _htmlPanel.InvalidateVisual();
+        //    }
+        //}
 
         #region Private methods
 
@@ -149,20 +150,20 @@ namespace Utility.WPF.Controls.Html
             {
                 _updateLock = true;
 
-                try
-                {
-                    _htmlPanel.Text = GetHtmlEditorText();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString(), "Failed to render HTML");
-                }
+                //try
+                //{
+                //    _htmlPanel.Text = GetHtmlEditorText();
+                //}
+                //catch (Exception ex)
+                //{
+                //    MessageBox.Show(ex.ToString(), "Failed to render HTML");
+                //}
 
-                //SyntaxHilight.AddColoredText(_htmlEditor.Text, _htmlEditor);
+                ////SyntaxHilight.AddColoredText(_htmlEditor.Text, _htmlEditor);
 
-                UpdateWebBrowserHtml();
+                //UpdateWebBrowserHtml();
 
-                _updateLock = false;
+                //_updateLock = false;
             }), state);
         }
 
@@ -174,32 +175,32 @@ namespace Utility.WPF.Controls.Html
         {
             var html = GetHtmlEditorText();
 
-            html = Regex.Replace(html, @"src=\""(\w.*?)\""", match =>
-            {
-                var img = HtmlRenderingHelper.TryLoadResourceImage(match.Groups[1].Value);
-                if (img != null)
-                {
-                    var tmpFile = Path.GetTempFileName();
-                    var encoder = new PngBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(img));
-                    using (FileStream stream = new FileStream(tmpFile, FileMode.Create))
-                        encoder.Save(stream);
-                    return string.Format("src=\"{0}\"", tmpFile);
-                }
-                return match.Value;
-            }, RegexOptions.IgnoreCase);
+            //html = Regex.Replace(html, @"src=\""(\w.*?)\""", match =>
+            //{
+            //    var img = HtmlRenderingHelper.TryLoadResourceImage(match.Groups[1].Value);
+            //    if (img != null)
+            //    {
+            //        var tmpFile = Path.GetTempFileName();
+            //        var encoder = new PngBitmapEncoder();
+            //        encoder.Frames.Add(BitmapFrame.Create(img));
+            //        using (FileStream stream = new FileStream(tmpFile, FileMode.Create))
+            //            encoder.Save(stream);
+            //        return string.Format("src=\"{0}\"", tmpFile);
+            //    }
+            //    return match.Value;
+            //}, RegexOptions.IgnoreCase);
 
-            html = Regex.Replace(html, @"href=\""(\w.*?)\""", match =>
-            {
-                var stylesheet = DemoUtils.GetStylesheet(match.Groups[1].Value);
-                if (stylesheet != null)
-                {
-                    var tmpFile = Path.GetTempFileName();
-                    File.WriteAllText(tmpFile, stylesheet);
-                    return string.Format("href=\"{0}\"", tmpFile);
-                }
-                return match.Value;
-            }, RegexOptions.IgnoreCase);
+            //html = Regex.Replace(html, @"href=\""(\w.*?)\""", match =>
+            //{
+            //    var stylesheet = DemoUtils.GetStylesheet(match.Groups[1].Value);
+            //    if (stylesheet != null)
+            //    {
+            //        var tmpFile = Path.GetTempFileName();
+            //        File.WriteAllText(tmpFile, stylesheet);
+            //        return string.Format("href=\"{0}\"", tmpFile);
+            //    }
+            //    return match.Value;
+            //}, RegexOptions.IgnoreCase);
 
             return html;
         }
@@ -223,35 +224,35 @@ namespace Utility.WPF.Controls.Html
         /// <summary>
         /// Show error raised from html renderer.
         /// </summary>
-        private void OnRenderError(object sender, RoutedEvenArgs<HtmlRenderErrorEventArgs> args)
-        {
-            Dispatcher.BeginInvoke(new Action(() => MessageBox.Show(args.Data.Message + (args.Data.Exception != null ? "\r\n" + args.Data.Exception : null), "Error in Html Renderer", MessageBoxButton.OK)));
-        }
+        //private void OnRenderError(object sender, RoutedEvenArgs<HtmlRenderErrorEventArgs> args)
+        //{
+        //    Dispatcher.BeginInvoke(new Action(() => MessageBox.Show(args.Data.Message + (args.Data.Exception != null ? "\r\n" + args.Data.Exception : null), "Error in Html Renderer", MessageBoxButton.OK)));
+        //}
 
-        /// <summary>
-        /// On specific link click handle it here.
-        /// </summary>
-        private void OnLinkClicked(object sender, RoutedEvenArgs<HtmlLinkClickedEventArgs> args)
-        {
-            if (args.Data.Link == "SayHello")
-            {
-                MessageBox.Show("Hello you!");
-                args.Data.Handled = true;
-            }
-            else if (args.Data.Link == "ShowSampleForm")
-            {
-                //var w = new SampleWindow();
-                //var window = Window.GetWindow(this);
-                //if (window != null)
-                //{
-                //    w.Owner = window;
-                //    w.Width = window.Width * 0.8;
-                //    w.Height = window.Height * 0.8;
-                //    w.ShowDialog();
-                //}
-                //args.Data.Handled = true;
-            }
-        }
+        ///// <summary>
+        ///// On specific link click handle it here.
+        ///// </summary>
+        //private void OnLinkClicked(object sender, RoutedEvenArgs<HtmlLinkClickedEventArgs> args)
+        //{
+        //    if (args.Data.Link == "SayHello")
+        //    {
+        //        MessageBox.Show("Hello you!");
+        //        args.Data.Handled = true;
+        //    }
+        //    else if (args.Data.Link == "ShowSampleForm")
+        //    {
+        //        //var w = new SampleWindow();
+        //        //var window = Window.GetWindow(this);
+        //        //if (window != null)
+        //        //{
+        //        //    w.Owner = window;
+        //        //    w.Width = window.Width * 0.8;
+        //        //    w.Height = window.Height * 0.8;
+        //        //    w.ShowDialog();
+        //        //}
+        //        //args.Data.Handled = true;
+        //    }
+        //}
 
         /// <summary>
         /// Set html syntax color text on the RTF html editor.
@@ -274,7 +275,7 @@ namespace Utility.WPF.Controls.Html
             return _htmlEditor.Document.Text;
         }
 
-        private void Update(string s)
+        private async void Update(string html)
         {
             _updateLock = true;
 
@@ -285,7 +286,10 @@ namespace Utility.WPF.Controls.Html
             try
             {
                 //_htmlPanel.AvoidImagesLateLoading = !sample.FullName.Contains("Many images");
-                _htmlPanel.Text = s;
+                await _htmlPanel.EnsureCoreWebView2Async();
+                //_htmlPanel.AvoidImagesLateLoading = !sample.FullName.Contains("Many images");
+                _htmlPanel.NavigateToString(html);
+                _htmlEditor.Text = html;
             }
             catch (Exception ex)
             {
@@ -295,7 +299,7 @@ namespace Utility.WPF.Controls.Html
             Cursor = Cursors.Arrow;
             _updateLock = false;
 
-            UpdateWebBrowserHtml();
+            //UpdateWebBrowserHtml();
         }
 
         #endregion Private methods

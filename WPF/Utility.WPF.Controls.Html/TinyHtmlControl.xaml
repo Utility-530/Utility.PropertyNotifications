@@ -5,7 +5,6 @@
             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
             xmlns:local="clr-namespace:Utility.WPF.Controls.Html"
             xmlns:att="http://schemas.utility.com/attached"
-            xmlns:wpf1="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
             xmlns:sys="clr-namespace:System.Windows.Controls"
 
            xmlns:base="clr-namespace:Utility.WPF.Controls.Base;assembly=Utility.WPF.Controls.Base"

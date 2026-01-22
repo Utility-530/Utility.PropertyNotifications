@@ -14,6 +14,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using TheArtOfDev.HtmlRenderer.Core.Entities;
+using TheArtOfDev.HtmlRenderer.Demo.Common;
 using TheArtOfDev.HtmlRenderer.WPF;
 
 namespace TheArtOfDev.HtmlRenderer.Demo.WPF

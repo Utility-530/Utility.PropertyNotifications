@@ -61,7 +61,6 @@ namespace Utility.WPF.Controls.Html
             //_htmlControl = this.Content as WpfHtmlControl;
             _htmlControl = this.Content as HtmlControl;
             _htmlControl.Html = Html;
-            //_htmlControl.Html = Html;
             // its necessary to set the header in code-behind because of the difficulty detaching the TextEditor
             // when control is unloaded
             this.Header ??= new TextEditor()

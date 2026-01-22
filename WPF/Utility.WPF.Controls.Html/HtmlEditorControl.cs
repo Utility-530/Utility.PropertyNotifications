@@ -3,7 +3,6 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using AvalonEditB;
-using TheArtOfDev.HtmlRenderer.Demo.WPF;
 using Utility.WPF.Controls.Base;
 
 namespace Utility.WPF.Controls.Html
@@ -49,28 +48,28 @@ namespace Utility.WPF.Controls.Html
 
             html = Regex.Replace(html, @"src=\""(\w.*?)\""", match =>
             {
-                var img = HtmlRenderingHelper.TryLoadResourceImage(match.Groups[1].Value);
-                if (img != null)
-                {
-                    var tmpFile = Path.GetTempFileName();
-                    var encoder = new PngBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(img));
-                    using (FileStream stream = new FileStream(tmpFile, FileMode.Create))
-                        encoder.Save(stream);
-                    return string.Format("src=\"{0}\"", tmpFile);
-                }
+                //var img = HtmlRenderingHelper.TryLoadResourceImage(match.Groups[1].Value);
+                //if (img != null)
+                //{
+                //    var tmpFile = Path.GetTempFileName();
+                //    var encoder = new PngBitmapEncoder();
+                //    encoder.Frames.Add(BitmapFrame.Create(img));
+                //    using (FileStream stream = new FileStream(tmpFile, FileMode.Create))
+                //        encoder.Save(stream);
+                //    return string.Format("src=\"{0}\"", tmpFile);
+                //}
                 return match.Value;
             }, RegexOptions.IgnoreCase);
 
             html = Regex.Replace(html, @"href=\""(\w.*?)\""", match =>
             {
-                var stylesheet = DemoUtils.GetStylesheet(match.Groups[1].Value);
-                if (stylesheet != null)
-                {
-                    var tmpFile = Path.GetTempFileName();
-                    File.WriteAllText(tmpFile, stylesheet);
-                    return string.Format("href=\"{0}\"", tmpFile);
-                }
+                //var stylesheet = DemoUtils.GetStylesheet(match.Groups[1].Value);
+                //if (stylesheet != null)
+                //{
+                //    var tmpFile = Path.GetTempFileName();
+                //    File.WriteAllText(tmpFile, stylesheet);
+                //    return string.Format("href=\"{0}\"", tmpFile);
+                //}
                 return match.Value;
             }, RegexOptions.IgnoreCase);
 
