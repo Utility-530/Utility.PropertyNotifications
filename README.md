@@ -2,9 +2,9 @@
 
 # Utility.PropertyNotifications
 
-- Simplifies raising **INotifyPropertyChanged** events with methods [e.g RaisePropertyChanged<T>(ref T field, T value, [CallerMemberName] string propertyName = null)]
-that sit inside the get/set brackets and handles value comparison and updates
-- Simplifies subscribing to **INotifyPropertyChanged** events with customisable extension methods [e.g WithChangesTo] that with ReactiveEx can be used for neat subscriptions
+- Simplifies raising **INotifyPropertyChanged** events with helper methods [e.g RaisePropertyChanged<T>(ref T field, T value, [CallerMemberName] string propertyName = null)]
+that sit inside the get/set brackets and handle value comparison and updates
+- Simplifies subscribing to **INotifyPropertyChanged** events with customisable extension methods [e.g WithChangesTo] that (combined with ReactiveEx) can be used for neat subscriptions
 - Adds two other interfaces, **INotifyPropertyCalled** and **INotifyPropertyReceived**, with methods comparable to those for INotifyPropertyChanged for greater control over reacting to property getting/setting
 - Includes, NotifyPropertyClass - Base class providing methods for raising, calling, and receiving data changes
 - Leverages CallerMemberName attribute to avoid string literals
@@ -12,12 +12,8 @@ that sit inside the get/set brackets and handles value comparison and updates
 
 ## Example:
 
-    using Utility.PropertyNotifications;
-
-
     public class MainViewModel : NotifyPropertyClass
     {
-
       private string _someProperty;
       private string _otherProperty;
 
@@ -28,25 +24,17 @@ that sit inside the get/set brackets and handles value comparison and updates
               RaisePropertyCalled(_someProperty);
               return _someProperty;
           }
-          set
-          {
-              RaisePropertyReceived(ref _someProperty, value);
-          }
+          set =>  RaisePropertyReceived(ref _someProperty, value);
       }
 
       public string OtherProperty
       {
           get => _otherProperty;
-          set
-          {
-              RaisePropertyChanged(ref _otherProperty, value);
-          }
+          set => RaisePropertyChanged(ref _otherProperty, value);     
       }
     }
   
     using System;
-    using System.Collections.Generic;
-    using System.Text;
     using System.Reactive;
     using System.Reactive.Linq;
 
@@ -86,9 +74,3 @@ that sit inside the get/set brackets and handles value comparison and updates
     {
         Task<T> Value<T>(string name);
     }
-
-
-
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-Support
