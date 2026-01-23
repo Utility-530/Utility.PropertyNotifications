@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Attributes\Utility.Attributes\Utility.Attributes.csproj" />
+    <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
+    <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Utility.Attributes\Utility.Attributes.csproj" />
+  </ItemGroup>
+</Project>
