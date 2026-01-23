@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text.Json.Serialization;
+//using System.Text.Json.Serialization;
 using Utility.Interfaces;
 
 namespace Utility.PropertyNotifications
@@ -32,7 +32,7 @@ namespace Utility.PropertyNotifications
         /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        [JsonIgnore]
+        //[JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
         public bool IsPropertyChangedNotNull => PropertyChanged != null;
 
@@ -117,7 +117,7 @@ namespace Utility.PropertyNotifications
         private SynchronizationContext? context;
         private readonly bool raisePropertyCalled;
 
-        [JsonIgnore]
+        //[JsonIgnore]
         [Newtonsoft.Json.JsonIgnore]
         public IEnumerable<PropertyCalledEventArgs> MissedCalls => missedCalls;
 

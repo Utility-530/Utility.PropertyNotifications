@@ -25,12 +25,12 @@ namespace Utility.PropertyNotifications
                 private readonly INotifyPropertyCalled _target;
                 private readonly IObserver<PropertyCall> _observer;
 
-                public Subscription(INotifyPropertyCalled target, IObserver<PropertyCall> observer, bool includeNonInitial)
+                public Subscription(INotifyPropertyCalled target, IObserver<PropertyCall> observer, bool includeMissedCalls)
                 {
                     _target = target;
                     _observer = observer;
 
-                    if (includeNonInitial)
+                    if (includeMissedCalls)
                         foreach (var item in _target.MissedCalls.ToArray())
                         {
                             onPropertyCalled(target, item);

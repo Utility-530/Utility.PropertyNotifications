@@ -15,20 +15,22 @@ namespace Utility.PropertyNotifications
             private readonly PropertyInfo _info;
             private readonly bool includeInitial;
             private readonly bool includeNulls;
+            private readonly bool includeDefaultValues;
 
-            public PropertyObservable(TTarget target, PropertyInfo info, bool includeInitial = true, bool includeNulls = true) : base(target, includeNulls)
+            public PropertyObservable(TTarget target, PropertyInfo info, bool includeInitial = true, bool includeNulls = true, bool includeDefaultValues = true) : base(target, includeNulls, includeDefaultValues)
             {
                 _target = target;
                 _info = info;
                 this.includeInitial = includeInitial;
                 this.includeNulls = includeNulls;
+                this.includeDefaultValues = includeDefaultValues;
             }
 
             public PropertyInfo PropertyInfo => _info;
 
             public IDisposable Subscribe(IObserver<T> observer)
             {
-                return new Subscription<T>(_target, _info, observer, includeInitial, includeNulls);
+                return new Subscription<T>(_target, _info, observer, includeInitial, includeNulls, includeDefaultValues);
             }
         }
 
@@ -37,12 +39,12 @@ namespace Utility.PropertyNotifications
             return new PropertyObservable(model, includeNulls);
         }
 
-        public static IObservable<TRes> WhenReceivedFrom<TModel, TRes>(this TModel model, Expression<Func<TModel, TRes>> expr, bool includeInitialValue = true, bool includeNulls = true) where TModel : INotifyPropertyReceived
+        public static IObservable<TRes> WhenReceivedFrom<TModel, TRes>(this TModel model, Expression<Func<TModel, TRes>> expr, bool includeInitialValue = true, bool includeNulls = true, bool includeDefaultValues) where TModel : INotifyPropertyReceived
         {
             var l = (LambdaExpression)expr;
             var ma = (MemberExpression)l.Body;
             var prop = (PropertyInfo)ma.Member;
-            return new PropertyObservable<TModel, TRes>(model, prop, includeInitialValue, includeNulls);
+            return new PropertyObservable<TModel, TRes>(model, prop, includeInitialValue, includeNulls, includeDefaultValues);
         }
     }
 
@@ -54,9 +56,10 @@ namespace Utility.PropertyNotifications
         private readonly Action<T, object> _setter;
         private readonly IObserver<T> _observer;
         private readonly bool includeNulls;
+        private readonly bool includeDefaultValues;
         private T value;
 
-        public Subscription(INotifyPropertyReceived target, PropertyInfo info, IObserver<T> observer, bool includeInitial = true, bool includeNulls = true)
+        public Subscription(INotifyPropertyReceived target, PropertyInfo info, IObserver<T> observer, bool includeInitial = true, bool includeNulls = true, bool includeDefaultValues = true)
         {
             _target = target;
             _info = info;
@@ -64,13 +67,17 @@ namespace Utility.PropertyNotifications
             //_setter = info.ToSetter<T>();
             _observer = observer;
             this.includeNulls = includeNulls;
+            this.includeDefaultValues = includeDefaultValues;
             _target.PropertyReceived += onPropertyReceived;
 
             if (includeInitial)
             {
                 var value = _getter.Invoke(_target);
-                if (includeNulls || !Comparison.IsDefaultValue(value))
+                if (Helpers.Include(value, includeNulls, includeDefaultValues))
+                {
                     _observer.OnNext(value);
+                    return;
+                }
             }
         }
 
@@ -79,9 +86,10 @@ namespace Utility.PropertyNotifications
             if (e.PropertyName == _info.Name)
             {
                 var value = _getter.Invoke(e.Source ?? _target);
-                if (includeNulls || !Comparison.IsDefaultValue(value))
+                if (Helpers.Include(value, includeNulls, includeDefaultValues))
                 {
                     _observer.OnNext(value);
+                    return;
                 }
             }
         }
