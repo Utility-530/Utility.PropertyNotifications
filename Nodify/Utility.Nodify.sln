@@ -33,7 +33,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Infrastructure", ".
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.PropertyDescriptors", "..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj", "{FA7E6DD5-714B-4A53-A649-4B6441F20352}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.PropertyNotifications", "..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj", "{88936E7B-17AB-4706-B7D9-B1C438041079}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.PropertyNotifications", "..\PropertyNotifications\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj", "{88936E7B-17AB-4706-B7D9-B1C438041079}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodes", "..\Nodes\Utility.Nodes\Utility.Nodes.csproj", "{E16BF309-B8EB-40AE-8262-6FF325E6E4A6}"
 EndProject
@@ -128,6 +128,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Geometries", "..\WPF\Utility.WPF.Geometry\Utility.WPF.Geometries.csproj", "{F46F4637-81DB-F44B-6B52-FCC2E46BCEB8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Colours", "..\WPF\Utility.WPF.Colours\Utility.WPF.Colours.csproj", "{17B1FEA0-4939-D4C0-BEB0-13E727A0A741}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Attributes", "..\Attributes\Utility.Attributes\Utility.Attributes.csproj", "{12FBA733-DD5A-8A4A-BE35-5E21580FE5AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -379,6 +381,10 @@ Global
 		{17B1FEA0-4939-D4C0-BEB0-13E727A0A741}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17B1FEA0-4939-D4C0-BEB0-13E727A0A741}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17B1FEA0-4939-D4C0-BEB0-13E727A0A741}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12FBA733-DD5A-8A4A-BE35-5E21580FE5AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12FBA733-DD5A-8A4A-BE35-5E21580FE5AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12FBA733-DD5A-8A4A-BE35-5E21580FE5AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12FBA733-DD5A-8A4A-BE35-5E21580FE5AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -436,6 +442,7 @@ Global
 		{D78E2C4F-28AD-B43D-77AE-93850110A3CA} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{F46F4637-81DB-F44B-6B52-FCC2E46BCEB8} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{17B1FEA0-4939-D4C0-BEB0-13E727A0A741} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
+		{12FBA733-DD5A-8A4A-BE35-5E21580FE5AF} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C218ADB7-210D-4A37-BC47-800268D4894F}
