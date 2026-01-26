@@ -31,20 +31,15 @@
     xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit" 
     xmlns:trees="http://schemas.utility.com/trees">
 
-
     <ResourceDictionary.MergedDictionaries>
-        <!--<res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Shared.xaml"/>-->
         <res:SharedResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml" />
         <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Shared.xaml" />
-
     </ResourceDictionary.MergedDictionaries>
 
     <conv:NewObjectConverter x:Key="NewObjectConverter" />
     <conv:PropertyNamesConverter x:Key="PropertyNamesConverter" />
     <conv:TypeNameConverter x:Key="TypeNameConverter" />
     <local:ValueChangeConverter x:Key="ValueChangeConverter" />
-    <!--<local:ModelTemplateSelector x:Key="ModelTemplateSelector" />-->
-
 
     <HierarchicalDataTemplate
         DataType="{x:Type nodes:NodeViewModel}"
@@ -83,24 +78,9 @@
     <HierarchicalDataTemplate
         x:Key="InvisibleTemplate"
         DataType="{x:Type nodes:NodeViewModel}"
-        ItemsSource="{Binding Children}">
-        <!--<TextBlock Text="{Binding Name}" />-->
+        ItemsSource="{Binding Children}">     
     </HierarchicalDataTemplate>
 
-    <!--<HierarchicalDataTemplate
-        DataType="{x:Type inf:DataFilesModel}"
-        ItemsSource="{Binding Children}">
-        <TextBlock Text="{Binding Name}" />
-    </HierarchicalDataTemplate>-->
-
-
-    <!--<DataTemplate x:Key="EditTreeTemplate" DataType="{x:Type nodes:NodeViewModel}">
-        <trees:CustomTreeView 
-              ItemsSource="{Binding Path=Children}" 
-              ItemContainerStyleSelector="{StaticResource StyleSelector}"
-              ItemTemplateSelector="{StaticResource DataTemplateSelector}">
-        </trees:CustomTreeView>
-    </DataTemplate>-->
 
     <DataTemplate x:Key="MoneyTemplate">
         <TextBox Name="myCurrencyTextBox2"
@@ -214,11 +194,7 @@
         </Border>
     </DataTemplate>
 
-
-    <!--  Value Change Converter  -->
-
-
-
+    
     <DataTemplate x:Key="PriceTemplate" DataType="{x:Type model:Model}">
         <Border
             x:Name="MainBorder"
@@ -430,14 +406,7 @@
             </i:Interaction.Triggers>
         </list:CustomSelector>
     </DataTemplate>
-    <!--<DataTemplate x:Key="InitialTemplate" DataType="{x:Type nodes:NodeViewModel}">
-        <Grid>
-            <TextBlock
-                MinWidth="60"
-                Background="AliceBlue"
-                Text="init" />
-        </Grid>
-    </DataTemplate>-->
+
     <DataTemplate x:Key="ReadOnlyStringTemplate" DataType="{x:Type nodes:NodeViewModel}">
         <Grid>
             <TextBlock
@@ -452,14 +421,7 @@
             <TextBox MinWidth="60" Text="{Binding Value}" />
         </Grid>
     </DataTemplate>
-    <!--<DataTemplate x:Key="TabTemplate" DataType="{x:Type nodes:NodeViewModel}">
-        <Grid>
-            <TextBlock
-                MinWidth="60"
-                Background="AliceBlue"
-                Text="{Binding Name}" />
-        </Grid>
-    </DataTemplate>-->
+
     <DataTemplate x:Key="NullTemplate" DataType="{x:Type nodes:NodeViewModel}">
         <Grid>
             <TextBlock
@@ -469,18 +431,11 @@
         </Grid>
     </DataTemplate>
     <!--<DataTemplate x:Key="EllipseTemplate" DataType="{x:Type nodes:NodeViewModel}">
-        <Grid Height="100" Width="100" Background="Aqua">
-            
-        </Grid>
-    </DataTemplate>
-    <DataTemplate x:Key="DefaultSelectedItemTemplate" DataType="{x:Type nodes:NodeViewModel}">
-        <Grid Height="100" Width="100" Background="Maroon">
-            
+        <Grid Height="100" Width="100" Background="Aqua">            
         </Grid>
     </DataTemplate>-->
 
     <DataTemplate x:Key="HtmlEditor" DataType="{x:Type nodes:NodeViewModel}">
-        <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
 
         <avalonedit:TextEditor
             x:Name="_htmlEditor"
@@ -494,8 +449,7 @@
         </avalonedit:TextEditor>
     </DataTemplate>
 
-    <DataTemplate x:Key="HtmlWebViewer" DataType="{x:Type nodes:NodeViewModel}">
-        <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
+    <DataTemplate x:Key="HtmlWebViewer" DataType="{x:Type nodes:NodeViewModel}">     
         <WebBrowser>
             <i:Interaction.Behaviors>
                 <beh:WebBrowserNavigationBehavior Html="{Binding Value, Mode=OneWay}" />
@@ -504,34 +458,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="Html">
-        <!--<TextBlock Text="Html" />-->
-        <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
-        <!--<html:TinyHtmlEditorControl Html="{Binding Value, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>-->
-        <html:HtmlView ></html:HtmlView>
-        <!--<avalonedit:TextEditor x:Name="_htmlEditor"
-
-                                       VerticalScrollBarVisibility="Visible"
-                                       BorderThickness="0"
-                                       SyntaxHighlighting="HTML"
-                                       ShowLineNumbers="True" >
-            <i:Interaction.Behaviors>
-                <html:TextEditorTextBehavior Html="{Binding Value}"/>
-            </i:Interaction.Behaviors>
-        </avalonedit:TextEditor>-->
-    </DataTemplate>
-
-    <DataTemplate x:Key="ChromiumOutput">
-        <!--<Border BorderThickness="1" BorderBrush="Blue">
-            <cefsharpwpf:ChromiumWebBrowser
-                    Address="{Binding Mode=OneWay, Path=Address}"
-                    Name="Browser">
-        -->
-        <!--<i:Interaction.Behaviors>
-                    <behavior:ChromiumWebBrowserBehavior/>
-                </i:Interaction.Behaviors>-->
-        <!--
-            </cefsharpwpf:ChromiumWebBrowser>
-        </Border>-->
+        <html:HtmlView Html="{Binding Value, Mode=OneWay}" MinWidth="800" MinHeight="600"/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type des:MemberDescriptor}">
