@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Drawing;
 using System.Windows.Input;
 using Utility.Commands;
 using Utility.Interfaces;
@@ -92,6 +93,10 @@ namespace Utility.Nodes
         {
             get => base.Key; set
             {
+                if (Guid.TryParse(value, out _) == false)
+                {
+                    throw new Exception($"key is not guid ({value})");
+                }
                 if (Key != null && SuppressExceptions == false && SuppressKeyException == false)
                 {
                     throw new Exception($"Key {Key} not null!");
@@ -178,5 +183,17 @@ namespace Utility.Nodes
             return cloneTree;
         }
 
+        public virtual void OpenAt(PointF targetLocation)
+        {
+            Close();
+            Location = targetLocation;
+            IsVisible = true;
+        }
+
+        public virtual void Close()
+        {
+            IsVisible = false;
+            Closed?.Invoke();
+        }
     }
 }

@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
-using DryIoc;
 using MoreLinq;
 using Utility.Collections;
 using Utility.Commands;
@@ -11,37 +10,26 @@ using Utility.Enums;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodify.Base.Abstractions;
-using Utility.Nodify.Operations.Infrastructure;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
 using Utility.ServiceLocation;
+using Utility.Interfaces;
+using Splat;
+using Utility.Interfaces.Exs;
+using Utility.Interfaces.Generic;
 
 namespace Utility.Nodes
 {
     public class DiagramViewModel : NodeViewModel, IDiagramViewModel
     {
-        private IMenuViewModel menu;
+        private INodeViewModel menu;
         private RangeObservableCollection<INodeViewModel> _selectedOperations = [];
         private RangeObservableCollection<IConnectionViewModel> connections = new();
 
         public int GridColumn = 1;
         private PendingConnectionViewModel pendingConnection = new PendingConnectionViewModel();
 
-        private INodeSource operations
-        {
-            get
-            {
-                try
-                {
-                    return Globals.Resolver.Resolve<Utility.Nodify.Operations.Infrastructure.INodeSource>();
-                }
-                catch (Exception ex)
-                {
-                    return null;
-                }
-            }
-        }
-
+      
         public DiagramViewModel()
         {
             Connections = connections;
@@ -56,7 +44,6 @@ namespace Utility.Nodes
             GroupSelectionCommand = new Command(GroupSelectedOperations, () => SelectedNodes.Count > 0);
 
             // Setup collection behaviors
-
             if (Connections is ThreadSafeObservableCollection<IConnectionViewModel> threadSafe)
                 threadSafe.WhenAdded(c =>
                 {
@@ -108,15 +95,17 @@ namespace Utility.Nodes
                 });
         }
 
-        public IMenuViewModel Menu
+        public INodeViewModel Menu
         {
             get
             {
                 if (menu == null)
                 {
                     //menu = new MenuViewModel() { Items = new RangeObservableCollection<IMenuViewModel>() };
+                    var menuFactory = Globals.Resolver.Resolve<IMenuFactory>();
                     menu = Globals.Resolver.Resolve<IMenuFactory>().CreateMenu();
-                    menu.Subscribe(a => OperationsMenu_MenuItemSelected(a.Item1, a.Item2));
+                    menuFactory
+                        .Subscribe(a => OperationsMenu_MenuItemSelected(a.Item1, a.Item2));
                 }
                 return menu;
             }
@@ -133,13 +122,14 @@ namespace Utility.Nodes
         public ICommand DeleteSelectionCommand { get; }
         public ICommand GroupSelectionCommand { get; }
 
-        protected void OperationsMenu_MenuItemSelected(PointF location, IMenuItemViewModel menuItem)
+        protected void OperationsMenu_MenuItemSelected(PointF location, object menuItem)
         {
-            var nodeViewModel = operations.Find(menuItem.Content);
+            var nodeViewModel = Globals.Resolver.Resolve<IFactory<INodeViewModel>>().Create(menuItem);
+
             IConnectorViewModel connector = null;
             var pending = PendingConnection;
 
-            if (menuItem.Content is IType { Type: { } type })
+            if (menuItem is IType { Type: { } type })
             {
                 if (pendingConnection.IsVisible)
                 {
@@ -158,6 +148,7 @@ namespace Utility.Nodes
                 nodeViewModel.Location = location;
                 Nodes.Add(nodeViewModel);
             }
+            menu.Close();
         }
 
         protected virtual void CreateConnection(IConnectorViewModel source, IConnectorViewModel? target)
@@ -208,29 +199,33 @@ namespace Utility.Nodes
             Menu.Closed -= OnOperationsMenuClosed;
         }
 
-        public void OpenAt(PointF mouseLocation)
+        public override void OpenAt(PointF mouseLocation)
         {
-            menu.Items.Clear();
+            menu.Clear();
+            var operations = Globals.Resolver.Resolve<IEnumerableFactory>();
+
             if (PendingConnection.Output != null)
             {
                 var x = operations?
-                    .Filter(PendingConnection)
-                    .Select(a => Globals.Resolver.Resolve<IMenuFactory>().Create(a)) //new MenuItemViewModel() { Content = a, Guid = a.Guid });
+                    .Create(PendingConnection)
+                    .Cast<object>()
+                    .Select(a => Globals.Resolver.Resolve<IMenuFactory>().Create(a))
                     .ToArray();
                 if (x == null)
                     return;
                 foreach (var y in x)
-                    menu.Items.Add(y);
+                    menu.Add(y);
             }
             else if (operations != null)
             {
                 var x = operations
-                    .Filter(null)
-           .Select(a => Globals.Resolver.Resolve<IMenuFactory>().Create(a))
+                    .Create(null)
+                    .Cast<object>()                
+                    .Select(a => Globals.Resolver.Resolve<IMenuFactory>().Create(a))
                     .ToArray();
 
                 foreach (var y in x)
-                    menu.Items.Add(y);
+                    menu.Add(y);
             }
             menu.OpenAt(mouseLocation);
         }

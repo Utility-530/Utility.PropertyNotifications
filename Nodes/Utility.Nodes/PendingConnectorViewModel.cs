@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
 using System.Reflection;
@@ -32,27 +33,14 @@ namespace Utility.Nodes
             });
             ChangeConnectorsCommand = new Command<object>((a) =>
             {
-                if (a is (IEnumerable x, IEnumerable y))
+                if (a is CollectionChanges { Additions: IList { } additions, Removals: IList removals })
                 {
-                    foreach (var item in x)
-                    {
-                        ConnectorsChanged?.Invoke(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, (IList)x));
-                        return;
-                    }
-                    foreach (var item in y)
-                    {
-                        ConnectorsChanged?.Invoke(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, (IList)y));
-                        return;
-                    }
 
-                    //foreach (PropertyInfo propertyInfo in x)
-                    //{
-                    //    var x = new ConnectorViewModel() { Data = propertyInfo, Key = propertyInfo.Name, Node = this.Node };
+                    if (additions is { Count: > 0 })
+                        ConnectorsChanged?.Invoke(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, additions));
 
-                    //    this.Node.Output.Add();
-                    //}
-                    //foreach (PropertyInfo propertyInfo in y)
-                    //    this.Node.Output.RemoveBy(a => a.Data.Equals(propertyInfo));
+                    if (removals is { Count: > 0 })
+                        ConnectorsChanged?.Invoke(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removals));
                 }
             });
         }
@@ -68,4 +56,6 @@ namespace Utility.Nodes
         public ICommand AddConnectorCommand { get; }
         public ICommand ChangeConnectorsCommand { get; }
     }
+
+    public record CollectionChanges(IList Additions, IList Removals);
 }
