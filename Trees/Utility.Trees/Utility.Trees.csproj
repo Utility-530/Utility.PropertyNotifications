@@ -12,7 +12,7 @@
 
   <ItemGroup>
 		<ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
-		<ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
+		<ProjectReference Include="..\..\PropertyNotifications\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
 		<ProjectReference Include="..\..\Observables\Utility.Observables\Utility.Observables.csproj" />
 		<ProjectReference Include="..\..\Structs\Utility.Structs\Utility.Structs.csproj" />
   </ItemGroup>

@@ -14,6 +14,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\Projects\Diagram\nodify\Nodify\Nodify.csproj" />
 		<ProjectReference Include="..\..\Models\Utility.Models.Diagrams\Utility.Models.Diagrams.csproj" />
+		<ProjectReference Include="..\..\PropertyNotifications\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Behaviors\Utility.WPF.Behaviors.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.ComboBoxes\Utility.WPF.Controls.ComboBoxes.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Lists\Utility.WPF.Controls.Lists.csproj" />

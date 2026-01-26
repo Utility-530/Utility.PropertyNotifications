@@ -11,7 +11,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Projects\Diagram\nodify\Nodify\Nodify.csproj" />
     <ProjectReference Include="..\..\Helpers\Utility.Extensions\Utility.Extensions.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Services.Meta\Utility.Services.Meta.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.ServiceLocation\Utility.ServiceLocation.csproj" />
     <ProjectReference Include="..\..\Nodes\Models\Models.csproj" />
@@ -26,11 +25,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
+	  <ProjectReference Include="..\..\PropertyNotifications\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
 	  <ProjectReference Include="..\..\Models\Utility.Models.Diagrams\Utility.Models.Diagrams.csproj" />
 	  <ProjectReference Include="..\Utility.Nodify.Base\Utility.Nodify.Base.csproj" />
 	</ItemGroup>

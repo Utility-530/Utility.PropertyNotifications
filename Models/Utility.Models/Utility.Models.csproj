@@ -13,7 +13,7 @@
 		<ProjectReference Include="..\..\Infrastructure\Utility.Exceptions\Utility.Exceptions.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Globals\Utility.Globals.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Keys\Utility.Keys.csproj" />
-		<ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
+		<ProjectReference Include="..\..\PropertyNotifications\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
 		<ProjectReference Include="..\..\Interfaces\Utility.Interfaces.Exs\Utility.Interfaces.Exs.csproj" />
 		<ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
 		<ProjectReference Include="..\..\Nodes\Utility.Nodes\Utility.Nodes.csproj" />

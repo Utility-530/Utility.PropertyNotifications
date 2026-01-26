@@ -10,7 +10,7 @@
     <ProjectReference Include="..\..\Helpers\Utility.Extensions\Utility.Extensions.csproj" />
     <ProjectReference Include="..\..\Interfaces\Utility.Interfaces.Exs\Utility.Interfaces.Exs.csproj" />
 	  <ProjectReference Include="..\..\Reactives\Utility.Reactives\Utility.Reactives.csproj" />
-	  <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
+	  <ProjectReference Include="..\..\PropertyNotifications\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
 	  <ProjectReference Include="..\..\Infrastructure\Utility.Globals\Utility.Globals.csproj" />
 
   </ItemGroup>

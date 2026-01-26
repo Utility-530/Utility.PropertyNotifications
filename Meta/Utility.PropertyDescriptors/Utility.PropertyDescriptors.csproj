@@ -11,7 +11,7 @@
 	  <ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
 	  <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
 	  <ProjectReference Include="..\..\Infrastructure\Utility.Changes\Utility.Changes.csproj" />
-	  <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
+	  <ProjectReference Include="..\..\PropertyNotifications\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
 	  <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
 	  <ProjectReference Include="..\..\Nodes\Utility.Nodes\Utility.Nodes.csproj" />
 	  <ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
