@@ -1,6 +1,4 @@
-﻿using DryIoc;
-using LanguageExt.Pipes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
@@ -98,12 +96,12 @@ namespace Utility.Nodify.Engine
                 NodeViewModel nodeViewModel = new() { Data = methodInfo, Inputs = inputs, Outputs = outputs, Key = new GuidKey(Guid.NewGuid()) };
                 foreach (var parameter in methodInfo.GetParameters())
                 {
-                    var input = new ConnectorViewModel() { Key = parameter.Name, Data = parameter, Flow = IO.Input, Node = nodeViewModel };
+                    var input = new ConnectorViewModel() { Name = parameter.Name, Guid = Guid.NewGuid(), Data = parameter, Flow = IO.Input, Node = nodeViewModel };
                     inputs.Add(input);
                 }
                 if (methodInfo.ReturnParameter != null)
                 {
-                    var output = new ConnectorViewModel() { Flow = IO.Output, Node = nodeViewModel, Key = "output", Data = methodInfo.ReturnParameter };
+                    var output = new ConnectorViewModel() { Flow = IO.Output, Guid = Guid.NewGuid(), Node = nodeViewModel, Name = "output", Data = methodInfo.ReturnParameter };
                     outputs.Add(output);
                 }
 
@@ -126,7 +124,7 @@ namespace Utility.Nodify.Engine
                 {
                     foreach(var item in a.NewItems)
                     {
-                        if (item is PropertyInfo propertyInfo)
+                        if (item is IGetData{ Data: PropertyInfo propertyInfo })
                         {
                             var connectorViewModel = new ConnectorViewModel() { Data = propertyInfo, Name = propertyInfo.Name, Guid = Guid.NewGuid(), Node = pending.Node };
                             connectorViewModel.Node.Outputs.Add(connectorViewModel);
