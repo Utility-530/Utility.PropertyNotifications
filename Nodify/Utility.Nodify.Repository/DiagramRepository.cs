@@ -25,7 +25,7 @@ namespace Utility.Nodify.Repository
         public Guid Guid { get; set; }
 
         [Unique]
-        public string Key { get; set; }
+        public string Name { get; set; }
     }
 
     public class Connector
@@ -33,7 +33,7 @@ namespace Utility.Nodify.Repository
         [PrimaryKey]
         public Guid Guid { get; set; }
         public Guid NodeId { get; set; }
-        public string Key { get; set; }
+        public string Name { get; set; }
         public bool IsInput { get; set; }
     }
 
@@ -45,7 +45,7 @@ namespace Utility.Nodify.Repository
 
 
         [Unique]
-        public string Key { get; set; }
+        public string Name { get; set; }
 
     }
 
@@ -120,15 +120,14 @@ namespace Utility.Nodify.Repository
 
         public void Track(IDiagramViewModel diagramViewModel)
         {
-            var find = connection.FindWithQuery<Diagram>("SELECT * FROM Diagram WHERE Key = ?", (diagramViewModel as IGetKey).Key);
-
-            var diagramId = Guid.NewGuid();
-            if (find == null)
-            {
-                Add(new Diagram { Guid = diagramId, Key = (diagramViewModel as IGetKey).Key });
-            }
-            else
-                diagramId = find.Guid;
+            //var find = connection.FindWithQuery<Diagram>("SELECT * FROM Diagram WHERE Name = ?", (diagramViewModel as IGetName).Name);
+            //var diagram
+            //if (find == null)
+            //{
+            //    Add(new Diagram { Guid = diagramViewModel.Guid(), Name = (diagramViewModel as IGetName).Name });
+            //}
+            //else
+              var  diagramId = diagramViewModel.Guid();
 
             diagramViewModel
                 .Connections
@@ -151,7 +150,7 @@ namespace Utility.Nodify.Repository
                 {
                     var key = converter.Convert(a.Data());
                     var nodeId = (a as IGetGuid).Guid;
-                    Add(new Node() { DiagramId = diagramId, Guid = nodeId, Key = key });
+                    Add(new Node() { DiagramId = diagramId, Guid = nodeId, Name = key });
 
                     a.Inputs.AndAdditions<IConnectorViewModel>().Subscribe(input =>
                     {
@@ -160,7 +159,7 @@ namespace Utility.Nodify.Repository
                             if ((input as IGetGuid).Guid == default)
                                 (input as ISetGuid).Guid = Guid.NewGuid();
                             if (input is IGetData { Data: { } data })
-                                Add(new Connector() { NodeId = input.Node.Guid(), Guid = (input as IGetGuid).Guid, Key = converter.Convert(data), IsInput = true });
+                                Add(new Connector() { NodeId = input.Node.Guid(), Guid = (input as IGetGuid).Guid, Name = converter.Convert(data), IsInput = true });
                             else
                                 throw new Exception("Input Connector data is null");
                         }
@@ -173,7 +172,7 @@ namespace Utility.Nodify.Repository
                             if ((output as IGetGuid).Guid == default)
                                 (output as ISetGuid).Guid = Guid.NewGuid();
                             if (output is IGetData { Data: { } data })
-                                Add(new Connector() { NodeId = output.Node.Guid(), Guid = (output as IGetGuid).Guid, Key = converter.Convert(data) });
+                                Add(new Connector() { NodeId = output.Node.Guid(), Guid = (output as IGetGuid).Guid, Name = converter.Convert(data) });
                             else
                                 throw new Exception("Output Connector data is null");
                         }
@@ -184,13 +183,13 @@ namespace Utility.Nodify.Repository
 
         public IDiagramViewModel? Convert(IDiagramViewModel diagramViewModel)
         {
-            var find = connection.FindWithQuery<Diagram>("SELECT * FROM Diagram WHERE Key = ?", (diagramViewModel as IGetKey).Key);
-            if (find == null)
-                //throw new Exception($"Diagram with key '{key}' not found");
-                return null;
+            //var find = connection.FindWithQuery<Diagram>("SELECT * FROM Diagram WHERE Key = ?", (diagramViewModel as IGetKey).Key);
+            //if (find == null)
+            //    //throw new Exception($"Diagram with key '{key}' not found");
+            //    return null;
 
             //var diagramViewModel = new ViewModels.DiagramViewModel(Locator.Current.GetService<DryIoc.IContainer>()) { Key = key, Guid = find.Guid };
-            var nodes = connection.Query<Node>("SELECT * FROM Node WHERE DiagramId = ?", find.Guid);
+            var nodes = connection.Query<Node>("SELECT * FROM Node WHERE DiagramId = ?", diagramViewModel.Guid());
 
             foreach (var node in nodes)
             {
@@ -205,7 +204,7 @@ namespace Utility.Nodify.Repository
         {
             return Observable.Create<INodeViewModel>(observer =>
             {
-                return converter.ConvertBack(node.Key)
+                return converter.ConvertBack(node.Name)
                 .Subscribe(data =>
                 {
                     INodeViewModel nodeViewModel;
@@ -220,7 +219,7 @@ namespace Utility.Nodify.Repository
                     }
                     else
                     {
-                        //nodeViewModel = new NodeViewModel() { Key = data.Key, Data = data.Data };
+
                         nodeViewModel = Globals.Resolver.Resolve<IViewModelFactory>().CreateNode(data);
                         (nodeViewModel as ISetKey).Key = new GuidKey(node.Guid);
                         diagramViewModel.Nodes.Add(nodeViewModel);
@@ -232,7 +231,7 @@ namespace Utility.Nodify.Repository
                     foreach (var _outputConnector in _outputConnectors)
                     {
                         converter
-                        .ConvertBack(_outputConnector.Key)
+                        .ConvertBack(_outputConnector.Name)
                         .Subscribe(a =>
                         {
                             var outputConnectorViewModel = nodeViewModel.Outputs.SingleOrDefault(a => (a as IGetGuid).Guid == _outputConnector.Guid);
@@ -249,7 +248,7 @@ namespace Utility.Nodify.Repository
                                 if (inputConnector != null)
                                 {
                                     converter
-                                    .ConvertBack(inputConnector.Key)
+                                    .ConvertBack(inputConnector.Name)
                                     .Subscribe(al =>
                                     {
                                         Node inputNode = connection.Query<Node>("SELECT * FROM Node WHERE Guid = ?", inputConnector.NodeId).Single();
@@ -282,7 +281,7 @@ namespace Utility.Nodify.Repository
                     foreach (var inputConnector in inputConnectors)
                     {
                         converter
-                        .ConvertBack(inputConnector.Key)
+                        .ConvertBack(inputConnector.Name)
                         .Subscribe(al =>
                         {
                             Node inputNode = connection.Query<Node>("SELECT * FROM Node WHERE Guid = ?", inputConnector.NodeId).Single();
@@ -323,7 +322,7 @@ namespace Utility.Nodify.Repository
         public bool Add(Diagram diagram)
         {
             initialisationTask.Wait();
-            var find = connection.FindWithQuery<Diagram>("SELECT * FROM Diagram WHERE Key = ?", diagram.Key);
+            var find = connection.FindWithQuery<Diagram>("SELECT * FROM Diagram WHERE Name = ?", diagram.Name);
             if (find != null)
                 return false;
             return connection.Insert(diagram) == 1;
@@ -332,7 +331,7 @@ namespace Utility.Nodify.Repository
         public bool Add(Node node)
         {
             initialisationTask.Wait();
-            var find = connection.FindWithQuery<Node>("SELECT * FROM Node WHERE Key = ?", node.Key);
+            var find = connection.FindWithQuery<Node>("SELECT * FROM Node WHERE Name = ?", node.Name);
             if (find != null)
                 return false;
             return connection.Insert(node) == 1;
@@ -341,7 +340,7 @@ namespace Utility.Nodify.Repository
         public bool Add(Connector connector)
         {
             initialisationTask.Wait();
-            var find = connection.FindWithQuery<Connector>("SELECT * FROM Connector WHERE Key = ? AND NodeId = ?", connector.Key, connector.NodeId);
+            var find = connection.FindWithQuery<Connector>("SELECT * FROM Connector WHERE Name = ? AND NodeId = ?", connector.Name, connector.NodeId);
             if (find != null)
                 return false;
             return connection.Insert(connector) == 1;
