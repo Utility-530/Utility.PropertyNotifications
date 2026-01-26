@@ -19,12 +19,15 @@
                      xmlns:res="http://schemas.utility.com/resourcedictionary"
                      xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks" 
                      xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
-                     xmlns:sb="http://schemas.utility.com/splitbuttons"
+                     xmlns:sb="http://schemas.utility.com/splitbuttons" 
+                     xmlns:tree="http://schemas.utility.com/trees"
                      mc:Ignorable="d">
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/ButtonComboBoxTreeViewStyle.xaml"></res:SharedResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
+
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
     <Style x:Key="EllipseStyle"  TargetType="{x:Type cb:ComboBoxTreeView}" BasedOn="{StaticResource ButtonComboBoxTreeViewStyle}">
         <Setter Property="TreeItemContainerStyle" >
@@ -58,10 +61,12 @@
     </Style>
 
     <Style x:Key="PropertyStyle"  TargetType="{x:Type cb:ComboBoxTreeView}" BasedOn="{StaticResource ButtonComboBoxTreeViewStyle}">
+        <Setter Property="ShowCloseButton" Value="True"/>
+        <Setter Property="CloseOnCheck" Value="True"/>
         <Setter Property="ToggleButtonTemplate">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <materialDesign:PackIcon Kind="PlusBox" Foreground="Indigo" Background="Transparent"></materialDesign:PackIcon>
+                    <materialDesign:PackIcon Kind="PlusBox" Foreground="Tomato" Background="Transparent"></materialDesign:PackIcon>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -309,22 +314,26 @@
                                     Margin="{TemplateBinding Padding}">
 
                             <ContentPresenter ContentSource="Header" />
-                            <cb:ComboBoxTreeView     
-                                Height="14" Width="14"
-                                x:Name="PART_Connector"                             
-                                Style="{StaticResource PropertyStyle}"  
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                Background="Transparent"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                Margin="5 0 0 0">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="CheckedItemsChanged">
-                                        <beh:InvokeCommandAction PassEventArgsToCommand="False" 
-                                                                 EventArgsConverter="{StaticResource CheckedNodeEventArgsConverter}"
-                                                                 Command="{Binding DataContext.ChangeConnectorsCommand, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
+                            <cb:ComboBoxTreeView   
+                                x:Name="PART_Connector" >
+                                <cb:ComboBoxTreeView.Style>
+                                    <Style TargetType="{x:Type cb:ComboBoxTreeView}" BasedOn="{StaticResource PropertyStyle}">
+                                        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                                        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                                        <Setter Property="Background" Value="Transparent"></Setter>
+                                        <Setter Property="Margin" Value="5 0 0 0"></Setter>
+                                        <Setter Property="Height" Value="24"></Setter>
+                                        <Setter Property="Width" Value="24"></Setter>
+                                    </Style>
+                                </cb:ComboBoxTreeView.Style>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <WrapPanel>
+                                            <TextBlock Text="{Binding Data.Name}"/>
+                                            <CheckBox IsChecked="{Binding IsChecked}"/>
+                                        </WrapPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
                                 <i:Interaction.Behaviors>
                                     <cb:PropertySelectorBehavior Type="{x:Type nodes:NodeViewModel}" />
                                     <inf1:ScaleOnOpenClose></inf1:ScaleOnOpenClose>
@@ -466,15 +475,7 @@
 
 
                     <DataTemplate DataType="{x:Type models:NodeViewModel}">
-                        <!--<DataTemplate.Resources>
-                 
-                                <CollectionViewSource x:Key="TheWeeksBlocksSource" Source="{Binding Output}" />
 
-                            <CompositeCollection x:Key="CompositeCollectionSource">
-                                <CollectionContainer Collection="{Binding Source={StaticResource TheWeeksBlocksSource}}" />
-                                <ListBoxItem Foreground="Red">Other</ListBoxItem>
-                            </CompositeCollection>
-                        </DataTemplate.Resources>-->
                         <nodify:Node Content="{Binding Data}"
                                  ContentTemplateSelector="{StaticResource NodeTemplateSelector}">
                             <nodify:Node.Style>
@@ -520,6 +521,8 @@
                                                 Value="Red" />
                                         </DataTrigger>
                                     </Style.Triggers>
+                                    <Setter Property="Visibility" Value="{Binding IsVisible, Converter={x:Static conv:BooleanToVisibilityConverter.Instance}}"></Setter>
+
                                     <Setter Property="Footer" Value="{Binding Outputs}" />
 
                                     <Setter Property="Header" Value="{Binding Inputs}">
@@ -623,14 +626,77 @@
                     <nodify:DecoratorContainer DataContext="{Binding Menu}"
                                                Visibility="Visible"
                                            Location="{Binding Location, Converter={x:Static inf:PointConverter.Instance}}">
-                        <ContentControl Content="{Binding}" Height="400" Width="400" Background="Aqua"/>
+                        <ContentControl Content="{Binding}" Height="400" Width="400" Background="Aqua">
+                            <ContentControl.ContentTemplate>
+                                <DataTemplate >
+                                    <Border Padding="7" 
+                                            MaxWidth="220"
+                                            CornerRadius="3"
+                                            Background="{DynamicResource Node.BackgroundBrush}"
+                                            BorderBrush="{StaticResource NodifyEditor.SelectionRectangleStrokeBrush}"
+                                            BorderThickness="2"
+                                            Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                            <!-- Define the hierarchical data template for menu items -->
+                                            <tree:CustomTreeView ItemsSource="{Binding Children}" BorderThickness="0">
+                                                <!--<TreeView.Style>
+                                                    <Style TargetType="{x:Type tree:CustomTreeView}">
+                                                        <Setter Property="SelectedItem" Value="{Binding Current}"></Setter>
+                                                    </Style>
+                                                </TreeView.Style>-->
+                                                <TreeView.ItemContainerStyle>
+                                                    <Style TargetType="{x:Type tree:CustomTreeViewItem}">
+                                                        <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
+                                                        <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                                                    </Style>
+                                                </TreeView.ItemContainerStyle>
+                                                <TreeView.ItemTemplate>
+                                                    <HierarchicalDataTemplate  ItemsSource="{Binding Children}">
+                                                        <ContentControl 
+                                                            Content="{Binding Name, Converter={x:Static conv:DefaultConverter.Instance}}"
+                                                                Background="Transparent"
+                                                                Foreground="{DynamicResource ForegroundBrush}"
+                                                                Padding="3"
+                                                                Cursor="Hand">
+                                                            <ContentControl.Style>
+                                                                <Style TargetType="{x:Type ContentControl}">
+                                                                    <Setter Property="Template">
+                                                                        <Setter.Value>
+                                                                            <ControlTemplate TargetType="{x:Type ContentControl}">
+                                                                                <Border Name="Border"
+                                                                                        Background="{TemplateBinding Background}"
+                                                                                        Padding="{TemplateBinding Padding}">
+                                                                                    <ContentPresenter />
+                                                                                </Border>
+                                                                                <ControlTemplate.Triggers>
+                                                                                    <Trigger Property="IsMouseOver"
+                                                                                             Value="True">
+                                                                                        <Setter Property="Background"
+                                                                                                TargetName="Border"
+                                                                                                Value="{DynamicResource NodeInput.BorderBrush}" />
+                                                                                    </Trigger>
+                                                                                </ControlTemplate.Triggers>
+                                                                            </ControlTemplate>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Style>
+                                                            </ContentControl.Style>
+                                                        </ContentControl>
+                                                    </HierarchicalDataTemplate>
+                                                </TreeView.ItemTemplate>
+                                            </tree:CustomTreeView>
+                                        </ScrollViewer>
+                                    </Border>
+                                </DataTemplate>
+                            </ContentControl.ContentTemplate>
+                        </ContentControl>
                     </nodify:DecoratorContainer>
-                </CompositeCollection>            
+                </CompositeCollection>
             </nodify:NodifyEditor>
 
             <Grid Background="{StaticResource LargeGridLinesDrawingBrush}"
               Panel.ZIndex="-2" />
-            
+
             <Button Content="Fit To Screen" Width="100" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
@@ -689,7 +755,7 @@
                                      Value="{x:Static enm:FlatShape.Square}">
                 <Setter Property="ConnectorTemplate"
                                     Value="{StaticResource SquareConnector}" />
-                <!--<Setter Property="BorderBrush"
+               <!--<Setter Property="BorderBrush"
                                     Value="{StaticResource SquareConnectorColor}" />-->
                 <Setter Property="HeaderTemplate">
                     <Setter.Value>
