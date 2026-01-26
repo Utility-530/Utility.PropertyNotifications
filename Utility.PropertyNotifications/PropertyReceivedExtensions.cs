@@ -18,13 +18,11 @@ namespace Utility.PropertyNotifications
     public class PropertyObservable : IObservable<PropertyReception>, IGetReference
     {
         private readonly INotifyPropertyReceived _target;
-        private readonly bool includeNulls;
         private readonly bool includeDefaultValues;
 
-        public PropertyObservable(INotifyPropertyReceived target, bool includeNulls = true, bool includeDefaultValues = true)
+        public PropertyObservable(INotifyPropertyReceived target, bool includeDefaultValues = true)
         {
             _target = target;
-            this.includeNulls = includeNulls;
             this.includeDefaultValues = includeDefaultValues;
         }
 
@@ -32,7 +30,7 @@ namespace Utility.PropertyNotifications
 
         public IDisposable Subscribe(IObserver<PropertyReception> observer)
         {
-            return new Subscription(_target, observer, includeNulls, includeDefaultValues);
+            return new Subscription(_target, observer, includeDefaultValues);
         }
     }
 
@@ -41,21 +39,19 @@ namespace Utility.PropertyNotifications
     {
         private readonly INotifyPropertyReceived _target;
         private readonly IObserver<PropertyReception> _observer;
-        private readonly bool includeNulls;
         private readonly bool includeDefaultValues;
 
-        public Subscription(INotifyPropertyReceived target, IObserver<PropertyReception> observer, bool includeNulls, bool includeDefaultValues)
+        public Subscription(INotifyPropertyReceived target, IObserver<PropertyReception> observer, bool includeDefaultValues)
         {
             _target = target;
             _observer = observer;
-            this.includeNulls = includeNulls;
             this.includeDefaultValues = includeDefaultValues;
             _target.PropertyReceived += onPropertyReceived;
         }
 
         private void onPropertyReceived(object sender, PropertyReceivedEventArgs e)
         {
-            if (Helpers.Include(e.Value, includeNulls, includeDefaultValues))
+            if (Helpers.Proceed(e.Value, includeDefaultValues))
                 _observer.OnNext(new(e.Source ?? _target, e.Value, e.OldValue, e.PropertyName));
         }
 
