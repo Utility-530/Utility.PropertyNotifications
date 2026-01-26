@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Windows.Input;
 using Utility.Enums;
 using Utility.Interfaces.NonGeneric;
@@ -49,16 +50,25 @@ namespace Utility.Interfaces.Exs
         IIsLoaded,
         IStyle,
         ILayout,
-        IIsChecked
-
+        IIsChecked,
+        IClosed
     //IHeight,
     //IWidth
     {
     }
 
+    public interface IClosed
+    {
+        event Action? Closed;
+    }
+
     public interface IStyle
     {
         Visual Style { get; set; }
+    }
+    public interface ILocation
+    {
+        PointF Location { get; set; }
     }
     public interface ILayout
     {
