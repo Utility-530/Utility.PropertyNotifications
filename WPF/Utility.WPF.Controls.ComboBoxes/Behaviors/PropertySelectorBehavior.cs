@@ -11,6 +11,7 @@ using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Nodes;
+using Utility.PropertyNotifications;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Extensions;
 using Utility.WPF.Factorys;
@@ -141,13 +142,32 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         private IEnumerable toCollection(Type type, Predicate<PropertyInfo> predicate)
         {
-            return type
+            foreach (var nodeViewModel in type
                         .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                         .Where(a => predicate(a))
                         .OrderBy(a => a.Name)
-                        .Select(a => new NodeViewModel(a));
-                        //.GroupBy(a => a.PropertyType)
-                        //.Select(a => new Model(() => a.Select(a => new NodeViewModel(a))) { Data = a.Key, Name = a.Key.Name });
+                        .Select(a => new NodeViewModel(a)))
+            {
+                nodeViewModel
+                    .WhenReceivedFrom(a => a.IsChecked, includeInitialValue: false)
+                    .Subscribe(a =>
+                    {
+                        if (AssociatedObject.DataContext is PendingConnectorViewModel viewModel)
+                        {
+                            if (a)
+                            {
+                                viewModel.ChangeConnectorsCommand.Execute(new CollectionChanges(new[] { nodeViewModel }, Array.Empty<object>()));
+                            }
+                            else
+                            {
+                                viewModel.ChangeConnectorsCommand.Execute(new CollectionChanges(Array.Empty<object>(), new[] { nodeViewModel }));
+                            }
+                        }
+                    });
+                yield return nodeViewModel;
+            }
+            //.GroupBy(a => a.PropertyType)
+            //.Select(a => new Model(() => a.Select(a => new NodeViewModel(a))) { Data = a.Key, Name = a.Key.Name });
         }
 
         private static void _changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
