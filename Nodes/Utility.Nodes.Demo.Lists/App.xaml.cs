@@ -112,7 +112,7 @@ namespace Utility.Nodes.Demo.Lists
 
             var exceptionWindow = new Window()
             {
-                Content = Globals.Exceptions.ToObservableCollection(),
+                Content = Globals.Exceptions.ToObservableCollection(Globals.UI),
                 ContentTemplate = Utility.WPF.Helpers.ResourceHelper.FindTemplate("ExceptionsTemplate")
             };
 

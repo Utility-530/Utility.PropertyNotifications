@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Transactions;
-using ICSharpCode.WpfDesign;
 using Utility.API.Services;
 using Utility.Entities;
 using Utility.Enums;

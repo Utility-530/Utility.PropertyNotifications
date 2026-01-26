@@ -4,7 +4,7 @@ using System.Text;
 using NetPrints.Core;
 using NetPrints.Interfaces;
 using NetPrintsEditor.Converters;
-using NetPrintsEditor.Reflection;
+using NetPrints.Reflection;
 using Splat;
 using Utility.Extensions;
 using Utility.Interfaces.Exs;
@@ -18,6 +18,7 @@ using Utility.Services;
 using Utility.Services.Meta;
 using Utility.ServiceLocation;
 using Utility.Collections;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace Utility.Nodes.Demo.Lists.Factories
 {
@@ -25,7 +26,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
     {
         public INodeViewModel BuildMethodRoot()
         {
-            Locator.CurrentMutable.RegisterLazySingleton<IReflectionProvider>(() => ReflectionProvider.Empty());
+            Locator.CurrentMutable.RegisterLazySingleton<CSharpCompilation>(() => ReflectionProvider.Empty());
             Locator.CurrentMutable.RegisterLazySingleton<ISpecifierConverter>(() => new SpecifierConverter());
 
             var guid = Guid.Parse(MetaDataFactory.methodInfoGuid);
@@ -97,7 +98,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
     {
         public static IEnumerable<ISpecifier> Specifiers(bool? isStatic = default, string? name = null, Type argumentType = null, Type returnType = null)
         {
-            return Locator.Current.GetService<IReflectionProvider>()
+            return Locator.Current.GetService<CSharpCompilation>()
             .GetMethods(
                 new ReflectionProviderMethodQuery()
                       .WithArgumentType(argumentType == null ? null : TypeSpecifier.FromType(argumentType))

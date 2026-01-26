@@ -125,20 +125,20 @@ namespace Utility.Nodes.Demo.Lists.Factories
                             a.RaisePropertyChanged("Value");
                         }, guid: guid);
                     }) { Name = html, DataTemplate=Templates.Html },
-                    new Model<string>(attach: stringModel=>{
-                              //stringModel.ReactTo<RazorFileReturnParam>(setAction: a => stringModel.Set((string)a), guid: guid);
-                              ServiceHelper.ReactTo<GeneralOutStringParam>(setAction: _a =>    {
-                            stringModel.Set((string)_a);
-                            stringModel.RaisePropertyChanged("Value");
-                        }, guid: guid);
-                    }) { Name = html1, DataTemplate = Templates.HtmlEditor },
-                    new Model<string>(attach: rstringModel =>{
-                         //rstringModel.ReactTo<RazorFileReturnParam>(setAction: a => rstringModel.Set((string)a), guid: guid);
-                         ServiceHelper.ReactTo<GeneralOutStringParam>(setAction: _a => {
-                             rstringModel.Set((string)_a);
-                             rstringModel.RaisePropertyChanged("Value");
-                         }, guid: guid);
-                    }) { Name = html2, DataTemplate = Templates.HtmlWebViewer },
+                    //new Model<string>(attach: stringModel=>{
+                    //          //stringModel.ReactTo<RazorFileReturnParam>(setAction: a => stringModel.Set((string)a), guid: guid);
+                    //          ServiceHelper.ReactTo<GeneralOutStringParam>(setAction: _a =>    {
+                    //        stringModel.Set((string)_a);
+                    //        stringModel.RaisePropertyChanged("Value");
+                    //    }, guid: guid);
+                    //}) { Name = html1, DataTemplate = Templates.HtmlEditor },
+                    //new Model<string>(attach: rstringModel =>{
+                    //     //rstringModel.ReactTo<RazorFileReturnParam>(setAction: a => rstringModel.Set((string)a), guid: guid);
+                    //     ServiceHelper.ReactTo<GeneralOutStringParam>(setAction: _a => {
+                    //         rstringModel.Set((string)_a);
+                    //         rstringModel.RaisePropertyChanged("Value");
+                    //     }, guid: guid);
+                    //}) { Name = html2, DataTemplate = Templates.HtmlWebViewer },
                 ],
                 attach: (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; }
                 )
