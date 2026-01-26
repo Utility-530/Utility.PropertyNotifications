@@ -1,8 +1,8 @@
-﻿using DryIoc;
-using Splat;
+﻿using Splat;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
 using Utility.Interfaces.NonGeneric.Dependencies;
 using Utility.Models;
 using Utility.Models.Diagrams;
@@ -22,7 +22,7 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
         public static async void registerGlobals(IRegister register)
         {  
             const string diagramKey = "Master";
-
+            var diagramGuid = new Guid("CF96DB2C-16D6-4D87-BD49-7E8B1896AF5A");
             register.Register(() => new PlayBackViewModel());
             register.Register(() => new HistoryViewModel());
             register.Register(() => new MasterPlayViewModel());
@@ -38,13 +38,14 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
 
             Globals.Exceptions.Subscribe(a => Globals.Resolver.Resolve<ExceptionsViewModel>().Collection.Add(a));
             var repo = new DiagramRepository("../../../Data");
-            var diagramViewModel = new DiagramViewModel() { Key = diagramKey, Arrangement = Utility.Enums.Arrangement.UniformRow };
+            var diagramViewModel = new DiagramViewModel() { Guid = diagramGuid, Name = diagramKey, Arrangement = Utility.Enums.Arrangement.UniformRow };
             register.Register<IDiagramViewModel>(diagramViewModel);
             //container.RegisterInstance<IDiagramViewModel>(diagramViewModel);
             register.Register<IDiagramFactory, DiagramFactory>();
             register.Register<IViewModelFactory, ViewModelFactory>();
             register.Register<IMenuFactory, MenuFactory>();
-            register.Register<Utility.Nodify.Operations.Infrastructure.INodeSource, NodeSource>();
+            register.Register<IEnumerableFactory, NodeFilter>();
+            register.Register<IFactory<INodeViewModel>, NodeFactory>();
             await Globals.Resolver.Resolve<IDiagramFactory>().Build(diagramViewModel);
 
             repo.Track(diagramViewModel);
@@ -64,16 +65,5 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
 
         //    return container;
         //}
-
-        class DiConfiguration
-        {
-            public static Rules SetRules(Rules rules)
-            {
-                rules = rules
-                    .WithDefaultReuse(Reuse.Singleton)
-                    .With(FactoryMethod.ConstructorWithResolvableArguments);
-                return rules;
-            }
-        }
     }
 }

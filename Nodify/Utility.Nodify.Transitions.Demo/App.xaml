@@ -4,8 +4,7 @@
              xmlns:local="clr-namespace:Utility.Nodify.Transitions.Demo"
              xmlns:inf="clr-namespace:Utility.Nodify.Transitions.Demo.Infrastructure"
              xmlns:nodify="https://miroiu.github.io/nodify"    
-             xmlns:vm="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
-             xmlns:vm1="clr-namespace:Utility.Nodify.ViewModels;assembly=Utility.Nodify.ViewModels" 
+             xmlns:vm="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"           
              xmlns:templates="http://schemas.utility.com/templates" 
              xmlns:models="clr-namespace:Utility.Models.Diagrams;assembly=Utility.Models.Diagrams"
              xmlns:prop="clr-namespace:Utility.PropertyDescriptors;assembly=Utility.PropertyDescriptors"
@@ -24,7 +23,6 @@
                 <ResourceDictionary Source="/Utility.Nodify.Views;component/Templates.xaml"/>
                 <ResourceDictionary Source="/Utility.Nodify.Views;component/Brushes.xaml"/>
                 <ResourceDictionary Source="/Utility.Nodify.Views;component/DiagramView.xaml"/>
-                <ResourceDictionary Source="/Utility.Nodify.Views;component/MainView.xaml"/>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Simulation;component/Themes/Generic.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 

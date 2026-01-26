@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Cogs.Collections;
-using DryIoc;
 using Splat;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Exs;
@@ -27,8 +26,8 @@ namespace Utility.Nodify.Engine
 {
     public class DiagramFactory : IDiagramFactory
     {
-        Guid guid = new("004cf888-a762-4149-a3b9-7a0911cdf1a9");
-        const string sqliteName = "O:\\source\\repos\\Utility\\Nodes\\Utility.Nodes.Demo.Editor\\Data\\first_7.sqlite";
+        Guid guid = new("f9810a78-726d-40bc-8513-1332a1a19ccb");
+        const string sqliteName = "O:\\source\\repos\\Utility\\Nodes\\Utility.Nodes.Demo.Editor\\d.sqlite";
         //private IContainer container;
         private ITreeRepository repository;
         private readonly ObservableDictionary<string, Lazy<IReadOnlyTree>> _factories = [];
