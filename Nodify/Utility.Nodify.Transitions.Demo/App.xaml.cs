@@ -1,6 +1,4 @@
-﻿using DryIoc;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Splat;
 using System.Windows;
 using Utility.Conversions.Json.Newtonsoft;

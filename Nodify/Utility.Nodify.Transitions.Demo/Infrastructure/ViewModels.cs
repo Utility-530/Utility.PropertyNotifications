@@ -7,7 +7,6 @@ using Splat;
 using Utility.ServiceLocation;
 using Utility.Interfaces.Exs;
 using Utility.Nodes;
-using DryIoc;
 using Utility.Interfaces.Exs.Diagrams;
 
 namespace Utility.Nodify.Transitions.Demo.Infrastructure

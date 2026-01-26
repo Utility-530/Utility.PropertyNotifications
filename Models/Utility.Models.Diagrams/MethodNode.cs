@@ -1,5 +1,4 @@
-﻿using DryIoc;
-using Splat;
+﻿using Splat;
 using System.Reflection;
 using Utility.Extensions;
 using Utility.Interfaces.Exs;

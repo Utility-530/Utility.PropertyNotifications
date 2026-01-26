@@ -4,8 +4,6 @@ using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Windows.Input;
 using Byter;
-using DryIoc;
-using LanguageExt.Pipes;
 using Netly;
 using Netly.Core;
 using Utility.Collections;
@@ -35,10 +33,9 @@ namespace Utility.Infrastructure
 
     public class DummyLogger : ILogger
     {
-        private readonly IContainer container;
         private Queue<Subject<Unit>> _subjects = new();
 
-        public DummyLogger(IContainer container)
+        public DummyLogger()
         {
             Command = new ObservableCommand(b =>
             {
@@ -49,7 +46,6 @@ namespace Utility.Infrastructure
                     sub.OnCompleted();
                 }
             });
-            this.container = container;
         }
 
         public ICommand Command { get; }
@@ -83,7 +79,7 @@ namespace Utility.Infrastructure
         {
             var subject = new Subject<Unit>();
             _subjects.Enqueue(subject);
-            return await subject.ToTask(container.Resolve<SynchronizationContext>());
+            return await subject.ToTask(Globals.UI);
         }
 
         public void Send(BaseObject[] nodes)
@@ -100,12 +96,11 @@ namespace Utility.Infrastructure
 
     public class Logger : ILogger
     {
-        private readonly IContainer container;
         private UdpClient client = new();
         private Dictionary<Guid, ReplaySubject<Unit>> observables = new();
-        private SynchronizationContext synchronizationContext => container.Resolve<SynchronizationContext>();
+        private SynchronizationContext synchronizationContext => Globals.UI;
 
-        public Logger(IContainer container)
+        public Logger()
         {
             var host = new Host(Constants.IPAddress, Constants.Port);
 
@@ -174,7 +169,6 @@ namespace Utility.Infrastructure
             });
 
             client.Open(host);
-            this.container = container;
         }
 
         public Task<Unit> Send(GuidValue guidValue, IObserverIOType observer)

@@ -1,5 +1,4 @@
 ﻿using ActivateAnything;
-using DryIoc;
 using Optional;
 using Splat;
 using SQLite;

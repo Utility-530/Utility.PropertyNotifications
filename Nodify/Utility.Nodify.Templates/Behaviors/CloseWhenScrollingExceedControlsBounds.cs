@@ -10,7 +10,6 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Forms.Design.Behavior;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
-using LanguageExt;
 using Microsoft.Xaml.Behaviors;
 using Nodify;
 using Utility.Nodes;
