@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Conversions\Utility.Json.Newtonsoft\Utility.Conversions.Json.Newtonsoft.csproj" />
     <ProjectReference Include="..\..\Models\Utility.Models.Diagrams\Utility.Models.Diagrams.csproj" />
+    <ProjectReference Include="..\..\Repos\Utility.Repos\Utility.Repos.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Objects\Utility.WPF.Controls.Objects.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Trees\Utility.WPF.Trees.csproj" />
