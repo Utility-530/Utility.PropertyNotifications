@@ -13,9 +13,4 @@
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.ComboBoxes\Utility.WPF.Controls.ComboBoxes.csproj" />
     <ProjectReference Include="..\Utility.Nodes.Directorys\Utility.Nodes.Directories.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Infrastructure\" />
-  </ItemGroup>
-
 </Project>
