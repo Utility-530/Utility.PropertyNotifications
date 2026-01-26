@@ -54,16 +54,14 @@ namespace Utility.PropertyNotifications
         {
             private readonly TModel _target;
             private readonly PropertyInfo? _info;
-            private readonly bool _includeNulls;
             private readonly bool includeInitialValue;
             private readonly bool includeDefaultValues;
             private const string constructor = ".ctor";
 
-            public PropertyObservable(TModel target, PropertyInfo? info = null, bool includeNulls = false, bool includeInitialValue = true, bool includeDefaultValues = true)
+            public PropertyObservable(TModel target, PropertyInfo? info = null, bool includeInitialValue = true, bool includeDefaultValues = true)
             {
                 _target = target;
                 _info = info;
-                _includeNulls = includeNulls;
                 this.includeInitialValue = includeInitialValue;
                 this.includeDefaultValues = includeDefaultValues;
             }
@@ -78,23 +76,21 @@ namespace Utility.PropertyNotifications
                 private readonly Func<TModel, T> func;
                 private readonly PropertyInfo _info;
                 private readonly IObserver<T> _observer;
-                private readonly bool includeNulls;
                 private readonly bool includeInitialValue;
                 private readonly bool includeDefaultValues;
                 private Dictionary<string, Func<object, T>> dictionary = new();
 
-                public Subscription(TModel target, PropertyInfo? info, IObserver<T> observer, bool includeNulls, bool includeInitialValue, bool includeDefaultValues)
+                public Subscription(TModel target, PropertyInfo? info, IObserver<T> observer, bool includeInitialValue, bool includeDefaultValues)
                 {
                     _target = target;
                     _info = info;
                     this.func = info?.ToGetter<TModel, T>();
                     _observer = observer;
-                    this.includeNulls = includeNulls;
                     this.includeInitialValue = includeInitialValue;
                     this.includeDefaultValues = includeDefaultValues;
                     _target.PropertyChanged += OnPropertyChanged;
                     if(includeInitialValue)
-                        raiseChange();
+                        raiseChange(func.Invoke(_target));
                 }
 
                 private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -116,12 +112,12 @@ namespace Utility.PropertyNotifications
                             if (dictionary.ContainsKey(pName))
                             {
                                 var value = dictionary[pName].Invoke(_target);
-                                _observer.OnNext(value);
+                                raiseChange(value);
                             }
                         }
                     }
                     else if (e.PropertyName == _info.Name)
-                        raiseChange();
+                        raiseChange(func.Invoke(_target));
                 }
 
                 public void Dispose()
@@ -130,17 +126,16 @@ namespace Utility.PropertyNotifications
                     _observer.OnCompleted();
                 }
 
-                private void raiseChange()
+                private void raiseChange(T? value)
                 {
-                    var value = func.Invoke(_target);
-                    if (Helpers.Include(value, includeNulls, includeDefaultValues))
+                    if (Helpers.Proceed(value, includeDefaultValues))
                         _observer.OnNext(value);
                 }
             }
 
             public IDisposable Subscribe(IObserver<T> observer)
             {
-                return new Subscription(_target, _info, observer, _includeNulls, includeInitialValue, includeDefaultValues);
+                return new Subscription(_target, _info, observer, includeInitialValue, includeDefaultValues);
             }
 
             public override string ToString()
@@ -226,24 +221,24 @@ namespace Utility.PropertyNotifications
         }
 
         public static IObservable<TRes> WithChangesTo<TModel, TRes>(this TModel model,
-            Expression<Func<TModel, TRes>>? expr = null, bool includeNulls = false, bool includeInitialValue = true, bool includeDefaultValues = true) where TModel : INotifyPropertyChanged
+            Expression<Func<TModel, TRes>>? expr = null, bool includeInitialValue = true, bool includeDefaultValues = false) where TModel : INotifyPropertyChanged
         {
             var l = (LambdaExpression)expr;
             var ma = (MemberExpression)l.Body;
             var prop = (PropertyInfo)ma.Member;
-            return WithChangesTo<TModel, TRes>(model, prop, includeNulls, includeInitialValue, includeDefaultValues);
+            return WithChangesTo<TModel, TRes>(model, prop, includeInitialValue, includeDefaultValues);
         }
 
         public static IObservable<TRes> WithChangesTo<TModel, TRes>(this TModel model,
-            PropertyInfo? propertyInfo = null, bool includeNulls = false, bool includeInitialValue = true, bool includeDefaultValues = true) where TModel : INotifyPropertyChanged
+            PropertyInfo? propertyInfo = null, bool includeInitialValue = true, bool includeDefaultValues = true) where TModel : INotifyPropertyChanged
         {
-            return new PropertyObservable<TModel, TRes>(model, propertyInfo, includeNulls, includeInitialValue, includeDefaultValues);
+            return new PropertyObservable<TModel, TRes>(model, propertyInfo, includeInitialValue, includeDefaultValues);
         }
 
         public static IObservable<object> WithChangesTo<TModel>(this TModel model,
-            PropertyInfo? propertyInfo = null, bool includeNulls = false, bool includeInitialValue = true) where TModel : INotifyPropertyChanged
+            PropertyInfo? propertyInfo = null, bool includeInitialValue = true, bool includeDefaultValues = false) where TModel : INotifyPropertyChanged
         {
-            return new PropertyObservable<TModel, object>(model, propertyInfo, includeNulls, includeInitialValue);
+            return new PropertyObservable<TModel, object>(model, propertyInfo, includeDefaultValues, includeInitialValue);
         }
 
         public static IObservable<PropertyChange> WhenChanged<TModel>(this TModel model, Expression<Func<TModel, object>>? expr = null) where TModel : INotifyPropertyChanged
