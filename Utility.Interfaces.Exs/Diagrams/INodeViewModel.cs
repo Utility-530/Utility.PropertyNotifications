@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Interfaces.Exs.Diagrams
@@ -11,5 +13,9 @@ namespace Utility.Interfaces.Exs.Diagrams
         ICollection<IConnectorViewModel> Inputs { get; }
         ICollection<IConnectorViewModel> Outputs { get; }
         INodeViewModel Diagram { get; set; }
+
+        void OpenAt(PointF targetLocation);
+
+        void Close();
     }
 }
