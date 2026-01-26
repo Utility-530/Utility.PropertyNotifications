@@ -100,13 +100,14 @@
                                 <Grid            IsHitTestVisible="False">
                                     <base:CustomItemsControl x:Name="ContentSite"
                                                              AlternationCount="1000"
-                                      VerticalAlignment="Center" VerticalContentAlignment="Center"
-                                      HorizontalContentAlignment="Center"
-                                      HorizontalAlignment="Left"
-                            ItemsSource="{Binding SelectedItems, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                            ItemTemplate="{TemplateBinding SelectedItemTemplate}"
-                            ItemTemplateSelector="{TemplateBinding  SelectedItemTemplateSelector}"
-                            Margin="3,3,23,3">
+                                                             VerticalAlignment="Center" 
+                                                             VerticalContentAlignment="Center"
+                                                             HorizontalContentAlignment="Center"
+                                                             HorizontalAlignment="Left"
+                                                             ItemsSource="{Binding SelectedItems, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                                             ItemTemplate="{TemplateBinding SelectedItemTemplate}"
+                                                             ItemTemplateSelector="{TemplateBinding  SelectedItemTemplateSelector}"
+                                                             Margin="3,3,23,3">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <WrapPanel Orientation="Horizontal"></WrapPanel>
