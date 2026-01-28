@@ -1,8 +1,0 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Utility.WPF.Controls.Html;component/HtmlControl.xaml"></ResourceDictionary>
-        <ResourceDictionary Source="/Utility.WPF.Controls.Html;component/HtmlEditorControl.xaml"></ResourceDictionary>
-        <ResourceDictionary Source="/Utility.WPF.Controls.Html;component/TinyHtmlControl.xaml"></ResourceDictionary>
-        <ResourceDictionary Source="/Utility.WPF.Controls.Html;component/TinyHtmlEditorControl.xaml"></ResourceDictionary>
-    </ResourceDictionary.MergedDictionaries>
-</ResourceDictionary>
