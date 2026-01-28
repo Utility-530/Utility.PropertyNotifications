@@ -1,6 +1,8 @@
 [![NuGet version (Newtonsoft.Json.Bson)](https://img.shields.io/nuget/v/Utility.PropertyNotifications)](https://www.nuget.org/packages/Utility.PropertyNotifications)
+![.NET Standard 2.0](https://img.shields.io/badge/-2.0-green?logo=dotnet)
 
-# Utility.PropertyNotifications
+
+# Utility PropertyNotifications
 
 - Simplifies raising **INotifyPropertyChanged** events with helper methods [e.g RaisePropertyChanged<T>(ref T field, T value, [CallerMemberName] string propertyName = null)]
 that sit inside the get/set brackets and handle value comparison and updates
@@ -10,7 +12,7 @@ that sit inside the get/set brackets and handle value comparison and updates
 - Leverages CallerMemberName attribute to avoid string literals
 - .NET Standard 2.0
 
-## Example:
+## Example
 
     public class MainViewModel : NotifyPropertyClass
     {
