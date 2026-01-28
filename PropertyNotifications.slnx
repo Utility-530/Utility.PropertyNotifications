@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Demos/">
+    <Project Path="Utility.PropertyNotifications.WPF.Demo/Utility.PropertyNotifications.WPF.Demo.csproj" />
+  </Folder>
+  <Folder Name="/External/">
+    <Project Path="../Attributes/Utility.Attributes/Utility.Attributes.csproj" />
+    <Project Path="../Helpers/Utility.Helpers/Utility.Helpers.csproj" />
+    <Project Path="../Interfaces/Utility.Interfaces/Utility.Interfaces.csproj" />
+  </Folder>
+  <Project Path="Utility.PropertyNotifications/Utility.PropertyNotifications.csproj" />
+</Solution>
