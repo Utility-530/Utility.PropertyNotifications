@@ -16,7 +16,6 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using ActivateAnything;
 using AvalonEditB.Highlighting;
-using DryIoc;
 using HandyControl.Controls;
 using SQLite;
 using SQLitePCL;

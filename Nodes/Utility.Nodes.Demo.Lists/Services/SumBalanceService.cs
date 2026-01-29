@@ -1,5 +1,4 @@
 ﻿using Humanizer;
-using LanguageExt.Pipes;
 using SQLite;
 using System.Collections;
 using System.Windows.Documents;

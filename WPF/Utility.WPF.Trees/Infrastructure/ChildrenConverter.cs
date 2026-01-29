@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Data;
-using LanguageExt.TypeClasses;
 using Splat;
 using Tiny.Toolkits;
 using Utility;

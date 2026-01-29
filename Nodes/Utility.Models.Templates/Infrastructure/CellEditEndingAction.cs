@@ -9,7 +9,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Bogus;
-using DryIoc;
 using Microsoft.Xaml.Behaviors;
 using Splat;
 using Utility.Entities;
