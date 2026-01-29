@@ -19,7 +19,7 @@
 		<ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
 		<ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
 		<ProjectReference Include="..\..\Structs\Utility.Structs\Utility.Structs.csproj" />
-		<ProjectReference Include="..\Utility.Attributes\Utility.Attributes.csproj" />
+		<ProjectReference Include="..\..\Attributes\Utility.Attributes\Utility.Attributes.csproj" />
 	</ItemGroup>
 
 </Project>

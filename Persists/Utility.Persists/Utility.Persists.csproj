@@ -17,7 +17,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\..\External\TypeSerialization\TypeSerialization\TypeSerialization.csproj" />
 	  <ProjectReference Include="..\..\Infrastructure\Utility.Constants\Utility.Constants.csproj" />
-	  <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
+	  <ProjectReference Include="..\..\PropertyNotifications\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
 	  <ProjectReference Include="..\..\Reactives\Utility.Reactives\Utility.Reactives.csproj" />
 	</ItemGroup>
 
