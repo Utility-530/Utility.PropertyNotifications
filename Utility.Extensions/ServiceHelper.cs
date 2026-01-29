@@ -67,7 +67,7 @@ namespace Utility.Extensions
             {
                 throw new Exception("f 333333");
             }
-            var propertyObservable = tModel.WhenReceivedFrom(a => (a as IGetValue).Value, includeInitialValue: includeInitial, includeNulls: false);
+            var propertyObservable = tModel.WhenReceivedFrom(a => (a as IGetValue).Value, includeInitialValue: includeInitial);
             IPropertyNode propertyNode;
             if (tModel.Data() is not IPropertyNode node)
             {
