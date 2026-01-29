@@ -92,7 +92,7 @@ namespace Utility.Models
 
         public virtual void Initialise()
         {
-            this.WhenReceivedFrom(a => a.Current, includeNulls: true)
+            this.WhenReceivedFrom(a => a.Current, includeDefaultValues: true)
                 .Skip(1)
                 .Subscribe(a =>
                 {
