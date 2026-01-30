@@ -26,7 +26,7 @@ namespace Utility.Persists
             switch (query)
             {
                 case MaxRowId:
-                    return new MaxRowIdResult(connection.Table<T>().Length(), true);
+                    return new MaxRowIdResult(connection.Table<T>().Count(), true);
 
                 default:
                     throw new Exception("SD£vf fdsgff");
