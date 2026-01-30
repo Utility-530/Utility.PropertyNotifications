@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
-using DryIoc;
 using Utility.Interfaces.NonGeneric;
 using Utility.Reactives;
 
