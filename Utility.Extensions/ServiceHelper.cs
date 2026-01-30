@@ -32,10 +32,12 @@ namespace Utility.Extensions
     public class PropertyReceiver<TInput> : IObserver<object>, IGetReference
     {
         private readonly INodeViewModel nodeViewModel;
+        private readonly Func<object, TInput>? transformation;
 
-        public PropertyReceiver(INodeViewModel nodeViewModel)
+        public PropertyReceiver(INodeViewModel nodeViewModel, Func<object, TInput>? transformation = null)
         {
             this.nodeViewModel = nodeViewModel;
+            this.transformation = transformation;
         }
 
         public object Reference => typeof(TInput);
@@ -54,7 +56,13 @@ namespace Utility.Extensions
 
         public void OnNext(object value)
         {
-            (nodeViewModel as ISetValue).Value = value;
+            TInput? _value = default;
+            if (transformation != null)
+                _value = transformation.Invoke(value);
+            else
+                _value = (TInput)value;
+
+            (nodeViewModel as ISetValue).Value = _value;
             nodeViewModel.RaisePropertyChanged(nameof(IGetValue.Value));
         }
     }
@@ -67,7 +75,7 @@ namespace Utility.Extensions
             {
                 throw new Exception("f 333333");
             }
-            var propertyObservable = tModel.WhenReceivedFrom(a => (a as IGetValue).Value, includeInitialValue: includeInitial);
+            var propertyObservable = tModel.WhenReceivedFrom(a => (a as IGetValue).Value, includeInitialValue: includeInitial, includeDefaultValues: false);
             IPropertyNode propertyNode;
             if (tModel.Data() is not IPropertyNode node)
             {
@@ -78,7 +86,7 @@ namespace Utility.Extensions
             {
                 propertyNode = node;
             }
-            if(propertyNode.Inputs.Contains(propertyObservable, new ObserveEqualityComparer()))
+            if (propertyNode.Inputs.Contains(propertyObservable, new ObserveEqualityComparer()))
             {
                 return;
             }
@@ -88,7 +96,7 @@ namespace Utility.Extensions
 
         public static void ReactTo<TParam, TInput, TOutput>(this IServiceResolver serviceResolver, INodeViewModel tModel, Func<TInput, TOutput>? transformation = null) where TParam : IParameter
         {
-       
+
             IPropertyNode propertyNode;
             if (tModel.Data() is not IPropertyNode node)
             {
@@ -100,7 +108,13 @@ namespace Utility.Extensions
                 propertyNode = node;
             }
 
-            var propertyReceiver = new PropertyReceiver<TOutput>(tModel) { Name = nameof(ISetValue.Value) };
+            var propertyReceiver = new PropertyReceiver<TOutput>(tModel, transformation != null ? new Func<object, TOutput>(a =>
+            {
+                if (a is TInput input)
+                    return transformation(input);
+                else
+                    throw new Exception("c445 GRE4");
+            }) : null) { Name = nameof(ISetValue.Value) };
             if (propertyNode.Inputs.Contains(propertyReceiver, new ObservableEqualityComparer()))
             {
                 return;
