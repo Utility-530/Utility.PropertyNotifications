@@ -37,7 +37,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     new Model(items, attach: node =>
                     {
                         node
-                        .WhenReceivedFrom(a => a.Current, includeNulls: false)
+                        .WhenReceivedFrom(a => a.Current, includeDefaultValues: false)
                         .Select(current =>
                         {
                             if (current is TypeModel { Type: { } stype })

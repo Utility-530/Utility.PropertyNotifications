@@ -43,11 +43,11 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     {
                         ServiceHelper.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a, guid: guid);
 
-                        listModel.WhenReceivedFrom(a => a.Add, includeNulls: false)
+                        listModel.WhenReceivedFrom(a => a.Add, includeDefaultValues: false)
                         .Select(a => new Changes.Change(a, null, Changes.Type.Add))
                         .Observe<ChangeParam, Changes.Change>(guid);
 
-                        listModel.WhenReceivedFrom(a => a.Remove, includeNulls: false)
+                        listModel.WhenReceivedFrom(a => a.Remove, includeDefaultValues: false)
                         .Select(a => new Changes.Change(a, null, Changes.Type.Remove))
                         .Observe<ChangeParam, Changes.Change>(guid);
 
