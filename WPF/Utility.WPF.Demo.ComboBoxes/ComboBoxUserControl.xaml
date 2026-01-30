@@ -121,8 +121,8 @@
                 <controls:ComboBoxTreeView.ToggleButtonTemplate>
                     <ControlTemplate>
                         <Grid>
-                            <Ellipse Fill="IndianRed" Height="20" Width="20"></Ellipse>
-                            <TextBlock Text="click" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" />
+                            <Border Background="Teal" />
+                            <TextBlock Text="open (close button)" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" />
                         </Grid>
                     </ControlTemplate>
                 </controls:ComboBoxTreeView.ToggleButtonTemplate>
