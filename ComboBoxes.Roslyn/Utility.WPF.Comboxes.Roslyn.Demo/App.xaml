@@ -1,0 +1,44 @@
+﻿<Application x:Class="Utility.WPF.ComboBoxes.Roslyn.Demo.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:ref="clr-namespace:System.Reflection;assembly=System.Reflection"
+             xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Utility.WPF.ComboBoxes.Roslyn;component/Themes/Generic.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="HeaderedContentControlStyle" TargetType="HeaderedContentControl">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="HeaderedContentControl">
+                            <Border Background="#F5F5F5" CornerRadius="4">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="0.1*"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="0.5*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Border Grid.Row="1" Background="GhostWhite" 
+                           Padding="16,12" HorizontalAlignment="Center">
+                                        <ContentPresenter ContentSource="Header"
+                                       TextElement.Foreground="Gray"
+                                       TextElement.FontSize="16"
+                                       TextElement.FontWeight="Medium"/>
+                                    </Border>
+
+                                    <ContentPresenter Grid.Row="2" Margin="8"/>
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>     
+    </Application.Resources>
+</Application>
