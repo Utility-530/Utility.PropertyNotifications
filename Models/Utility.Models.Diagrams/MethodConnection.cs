@@ -12,6 +12,7 @@ using System.Collections.Specialized;
 using System.Reflection;
 using Utility.Interfaces.NonGeneric;
 using Utility.Extensions;
+using System.Linq.Expressions;
 
 
 namespace Utility.Models.Diagrams
@@ -53,7 +54,7 @@ namespace Utility.Models.Diagrams
                     action.OnNext(a);
                 });
             }
-            else if (action is MethodConnector { Parameter: ParameterInfo param } && a.GetType().IsAssignableTo(param.ParameterType))
+            else if (action is MethodConnector { Parameter: ParameterInfo param } && a?.GetType().IsAssignableTo(param.ParameterType) != false)
             {
                 action.OnNext(a);
             }
@@ -181,17 +182,28 @@ namespace Utility.Models.Diagrams
                         return null; // not observable
 
                     var t = observableInterface.GetGenericArguments()[0];
-
-                    // Create an Observer<T> wrapper that forwards values to an IObserver<object>
+                  
                     var observerType = typeof(Utility.Reactives.Observer<>).MakeGenericType(t);
-                    Delegate convertedAction = Delegate.CreateDelegate(typeof(Action<>).MakeGenericType(t), action.Target, action.Method);
-
-                    var observer = Activator.CreateInstance(observerType, convertedAction, aex, completed);
+                   
+                    var observer = Activator.CreateInstance(observerType, createDelegate(t, action), aex, completed);
 
                     // Call Subscribe(observer)
                     var subscribeMethod = observableInterface.GetMethod("Subscribe");
                     var disposable = (IDisposable)subscribeMethod.Invoke(obj, new[] { observer });
                     return disposable;
+                }
+
+                static Delegate createDelegate(Type t, Action<object> action)
+                {
+                    //// Create an Observer<T> wrapper that forwards values to an IObserver<object>
+                    //Delegate convertedAction = Delegate.CreateDelegate(typeof(Action<>).MakeGenericType(t), action.Target, action.Method);
+                    // this works for value types by boxing
+                    var parameter = Expression.Parameter(t, "value");
+                    var converted = Expression.Convert(parameter, typeof(object));
+                    var call = Expression.Call(Expression.Constant(action.Target), action.Method, converted);
+                    var lambda = Expression.Lambda(typeof(Action<>).MakeGenericType(t), call, parameter);
+                    Delegate convertedAction = lambda.Compile();
+                    return convertedAction;
                 }
 
                 static IDisposable subscribeToTask(Task task, Action<object> action, Action? completed = null, Action<Exception>? aex = null)
