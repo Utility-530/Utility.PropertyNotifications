@@ -10,9 +10,9 @@
 - Integration of Roslyn's `Microsoft.CodeAnalysis` APIs into the WPF ComboBox control
 - WPF data binding and MVVM patterns for UI updates
 
-![me](https://github.com/dtaylor-530/WPF.ComboBoxes.Roslyn/blob/main/Assets/FilterTypesWithDebugging.gif)
+![me](https://github.com/dtaylor-530/WPF.ComboBoxes.Roslyn/blob/master/Assets/FilterTypesWithDebugging.gif)
 
-![me](https://github.com/dtaylor-530/WPF.ComboBoxes.Roslyn/blob/main/Assets/FilterMethodsWithParamSelection.gif)
+![me](https://github.com/dtaylor-530/WPF.ComboBoxes.Roslyn/blob/master/Assets/FilterMethodsWithParamSelection.gif)
 
 ### Structure
 
