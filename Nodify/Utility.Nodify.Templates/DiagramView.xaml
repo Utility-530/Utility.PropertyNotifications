@@ -560,7 +560,7 @@
                                                 <inf1:ConnectorTemplateSelector.DefaultTemplate>
                                                     <DataTemplate DataType="{x:Type models:ConnectorViewModel}">
                                                         <nodify:NodeInput Orientation="Horizontal" />
-                                                    </DataTemplate>
+                                                    </DataTemplate>                                  
                                                 </inf1:ConnectorTemplateSelector.DefaultTemplate>
                                                 <inf1:ConnectorTemplateSelector.PendingTemplate>
                                                     <DataTemplate DataType="{x:Type models:PendingConnectorViewModel}">
