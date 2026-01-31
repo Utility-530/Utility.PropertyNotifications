@@ -234,15 +234,15 @@ namespace Utility.Nodify.Repository
                         .Subscribe(a =>
                         {
                             var outputConnectorViewModel = nodeViewModel.Outputs.SingleOrDefault(a => (a as IGetGuid).Guid == _outputConnector.Guid);
-                            outputConnectorViewModel ??= Globals.Resolver.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(_outputConnector.Guid, true, a.Key, nodeViewModel, a.Data));
+                            outputConnectorViewModel ??= Globals.Resolver.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(_outputConnector.Guid, _outputConnector.IsInput, a.Key, nodeViewModel, a.Data));
                             outputConnectorViewModel.Node = nodeViewModel;
                             nodeViewModel.Outputs.Add(outputConnectorViewModel);
 
-                            var outputConnections = connection.Query<Connection>("SELECT * FROM Connection WHERE OutputId = ?", _outputConnector.Guid);
+                            var outputConnections = connection.Query<Connection>("SELECT * FROM Connection WHERE InputId = ?", _outputConnector.Guid);
                             foreach (var outputConnection in outputConnections)
                             {
                                 // Find the output connector
-                                var inputConnector = connection.Query<Connector>("SELECT * FROM Connector WHERE Guid = ?", outputConnection.InputId).FirstOrDefault();
+                                var inputConnector = connection.Query<Connector>("SELECT * FROM Connector WHERE Guid = ?", outputConnection.OutputId).FirstOrDefault();
                                 //ConnectorViewModel? outputConnectorViewModel = null;
                                 if (inputConnector != null)
                                 {
@@ -259,7 +259,7 @@ namespace Utility.Nodify.Repository
 
                                             if (inputConnectorViewModel == null)
                                             {
-                                                inputConnectorViewModel = Globals.Resolver.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(inputConnector.Guid, false, al.Key, inputNodeViewModel, al.Data));
+                                                inputConnectorViewModel = Globals.Resolver.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(inputConnector.Guid, inputConnector.IsInput, al.Key, inputNodeViewModel, al.Data));
                                                 inputConnectorViewModel.Node = inputNodeViewModel;
                                                 inputNodeViewModel.Inputs.Add(inputConnectorViewModel);
                                             }
@@ -290,7 +290,7 @@ namespace Utility.Nodify.Repository
 
                                 if (inputConnectorViewModel == null)
                                 {
-                                    inputConnectorViewModel = Globals.Resolver.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(inputConnector.Guid, false, al.Key, nodeViewModel, al.Data));
+                                    inputConnectorViewModel = Globals.Resolver.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(inputConnector.Guid, inputConnector.IsInput, al.Key, nodeViewModel, al.Data));
                                     inputConnectorViewModel.Node = nodeViewModel;
                                     nodeViewModel.Inputs.Add(inputConnectorViewModel);
                                 }
