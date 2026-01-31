@@ -133,16 +133,15 @@ namespace Utility.Nodes
             {
                 if (pendingConnection.IsVisible)
                 {
-                    connector = nodeViewModel.Inputs.FirstOrDefault(a => a is IGetData { Data: IType { Type: { } _type } } && _type == type);
+                    connector = nodeViewModel.Inputs.FirstOrDefault(a => a is IGetData { Data: ParameterInfo { ParameterType: Type { } _type } }? _type == type: throw new Exception(" Sdsd"));
                 }
             }
-
-            if (pendingConnection.IsVisible)
+            else
             {
-                connector = nodeViewModel.Inputs.FirstOrDefault();
+                throw new Exception("R 44d s");
             }
 
-            if (pending.Output != null && Globals.Resolver.Resolve<IViewModelFactory>().CanCreateConnection(pending.Output, pending.Input))
+            if (pending.Output != null && Globals.Resolver.Resolve<IViewModelFactory>().CanCreateConnection(pending.Output, connector))
             {
                 CreateConnection(pending.Output, connector);
                 nodeViewModel.Location = location;
@@ -188,7 +187,7 @@ namespace Utility.Nodes
             pendingConnection.IsVisible = false;
             DisconnectConnector(input);
 
-            var connectionViewModel = Globals.Resolver.Resolve<IViewModelFactory>().CreateConnection(input, output);
+            var connectionViewModel = Globals.Resolver.Resolve<IViewModelFactory>().CreateConnection(output, input);
             //Globals.Resolver.RegisterInstanceMany(connectionViewModel);
             connections.Add(connectionViewModel);
         }
