@@ -96,7 +96,7 @@ namespace Utility.Nodify.Engine
                 NodeViewModel nodeViewModel = new() { Data = methodInfo, Inputs = inputs, Outputs = outputs, Key = new GuidKey(Guid.NewGuid()) };
                 foreach (var parameter in methodInfo.GetParameters())
                 {
-                    var input = new ConnectorViewModel() { Name = parameter.Name, Guid = Guid.NewGuid(), Data = parameter, Flow = IO.Input, Node = nodeViewModel };
+                    var input = new ConnectorViewModel() { Name = parameter.Name, IsInput = true, Guid = Guid.NewGuid(), Data = parameter, Flow = IO.Input, Node = nodeViewModel };
                     inputs.Add(input);
                 }
                 if (methodInfo.ReturnParameter != null)
@@ -141,7 +141,7 @@ namespace Utility.Nodify.Engine
             };
             pending.ConnectorAdded += propertyInfo =>
             {
-                var input = new ConnectorViewModel() { Data = propertyInfo, Key = propertyInfo.Name, Node = pending.Node, IsInput = true };
+                var input = new ConnectorViewModel() { Data = propertyInfo, Guid = Guid.NewGuid(), Name = propertyInfo.Name, Node = pending.Node, IsInput = true };
                 pending.Node.Inputs.Add(input);
             };
             return pending;
