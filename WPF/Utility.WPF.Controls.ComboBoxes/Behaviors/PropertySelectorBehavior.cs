@@ -20,8 +20,6 @@ using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
-
-
     public class PropertySelectorBehavior : Behavior<ComboBox>
     {
         public static readonly DependencyProperty TypeProperty = DependencyProperty.Register("Type", typeof(Type), typeof(PropertySelectorBehavior), new PropertyMetadata(TypeChanged));
@@ -176,7 +174,7 @@ namespace Utility.WPF.Controls.ComboBoxes
             {
                 if (e.NewValue is Type type)
                 {
-                    typeSelector.AssociatedObject.ItemsSource = typeSelector.toCollection(type, a => typeSelector.Filter?.Equals(a.PropertyType) != false);
+                    typeSelector.AssociatedObject.ItemsSource = typeSelector.toCollection(typeSelector.Type, a => type?.Equals(a.PropertyType) != false);
                 }
             }
         }
