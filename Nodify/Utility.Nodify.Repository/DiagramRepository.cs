@@ -238,11 +238,11 @@ namespace Utility.Nodify.Repository
                             outputConnectorViewModel.Node = nodeViewModel;
                             nodeViewModel.Outputs.Add(outputConnectorViewModel);
 
-                            var outputConnections = connection.Query<Connection>("SELECT * FROM Connection WHERE InputId = ?", _outputConnector.Guid);
+                            var outputConnections = connection.Query<Connection>("SELECT * FROM Connection WHERE OutputId = ?", _outputConnector.Guid);
                             foreach (var outputConnection in outputConnections)
                             {
                                 // Find the output connector
-                                var inputConnector = connection.Query<Connector>("SELECT * FROM Connector WHERE Guid = ?", outputConnection.OutputId).FirstOrDefault();
+                                var inputConnector = connection.Query<Connector>("SELECT * FROM Connector WHERE Guid = ?", outputConnection.InputId).FirstOrDefault();
                                 //ConnectorViewModel? outputConnectorViewModel = null;
                                 if (inputConnector != null)
                                 {
