@@ -298,10 +298,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetPrints", "..\External\Ne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodes.Meta", "..\Nodes\Utility.Nodes.Meta\Utility.Nodes.Meta.csproj", "{F05E5B8D-DE39-9755-947D-2041AADD42FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Attributes", "..\Attributes\Utility.Attributes\Utility.Attributes.csproj", "{12FBA733-DD5A-8A4A-BE35-5E21580FE5AF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.PropertyNotifications", "..\PropertyNotifications\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj", "{77C4DE80-5C07-6A43-A3F0-8F9733458C95}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -868,14 +864,6 @@ Global
 		{F05E5B8D-DE39-9755-947D-2041AADD42FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F05E5B8D-DE39-9755-947D-2041AADD42FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F05E5B8D-DE39-9755-947D-2041AADD42FA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{12FBA733-DD5A-8A4A-BE35-5E21580FE5AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12FBA733-DD5A-8A4A-BE35-5E21580FE5AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{12FBA733-DD5A-8A4A-BE35-5E21580FE5AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{12FBA733-DD5A-8A4A-BE35-5E21580FE5AF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{77C4DE80-5C07-6A43-A3F0-8F9733458C95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77C4DE80-5C07-6A43-A3F0-8F9733458C95}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77C4DE80-5C07-6A43-A3F0-8F9733458C95}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77C4DE80-5C07-6A43-A3F0-8F9733458C95}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1022,8 +1010,6 @@ Global
 		{56D2319C-9AE8-0FEB-1B51-7655E27107CF} = {993A1800-4787-40F0-9536-057493541BBB}
 		{E0DD9377-36FB-673D-1EA6-DF3791C02204} = {993A1800-4787-40F0-9536-057493541BBB}
 		{F05E5B8D-DE39-9755-947D-2041AADD42FA} = {CF03926E-9E72-4A61-B447-2EF7E3C17461}
-		{12FBA733-DD5A-8A4A-BE35-5E21580FE5AF} = {CF03926E-9E72-4A61-B447-2EF7E3C17461}
-		{77C4DE80-5C07-6A43-A3F0-8F9733458C95} = {CF03926E-9E72-4A61-B447-2EF7E3C17461}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D60CFCE-498F-4A6D-9B9B-5546561C117E}
