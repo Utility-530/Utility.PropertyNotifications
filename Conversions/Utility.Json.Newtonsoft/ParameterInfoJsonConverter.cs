@@ -24,15 +24,32 @@ namespace Utility.Conversions.Json.Newtonsoft
             writer.WritePropertyName("MethodName");
             writer.WriteValue(value.Member.Name ?? string.Empty);
 
-            bool isReturn = value.Name == null && (value.Position == -1 || value.IsRetval);
-            writer.WritePropertyName("IsReturn");
-            writer.WriteValue(isReturn);
+            writer.WritePropertyName("Position");
+            writer.WriteValue(value.Position);
 
-            if (isReturn == false)
+            if (value.Name == null && (value.Position == -1 || value.IsRetval))
+            {
+                // return parameter
+            }
+            else
             {
                 writer.WritePropertyName("ParameterName");
                 writer.WriteValue(value.Name);
+
+                writer.WritePropertyName("Types");
+                if (value.Member is MethodInfo method)
+                {
+                    writer.WriteStartArray();
+
+                    foreach (var type in method.GetParameters().Select(p => p.ParameterType))
+                    {
+                        writer.WriteValue(type.AssemblyQualifiedName);
+                    }
+
+                    writer.WriteEndArray();
+                }
             }
+
             // End object
             writer.WriteEndObject();
         }
@@ -65,29 +82,38 @@ namespace Utility.Conversions.Json.Newtonsoft
             {
                 throw new JsonSerializationException("Method name is missing or invalid.");
             }
+            var parameterName = jObject["ParameterName"]?.ToString();
+            int? position = jObject["Position"]?.ToString() is string pos ? int.Parse(pos) : null;
+            var types = jObject["Types"].Select(a => Type.GetType(a.ToString())).ToArray();
 
-            var method = type.GetMethods().FirstOrDefault(a => a.Name == methodName);
+            var methods = type.GetMethods().Where(a => a.Name == methodName).ToArray();
 
-            if (jObject["IsReturn"].Value<bool>())
+            foreach (var method in methods)
             {
-                return method?.ReturnParameter;
-            }
-            else
-            {
-                // Try to get the property from the resolved type
-                var parameterName = jObject["ParameterName"]?.ToString();
-                if (string.IsNullOrEmpty(parameterName))
+                if (jObject["Position"].Value<int>() == -1)
                 {
-                    throw new JsonSerializationException("Parameter name is missing or invalid.");
+                    return method?.ReturnParameter;
                 }
-                var parameters = method?.GetParameters();
-                var parameterInfo = parameters.Single(a => a.Name == parameterName);
-                if (parameterInfo == null)
+                else
                 {
-                    throw new JsonSerializationException($"Parameter '{parameterName}' not found on type '{type.FullName}' of method {methodName}.");
+                    // Try to get the property from the resolved type
+                    if (string.IsNullOrEmpty(parameterName))
+                    {
+                        throw new JsonSerializationException("Parameter name is missing or invalid.");
+                    }
+                    var parameters = method?.GetParameters();
+                    var parameterInfo = parameters.SingleOrDefault(a =>
+                    a.Name == parameterName &&
+                    (position.HasValue ? a.Position == position : true) &&
+                    (types != null ? method.GetParameters().Select(a => a.ParameterType).SequenceEqual(types) : true));
+                    if (parameterInfo != null)
+                    {
+                        return parameterInfo;
+                    }
+
                 }
-                return parameterInfo;
             }
+            throw new JsonSerializationException($"Parameter '{parameterName}' not found on type '{type.FullName}' of method {methodName}.");
         }
     }
 }
