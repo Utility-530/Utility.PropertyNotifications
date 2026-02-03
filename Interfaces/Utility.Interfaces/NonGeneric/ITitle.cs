@@ -1,4 +1,4 @@
-﻿namespace Utility.Enums
+﻿namespace Utility.Interfaces
 {
     public interface ITitle
     {
