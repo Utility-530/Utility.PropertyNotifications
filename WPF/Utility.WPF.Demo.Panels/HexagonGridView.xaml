@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="http://schemas.utility.com/panels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:panels="http://schemas.utility.com/panels"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -66,11 +67,11 @@
         </Style>
     </UserControl.Resources>
 
-    <UniformGrid Columns="1">
-        <local:HexagonGrid Rows="4" Columns="2" HexagonSideLength="40" HorizontalAlignment="Center">
-            <local:HexagonGrid.Resources>
+    <UniformGrid >
+        <panels:HexagonGrid Rows="4" Columns="2" HexagonSideLength="40" HorizontalAlignment="Center">
+            <panels:HexagonGrid.Resources>
                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource HexagonButtonStyle}" />
-            </local:HexagonGrid.Resources>
+            </panels:HexagonGrid.Resources>
             <Button Grid.Row="0" Grid.Column="0" Content="0,0" />
             <Button Grid.Row="0" Grid.Column="1" Content="0,1" />
             <Button Grid.Row="0" Grid.Column="2" Content="0,2" />
@@ -85,14 +86,14 @@
             <Button Grid.Row="2" Grid.Column="1" Content="2,1" />
             <Button Grid.Row="2" Grid.Column="2" Content="2,2" />
             <Button Grid.Row="2" Grid.Column="3" Content="2,3" />
-        </local:HexagonGrid>
-        <local:HexagonGrid Rows="4" Columns="2" HexagonSideLength="40" HorizontalAlignment="Center">
-            <local:HexagonGrid.Resources>
+        </panels:HexagonGrid>
+        <panels:HexagonGrid Rows="4" Columns="2" HexagonSideLength="40" HorizontalAlignment="Center">
+            <panels:HexagonGrid.Resources>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="Height" Value="20"></Setter>
                     <Setter Property="Width" Value="20"></Setter>
                 </Style>
-            </local:HexagonGrid.Resources>
+            </panels:HexagonGrid.Resources>
             <Button Grid.Row="0" Grid.Column="0" Content="0,0" />
             <Button Grid.Row="0" Grid.Column="1" Content="0,1" />
             <Button Grid.Row="0" Grid.Column="2" Content="0,2" />
@@ -107,6 +108,48 @@
             <Button Grid.Row="2" Grid.Column="1" Content="2,1" />
             <Button Grid.Row="2" Grid.Column="2" Content="2,2" />
             <Button Grid.Row="2" Grid.Column="3" Content="2,3" />
-        </local:HexagonGrid>
+        </panels:HexagonGrid>
+
+        <panels:HexagonGrid Rows="4" Columns="2" IsArrangeAutomatic="True" HexagonSideLength="40" HorizontalAlignment="Center">
+            <panels:HexagonGrid.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Height" Value="40"></Setter>
+                    <Setter Property="Width" Value="40"></Setter>
+                </Style>
+            </panels:HexagonGrid.Resources>
+            <Button   />
+            <Button  />
+            <Button  />
+            <Button />
+            <Button  />
+            <Button  />
+            <Button   />
+            <Button  />
+            <Button />
+            <Button />
+            <Button />
+            <Button />
+        </panels:HexagonGrid>
+
+        <panels:HexagonGrid IsArrangeAutomatic="True" HexagonSideLength="40" HorizontalAlignment="Center">
+            <panels:HexagonGrid.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Height" Value="40"></Setter>
+                    <Setter Property="Width" Value="40"></Setter>
+                </Style>
+            </panels:HexagonGrid.Resources>
+            <Button   />
+            <Button  />
+            <Button  />
+            <Button />
+            <Button  />
+            <Button  />
+            <Button   />
+            <Button  />
+            <Button />
+            <Button />
+            <Button />
+            <Button />
+        </panels:HexagonGrid>
     </UniformGrid>
 </UserControl>
