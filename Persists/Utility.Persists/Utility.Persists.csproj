@@ -15,6 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
 	  <ProjectReference Include="..\..\External\TypeSerialization\TypeSerialization\TypeSerialization.csproj" />
 	  <ProjectReference Include="..\..\Infrastructure\Utility.Constants\Utility.Constants.csproj" />
 	  <ProjectReference Include="..\..\PropertyNotifications\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
