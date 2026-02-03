@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Xaml.Behaviors;
 
-namespace Utility.WPF.ComboBoxes.Roslyn
+namespace Utility.WPF.ComboBoxes
 {
 
     public partial class FilterBehavior : Behavior<ComboBox>

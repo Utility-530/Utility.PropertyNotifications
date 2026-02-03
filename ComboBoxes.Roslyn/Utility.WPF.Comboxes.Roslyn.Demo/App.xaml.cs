@@ -47,8 +47,7 @@ namespace Utility.WPF.ComboBoxes.Roslyn.Demo
             {
                 hcc.Header = "filters methods then displays their parameters on selection";
             },c =>
-            {
-                c.SetValue(FilterBehavior.IsSelectionSecondOrderProperty, true);
+            {            
                 var behaviors = Interaction.GetBehaviors(c);
                 behaviors.Add(new SymbolBehavior() { Compilation = compilation, Kind = Kind.Method, SecondaryKind = Kind.Parameters });
             }));

@@ -2,5 +2,7 @@
   <Folder Name="/App/">
     <Project Path="Utility.WPF.Comboxes.Roslyn.Demo/Utility.WPF.Comboxes.Roslyn.Demo.csproj" />
   </Folder>
+  <Project Path="Utility.Roslyn/Utility.Roslyn.csproj" Id="fcf403f9-4cc6-4df6-880a-438380406a9a" />
   <Project Path="Utility.WPF.ComboBoxes.Roslyn/Utility.WPF.ComboBoxes.Roslyn.csproj" />
+  <Project Path="Utility.WPF.ComboBoxes/Utility.WPF.ComboBoxes.csproj" Id="8598ba88-3327-473f-a282-babffbe907b1" />
 </Solution>

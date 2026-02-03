@@ -12,7 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace Utility.WPF.ComboBoxes.Roslyn
+namespace Utility.WPF.ComboBoxes
 {
     /// <summary>
     /// Attached behavior for ComboBox that enables filtering with IntelliSense-style sorting
@@ -124,24 +124,24 @@ namespace Utility.WPF.ComboBoxes.Roslyn
             obj.SetValue(IndexProperty, value);
         }
 
-        public static readonly DependencyProperty IsSelectionSecondOrderProperty =
-            DependencyProperty.RegisterAttached(
-        "IsSelectionSecondOrder",
-        typeof(bool),
-        typeof(FilterBehavior),
-         new FrameworkPropertyMetadata(
-            false,
-            changed));
+        //public static readonly DependencyProperty IsSelectionSecondOrderProperty =
+        //    DependencyProperty.RegisterAttached(
+        //"IsSelectionSecondOrder",
+        //typeof(bool),
+        //typeof(FilterBehavior),
+        // new FrameworkPropertyMetadata(
+        //    false,
+        //    changed));
 
-        public static bool GetIsSelectionSecondOrder(DependencyObject obj)
-        {
-            return (bool)obj.GetValue(IsSelectionSecondOrderProperty);
-        }
+        //public static bool GetIsSelectionSecondOrder(DependencyObject obj)
+        //{
+        //    return (bool)obj.GetValue(IsSelectionSecondOrderProperty);
+        //}
 
-        public static void SetIsSelectionSecondOrder(DependencyObject obj, bool value)
-        {
-            obj.SetValue(IsSelectionSecondOrderProperty, value);
-        }
+        //public static void SetIsSelectionSecondOrder(DependencyObject obj, bool value)
+        //{
+        //    obj.SetValue(IsSelectionSecondOrderProperty, value);
+        //}
 
         private static void changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

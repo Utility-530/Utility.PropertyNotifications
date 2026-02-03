@@ -1,4 +1,6 @@
-﻿namespace Utility.WPF.ComboBoxes.Roslyn
+﻿using System.Threading;
+
+namespace Utility.WPF.ComboBoxes.Roslyn
 {
     public sealed class AsyncRankingController
     {

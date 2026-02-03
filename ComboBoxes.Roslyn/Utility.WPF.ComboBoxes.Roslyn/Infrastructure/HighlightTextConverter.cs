@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Data;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Utility.WPF.ComboBoxes.Roslyn
 {
