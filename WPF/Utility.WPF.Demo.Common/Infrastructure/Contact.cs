@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Shapes;
 using Bogus.DataSets;
 using CsvHelper;
-using LanguageExt.Pipes;
-using LanguageExt.Pretty;
 using Moq;
 using NodaTime;
 using SQLitePCL;
