@@ -45,7 +45,7 @@ namespace Utility.Entities
         public override string ToString()
         {
             var ops = string.Join(", ", Operations.Select(o => o.ToString()));
-            return $"{AssignedTo}: {ops} on {DateTimeHelper.ToString(Date)}";
+            return $"{AssignedTo}: {ops} {DateTimeHelper.ToString(Date)}";
         }   
     }
 
