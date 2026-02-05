@@ -12,6 +12,5 @@ namespace Utility.Nodify.Base.Abstractions
     public interface IMenuFactory : IObservable<(PointF, object)>
     {
         INodeViewModel? CreateMenu();
-        INodeViewModel? Create(object menuItem);
     }
 }
