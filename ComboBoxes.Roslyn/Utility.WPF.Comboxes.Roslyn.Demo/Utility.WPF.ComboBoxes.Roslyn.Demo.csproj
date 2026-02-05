@@ -9,6 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\rytal\.nuget\packages\utility.propertynotifications\1.0.0\contentFiles\any\netstandard2.0\utility_helpers.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Reactive" Version="6.1.0" />
+    <PackageReference Include="Utility.PropertyNotifications" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Utility.WPF.ComboBoxes.Roslyn\Utility.WPF.ComboBoxes.Roslyn.csproj" />
   </ItemGroup>
 
