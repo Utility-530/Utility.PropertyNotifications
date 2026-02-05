@@ -19,6 +19,61 @@ namespace Utility.WPF.ComboBoxes
     /// </summary>
     public partial class FilterBehavior
     {
+
+        public static readonly DependencyProperty FiltersProperty =
+            DependencyProperty.RegisterAttached(
+                "Filters",
+                typeof(IEnumerable),
+                typeof(FilterBehavior),
+                new FrameworkPropertyMetadata());
+
+        public static IEnumerable GetFilters(DependencyObject obj)
+        {
+            return (IEnumerable)obj.GetValue(FiltersProperty);
+        }
+
+        public static void SetFilters(DependencyObject obj, IEnumerable value)
+        {
+            obj.SetValue(FiltersProperty, value);
+        }
+
+        //public static readonly DependencyProperty PredicateProperty =
+        //    DependencyProperty.RegisterAttached(
+        //        "Predicate",
+        //        typeof(Predicate<object>),
+        //        typeof(FilterBehavior),
+        //        new FrameworkPropertyMetadata());
+
+        //public static Predicate<object> GetPredicate(DependencyObject obj)
+        //{
+        //    return (Predicate<object>)obj.GetValue(PredicateProperty);
+        //}
+
+        //public static void SetPredicate(DependencyObject obj, IEnumerable value)
+        //{
+        //    obj.SetValue(PredicateProperty, value);
+        //}
+
+        public static readonly DependencyProperty FiltersTemplateSelectorProperty =
+            DependencyProperty.RegisterAttached(
+                "FiltersTemplateSelector",
+                typeof(DataTemplateSelector),
+                typeof(FilterBehavior),
+                new FrameworkPropertyMetadata());
+
+        public static DataTemplateSelector GetFiltersTemplateSelector(DependencyObject obj)
+        {
+            return (DataTemplateSelector)obj.GetValue(FiltersProperty);
+        }
+
+        public static void SetFiltersTemplateSelector(DependencyObject obj, DataTemplateSelector value)
+        {
+            obj.SetValue(FiltersProperty, value);
+        }
+
+        
+
+
         private static readonly DependencyProperty IsUpdatingTextProperty =
             DependencyProperty.RegisterAttached(
                 "IsUpdatingText",
@@ -124,24 +179,7 @@ namespace Utility.WPF.ComboBoxes
             obj.SetValue(IndexProperty, value);
         }
 
-        //public static readonly DependencyProperty IsSelectionSecondOrderProperty =
-        //    DependencyProperty.RegisterAttached(
-        //"IsSelectionSecondOrder",
-        //typeof(bool),
-        //typeof(FilterBehavior),
-        // new FrameworkPropertyMetadata(
-        //    false,
-        //    changed));
 
-        //public static bool GetIsSelectionSecondOrder(DependencyObject obj)
-        //{
-        //    return (bool)obj.GetValue(IsSelectionSecondOrderProperty);
-        //}
-
-        //public static void SetIsSelectionSecondOrder(DependencyObject obj, bool value)
-        //{
-        //    obj.SetValue(IsSelectionSecondOrderProperty, value);
-        //}
 
         private static void changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -170,6 +208,8 @@ namespace Utility.WPF.ComboBoxes
 
         private static void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.OriginalSource is not ComboBox)
+                return;
             if (sender is ComboBox comboBox)
             {
                 SetIndex(comboBox, 0);
