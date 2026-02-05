@@ -84,7 +84,7 @@ namespace Utility.Conversions.Json.Newtonsoft
             }
             var parameterName = jObject["ParameterName"]?.ToString();
             int? position = jObject["Position"]?.ToString() is string pos ? int.Parse(pos) : null;
-            var types = jObject["Types"].Select(a => Type.GetType(a.ToString())).ToArray();
+            var types = jObject["Types"]?.Select(a => Type.GetType(a.ToString())).ToArray();
 
             var methods = type.GetMethods().Where(a => a.Name == methodName).ToArray();
 
