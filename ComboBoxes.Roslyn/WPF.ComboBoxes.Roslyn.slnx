@@ -1,7 +1,8 @@
 <Solution>
   <Folder Name="/App/">
-    <Project Path="Utility.WPF.Comboxes.Roslyn.Demo/Utility.WPF.Comboxes.Roslyn.Demo.csproj" />
+    <Project Path="Utility.WPF.Comboxes.Roslyn.Demo/Utility.WPF.ComboBoxes.Roslyn.Demo.csproj" />
   </Folder>
+  <Project Path="Utility.PatternMatchings/Utility.PatternMatchings.csproj" Id="f8e998d4-3e5a-4275-8a62-4516d7e7605a" />
   <Project Path="Utility.Roslyn/Utility.Roslyn.csproj" Id="fcf403f9-4cc6-4df6-880a-438380406a9a" />
   <Project Path="Utility.WPF.ComboBoxes.Roslyn/Utility.WPF.ComboBoxes.Roslyn.csproj" />
   <Project Path="Utility.WPF.ComboBoxes/Utility.WPF.ComboBoxes.csproj" Id="8598ba88-3327-473f-a282-babffbe907b1" />
