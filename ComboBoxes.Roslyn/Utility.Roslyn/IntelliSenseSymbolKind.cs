@@ -1,4 +1,4 @@
-﻿namespace Utility.WPF.ComboBoxes.Roslyn
+﻿namespace Utility.Roslyn
 {
     public enum IntelliSenseSymbolKind
     {
