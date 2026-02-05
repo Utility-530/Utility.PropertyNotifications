@@ -40,6 +40,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\..\Attributes\Utility.Attributes\Utility.Attributes.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Attributes\Utility.Attributes.csproj" />
     <ProjectReference Include="..\..\Models\Utility.Models.Filters\Utility.Models.Filters.csproj" />
     <ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
