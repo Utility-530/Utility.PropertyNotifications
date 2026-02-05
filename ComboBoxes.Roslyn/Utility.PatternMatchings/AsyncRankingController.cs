@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace Utility.WPF.ComboBoxes.Roslyn
+namespace Utility.PatternMatchings
 {
     public sealed class AsyncRankingController
     {

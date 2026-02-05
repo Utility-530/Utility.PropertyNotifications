@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Utility.WPF.ComboBoxes.Roslyn
+namespace Utility.PatternMatchings
 {
     using System;
 

@@ -4,7 +4,7 @@ using System.Text;
 using System;
 using System.Collections.Concurrent;
 
-namespace Utility.WPF.ComboBoxes.Roslyn
+namespace Utility.PatternMatchings
 {
 
     public sealed class TelemetryTracker

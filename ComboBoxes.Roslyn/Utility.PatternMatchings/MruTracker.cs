@@ -1,4 +1,4 @@
-﻿namespace Utility.WPF.ComboBoxes.Roslyn
+﻿namespace Utility.PatternMatchings
 {
     using System.Collections.Generic;
 

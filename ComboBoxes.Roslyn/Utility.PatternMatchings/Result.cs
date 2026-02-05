@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Utility.PatternMatchings;
 
-namespace Utility.WPF.ComboBoxes.Roslyn
+namespace Utility.PatternMatchings
 {
-    public sealed class IndexedSymbol
+    public sealed class Input
     {
         public readonly object Item;
         public readonly PatternToken Token;
-        public readonly IntelliSenseSymbolKind Kind;
+        public readonly int Kind;
         public readonly string FullName;
 
-        public IndexedSymbol(object item, PatternToken token,
-                             IntelliSenseSymbolKind kind, string fullName)
+        public Input(object item, PatternToken token,
+                             int kind, string fullName)
         {
             Item = item;
             Token = token;
@@ -22,23 +23,27 @@ namespace Utility.WPF.ComboBoxes.Roslyn
     }
 
 
-    public sealed class IntelliSenseResult
+    public sealed class Result
     {
-        public readonly IndexedSymbol Symbol;
+        public readonly Input Symbol;
         public readonly PatternMatchResult Match;
         private readonly int _symbolWeight;
         private readonly int _namespacePenalty;
         private readonly int _mruBoost;
         private readonly int _telemetryBoost;
+        private bool isChecked;
 
-        public IntelliSenseResult(
-            IndexedSymbol symbol,
+        public Result(
+            string pattern,
+            Input symbol,
             PatternMatchResult match,
+           
             int symbolWeight,
             int namespacePenalty,
             int mruBoost,
             int telemetryBoost)
         {
+            Pattern = pattern;
             Symbol = symbol;
             Match = match;
             _symbolWeight = symbolWeight;
@@ -47,8 +52,13 @@ namespace Utility.WPF.ComboBoxes.Roslyn
             _telemetryBoost = telemetryBoost;
         }
 
+        public bool IsAllowed => AdaptiveThresholds.IsAllowed(Match.Kind, Pattern.Length);
+        public bool IsChecked { get => isChecked; set => isChecked = value; }
+
+        public string Pattern { get; }
+
         // VS-style sorting
-        public static int Compare(IntelliSenseResult a, IntelliSenseResult b)
+        public static int Compare(Result a, Result b)
         {
             int c = a.Match.Score.CompareTo(b.Match.Score);
             if (c != 0) return c;

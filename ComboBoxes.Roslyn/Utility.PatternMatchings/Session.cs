@@ -2,36 +2,39 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using static Utility.WPF.ComboBoxes.Roslyn.RoslynPatternMatcher;
+using Utility.PatternMatchings;
 
-namespace Utility.WPF.ComboBoxes.Roslyn
+namespace Utility.PatternMatchings
 {
 
-    public sealed class IntelliSenseSession
+    public sealed class Session
     {
-        private readonly IReadOnlyCollection<IndexedSymbol> _all;
-        private IReadOnlyCollection<IndexedSymbol> _current;
+        private readonly IReadOnlyCollection<Input> _all;
+        private IReadOnlyCollection<Input> _current;
         private string _lastPattern = "";
         private readonly MruTracker _mru;
         private readonly TelemetryTracker _telemetry;
+        private readonly Func<int, int> weigher;
 
-        public IntelliSenseSession(IReadOnlyCollection<IndexedSymbol> symbols, MruTracker mru, TelemetryTracker telemetry)
+        public Session(IReadOnlyCollection<Input> symbols, MruTracker mru, TelemetryTracker telemetry, Func<int, int> weigher)
         {
             _all = symbols;
             _current = symbols;
             _mru = mru;
             _telemetry = telemetry;
+            this.weigher = weigher;
         }
 
-        public IReadOnlyCollection<IndexedSymbol> CurrentSymbols => _current;
+        public IReadOnlyCollection<Input> CurrentSymbols => _current;
 
         // Build IntelliSenseResult from an IndexedSymbol + match
-        public IntelliSenseResult BuildResult(IndexedSymbol symbol, PatternMatchResult match)
+        public Result BuildResult(string pattern, Input symbol, PatternMatchResult match)
         {
-            return new IntelliSenseResult(
+            return new Result(
+                pattern,
                 symbol,
                 match,
-                SymbolKindWeights.Get(symbol.Kind),
+                weigher(symbol.Kind),
                 NamespaceWeighting.GetPenalty(symbol.FullName),
                 _mru.GetBoost(symbol.Item),
                 _telemetry.GetBoost(symbol.Item)
@@ -39,7 +42,7 @@ namespace Utility.WPF.ComboBoxes.Roslyn
         }
 
         // Incremental narrowing + async-safe filter
-        public List<IntelliSenseResult> Update(string pattern)
+        public List<Result> Update(string pattern, int? count = null)
         {
             if (pattern.Length == 0)
             {
@@ -47,14 +50,15 @@ namespace Utility.WPF.ComboBoxes.Roslyn
                 _lastPattern = "";
 
                 return _all
-                    .Select(s => new IntelliSenseResult(
+                    .Select(s => new Result(
+                        pattern,
                         s,
                         default(PatternMatchResult),
-                        SymbolKindWeights.Get(s.Kind),
+                        weigher(s.Kind),
                         NamespaceWeighting.GetPenalty(s.FullName),
                         _mru.GetBoost(s.Item),
                         _telemetry.GetBoost(s.Item)))
-                    .OrderBy(r => r.Match.Score)
+                    .OrderBy(r => r.Match?.Score ?? 0)
                     .ThenBy(r => r.Symbol.FullName)
                     .Take(200)
                     .ToList();
@@ -74,26 +78,29 @@ namespace Utility.WPF.ComboBoxes.Roslyn
             //        .ToList();
             //}
 
-            ReadOnlySpan<char> p = pattern.AsSpan();
+            string p = pattern;
 
-            if (!pattern.StartsWith(_lastPattern, StringComparison.OrdinalIgnoreCase))
+            if (!pattern.StartsWith(_lastPattern, StringComparison.OrdinalIgnoreCase) || _current.Any() == false)
                 _current = _all;
 
-            var results = new List<IntelliSenseResult>(_current.Count);
+            var results = new List<Result>(_current.Count);
 
             foreach (var s in _current)
             {
-                if (TokenizedRoslynMatcher.TryMatch(s.Token, p, out var match))
+                if (TokenizedMatcher.TryMatch(s.Token, p, out var match))
                 {
                     // Adaptive fuzzy threshold
-                    if (!AdaptiveThresholds.IsAllowed(match.Kind, pattern.Length))
-                        continue;
-
-                    results.Add(BuildResult(s, match));
+                    if (AdaptiveThresholds.IsAllowed(match.Kind, pattern.Length))
+                        results.Add(BuildResult(pattern, s, match));
                 }
             }
 
-            results.Sort(IntelliSenseResult.Compare);
+            //if (count != null)
+            //{
+            //    results = results.Where(a => a.IsAllowed).Take(count.Value).ToList();
+            //}
+
+            results.Sort(Result.Compare);
             _current = results.ConvertAll(r => r.Symbol).ToArray();
             _lastPattern = pattern;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Utility.WPF.ComboBoxes.Roslyn
+namespace Utility.PatternMatchings
 {
     public static class NamespaceWeighting
     {

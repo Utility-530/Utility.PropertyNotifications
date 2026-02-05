@@ -1,43 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Utility.PatternMatchings;
 
-namespace Utility.WPF.ComboBoxes.Roslyn
+namespace Utility.PatternMatchings
 {
     using System;
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using static Utility.WPF.ComboBoxes.Roslyn.RoslynPatternMatcher;
 
-    public sealed class AsyncIntelliSenseEngine
+    public sealed class AsyncEngine
     {
-        private readonly IntelliSenseSession _session;
+        private readonly Session _session;
         private readonly AsyncRankingController _controller;
 
-        public AsyncIntelliSenseEngine(IntelliSenseSession session, AsyncRankingController controller)
+        public AsyncEngine(Session session, AsyncRankingController controller)
         {
             _session = session;
             _controller = controller;
         }
 
         // Main method to call on every keystroke
-        public async Task<IReadOnlyList<IntelliSenseResult>> UpdateAsync(
+        public async Task<IReadOnlyList<Result>> UpdateAsync(
             string pattern,
-            Action<IReadOnlyList<IntelliSenseResult>> publishFast)
+            Action<IReadOnlyList<Result>> publishFast)
         {
             var token = _controller.NewRequest();
 
             // -------- PHASE 1: FAST (UI thread) --------
-            var fastResults = new List<IntelliSenseResult>();
+            var fastResults = new List<Result>();
             foreach (var symbol in _session.CurrentSymbols)
             {
-                if (TryFastMatch(symbol.Token, pattern.AsSpan(), out var match))
+                if (TryFastMatch(symbol.Token, pattern, out var match))
                 {
-                    fastResults.Add(_session.BuildResult(symbol, match));
+                    fastResults.Add(_session.BuildResult(pattern, symbol, match));
                 }
             }
-            fastResults.Sort(IntelliSenseResult.Compare);
+            fastResults.Sort(Result.Compare);
             publishFast(fastResults);
 
             // -------- PHASE 2: FULL (background) --------
@@ -59,9 +59,9 @@ namespace Utility.WPF.ComboBoxes.Roslyn
             }
         }
 
-        private static bool TryFastMatch(PatternToken token, ReadOnlySpan<char> pattern, out PatternMatchResult result)
+        private static bool TryFastMatch(PatternToken token, string pattern, out PatternMatchResult result)
         {
-            if (TokenizedRoslynMatcher.TryMatch(token, pattern, out result))
+            if (TokenizedMatcher.TryMatch(token, pattern, out result))
             {
                 // Only allow cheap matches for fast UI
                 return result.Kind != PatternMatchKind.Fuzzy;
