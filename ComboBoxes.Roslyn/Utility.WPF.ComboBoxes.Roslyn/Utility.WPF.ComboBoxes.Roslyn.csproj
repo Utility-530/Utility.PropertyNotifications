@@ -8,6 +8,8 @@
   </PropertyGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Utility.PatternMatchings\Utility.PatternMatchings.csproj" />
+	  <ProjectReference Include="..\Utility.Roslyn\Utility.Roslyn.csproj" />
 	  <ProjectReference Include="..\Utility.Roslyn\Utility.Roslyn.csproj" />
 	  <ProjectReference Include="..\Utility.WPF.ComboBoxes\Utility.WPF.ComboBoxes.csproj" />
 	</ItemGroup>

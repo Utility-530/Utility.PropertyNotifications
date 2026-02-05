@@ -60,56 +60,67 @@
             FontFamily="Consolas"
             Foreground="#808080" 
             VerticalAlignment="Center"
-            Text="{Binding ConverterParameter='Namespace', 
+            Text="{Binding ConverterParameter='Alternate', 
                           Converter={StaticResource SymbolConverter}}" />
         </Grid>
     </DataTemplate>
 
-
+    <VisualBrush x:Key="HatchBrush" TileMode="Tile"
+            Viewport="0,0,5,5" ViewportUnits="Absolute"
+            Viewbox="0,0,5,5" ViewboxUnits="Absolute"
+            po:Freeze="True">
+        <VisualBrush.Visual>
+            <Path Data="M 0 5 L 5 0 M -2 2 L 2 -2 M 3 7 L 7 3"
+             Stroke="WhiteSmoke" StrokeEndLineCap="Square"
+             RenderOptions.EdgeMode="Aliased" />
+        </VisualBrush.Visual>
+    </VisualBrush>
 
     <Style x:Key="VisualStudio_Roslyn_Style" TargetType="{x:Type ComboBox}">
         <Setter Property="StaysOpenOnEdit" Value="True"></Setter>
         <Setter Property="Height" Value="24"></Setter>
         <Setter Property="Width" Value="400"></Setter>
         <Setter Property="ItemTemplate" Value="{StaticResource HighlightTemplate}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="cmb:ComboBoxEx.ToggleButtonStyle" >
+            <Setter.Value>
+                <Style TargetType="ToggleButton">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Border x:Name="Border" 
+                           Background="White"
+                           BorderBrush="#CCCCCC" 
+                           BorderThickness="1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="0"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Path Grid.Column="1"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Data="M 0 0 L 4 4 L 8 0 Z"
+                                 Fill="#666666"/>
+                                    </Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBox}">
                     <Grid>
-                        <ToggleButton x:Name="ToggleButton"
-                                      Grid.Column="0"
-                                      Grid.ColumnSpan="2"
+                        <ToggleButton x:Name="ToggleButton"                                    
                                       Focusable="False"
                                       IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                      ClickMode="Press">
-                            <ToggleButton.Style>
-                                <Style TargetType="ToggleButton">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="ToggleButton">
-                                                <Border x:Name="Border" 
-                                                          Background="White"
-                                                          BorderBrush="#CCCCCC" 
-                                                          BorderThickness="1">
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition/>
-                                                            <ColumnDefinition Width="0"/>
-                                                        </Grid.ColumnDefinitions>
-                                                        <Path Grid.Column="1"
-                                                                HorizontalAlignment="Center"
-                                                                VerticalAlignment="Center"
-                                                                Data="M 0 0 L 4 4 L 8 0 Z"
-                                                                Fill="#666666"/>
-                                                    </Grid>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </ToggleButton.Style>
-                        </ToggleButton>
+                                      ClickMode="Press"
+                                      Style="{Binding Path=(cmb:ComboBoxEx.ToggleButtonStyle), RelativeSource={RelativeSource AncestorType=ComboBox}}">
 
+                        </ToggleButton>
 
                         <ContentPresenter x:Name="ContentSite"
                                                             Margin="6,3,3,3"
@@ -122,7 +133,7 @@
                                     <TextBlock FontSize="12" 
                                                                  FontWeight="ExtraBold"
                                                                  FontFamily="Consolas"
-                                                                 Text="{Binding Converter={StaticResource SymbolConverter}, ConverterParameter='Name'}">
+                                                                 Text="{Binding Converter={StaticResource SymbolConverter}, ConverterParameter='Selected'}">
 
                                     </TextBlock>
                                 </DataTemplate>
@@ -160,7 +171,7 @@
                                                 TargetNullValue=50,
                                                 RelativeSource={RelativeSource AncestorType=ComboBox}}">
                         </ProgressBar>
-
+            
                         <Popup x:Name="Popup"
                                  Placement="Bottom"
                                    Width="{TemplateBinding Width}"
@@ -169,8 +180,23 @@
                                  Focusable="False"
                                  PopupAnimation="Slide">
                             <Grid MinWidth="{TemplateBinding ActualWidth}"
-                                    MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                <Border 
+                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                  Background="{TemplateBinding Background}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <ItemsControl 
+                                    ItemsSource="{Binding Path=(cmb:FilterBehavior.Filters), RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                    ItemTemplateSelector="{Binding Path=(cmb:FilterBehavior.FiltersTemplateSelector), RelativeSource={RelativeSource AncestorType=ComboBox}}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel></WrapPanel>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+
+                                <Border Grid.Row="1"
                                           BorderBrush="#3F3F46"
                                           BorderThickness="1">
                                     <ScrollViewer>
@@ -196,6 +222,7 @@
                             <Setter TargetName="PART_Custom_EditableTextBox" Property="Visibility" Value="Visible"/>
                             <Setter TargetName="ContentSite" Property="Visibility" Value="Collapsed"/>
                         </DataTrigger>
+               
                         <!--<DataTrigger Binding="{Binding Path=(cmb:FilterBehavior.Progress),                                        
                                       RelativeSource={RelativeSource Self}}" 
                                                Value='100'>
@@ -211,19 +238,6 @@
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="ComboBoxItem">
-                    <Style.Resources>
-
-                        <VisualBrush x:Key="HatchBrush" TileMode="Tile"
-   Viewport="0,0,5,5" ViewportUnits="Absolute"
-   Viewbox="0,0,5,5" ViewboxUnits="Absolute"
-   po:Freeze="True">
-                            <VisualBrush.Visual>
-                                <Path Data="M 0 5 L 5 0 M -2 2 L 2 -2 M 3 7 L 7 3"
-Stroke="WhiteSmoke" StrokeEndLineCap="Square"
-RenderOptions.EdgeMode="Aliased" />
-                            </VisualBrush.Visual>
-                        </VisualBrush>
-                    </Style.Resources>
                     <Setter Property="Padding" Value="6,4"/>
                     <Setter Property="Template">
                         <Setter.Value>

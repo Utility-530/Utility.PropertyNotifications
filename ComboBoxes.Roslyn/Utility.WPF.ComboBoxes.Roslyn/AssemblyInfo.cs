@@ -12,3 +12,4 @@ using System.Windows.Markup;
 
 [assembly: XmlnsPrefix("http://schemas.utility.com/ComboBoxes.Roslyn", "cmb_ros")]
 [assembly: XmlnsDefinition("http://schemas.utility.com/ComboBoxes.Roslyn", "Utility.WPF.ComboBoxes.Roslyn")]
+[assembly: XmlnsDefinition("http://schemas.utility.com/ComboBoxes.Roslyn", "Utility.WPF.ComboBoxes.Roslyn.Infrastructure")]

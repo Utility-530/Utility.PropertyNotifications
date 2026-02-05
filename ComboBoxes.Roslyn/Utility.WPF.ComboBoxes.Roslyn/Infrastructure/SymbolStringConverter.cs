@@ -1,6 +1,10 @@
 ﻿using System.Globalization;
+using System.Reflection;
+using System.Windows;
 using System.Windows.Data;
 using Microsoft.CodeAnalysis;
+using Utility.PatternMatchings;
+using Utility.Roslyn;
 
 namespace Utility.WPF.ComboBoxes.Roslyn
 {
@@ -19,9 +23,14 @@ namespace Utility.WPF.ComboBoxes.Roslyn
 
         public static string ToString(object obj)
         {
-            if (obj is IntelliSenseResult { Symbol.Item: ISymbol typeSymbol } specifier)
+            if (obj is Result { } specifier)
             {
-                return typeSymbol?.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+                if (specifier.Symbol.Item is ISymbol typeSymbol)
+                    return typeSymbol?.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+                else if (specifier.Symbol.Item is PropertyInfo propertyInfo)
+                    return propertyInfo.Name;
+                else
+                    throw new Exception("DFS 3f s3 f");
             }
             else if (obj is ISymbol symbol)
             {
@@ -29,14 +38,15 @@ namespace Utility.WPF.ComboBoxes.Roslyn
             }
             else
             {
-                throw new Exception("dsdf e ");
+                //throw new Exception("dsdf e ");
+                return null;
             }
         }
-        public static IReadOnlyList<TextSpan> ToSpans(object obj)
+        public static IEnumerable<TextSpan> ToSpans(object obj)
         {
-            if (obj is IntelliSenseResult { Symbol.Item: ISymbol typeSymbol } specifier)
+            if (obj is Result { } specifier)
             {
-                return specifier.Match.MatchedSpans;
+                return specifier?.Match?.MatchedSpans ?? Array.Empty<TextSpan>();
             }
             else if (obj is ISymbol symbol)
             {

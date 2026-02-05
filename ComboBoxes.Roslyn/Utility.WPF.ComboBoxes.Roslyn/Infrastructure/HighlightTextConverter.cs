@@ -3,6 +3,8 @@ using System.Windows;
 using System.Windows.Data;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
+using Utility.Roslyn;
+using TextSpan = Utility.PatternMatchings.TextSpan;
 
 namespace Utility.WPF.ComboBoxes.Roslyn
 {
@@ -18,7 +20,7 @@ namespace Utility.WPF.ComboBoxes.Roslyn
             string searchText = values[1] as string ?? string.Empty;
 
             string displayText = SymbolStringConverter.ToString(values[0]);
-            IReadOnlyList<TextSpan> spans = SymbolStringConverter.ToSpans(values[0]);
+            IEnumerable<TextSpan> spans = SymbolStringConverter.ToSpans(values[0]);
 
             if (string.IsNullOrEmpty(displayText))
                 return new List<HighlightTextSegment>();
@@ -34,7 +36,7 @@ namespace Utility.WPF.ComboBoxes.Roslyn
             return HighlightMatches(displayText, spans);
         }
 
-        private List<HighlightTextSegment> HighlightMatches(string fullText, IReadOnlyList<TextSpan> spans)
+        private List<HighlightTextSegment> HighlightMatches(string fullText, IEnumerable<TextSpan> spans)
         {
             var segments = new List<HighlightTextSegment>();
 
