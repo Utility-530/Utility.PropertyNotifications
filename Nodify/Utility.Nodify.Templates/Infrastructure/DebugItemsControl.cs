@@ -87,7 +87,9 @@ namespace Utility.Nodify.Views.Infrastructure
         {
             if (e.AddedItems.Count != 1)
                 return;
-            var node = (ItemContainer)Editor.ItemContainerGenerator.ContainerFromItem(e.AddedItems.Cast<NodeViewModel>().First());
+            if (e.AddedItems.OfType<NodeViewModel>().ToArray() is not { Length: > 0 } array)
+                return;
+            var node = (ItemContainer)Editor.ItemContainerGenerator.ContainerFromItem(array.First());
             var renderTransform = Editor.ViewportTransform;
 
             var transformGroup = Editor.ViewportTransform as TransformGroup;

@@ -20,13 +20,16 @@
                      xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks" 
                      xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
                      xmlns:sb="http://schemas.utility.com/splitbuttons" 
-                     xmlns:tree="http://schemas.utility.com/trees"
+                     xmlns:tree="http://schemas.utility.com/trees" 
+                     xmlns:cb1="http://schemas.utility.com/ComboBoxes" 
+                     xmlns:cmb_ros="http://schemas.utility.com/ComboBoxes.Roslyn"
+                     xmlns:unv="clr-namespace:Utility.Nodify.Demo"
                      mc:Ignorable="d">
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/ButtonComboBoxTreeViewStyle.xaml"></res:SharedResourceDictionary>
+        <res:SharedResourceDictionary Source="/Utility.WPF.ComboBoxes.Roslyn;component/Themes/Generic.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
     <Style x:Key="EllipseStyle"  TargetType="{x:Type cb:ComboBoxTreeView}" BasedOn="{StaticResource ButtonComboBoxTreeViewStyle}">
@@ -49,29 +52,112 @@
                        StrokeStartLineCap="Round"
                        StrokeEndLineCap="Round"
                        StrokeThickness="2" >
-                        <!--<i:Interaction.Triggers>
-                            <i:EventTrigger EventName="OnMouseUp">
-                                <beh:InvokeCommandAction ></beh:InvokeCommandAction>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>-->
                     </Ellipse>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="PropertyStyle"  TargetType="{x:Type cb:ComboBoxTreeView}" BasedOn="{StaticResource ButtonComboBoxTreeViewStyle}">
-        <Setter Property="ShowCloseButton" Value="True"/>
-        <Setter Property="CloseOnCheck" Value="True"/>
-        <Setter Property="ToggleButtonTemplate">
+    <Style x:Key="CustomWhiteBackgroundStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource VisualStudio_Roslyn_Style}">
+        <Setter Property="Background" Value="White"></Setter>
+    </Style>
+
+    <Ellipse x:Shared="false" 
+             x:Key="Ellipse" 
+             Width="14"
+             Stroke="DodgerBlue"
+             Height="14"
+             StrokeDashCap="Round"
+             StrokeLineJoin="Round"
+             StrokeStartLineCap="Round"
+             StrokeEndLineCap="Round"
+             StrokeThickness="2" >
+    </Ellipse>
+
+    <materialDesign:PackIcon x:Key="PlusBox" x:Shared="false" Kind="PlusBox" Foreground="Tomato" Background="Transparent"></materialDesign:PackIcon>
+
+    <Style x:Key="CustomIOToggleButtonStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource CustomWhiteBackgroundStyle}" >
+        <Setter Property="Width" Value="14"></Setter>
+        <Setter Property="Height" Value="14"></Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsDropDownOpen" Value="True">
+                <Setter Property="Width" Value="260"></Setter>
+                <Setter Property="Height" Value="26"></Setter>
+
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <ControlTemplate x:Key="ComboBox_ToggleButton" TargetType="{x:Type ToggleButton}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <ContentPresenter x:Name="Icon" />
+        </Grid>
+    </ControlTemplate>
+
+    <Style x:Key="NodeInputSelectionStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource CustomIOToggleButtonStyle}">
+        <Setter Property="cb1:ComboBoxEx.ToggleButtonStyle">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <materialDesign:PackIcon Kind="PlusBox" Foreground="Tomato" Background="Transparent"></materialDesign:PackIcon>
-                </ControlTemplate>
+                <Style TargetType="ToggleButton">
+                    <Setter Property="Template" Value="{StaticResource ComboBox_ToggleButton}"/>
+                    <Setter Property="Content" Value="{StaticResource Ellipse}"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
             </Setter.Value>
         </Setter>
     </Style>
 
+    <Style x:Key="NodeOutputSelectionStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource CustomIOToggleButtonStyle}">
+        <Setter Property="cb1:ComboBoxEx.ToggleButtonStyle">
+            <Setter.Value>
+                <Style TargetType="ToggleButton">
+                    <Setter Property="Template" Value="{StaticResource ComboBox_ToggleButton}"/>
+                    <Setter Property="Content" Value="{StaticResource PlusBox}"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ComboBoxItem">
+                    <!--<Setter Property="Padding" Value="6,4"/>-->
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ComboBoxItem">
+                                <Border x:Name="Border"  
+                                             BorderThickness="0"
+                                             Background="{StaticResource HatchBrush}"
+                                             Padding="{TemplateBinding Padding}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ContentPresenter/>
+                                        <CheckBox Grid.Column="1" 
+                                                   IsChecked="{Binding Content.IsChecked,RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                                        </CheckBox>
+                                    </Grid>
+                                </Border>
+
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 
     <inf1:ContentConverter x:Key="ContentConverter"></inf1:ContentConverter>
@@ -93,8 +179,6 @@
             </DataTemplate>
         </inf1:NodeTemplateSelector.ValueModelTemplate>
     </inf1:NodeTemplateSelector>
-
-
 
     <Style x:Key="ConnectionStyle"
                TargetType="{x:Type nodify:BaseConnection}"
@@ -185,29 +269,28 @@
                                     Margin="{TemplateBinding Padding}">
 
                             <ContentPresenter ContentSource="Header" />
-                            <cb:ComboBoxTreeView     
-                                Height="14" Width="14"
-                                x:Name="PART_Connector"
-                                IsDropDownOpen="{Binding IsEditing, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}"
-                                Style="{StaticResource EllipseStyle}"  
-                                     VerticalAlignment="Center"
-                                     HorizontalAlignment="Center"
-                                     Background="Transparent"
-                                     BorderBrush="{TemplateBinding BorderBrush}"
-                                Margin="5 0 0 0">
+                            <ComboBox x:Name="PART_Connector"
+                                IsDropDownOpen="{Binding DataContext.IsExpanded, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay, Converter={x:Static conv:DefaultConverter.Instance}}"
+                                Style="{StaticResource NodeInputSelectionStyle}"      
+                                VirtualizingPanel.IsVirtualizing="True"
+                                VirtualizingPanel.ScrollUnit="Pixel"
+                                VirtualizingPanel.VirtualizationMode="Recycling">
+                                <i:Interaction.Behaviors>
+                                    <cb1:FilterBehavior />
+                                    <cmb_ros:ReflectionBehavior 
+                                         Type="{x:Type models:NodeViewModel}"                                  
+                                         FilterType="{Binding Data}">
+                                    </cmb_ros:ReflectionBehavior>
+                                </i:Interaction.Behaviors>
                                 <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="SelectedNodeChanged">
-                                        <beh:InvokeCommandAction PassEventArgsToCommand="False" 
-                                                                 EventArgsConverter="{StaticResource NodeEventArgsConverter}"
-                                                                 Command="{Binding DataContext.AddConnectorCommand, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    <i:EventTrigger EventName="SelectionChanged">
+                                        <beh:InvokeCommandAction 
+                                               PassEventArgsToCommand="False" 
+                                               EventArgsConverter="{StaticResource NodeEventArgsConverter}"
+                                               Command="{Binding DataContext.AddConnectorCommand, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                                <i:Interaction.Behaviors>
-                                    <cb:PropertySelectorBehavior Type="{x:Type nodes:NodeViewModel}" Filter="{Binding Tag, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
-                                    <inf1:CloseWhenScrollingExceedControlsBounds />
-                                    <inf1:ScaleOnOpenClose />
-                                </i:Interaction.Behaviors>
-                            </cb:ComboBoxTreeView>
+                            </ComboBox>                         
                         </StackPanel>
                     </Grid>
 
@@ -261,7 +344,7 @@
                 <ControlTemplate TargetType="{x:Type ContentControl}">
                     <sb:PopupButton>
                         <sb:PopupButton.Header>
-                            <ContentPresenter Content="{Binding Content.Content.Data, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={x:Static conv:DefaultConverter.Instance}}"></ContentPresenter>
+                            <ContentPresenter Content="{Binding Content.Content.Data, RelativeSource={RelativeSource Mode=TemplatedParent}}"></ContentPresenter>
                         </sb:PopupButton.Header>
 
                         <sb:PopupButton.Content>
@@ -298,7 +381,6 @@
                 Value="White" />
         <Setter Property="Padding"
                 Value="4 2" />
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type nodify:NodeOutput}">
@@ -314,33 +396,28 @@
                                     Margin="{TemplateBinding Padding}">
 
                             <ContentPresenter ContentSource="Header" />
-                            <cb:ComboBoxTreeView   
-                                x:Name="PART_Connector" >
-                                <cb:ComboBoxTreeView.Style>
-                                    <Style TargetType="{x:Type cb:ComboBoxTreeView}" BasedOn="{StaticResource PropertyStyle}">
-                                        <Setter Property="VerticalAlignment" Value="Center"></Setter>
-                                        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
-                                        <Setter Property="Background" Value="Transparent"></Setter>
-                                        <Setter Property="Margin" Value="5 0 0 0"></Setter>
-                                        <Setter Property="Height" Value="24"></Setter>
-                                        <Setter Property="Width" Value="24"></Setter>
-                                    </Style>
-                                </cb:ComboBoxTreeView.Style>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <WrapPanel>
-                                            <TextBlock Text="{Binding Data.Name}"/>
-                                            <CheckBox IsChecked="{Binding IsChecked}"/>
-                                        </WrapPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                                <i:Interaction.Behaviors>
-                                    <cb:PropertySelectorBehavior Type="{x:Type nodes:NodeViewModel}" />
-                                    <inf1:ScaleOnOpenClose></inf1:ScaleOnOpenClose>
-                                    <inf1:CloseWhenScrollingExceedControlsBounds />
-                                </i:Interaction.Behaviors>
 
-                            </cb:ComboBoxTreeView>
+                            <ComboBox         
+                                x:Name="PART_Connector"
+                                IsDropDownOpen="{Binding DataContext.IsExpanded,
+                                               RelativeSource={RelativeSource TemplatedParent},
+                                               Mode=OneWayToSource,
+                                               Converter={x:Static conv:DefaultConverter.Instance}}" 
+                                Style="{StaticResource NodeOutputSelectionStyle}"      
+                                VirtualizingPanel.IsVirtualizing="True"
+                                VirtualizingPanel.ScrollUnit="Pixel"
+                                VirtualizingPanel.VirtualizationMode="Recycling">
+                                <i:Interaction.Behaviors>
+                                    <cb1:FilterBehavior />
+                                    <cmb_ros:ReflectionBehavior 
+                                        Type="{x:Type models:NodeViewModel}"                                       
+                                        FilterType="{Binding Data}">
+
+                                    </cmb_ros:ReflectionBehavior>
+                                    <inf1:CheckedUpdateBehavior/>
+                                </i:Interaction.Behaviors>
+                            </ComboBox>
+
                         </StackPanel>
                     </Grid>
 
@@ -434,7 +511,8 @@
                                 PendingConnectionTemplate="{StaticResource PendingConnectionTemplate}"
                                 ConnectionTemplate="{StaticResource ConnectionTemplate}"
                                 Background="{StaticResource SmallGridLinesDrawingBrush}"
-                                ItemContainerStyle="{StaticResource ItemContainerStyle}"                              
+                                ItemContainerStyle="{StaticResource ItemContainerStyle}"    
+                                DisablePanning="{Binding DisablePanning}"                                
                                 GridCellSize="15"                         
                                 x:Name="Editor">
                 <i:Interaction.Behaviors>
@@ -560,7 +638,7 @@
                                                 <inf1:ConnectorTemplateSelector.DefaultTemplate>
                                                     <DataTemplate DataType="{x:Type models:ConnectorViewModel}">
                                                         <nodify:NodeInput Orientation="Horizontal" />
-                                                    </DataTemplate>                                  
+                                                    </DataTemplate>
                                                 </inf1:ConnectorTemplateSelector.DefaultTemplate>
                                                 <inf1:ConnectorTemplateSelector.PendingTemplate>
                                                     <DataTemplate DataType="{x:Type models:PendingConnectorViewModel}">
@@ -626,66 +704,30 @@
                     <nodify:DecoratorContainer DataContext="{Binding Menu}"
                                                Visibility="Visible"
                                            Location="{Binding Location, Converter={x:Static inf:PointConverter.Instance}}">
-                        <ContentControl Content="{Binding}" Height="400" Width="400" Background="Aqua">
+                        <ContentControl Content="{Binding}" Height="40" Width="200" Background="Aqua">
                             <ContentControl.ContentTemplate>
                                 <DataTemplate >
-                                    <Border Padding="7" 
-                                            MaxWidth="220"
-                                            CornerRadius="3"
+                                    <Border 
+                                        CornerRadius="3"
                                             Background="{DynamicResource Node.BackgroundBrush}"
                                             BorderBrush="{StaticResource NodifyEditor.SelectionRectangleStrokeBrush}"
                                             BorderThickness="2"
                                             Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                            <!-- Define the hierarchical data template for menu items -->
-                                            <tree:CustomTreeView ItemsSource="{Binding Children}" BorderThickness="0">
-                                                <!--<TreeView.Style>
-                                                    <Style TargetType="{x:Type tree:CustomTreeView}">
-                                                        <Setter Property="SelectedItem" Value="{Binding Current}"></Setter>
-                                                    </Style>
-                                                </TreeView.Style>-->
-                                                <TreeView.ItemContainerStyle>
-                                                    <Style TargetType="{x:Type tree:CustomTreeViewItem}">
-                                                        <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
-                                                        <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                                                    </Style>
-                                                </TreeView.ItemContainerStyle>
-                                                <TreeView.ItemTemplate>
-                                                    <HierarchicalDataTemplate  ItemsSource="{Binding Children}">
-                                                        <ContentControl 
-                                                            Content="{Binding Name, Converter={x:Static conv:DefaultConverter.Instance}}"
-                                                                Background="Transparent"
-                                                                Foreground="{DynamicResource ForegroundBrush}"
-                                                                Padding="3"
-                                                                Cursor="Hand">
-                                                            <ContentControl.Style>
-                                                                <Style TargetType="{x:Type ContentControl}">
-                                                                    <Setter Property="Template">
-                                                                        <Setter.Value>
-                                                                            <ControlTemplate TargetType="{x:Type ContentControl}">
-                                                                                <Border Name="Border"
-                                                                                        Background="{TemplateBinding Background}"
-                                                                                        Padding="{TemplateBinding Padding}">
-                                                                                    <ContentPresenter />
-                                                                                </Border>
-                                                                                <ControlTemplate.Triggers>
-                                                                                    <Trigger Property="IsMouseOver"
-                                                                                             Value="True">
-                                                                                        <Setter Property="Background"
-                                                                                                TargetName="Border"
-                                                                                                Value="{DynamicResource NodeInput.BorderBrush}" />
-                                                                                    </Trigger>
-                                                                                </ControlTemplate.Triggers>
-                                                                            </ControlTemplate>
-                                                                        </Setter.Value>
-                                                                    </Setter>
-                                                                </Style>
-                                                            </ContentControl.Style>
-                                                        </ContentControl>
-                                                    </HierarchicalDataTemplate>
-                                                </TreeView.ItemTemplate>
-                                            </tree:CustomTreeView>
-                                        </ScrollViewer>
+
+                                        <ComboBox
+                                            Style="{StaticResource CustomWhiteBackgroundStyle}"
+                                            VirtualizingPanel.IsVirtualizing="True"
+                                                      VirtualizingPanel.ScrollUnit="Pixel"
+                                                      VirtualizingPanel.VirtualizationMode="Recycling">
+                                            <i:Interaction.Behaviors>
+                                                <cb1:FilterBehavior />
+                                                <cmb_ros:SymbolBehavior Compilation="{x:Static unv:DiagramView.Compilation}" 
+                                                                        Kind="Method" 
+                                                                            Type="{Binding Data.Type}"
+                                                                        SecondaryKind="Parameters">
+                                                </cmb_ros:SymbolBehavior>
+                                            </i:Interaction.Behaviors>
+                                        </ComboBox>                                     
                                     </Border>
                                 </DataTemplate>
                             </ContentControl.ContentTemplate>
@@ -755,7 +797,7 @@
                                      Value="{x:Static enm:FlatShape.Square}">
                 <Setter Property="ConnectorTemplate"
                                     Value="{StaticResource SquareConnector}" />
-               <!--<Setter Property="BorderBrush"
+                <!--<Setter Property="BorderBrush"
                                     Value="{StaticResource SquareConnectorColor}" />-->
                 <Setter Property="HeaderTemplate">
                     <Setter.Value>

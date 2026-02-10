@@ -4,6 +4,9 @@ using System.Windows.Input;
 using Nodify;
 using System.Drawing;
 using Utility.Nodes;
+using Microsoft.CodeAnalysis.CSharp;
+using Splat;
+using Utility.ServiceLocation;
 
 namespace Utility.Nodify.Demo
 {
@@ -40,5 +43,7 @@ namespace Utility.Nodify.Demo
         {
 
         }
+
+        public static CSharpCompilation Compilation => Globals.Resolver.Resolve<CSharpCompilation>() ?? throw new System.InvalidOperationException("CSharpCompilation service not registered.");
     }
 }

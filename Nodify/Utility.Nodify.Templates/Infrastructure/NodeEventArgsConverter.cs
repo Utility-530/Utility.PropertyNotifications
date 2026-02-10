@@ -3,11 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes;
+using Utility.PatternMatchings;
 using Utility.Trees;
 
 namespace Utility.Nodify.Views.Infrastructure
@@ -16,9 +19,16 @@ namespace Utility.Nodify.Views.Infrastructure
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is WPF.Controls.ComboBoxes.ComboBoxTreeView.SelectedNodeEventArgs { Value: Tree x } args)
+            if (value is SelectionChangedEventArgs { AddedItems: { } x } args)
             {
-                return x.Data;
+                foreach(var item in x)
+                {
+                    if(item is Result { Symbol:{ Item: PropertyInfo propertyInfo } })
+                    {
+                        return propertyInfo;
+                    }
+                }
+            
             }
             throw new NotImplementedException("SD");
         }
