@@ -1,4 +1,6 @@
-﻿using Splat;
+﻿using System.Reactive.Subjects;
+using Microsoft.CodeAnalysis.CSharp;
+using Splat;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
@@ -11,9 +13,11 @@ using Utility.Nodify.Base.Abstractions;
 using Utility.Nodify.Engine;
 using Utility.Nodify.Repository;
 using Utility.Repos;
+using Utility.Roslyn;
 using Utility.ServiceLocation;
 using Utility.Services;
 using Utility.Simulation;
+using Utility.WPF.ComboBoxes.Roslyn;
 
 namespace Utility.Nodify.Transitions.Demo.Infrastructure
 {
@@ -23,6 +27,8 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
         {  
             const string diagramKey = "Master";
             var diagramGuid = new Guid("CF96DB2C-16D6-4D87-BD49-7E8B1896AF5A");
+            register.Register<CSharpCompilation>(() => Compiler.Compile(Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>()));
+
             register.Register(() => new PlayBackViewModel());
             register.Register(() => new HistoryViewModel());
             register.Register(() => new MasterPlayViewModel());
@@ -46,6 +52,8 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
             register.Register<IMenuFactory, MenuFactory>();
             register.Register<IEnumerableFactory, NodeFilter>();
             register.Register<IFactory<INodeViewModel>, NodeFactory>();
+            register.Register<Subject<Type>>();
+
             await Globals.Resolver.Resolve<IDiagramFactory>().Build(diagramViewModel);
 
             repo.Track(diagramViewModel);

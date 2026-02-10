@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes;
@@ -19,27 +20,6 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
     public class MenuFactory : IMenuFactory
     {
         Subject<(PointF, object)> subject = new();
-
-        public INodeViewModel? Create(object menuItem)
-        {
-            var node = new NodeViewModel() { Data = menuItem, Name = name(menuItem), Guid = Guid.NewGuid() };
-            node.WithChangesTo(a => a.IsSelected)
-                .Where(a => a)
-                .Subscribe(a =>
-            {
-                if (node.Data is Ref2 ref2)
-                {
-                    var enumerable = Globals.Resolver.Resolve<IEnumerableFactory>().Create(ref2);
-                    foreach (var item in enumerable)
-                    {
-                        node.Add(Create(item));
-                    }
-                }
-                else
-                    subject.OnNext((location, node.Data));
-            });
-            return node;
-        }
 
         public MenuFactory()
         {
@@ -63,7 +43,12 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
         PointF location = new();
         public INodeViewModel? CreateMenu()
         {
-            var node = new NodeViewModel() { Data = "Menu", IsVisible = false };
+            var menu = new MenuViewModel();
+            Globals.Resolver.Resolve<Subject<Type>>().Subscribe(a =>
+            {
+                menu.Type = a;
+            });
+            var node = new NodeViewModel() { Data = menu, IsVisible = false };
             node.WhenReceivedFrom(a => a.Location)
                 .Subscribe(a =>
                 {
@@ -89,6 +74,22 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
         public IDisposable Subscribe(IObserver<(PointF, object)> observer)
         {
             return subject.Subscribe(observer);
+        }
+
+        public class MenuViewModel : NotifyPropertyClass
+        {
+            private Type type;
+
+            public Type Type
+            {
+                get => type;
+                set
+                {
+                    type = value;
+                    RaisePropertyChanged();
+                }
+            }
+
         }
     }
 }
