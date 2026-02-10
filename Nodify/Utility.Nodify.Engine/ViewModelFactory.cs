@@ -16,12 +16,13 @@ using Utility.Interfaces.Exs.Diagrams;
 using Utility.Enums;
 using Utility.Interfaces.NonGeneric;
 using Utility.ServiceLocation;
+using Utility.PropertyNotifications;
 
 namespace Utility.Nodify.Engine
 {
     public class ViewModelFactory : IViewModelFactory
     {
-     
+
 
         public ViewModelFactory()
         {
@@ -36,7 +37,7 @@ namespace Utility.Nodify.Engine
                 Input = target,
                 Output = source,
                 //Data = container.Resolve<IConnectionFactory>().CreateConnection(source.Data, target.Data),
-                IsDirectionForward = source.Node is IGetData { Data : Tree } && target.Node is IGetData { Data: { } data } && data.GetType().Name.Contains("observable", StringComparison.InvariantCultureIgnoreCase) == true
+                IsDirectionForward = source.Node is IGetData { Data: Tree } && target.Node is IGetData { Data: { } data } && data.GetType().Name.Contains("observable", StringComparison.InvariantCultureIgnoreCase) == true
             };
 
             return connectionViewModel;
@@ -49,30 +50,43 @@ namespace Utility.Nodify.Engine
 
         public IConnectorViewModel CreateConnector(object dataContext)
         {
-            if (dataContext is ConnectorParameters { Guid: Guid guid, Data: var data, IsInput: bool isInput, Key: var key, Node: var node } s)
-            {
-                return new ConnectorViewModel()
+            var connector = create();
+            connector
+                .WhenReceivedFrom(a => a.IsExpanded)
+                .Subscribe(isExpanded =>
                 {
-                    Guid = guid,
-                    IsInput = isInput,
-                    Name = "ObjectProp",
-                    Node = node,
-                    Data = data
-                };
-            }
-            else if (dataContext is string _s)
-            {
-                return new ConnectorViewModel() { Data = dataContext, Name = _s };
-            }
+                    Globals.Resolver.Resolve<IDiagramViewModel>().DisablePanning = isExpanded;
+                });
+            return connector;
 
-            return new ConnectorViewModel() { Data = dataContext, Name = "" };
+            ConnectorViewModel create()
+            {
+                if (dataContext is ConnectorParameters { Guid: Guid guid, Data: var data, IsInput: bool isInput, Key: var key, Node: var node } s)
+                {
+                    return new ConnectorViewModel()
+                    {
+                        Guid = guid,
+                        IsInput = isInput,
+                        Name = "ObjectProp",
+                        Node = node,
+                        Data = data,
+                        IsExpanded =false,
+                    };
+                }
+                else if (dataContext is string _s)
+                {
+                    return new ConnectorViewModel() { Data = dataContext, Name = _s, IsExpanded = false };
+                }
+
+                return new ConnectorViewModel() { Data = dataContext, Name = "", IsExpanded = false, };
+            }
         }
 
         public INodeViewModel CreateNode(object dataContext)
         {
-            if(dataContext is InstanceKey instanceKey)
+            if (dataContext is InstanceKey instanceKey)
             {
-                return new NodeViewModel() {  Data = instanceKey.Data, Diagram = Utility.Globals.Resolver.Resolve<IDiagramViewModel>() };
+                return new NodeViewModel() { Data = instanceKey.Data, Diagram = Utility.Globals.Resolver.Resolve<IDiagramViewModel>() };
             }
             else if (dataContext is IReadOnlyTree tree)
             {
@@ -115,34 +129,48 @@ namespace Utility.Nodify.Engine
             PendingConnectorViewModel pending = null;
             if (dataContext is bool b)
             {
-                pending = new PendingConnectorViewModel() { IsInput = b };
+                pending = new PendingConnectorViewModel() { IsInput = b, IsExpanded =false };
             }
-            pending = new PendingConnectorViewModel() {  };
+            pending = new PendingConnectorViewModel() { IsExpanded = false };
+
+            pending.WhenReceivedFrom(a => a.IsExpanded).Subscribe(a =>
+            {
+                Globals.Resolver.Resolve<IDiagramViewModel>().DisablePanning = a;
+            });
             pending.ConnectorsChanged += a =>
             {
-                if(a.Action== System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+                if (a.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
                 {
-                    foreach(var item in a.NewItems)
+                    foreach (var item in a.NewItems)
                     {
-                        if (item is IGetData{ Data: PropertyInfo propertyInfo })
+                        if (item is IGetData { Data: PropertyInfo propertyInfo })
                         {
-                            var connectorViewModel = new ConnectorViewModel() { Data = propertyInfo, Name = propertyInfo.Name, Guid = Guid.NewGuid(), Node = pending.Node };
+                            var parameters = new ConnectorParameters(Guid.NewGuid(), false, propertyInfo.Name, pending.Node, propertyInfo);
+                            var connectorViewModel = Globals.Resolver.Resolve<IViewModelFactory>().CreateConnector(parameters);
+                            connectorViewModel.Node.Outputs.Add(connectorViewModel);
+                        }
+                        if (item is PropertyInfo _propertyInfo )
+                        {
+                            var parameters = new ConnectorParameters(Guid.NewGuid(), false, _propertyInfo.Name, pending.Node, _propertyInfo);
+                            var connectorViewModel = Globals.Resolver.Resolve<IViewModelFactory>().CreateConnector(parameters);
                             connectorViewModel.Node.Outputs.Add(connectorViewModel);
                         }
                     }
                 }
-                else if(a.Action== System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+                else if (a.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
                 {
-                    foreach(var propertyInfo in a.OldItems)
+                    foreach (var propertyInfo in a.OldItems)
                     {
                         pending.Node.Outputs.RemoveBy(a => a is IGetData { Data: { } data } && data.Equals(propertyInfo));
                     }
                 }
             };
+
             pending.ConnectorAdded += propertyInfo =>
-            {
-                var input = new ConnectorViewModel() { Data = propertyInfo, Guid = Guid.NewGuid(), Name = propertyInfo.Name, Node = pending.Node, IsInput = true };
-                pending.Node.Inputs.Add(input);
+            {     
+                var parameters = new ConnectorParameters(Guid.NewGuid(), true, propertyInfo.Name, pending.Node, propertyInfo);
+                var connectorViewModel = Globals.Resolver.Resolve<IViewModelFactory>().CreateConnector(parameters);
+                pending.Node.Inputs.Add(connectorViewModel);
             };
             return pending;
         }
