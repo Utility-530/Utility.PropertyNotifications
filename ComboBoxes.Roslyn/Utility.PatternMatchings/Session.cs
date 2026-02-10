@@ -60,23 +60,10 @@ namespace Utility.PatternMatchings
                         _telemetry.GetBoost(s.Item)))
                     .OrderBy(r => r.Match?.Score ?? 0)
                     .ThenBy(r => r.Symbol.FullName)
-                    .Take(200)
+                    .Take(10)
                     .ToList();
             }
 
-            //if (string.IsNullOrEmpty(pattern))
-            //{
-            //    _current = _all;
-            //    _lastPattern = "";
-
-            //    return _all
-            //        .Select(s => BuildResult(
-            //            s,
-            //            PatternMatchResult.Empty)) // special empty match
-            //        .OrderBy(IntelliSenseResult.Compare)
-            //        .Take(200) // important!
-            //        .ToList();
-            //}
 
             string p = pattern;
 

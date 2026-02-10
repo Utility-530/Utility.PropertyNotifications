@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Utility.PatternMatchings;
 
@@ -23,7 +25,7 @@ namespace Utility.PatternMatchings
     }
 
 
-    public sealed class Result
+    public sealed class Result : INotifyPropertyChanged
     {
         public readonly Input Symbol;
         public readonly PatternMatchResult Match;
@@ -37,7 +39,7 @@ namespace Utility.PatternMatchings
             string pattern,
             Input symbol,
             PatternMatchResult match,
-           
+
             int symbolWeight,
             int namespacePenalty,
             int mruBoost,
@@ -53,9 +55,30 @@ namespace Utility.PatternMatchings
         }
 
         public bool IsAllowed => AdaptiveThresholds.IsAllowed(Match.Kind, Pattern.Length);
-        public bool IsChecked { get => isChecked; set => isChecked = value; }
+        public bool IsChecked
+        {
+            get => isChecked;
+            set
+            {
+                isChecked = value;
+                RaisePropertyChanged(nameof(IsChecked));
+            }
+        }
 
         public string Pattern { get; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool RaisePropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            if (PropertyChanged != null)
+            {
+                var e = new PropertyChangedEventArgs(propertyName);
+                PropertyChanged(this, e);
+                return true;
+            }
+            return false;
+        }
 
         // VS-style sorting
         public static int Compare(Result a, Result b)

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
 using System.Text;
@@ -9,10 +11,68 @@ using Microsoft.CodeAnalysis;
 using Microsoft.Xaml.Behaviors;
 using Utility.PatternMatchings;
 using Utility.Roslyn;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Utility.WPF.ComboBoxes.Roslyn.Infrastructure
 {
+    public class CheckedArgs:EventArgs
+    {
+        public readonly Dictionary<string, bool> isChecked;
+
+        public CheckedArgs(Dictionary<string, bool> isChecked)
+        {
+            this.isChecked = isChecked;
+        }
+    }
+
+    public delegate void CheckedChangesEventHandler(
+    object sender,
+    CheckedChangesEventArgs e);
+
+    public class CheckedChangesEventArgs : RoutedEventArgs
+    {
+        public CheckedChangesEventArgs(RoutedEvent routedEvent, string name, bool isChecked, IDictionary<string, bool> dictionary) : base(routedEvent)
+        {
+            Name = name;
+            IsChecked = isChecked;
+            Dictionary = dictionary;
+        }
+        public IReadOnlyDictionary<string, bool> Changes { get; }
+        public string Name { get; }
+        public bool IsChecked { get; }
+        public IDictionary<string, bool> Dictionary { get; }
+    }
+
+    public static class CheckedEvents
+    {
+        public static readonly RoutedEvent CheckedChangesEvent =
+            EventManager.RegisterRoutedEvent(
+                "CheckedChanges",
+                RoutingStrategy.Bubble,
+                typeof(CheckedChangesEventHandler),
+                typeof(CheckedEvents));
+
+        public static void AddCheckedChangesHandler(
+            DependencyObject d,
+            CheckedChangesEventHandler handler)
+        {
+            if (d is UIElement u)
+                u.AddHandler(CheckedChangesEvent, handler);
+        }
+
+        public static void RemoveCheckedChangesHandler(
+            DependencyObject d,
+            CheckedChangesEventHandler handler)
+        {
+            if (d is UIElement u)
+                u.RemoveHandler(CheckedChangesEvent, handler);
+        }
+        // Helper to raise the event
+        public static void RaiseEvent(UIElement source, string fullName, bool isChecked, IDictionary<string, bool> dictionary)
+        {
+            source.RaiseEvent(new CheckedChangesEventArgs(CheckedChangesEvent, fullName, isChecked, dictionary));
+        }
+    }
+
     public class ReflectionBehavior : Behavior<ComboBox>
     {
         public static readonly DependencyProperty TypeProperty =
@@ -28,6 +88,7 @@ namespace Utility.WPF.ComboBoxes.Roslyn.Infrastructure
         private Input[] collection;
         private MruTracker mru = new();
         private Session session;
+        public readonly Dictionary<string, bool> @checked = [];
 
         public Type FilterType
         {
@@ -55,7 +116,7 @@ namespace Utility.WPF.ComboBoxes.Roslyn.Infrastructure
             {
                 if (AssociatedObject.ItemsSource is null)
                 {
-                    update();
+                    initialise();
                 }
             };
 
@@ -79,13 +140,13 @@ namespace Utility.WPF.ComboBoxes.Roslyn.Infrastructure
             if (e.Property == TypeProperty || e.Property == AccessibilityProperty || e.Property == FilterTypeProperty)
             {
                 if (AssociatedObject != null)
-                    update();
+                    initialise();
             }
 
             base.OnPropertyChanged(e);
         }
 
-        void update()
+        void initialise()
         {
             collection = Type
                 .GetProperties(Accessibility.ToBindingFlags() | System.Reflection.BindingFlags.Instance)
@@ -94,12 +155,42 @@ namespace Utility.WPF.ComboBoxes.Roslyn.Infrastructure
                 .ToArray();
 
             session = new Session(collection, mru, telemetry, x => 1);
-            AssociatedObject.ItemsSource = session.Update(FilterBehavior.GetSearchText(AssociatedObject));
+            updateSession();
         }
 
+        List<PatternMatchings.Result> results = new();
         private async void OnAttachedPropertyChanged(object? sender, EventArgs e)
         {
-            AssociatedObject.ItemsSource = session.Update(FilterBehavior.GetSearchText(AssociatedObject));
+            updateSession();
+        }
+
+        void updateSession()
+        {
+            foreach (var result in results)
+            {
+                result.PropertyChanged -= update;
+            }
+            results = session.Update(FilterBehavior.GetSearchText(AssociatedObject));
+            foreach (var result in results)
+            {
+                if(@checked.TryGetValue(result.Symbol.FullName, out var isChecked))
+                {
+                    result.IsChecked = isChecked;
+                }
+                result.PropertyChanged += update;
+            }
+            AssociatedObject.ItemsSource = results;
+        }
+
+        void update(object obj, PropertyChangedEventArgs e)
+        {
+            if (obj is PatternMatchings.Result result && 
+                e.PropertyName == nameof(PatternMatchings.Result.IsChecked))
+            {
+                @checked[result.Symbol.FullName] = result.IsChecked;
+                CheckedEvents.RaiseEvent(AssociatedObject, result.Symbol.FullName, result.IsChecked, @checked);
+            }
+
         }
     }
 }

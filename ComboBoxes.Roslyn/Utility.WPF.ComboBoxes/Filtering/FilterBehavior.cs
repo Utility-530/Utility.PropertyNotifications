@@ -37,23 +37,6 @@ namespace Utility.WPF.ComboBoxes
             obj.SetValue(FiltersProperty, value);
         }
 
-        //public static readonly DependencyProperty PredicateProperty =
-        //    DependencyProperty.RegisterAttached(
-        //        "Predicate",
-        //        typeof(Predicate<object>),
-        //        typeof(FilterBehavior),
-        //        new FrameworkPropertyMetadata());
-
-        //public static Predicate<object> GetPredicate(DependencyObject obj)
-        //{
-        //    return (Predicate<object>)obj.GetValue(PredicateProperty);
-        //}
-
-        //public static void SetPredicate(DependencyObject obj, IEnumerable value)
-        //{
-        //    obj.SetValue(PredicateProperty, value);
-        //}
-
         public static readonly DependencyProperty FiltersTemplateSelectorProperty =
             DependencyProperty.RegisterAttached(
                 "FiltersTemplateSelector",
@@ -71,7 +54,7 @@ namespace Utility.WPF.ComboBoxes
             obj.SetValue(FiltersProperty, value);
         }
 
-        
+
 
 
         private static readonly DependencyProperty IsUpdatingTextProperty =
@@ -171,14 +154,31 @@ namespace Utility.WPF.ComboBoxes
 
         public static bool GetIsDebugging(DependencyObject obj)
         {
-            return (bool)obj.GetValue(IndexProperty);
+            return (bool)obj.GetValue(IsDebuggingProperty);
         }
 
         public static void SetIsDebugging(DependencyObject obj, bool value)
         {
-            obj.SetValue(IndexProperty, value);
+            obj.SetValue(IsDebuggingProperty, value);
         }
 
+        public static readonly DependencyProperty IsProgressingProperty =
+            DependencyProperty.RegisterAttached(
+        "IsProgressing",
+        typeof(bool),
+        typeof(FilterBehavior),
+         new FrameworkPropertyMetadata(
+            false));
+
+        public static bool GetIsProgressing(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(IsProgressingProperty);
+        }
+
+        public static void SetIsProgressing(DependencyObject obj, bool value)
+        {
+            obj.SetValue(IsProgressingProperty, value);
+        }
 
 
         private static void changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -201,6 +201,7 @@ namespace Utility.WPF.ComboBoxes
         public static void SetProgress(DependencyObject obj, double value)
         {
             obj.SetValue(ProgressProperty, value);
+            obj.SetValue(IsProgressingProperty, value > 0);
         }
 
         #region Event Handlers
@@ -215,46 +216,13 @@ namespace Utility.WPF.ComboBoxes
                 SetIndex(comboBox, 0);
                 comboBox.SetValue(IsUpdatingTextProperty, true);
                 if (e.AddedItems.Count > 0)
-                {         
+                {
                     SetIndex(comboBox, comboBox.SelectedIndex);
                     if (GetConverter(comboBox)?.Convert(e.AddedItems[0], typeof(string), null, null) is string conversion)
                         findTextBox(comboBox).Text = conversion;
                     comboBox.SetValue(FilterBehavior.SelectedItemProperty, e.AddedItems[0]);
 
-                    // Set flag to ignore the TextChanged event that happens when selection updates the text    
-                    //if (e.AddedItems[0] is IntelliSenseResult { Symbol.Item: ISymbol symbol } result)
-                    //{
-                    //    findTextBox(comboBox).Text = symbol?.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
-                    //    //SetIndex(comboBox, comboBox.SelectedIndex);
-                    //    var paraphernalia = pairs[comboBox];
-                    //    paraphernalia.telemetry.MarkUsed(symbol);
-                    //    paraphernalia.mru.MarkUsed(symbol);
-
-                    //    if (GetIsSelectionSecondOrder(comboBox))
-                    //    {
-                    //        if (symbol is IMethodSymbol methodSymbol)
-                    //        {
-                    //            comboBox.ItemsSource = methodSymbol.Parameters;
-                    //            comboBox.IsDropDownOpen = true;
-                    //        }
-                    //        if (symbol is ITypeSymbol typeSymbol)
-                    //        {
-                    //            comboBox.ItemsSource = typeSymbol.AllInterfaces;
-                    //            comboBox.IsDropDownOpen = true;
-                    //        }
-                    //    }
-                    //    else
-                    //    {
-                    //        findPopup(comboBox).IsOpen = false;
-                    //    }
-                    //}
-                    //else if (e.AddedItems[0] is ISymbol _symbol)
-                    //{
-                    //    comboBox.SetValue(FilterBehavior.SelectedItemProperty, _symbol);
-                    //}
-                    //else
-                    //    throw new Exception("FilterBehavior only supports items of type ITypeSpecifier.");
-                }
+                                }
                 else
                 {
 
@@ -269,41 +237,11 @@ namespace Utility.WPF.ComboBoxes
                 throw new Exception("ds 3 s");
         }
 
-        //private static void ComboBox_GotFocus(object sender, RoutedEventArgs e)
-        //{
-        //    if (sender is ComboBox comboBox)
-        //    {
-        //        // Open dropdown on focus
-        //        if (!comboBox.IsDropDownOpen)
-        //        {
-        //            //comboBox.IsDropDownOpen = true;
-        //        }
-
-        //        // Select all text for easy replacement
-        //        var textBox = findTextBox(comboBox);
-        //        setupFiltering(comboBox, findTextBox(comboBox));
-        //        setupHoverTracking(comboBox);
-        //        //if (textBox != null)
-        //        //{
-
-        //        //    //textBox.SelectAll();
-        //        //}
-        //    }
-        //}
-
+    
         private static void ComboBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (sender is ComboBox comboBox)
             {
-                // Handle Enter key to confirm selection
-                //if (e.Key == Key.Enter && comboBox.IsDropDownOpen)
-                //{
-                //    if (comboBox.Items.Count > 0 && comboBox.SelectedIndex >= 0)
-                //    {
-                //        comboBox.IsDropDownOpen = false;
-                //        e.Handled = true;
-                //    }
-                //}
                 // Handle Escape to close dropdown
                 if (e.Key == Key.Escape)
                 {
@@ -444,34 +382,7 @@ namespace Utility.WPF.ComboBoxes
 
 
             }
-
-
         }
-        //private static int GetContainerIndexAtPointUsingHitTest(ComboBox comboBox, System.Windows.Point point)
-        //{
-        //    // Find the visual element at the mouse position
-        //    HitTestResult hitTestResult = VisualTreeHelper.HitTest(comboBox, point);
-
-        //    if (hitTestResult?.VisualHit != null)
-        //    {
-        //        // Walk up the visual tree to find ComboBoxItem
-        //        DependencyObject current = hitTestResult.VisualHit;
-
-        //        while (current != null && current != comboBox)
-        //        {
-        //            if (current is ComboBoxItem item)
-        //            {
-        //                // Get the index of this container
-        //                int index = comboBox.ItemContainerGenerator.IndexFromContainer(item);
-        //                return index;
-        //            }
-
-        //            current = VisualTreeHelper.GetParent(current);
-        //        }
-        //    }
-
-        //    return -1;
-        //}
 
         private static void setupFiltering(ComboBox comboBox, TextBox textBox)
         {
@@ -549,25 +460,11 @@ namespace Utility.WPF.ComboBoxes
                 SetIndex(comboBox, 0);
 
             string searchText = textBox.Text ?? string.Empty;
-            //string filterProperty = GetFilterProperty(comboBox);
             if (!string.IsNullOrEmpty(searchText))
             {
                 findPopup(comboBox).IsOpen = true;
             }
             SetSearchText(comboBox, searchText);
-
-            //var results = await pairs[comboBox].asyncEngine.UpdateAsync(searchText, fast =>
-            //{
-            //    comboBox.Dispatcher.Invoke(() =>
-            //    {
-            //        var array = fast.Take(10).ToArray();
-            //        comboBox.ItemsSource = array;
-
-            //    });
-            //});
-            //comboBox.ItemsSource = results.Take(10).ToArray();
-
-
         }
     }
 }

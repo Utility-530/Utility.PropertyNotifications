@@ -201,35 +201,17 @@ namespace Utility.WPF.ComboBoxes.Roslyn
             AssociatedObject.ItemsSource = results.Take(10).ToArray();
         }
 
-        async void setCollection(IEnumerable objects, Paraphernalia paraphernalia)
+        async Task setCollection(IEnumerable objects, Paraphernalia paraphernalia)
         {
-            ConcurrentQueue<Input> symbols = new ConcurrentQueue<Input>();
+            List<Input> symbols = new List<Input>();
             var count = objects.Count();
-
             paraphernalia.telemetry = new TelemetryTracker();
             paraphernalia.mru = new MruTracker();
             var session = new Session(symbols.ToArray(), paraphernalia.mru, paraphernalia.telemetry, x => SymbolKindWeights.Get((IntelliSenseSymbolKind)x));
             paraphernalia.asyncEngine = new AsyncEngine(session, new AsyncRankingController());
             IProgress<double> progress = new Progress<double>(p =>
             {
-                Input[] array = null;
-                try
-                {
-                    lock (symbols)
-                    {
-                        array = symbols.ToArray();
-                    }
-                }
-                catch (Exception ex)
-                {
-
-                }
-                if (array is not null)
-                {
-                    var session = new Session(array, paraphernalia.mru, paraphernalia.telemetry, x => SymbolKindWeights.Get((IntelliSenseSymbolKind)x));
-                    paraphernalia.asyncEngine = new AsyncEngine(session, new AsyncRankingController());
-                    FilterBehavior.SetProgress(AssociatedObject, p);
-                }
+                FilterBehavior.SetProgress(AssociatedObject, p);    
             });
 
             await Task.Run(() =>
@@ -245,14 +227,16 @@ namespace Utility.WPF.ComboBoxes.Roslyn
                     var token = new PatternToken(text);
                     var kind = IntelliSenseSymbolKind.Type;
                     var fullname = text;
-                    symbols.Enqueue(new Input(item, token, (int)kind, fullname));
-
-                    if (symbols.Count % 100 == 0 || symbols.Count == count)
+                    symbols.Add(new Input(item, token, (int)kind, fullname));
+                    var increment = Math.Max(1, (int)(count / 100.0));
+                    if (symbols.Count % increment == 0 || symbols.Count == count)
                     {
                         progress.Report(100.0 * symbols.Count / count);
                     }
                 }
             });
+            session = new Session(symbols.ToArray(), paraphernalia.mru, paraphernalia.telemetry, x => SymbolKindWeights.Get((IntelliSenseSymbolKind)x));
+            paraphernalia.asyncEngine = new AsyncEngine(session, new AsyncRankingController());
         }
     }
 }

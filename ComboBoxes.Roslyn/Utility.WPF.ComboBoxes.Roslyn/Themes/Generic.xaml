@@ -162,11 +162,15 @@
                             <TextBlock FontSize="8" Text="SearchText"></TextBlock>
                             <TextBlock  HorizontalAlignment="Right" Text="{Binding Path=(cmb:FilterBehavior.SearchText) , RelativeSource={RelativeSource AncestorType=ComboBox}}"></TextBlock>
                         </WrapPanel>
-                        <ProgressBar Height="2" HorizontalAlignment="Stretch" 
+                        <ProgressBar
+                                x:Name="PART_ProgressBar"     
+                            Height="2" HorizontalAlignment="Stretch" 
                                              VerticalAlignment="Bottom"
                                              Minimum="0" Maximum="100" 
                                              Foreground="#4EC9B0"
-                                             Value="{Binding Path=(cmb:FilterBehavior.Progress), 
+                                      Visibility="Collapsed"
+                                     
+                                     Value="{Binding Path=(cmb:FilterBehavior.Progress), 
                                                 FallbackValue=50,
                                                 TargetNullValue=50,
                                                 RelativeSource={RelativeSource AncestorType=ComboBox}}">
@@ -222,13 +226,17 @@
                             <Setter TargetName="PART_Custom_EditableTextBox" Property="Visibility" Value="Visible"/>
                             <Setter TargetName="ContentSite" Property="Visibility" Value="Collapsed"/>
                         </DataTrigger>
-               
-                        <!--<DataTrigger Binding="{Binding Path=(cmb:FilterBehavior.Progress),                                        
-                                      RelativeSource={RelativeSource Self}}" 
-                                               Value='100'>
-                                      <Setter TargetName="PART_Custom_EditableTextBox" Property="IsEnabled" Value="True"/>
 
-                                  </DataTrigger>-->
+                        <!--<DataTrigger Binding="{Binding Path=(cmb:FilterBehavior.IsProgressing), 
+                                 RelativeSource={RelativeSource Self}}" 
+                                               Value="False">
+                            <Setter TargetName="PART_ProgressBar" Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>-->
+                        <DataTrigger Binding="{Binding Path=(cmb:FilterBehavior.IsProgressing), 
+                                 RelativeSource={RelativeSource Self}}" 
+                                               Value="True">
+                            <Setter TargetName="PART_ProgressBar" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
 
 
