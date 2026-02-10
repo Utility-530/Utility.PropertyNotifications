@@ -139,16 +139,16 @@
                 <ItemsControl ItemsSource="{Binding Collection}" ItemTemplateSelector="{StaticResource TemplateSelector}" >
                     <ItemsControl.ItemContainerStyle>
                         <Style TargetType="{x:Type ContentPresenter}">
-                            <Setter Property="Grid.Row" Value="{Binding GridRow}"></Setter>
+                            <Setter Property="Grid.Column" Value="{Binding GridRow}"></Setter>
                         </Style>
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"></RowDefinition>
-                                    <RowDefinition Height="*"></RowDefinition>
-                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
                             </Grid>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
