@@ -37,6 +37,7 @@ namespace Utility.Nodes
                     c.Output.IsConnected = false;
                 }
             });
+            IsExpanded = false;
         }
 
         public override Type Type => Data is Type type ? type : Data is IParameterInfo parameterInfo ?
@@ -84,11 +85,6 @@ namespace Utility.Nodes
             {
                 Flow = flow.Inputs.Contains(this) ? IO.Input : IO.Output;
             }
-
-            //else if (Node is KnotNodeViewModel knot)
-            //{
-            //    Flow = knot.Flow;
-            //}
         }
 
         public bool IsConnectedTo(ConnectorViewModel con)
@@ -99,7 +95,5 @@ namespace Utility.Nodes
 
         public void Disconnect()
         { }
-
-        //=> Node.Graph.Schema.DisconnectConnector(this);
     }
 }

@@ -17,6 +17,7 @@ using Utility.Interfaces;
 using Splat;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
+using System.Reactive.Subjects;
 
 namespace Utility.Nodes
 {
@@ -28,8 +29,8 @@ namespace Utility.Nodes
 
         public int GridColumn = 1;
         private PendingConnectionViewModel pendingConnection = new PendingConnectionViewModel();
+        private bool disablePanning;
 
-      
         public DiagramViewModel()
         {
             Connections = connections;
@@ -122,6 +123,12 @@ namespace Utility.Nodes
         public ICommand DeleteSelectionCommand { get; }
         public ICommand GroupSelectionCommand { get; }
 
+        public bool DisablePanning
+        {
+            get => disablePanning;
+            set => RaisePropertyChanged(ref disablePanning, value);
+        }
+
         protected void OperationsMenu_MenuItemSelected(PointF location, object menuItem)
         {
             var nodeViewModel = Globals.Resolver.Resolve<IFactory<INodeViewModel>>().Create(menuItem);
@@ -162,24 +169,30 @@ namespace Utility.Nodes
 
             if (target is PendingConnectorViewModel pending)
             {
-                pending.IsDropDownOpen = true;
-                if (source is IGetData { Data: ParameterInfo { ParameterType: Type type } })
+                pending.IsExpanded = true;
+                pending.RaisePropertyChanged(nameof(IsExpanded));
+                this.DisablePanning = true;
+                if (pending.Data() is null)
                 {
-                    pending.Data = type;
+                    if (source is IGetData { Data: ParameterInfo { ParameterType: Type type } })
+                    {
+                        pending.Data = type;
+                    }
+                    else if (source is IGetData { Data: PropertyInfo { PropertyType: { } _type } })
+                    {
+                        pending.Data = _type;
+                    }
+                    pending.Node.Inputs.Additions<ConnectorViewModel>().Take(1).Subscribe(connector =>
+                    { 
+                        CreateConnection(source, connector);
+                    });
                 }
-                else if (source is IGetData { Data: PropertyInfo { PropertyType: { } _type } })
-                {
-                    pending.Data = _type;
-                }
-                pending.Node.Inputs.Additions<ConnectorViewModel>().Take(1).Subscribe(connector =>
-                {
-                    CreateConnection(source, connector);
-                });
                 return;
             }
             else if (target is ConnectorViewModel connector)
             {
             }
+            this.DisablePanning = false;
 
             var input = source.IsInput ? source : target;
             var output = target.IsInput ? source : target;
@@ -195,6 +208,7 @@ namespace Utility.Nodes
         protected void OnOperationsMenuClosed()
         {
             pendingConnection.IsVisible = false;
+            DisablePanning = false;
             Menu.Closed -= OnOperationsMenuClosed;
         }
 
@@ -202,30 +216,12 @@ namespace Utility.Nodes
         {
             menu.Clear();
             var operations = Globals.Resolver.Resolve<IEnumerableFactory>();
-
-            if (PendingConnection.Output != null)
+            
+            if(PendingConnection.Output.Data() is PropertyInfo propertyInfo)
             {
-                var x = operations?
-                    .Create(PendingConnection)
-                    .Cast<object>()
-                    .Select(a => Globals.Resolver.Resolve<IMenuFactory>().Create(a))
-                    .ToArray();
-                if (x == null)
-                    return;
-                foreach (var y in x)
-                    menu.Add(y);
+                Globals.Resolver.Resolve<Subject<Type>>().OnNext(propertyInfo.PropertyType);
             }
-            else if (operations != null)
-            {
-                var x = operations
-                    .Create(null)
-                    .Cast<object>()                
-                    .Select(a => Globals.Resolver.Resolve<IMenuFactory>().Create(a))
-                    .ToArray();
-
-                foreach (var y in x)
-                    menu.Add(y);
-            }
+            DisablePanning = true;
             menu.OpenAt(mouseLocation);
         }
 

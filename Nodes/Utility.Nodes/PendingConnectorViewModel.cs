@@ -14,7 +14,6 @@ namespace Utility.Nodes
     public class PendingConnectorViewModel : NodeViewModel, IConnectorViewModel, IPendingConnectorViewModel
     {
         private bool isDropDownOpen;
-        private object data;
 
         public event Action<PropertyInfo> ConnectorAdded;
 
@@ -31,6 +30,7 @@ namespace Utility.Nodes
                     ConnectorAdded.Invoke(propertyInfo);
                 }
             });
+
             ChangeConnectorsCommand = new Command<object>((a) =>
             {
                 if (a is CollectionChanges { Additions: IList { } additions, Removals: IList removals })
@@ -43,9 +43,9 @@ namespace Utility.Nodes
                         ConnectorsChanged?.Invoke(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removals));
                 }
             });
+            IsExpanded = false;
         }
 
-        public bool IsDropDownOpen { get => isDropDownOpen; set => RaisePropertyChanged(ref isDropDownOpen, value); }
         public bool IsConnected { get; set; }
         public bool IsInput { get; set; }
         public INodeViewModel Node { get; set; }
