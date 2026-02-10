@@ -1,5 +1,4 @@
-﻿using DryIoc;
-using Splat;
+﻿using Splat;
 using System;
 using System.Windows;
 using Utility.Interfaces.Exs;

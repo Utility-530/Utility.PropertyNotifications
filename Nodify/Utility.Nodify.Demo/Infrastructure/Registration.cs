@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reactive.Concurrency;
-using DryIoc;
+using Microsoft.CodeAnalysis.CSharp;
 using Splat;
 using TreeCollections;
 using Utility.Interfaces.Exs;
@@ -13,9 +13,8 @@ using Utility.Nodes;
 using Utility.Nodify.Base.Abstractions;
 using Utility.Nodify.Demo.Services;
 using Utility.Nodify.Engine;
-using Utility.Nodify.ViewModels;
-using Utility.Nodify.ViewModels.Infrastructure;
 using Utility.Repos;
+using Utility.Roslyn;
 using Utility.ServiceLocation;
 using Utility.Services;
 using Utility.Services.Meta;
@@ -25,8 +24,10 @@ namespace Utility.Nodify.Demo.Infrastructure
 {
     internal class Registration
     {
+        static readonly Guid diagramGuid = new Guid("014A058C-90B1-46D4-BD4F-DCE5B44858AE");
         public static async void registerGlobals(IRegister register)
         {
+            register.Register<CSharpCompilation>(() => Compiler.Compile(Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>()));
 
             register.Register<IScheduler>(() => new SynchronizationContextScheduler(Globals.UI));
             register.Register(() => new PlayBackViewModel());
@@ -44,10 +45,10 @@ namespace Utility.Nodify.Demo.Infrastructure
             register.Register<IViewModelFactory, ViewModelFactory>();
             //Globals.Register.Register<ITreeRepository>(() => new TreeRepository(sqliteName));
             Globals.Exceptions.Subscribe(a => Globals.Resolver.Resolve<ExceptionsViewModel>().Collection.Add(a));
-            register.Register(() => new DiagramViewModel() { Key = "Master", Arrangement = Utility.Enums.Arrangement.UniformRow });
+            register.Register<IDiagramViewModel>(() => new DiagramViewModel() { Guid = diagramGuid, Name = "Master", Arrangement = Utility.Enums.Arrangement.UniformRow });
             register.Register<INodeRoot>(() => new Utility.Nodes.Meta.NodeEngine(new TreeRepository("../../../Data"), new ValueRepository("../../../Data")));
             register.Register<IMenuFactory, MenuFactory>();
-            await new DiagramFactory().Build(Globals.Resolver.Resolve<DiagramViewModel>());
+            await new DiagramFactory().Build(Globals.Resolver.Resolve<IDiagramViewModel>());
             //new Tracker().Track(Globals.Resolver.Resolve<DiagramViewModel>());
         }
 
@@ -57,17 +58,6 @@ namespace Utility.Nodify.Demo.Infrastructure
             resolver.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new FactoryOne());
             resolver.RegisterLazySingleton(() => new CollectionViewService() { Name = nameof(CollectionViewService) });
             //resolver.RegisterLazySingleton<Utility.Nodify.Operations.Infrastructure.INodeSource>(() => new NodeSource() { });
-        }
-
-        class DiConfiguration
-        {
-            public static Rules SetRules(Rules rules)
-            {
-                rules = rules
-                    .WithDefaultReuse(Reuse.Singleton)
-                    .With(FactoryMethod.ConstructorWithResolvableArguments);
-                return rules;
-            }
         }
     }
 }

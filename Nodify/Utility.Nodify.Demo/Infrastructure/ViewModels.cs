@@ -8,6 +8,7 @@ using Utility.ServiceLocation;
 using Utility.Interfaces.Exs;
 using System.Linq;
 using Utility.Nodes;
+using Utility.Interfaces.Exs.Diagrams;
 
 namespace Utility.Nodify.Demo.Infrastructure
 {
@@ -25,7 +26,7 @@ namespace Utility.Nodify.Demo.Infrastructure
 
     public class MainViewModel
     {
-        object[] collection = [Globals.Resolver.Resolve<DiagramViewModel>(), Globals.Resolver.Resolve<MasterPlayViewModel>()];
+        object[] collection = [Globals.Resolver.Resolve<IDiagramViewModel>(), Globals.Resolver.Resolve<MasterPlayViewModel>()];
 
         public object[] Collection => collection;
     }
