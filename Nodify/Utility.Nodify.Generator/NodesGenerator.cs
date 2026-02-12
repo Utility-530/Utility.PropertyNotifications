@@ -37,7 +37,8 @@ namespace Nodify.Playground
                         {
                             var node = new NodeViewModel
                             {
-                                Key = methodNode.MethodInfo.Name,
+                                Guid = Guid.NewGuid(),
+                                Name = methodNode.MethodInfo.Name,
                                 Location = settings.NodeLocationGenerator(settings, ++i),
                                 Data = methodNode,
                             };
@@ -46,7 +47,7 @@ namespace Nodify.Playground
 
                             methodNode.InValues.ForEach(a =>
                             {
-                                var input = new ConnectorViewModel { Shape = FlatShape.Circle, Key = a.Value.Key, Data = a.Value };
+                                var input = new ConnectorViewModel { Guid = Guid.NewGuid(), Shape = FlatShape.Circle, Name = a.Value.Key, Data = a.Value };
                                 Shared.inputConnectors.Add(a.Value, input);
                                 node.Inputs.Add(input);
                                 input.Node = node;
@@ -54,7 +55,7 @@ namespace Nodify.Playground
 
                             if (methodNode.OutValue is { })
                             {
-                                var output = new ConnectorViewModel { Shape = FlatShape.Circle, Key = methodNode.MethodInfo.Name + ".", Data = methodNode.OutValue };
+                                var output = new ConnectorViewModel { Guid = Guid.NewGuid(), Shape = FlatShape.Circle, Name = methodNode.MethodInfo.Name + ".", Data = methodNode.OutValue };
                                 Shared.outputConnectors.Add(methodNode.OutValue, output);
                                 node.Outputs.Add(output);
                                 output.Node = node;
@@ -91,7 +92,14 @@ namespace Nodify.Playground
                                 throw new Exception("DSF3d54645dfd");
                             }
 
-                            var output = new ConnectorViewModel { Node = reference, Shape = FlatShape.Circle, Flow = IO.Output, Key = "output", Data = connector };
+                            var output = new ConnectorViewModel { 
+                                Node = reference, 
+                                Shape = FlatShape.Circle, 
+                                Flow = IO.Output, 
+                                Guid=Guid.NewGuid(), 
+                                Name = "output",
+                                Data = connector };
+
                             Shared.outputConnectors.Add(connector, output);
                             reference.Outputs.Add(output);
                             reference.Outputs.AndChanges<object>().Subscribe(a =>
@@ -125,7 +133,7 @@ namespace Nodify.Playground
                                 throw new Exception("DSF3d54645dfd");
                             }
 
-                            var input = new ConnectorViewModel { Shape = FlatShape.Square, Flow = IO.Input, Node = reference, Key = "input", Data = connector };
+                            var input = new ConnectorViewModel { Guid = Guid.NewGuid(), Shape = FlatShape.Square, Flow = IO.Input, Node = reference, Name = "input", Data = connector };
                             Shared.inputConnectors.Add(connector, input);
                             reference.Inputs.Add(input);
                         }
@@ -166,7 +174,7 @@ namespace Nodify.Playground
                                 Inputs = inConnectors,
                                 Output = output,
                                 Data = mConn,
-                                Key = Guid.NewGuid().ToString()
+                                Guid = Guid.NewGuid()
                             };
 
                             connections.Add(connection);

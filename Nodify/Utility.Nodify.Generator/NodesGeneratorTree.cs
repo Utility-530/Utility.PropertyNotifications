@@ -48,10 +48,10 @@ namespace Nodify.Playground
 
                         if (node.Parent() is not null)
                         {
-                            var input = new ConnectorViewModel { Node = node, Shape = FlatShape.Square, Flow = IO.Input, Key = "input" };
+                            var input = new ConnectorViewModel { Guid = Guid.NewGuid(), Node = node, Shape = FlatShape.Square, Flow = IO.Input, Name = "input" };
                             node.Inputs.Add(input);
                         }
-                        var output = new ConnectorViewModel { Node = node, Shape = FlatShape.Square, Flow = IO.Output, Key = "ouput2" };
+                        var output = new ConnectorViewModel { Guid = Guid.NewGuid(), Node = node, Shape = FlatShape.Square, Flow = IO.Output, Name = "ouput2" };
                         node.Outputs.Add(output);
                         nodes.Add(node);
                     });
