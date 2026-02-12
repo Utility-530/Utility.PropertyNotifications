@@ -1,4 +1,4 @@
-[![NuGet version (Newtonsoft.Json.Bson)](https://img.shields.io/nuget/v/Utility.Help-ers)](https://www.nuget.org/packages/Utility.Help-ers/)
+[![NuGet version (Newtonsoft.Json.Bson)](https://img.shields.io/nuget/v/Utility.Helpers)](https://www.nuget.org/packages/Utility.Helpers/)
 
 # Utility.Helpers
 
