@@ -6,9 +6,9 @@ namespace Utility.Interfaces.Exs.Diagrams
 {
     public interface IDiagramViewModel : INodeViewModel
     {
-        ICollection<INodeViewModel> SelectedNodes { get; }
+         ICollection<INodeViewModel> SelectedNodes { get; }
 
-        IConnectionViewModel PendingConnection { get; set; }
+         IConnectionViewModel PendingConnection { get; set; }
 
         bool DisablePanning { get; set; }
     }
