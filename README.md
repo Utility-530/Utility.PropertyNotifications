@@ -5,30 +5,32 @@
 ![Roslyn](https://img.shields.io/badge/Roslyn-Compiler-purple?style=for-the-badge&logo=c%23&logoColor=white)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-*A demonstration project for*
+*A demonstration project and demo for*
 
 - Integration of Roslyn's `Microsoft.CodeAnalysis` APIs into the WPF ComboBox control
 - WPF data binding and MVVM patterns for UI updates
 
-![me](https://github.com/dtaylor-530/WPF.ComboBoxes.Roslyn/blob/main/Assets/FilterTypesWithDebugging.gif)
+![me](https://github.com/dtaylor-530/WPF.ComboBoxes.Roslyn/blob/master/Assets/FilterTypesWithDebugging.gif)
 
-![me](https://github.com/dtaylor-530/WPF.ComboBoxes.Roslyn/blob/main/Assets/FilterMethodsWithParamSelection.gif)
+![me](https://github.com/dtaylor-530/WPF.ComboBoxes.Roslyn/blob/master/Assets/FilterMethodsWithParamSelection.gif)
 
-### Project Structure
+### Structure
 
-- App.xaml: the styles for the controls used
-- App.xaml.cs: the factory for constructing the demo project
-- Common 
-   - Helper: general extension methods
-   - Compiler: methods for generating the CSharpCompilation class that is used to derived methods and types
-- Filtering
-   - FilterBehavior: a behavior class containing many attached properties for interfacing between the combobox's parts so their actions synchronise
-- Infrastructure
-   - Classes related to displaying the specific kind of data from CSharpCompilation in the ComboBox
-- Roslyn
-   - Classes related to the algorithm that efficiently filters the data from the CSharpCompilation object
+- demo
+  - App.xaml: the styles for the controls used
+  - App.xaml.cs: the factory for constructing the demo project
+- library
+  - Common 
+     - Helper: general extension methods
+     - Compiler: methods for generating the CSharpCompilation class that is used to derived methods and types
+  - Filtering
+    - FilterBehavior: a behavior class containing many attached properties for interfacing between the combobox's parts so their actions synchronise
+  - Infrastructure
+    - Classes related to displaying the specific kind of data from CSharpCompilation in the ComboBox
+  - Roslyn
+    - Classes related to the algorithm that efficiently filters the data from the CSharpCompilation object
     
-### Building the Project
+### Building
 
 1. Clone the repository:
 ```bash
@@ -37,7 +39,9 @@ git clone https://github.com/dtaylor-530/WPF.ComboBoxes.Roslyn.git
 
 2. Open the solution file `WPF.ComboBoxes.Roslyn.slnx` in Visual Studio
 
-3. Restore NuGet packages and build the solution
+3. Restore NuGet packages
+   
+4. build the solution
 
 ## Acknowledgements
 - [Roslyn](https://github.com/dotnet/roslyn)
