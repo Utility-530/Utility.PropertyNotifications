@@ -1,0 +1,96 @@
+﻿<Window x:Class="Utility.WPF.SandBox.PathsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Utility.WPF.SandBox"
+        mc:Ignorable="d"
+        Title="PathsWindow" Height="450" Width="800">
+    <UniformGrid>
+        <Path Stroke="Black" StrokeThickness="4">
+            <Path.Data>
+                <GeometryGroup >
+                    <PathGeometry>M27 9C27 6.23858 24.7614 4 22 4C19.2386 4 17 6.23858 17 9V19C17 21.7614 19.2386 24 22 24C24.7614 24 27 21.7614 27 19V9Z</PathGeometry>
+                    <PathGeometry>M12 24H9</PathGeometry>
+                </GeometryGroup>
+            </Path.Data>
+        </Path>
+
+
+        <!-- License: MIT. Made by Primer: https://github.com/primer/octicons -->
+
+        <Path  Fill="Black" Data="M8.114 2.094a.75.75 0 01.386.656V9h1.252a.75.75 0 110 1.5H5.75a.75.75 0 010-1.5H7V4.103l-.853.533a.75.75 0 01-.795-1.272l2-1.25a.75.75 0 01.762-.02zm4.889 5.66a.75.75 0 01.75-.75h5.232a.75.75 0 01.53 1.28l-2.776 2.777c.55.097 1.057.253 1.492.483.905.477 1.504 1.284 1.504 2.418 0 .966-.471 1.75-1.172 2.27-.687.511-1.587.77-2.521.77-1.367 0-2.274-.528-2.667-.756a.75.75 0 01.755-1.297c.331.193.953.553 1.912.553.673 0 1.243-.188 1.627-.473.37-.275.566-.635.566-1.067 0-.5-.219-.836-.703-1.091-.538-.284-1.375-.443-2.471-.443a.75.75 0 01-.53-1.28l2.643-2.644h-3.421a.75.75 0 01-.75-.75zM7.88 15.215a1.4 1.4 0 00-1.446.83.75.75 0 01-1.37-.61 2.9 2.9 0 012.986-1.71 2.565 2.565 0 011.557.743c.434.446.685 1.058.685 1.778 0 1.641-1.254 2.437-2.12 2.986-.538.341-1.18.694-1.495 1.273H9.75a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75c0-1.799 1.337-2.63 2.243-3.21 1.032-.659 1.55-1.031 1.55-1.8 0-.355-.116-.584-.26-.732a1.068 1.068 0 00-.652-.298z"/>
+
+
+        <!-- License: Apache. Made by Carbon Design: https://github.com/carbon-design-system/carbon -->
+        <Path Fill="Black">
+            <Path.Data>
+                <GeometryGroup >
+                    <PathGeometry>M29,22H24a2.0027,2.0027,0,0,1-2-2V14a2.0023,2.0023,0,0,1,2-2h5v2H24v6h5Z</PathGeometry>
+                    <PathGeometry>M18,12H14V8H12V22h6a2.0027,2.0027,0,0,0,2-2V14A2.0023,2.0023,0,0,0,18,12Zm-4,8V14h4v6Z</PathGeometry>
+                    <PathGeometry>M8,12H3v2H8v2H4a2,2,0,0,0-2,2v2a2,2,0,0,0,2,2h6V14A2.0023,2.0023,0,0,0,8,12Zm0,8H4V18H8Z</PathGeometry>
+
+                </GeometryGroup>
+            </Path.Data>
+        </Path>
+
+        <Path Fill="Black">
+            <Path.Data>
+                <GeometryGroup FillRule="EvenOdd">
+                    <!--<PathGeometry>M23,23 A7,7 0 1 1 30,16 A7.0078,7.0078 0 0 1 23,23
+                  M23,11 A5,5 0 1 0 28,16 A5.0055,5.0055 0 0 0 23,11</PathGeometry>
+
+                    <PathGeometry FillRule="EvenOdd">M9,23
+                  A7,7 0 1 1 16,16
+                  A7,7 0 0 1 9,23
+                  M9,11
+                  A5,5 0 1 0 14,16
+                  A5,5 0 0 0 9,11</PathGeometry>-->
+                    <EllipseGeometry
+            Center="9,16"
+            RadiusX="7"
+            RadiusY="7" />
+                    <EllipseGeometry
+                Center="23,16"
+                RadiusX="7"
+                RadiusY="7" />
+
+                    <!-- Inner circle (hole) -->
+                    <EllipseGeometry
+                Center="23,16"
+                RadiusX="5"
+                RadiusY="5" />
+                </GeometryGroup>
+            </Path.Data>
+        </Path>
+
+
+        <Path  Fill="Black">
+            <Path.Data>
+                M6,7H4v2h2V7z M6,10H4v2h2V10z M9,7H7v2h2V7z M9,10H7v2h2V10z M12,7h-2v2h2V7z M12,10h-2v2h2V10z M15,2h-1v2h-3V2H5v2H2V2H1 C0.447,2,0,2.447,0,3v11c0,0.553,0.447,1,1,1h14c0.553,0,1-0.447,1-1V3C16,2.447,15.553,2,15,2z M14,13H2V6h12V13z M4,0.494 C4,0.222,3.778,0,3.506,0H3.497C3.222,0,3,0.222,3,0.494V3h1V0.494z M13,0.494C13,0.222,12.778,0,12.506,0h-0.009 C12.222,0,12,0.222,12,0.494V3h1V0.494z
+            </Path.Data>
+        </Path>
+
+        <Path Stroke="Black" StrokeThickness="4" Stretch="Uniform">
+        <Path.Data>
+            M0,0L16,16M16,0L0,16
+        </Path.Data>
+        </Path>
+        <Path StrokeThickness="2" Stroke="Black"  Stretch="Uniform">
+            <Path.Data>
+                <PathGeometry>
+                    <PathGeometry.Figures>
+                        <PathFigure StartPoint="0,1">
+                            <LineSegment Point="0,-1" />
+                        </PathFigure>
+                        <PathFigure StartPoint="1,0">
+                            <LineSegment Point="-1,0" />
+                        </PathFigure>
+                    </PathGeometry.Figures>
+                </PathGeometry>
+            </Path.Data>
+           
+        </Path>
+      
+    </UniformGrid>
+</Window>
