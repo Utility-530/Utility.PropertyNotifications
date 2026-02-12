@@ -128,6 +128,7 @@ namespace Utility.Nodes.Meta
                             {
                                 var value = getter.Get(node);
                                 repository.Set((GuidKey)node.Key(), reception.Name, value, DateTime.Now);
+                                node.RaisePropertyChanged(reception.Name);
                             }
                         }
                     }).DisposeWith(compositeDisposables.Get(node.Key()));
