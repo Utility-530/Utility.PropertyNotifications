@@ -1,9 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Windows;
+using Newtonsoft.Json;
 using Splat;
-using System.Windows;
 using Utility.Conversions.Json.Newtonsoft;
+using Utility.Interfaces.Exs.Diagrams;
+using Utility.Interfaces.NonGeneric;
 using Utility.Models.Trees.Converters;
 using Utility.Nodes;
+using Utility.Nodify.Base.Abstractions;
+using Utility.Nodify.Repository;
 using Utility.Nodify.Transitions.Demo.Infrastructure;
 using Utility.ServiceLocation;
 using MainViewModel = Utility.Nodify.Transitions.Demo.Infrastructure.MainViewModel;
@@ -20,7 +24,7 @@ namespace Utility.Nodify.Transitions.Demo
             SQLitePCL.Batteries.Init();
 
             Registration.registerGlobals(Globals.Register);
-            //Registration.initialise(Locator.CurrentMutable);
+            initialse();
             JsonConvert.DefaultSettings = () => settings;
             var window = new Window()
             {
@@ -28,6 +32,15 @@ namespace Utility.Nodify.Transitions.Demo
             };
             window.Show();
             base.OnStartup(e);
+        }
+
+        async void initialse()
+        {
+            var diagramViewModel = Globals.Resolver.Resolve<IDiagramViewModel>();
+            await Globals.Resolver.Resolve<IDiagramFactory>().Build(diagramViewModel);
+            var repo = new DiagramRepository("../../../Data");
+            repo.Track(diagramViewModel);
+            repo.Convert(diagramViewModel);
         }
 
         public JsonSerializerSettings settings = new()

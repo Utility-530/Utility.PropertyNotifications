@@ -43,7 +43,6 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
             //register.Register(container);
 
             Globals.Exceptions.Subscribe(a => Globals.Resolver.Resolve<ExceptionsViewModel>().Collection.Add(a));
-            var repo = new DiagramRepository("../../../Data");
             var diagramViewModel = new DiagramViewModel() { Guid = diagramGuid, Name = diagramKey, Arrangement = Utility.Enums.Arrangement.UniformRow };
             register.Register<IDiagramViewModel>(diagramViewModel);
             //container.RegisterInstance<IDiagramViewModel>(diagramViewModel);
@@ -54,10 +53,7 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
             register.Register<IFactory<INodeViewModel>, NodeFactory>();
             register.Register<Subject<Type>>();
 
-            await Globals.Resolver.Resolve<IDiagramFactory>().Build(diagramViewModel);
 
-            repo.Track(diagramViewModel);
-            repo.Convert(diagramViewModel);
             //new Tracker().Track(diagramViewModel);
         }
 
