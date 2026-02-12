@@ -44,7 +44,6 @@ namespace Utility.Nodes.Meta
 
         private const string ERROR_KEY_NOT_FOUND = "Key not found";
         private readonly Dictionary<string, List<INodeViewModel>> dictionary = new();
-        private readonly IDataActivator dataActivator;
         Dictionary<string, State> states = new();
         Dictionary<string, CompositeDisposable> _childrenSubscriptions = new();
         private IDisposable unLoadDisposable;
@@ -171,6 +170,10 @@ namespace Utility.Nodes.Meta
                                         observer.OnError,
                                         () => { }
                                         ).DisposeWith(disposables);
+                    }
+                    else
+                    {
+
                     }
 
                     return disposables;

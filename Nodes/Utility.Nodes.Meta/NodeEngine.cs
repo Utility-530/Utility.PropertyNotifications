@@ -42,14 +42,15 @@ namespace Utility.Nodes.Meta
         private readonly ITreeRepository repository;
         private readonly INodeSource nodesStore;
         Dictionary<string, CompositeDisposable> childrenSubscriptions = new();
-        private bool _disposed;
+        private bool _disposed;        
+        private readonly IDataActivator dataActivator;
 
-        public NodeEngine(ITreeRepository? treeRepo = null, IValueRepository? valueRepository = null, IDataActivator? dataActivator = null, Predicate<INodeViewModel>? childrenTracking = null, INodeSource? nodeSource = null)
+        public NodeEngine(ITreeRepository? treeRepo = null, IValueRepository? valueRepository = null, IDataActivator? dataActivator = null, Predicate<INodeViewModel>? childrenTracking = null, NodeInterface? nodeInterface = null, INodeSource? nodeSource = null)
         {
             this.repository = treeRepo ?? Globals.Resolver.Resolve<ITreeRepository>() ?? throw new Exception("££SXXX");
             valueRepository ??= Globals.Resolver.Resolve<IValueRepository>() ?? throw new Exception("£3__SXXX");
             this.dataActivator = dataActivator ?? Globals.Resolver.Resolve<IDataActivator>() ?? throw new Exception("£3__SXXX");
-            var x = Globals.Resolver.Resolve<NodeInterface>();
+            var x = nodeInterface ??= Globals.Resolver.Resolve<NodeInterface>();
             nodesStore = nodeSource ?? Globals.Resolver.Resolve<INodeSource>();
             _dataInitialiser = new(valueRepository, x);
             this.childrenTracking = childrenTracking;

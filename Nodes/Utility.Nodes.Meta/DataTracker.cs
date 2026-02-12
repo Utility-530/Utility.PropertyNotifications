@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Reflection;
 using Utility.Attributes;
 using Utility.Extensions;
@@ -22,12 +23,13 @@ using Utility.ServiceLocation;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Meta
-{
+{  
     internal class DataTracker : IDataTracker, IDisposable
     {
 
         IValueRepository repository;
         Dictionary<string, CompositeDisposable> compositeDisposables = new();
+        Subject<ValueChange> subject = new Subject<ValueChange>();
         NodeInterface nodeInterface;
         private bool _disposed;
         private static IEnumerable<PropertyInfo> yieldProperties;
@@ -188,6 +190,11 @@ namespace Utility.Nodes.Meta
             GC.SuppressFinalize(this);
         }
 
+        public IDisposable Subscribe(IObserver<ValueChange> observer)
+        {
+            return subject.Subscribe(observer);
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed)
@@ -201,6 +208,7 @@ namespace Utility.Nodes.Meta
                 // ...
                 compositeDisposables.ForEach(a => a.Value.Dispose());
                 compositeDisposables.Clear();
+                subject.Dispose();
             }
 
             // Free unmanaged resources.
@@ -208,6 +216,7 @@ namespace Utility.Nodes.Meta
 
             _disposed = true;
         }
+
         #endregion dispose
         //    void configure(INodeViewModel node)
         //    {
