@@ -135,6 +135,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{90
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.ComboBoxes.Roslyn", "..\ComboBoxes.Roslyn\Utility.WPF.ComboBoxes.Roslyn\Utility.WPF.ComboBoxes.Roslyn.csproj", "{FCD0C053-79F2-29E8-E76F-991D3A19C9B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Roslyn", "..\ComboBoxes.Roslyn\Utility.Roslyn\Utility.Roslyn.csproj", "{23B5917B-C300-2C0C-1A13-B2B15EDA2810}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.ComboBoxes", "..\ComboBoxes.Roslyn\Utility.WPF.ComboBoxes\Utility.WPF.ComboBoxes.csproj", "{35C1CBE6-16EB-FE59-599D-A3A2A284F63B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.PatternMatchings", "..\ComboBoxes.Roslyn\Utility.PatternMatchings\Utility.PatternMatchings.csproj", "{2AD175B9-07D7-447F-0A0E-7506FF63E459}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -393,6 +399,18 @@ Global
 		{FCD0C053-79F2-29E8-E76F-991D3A19C9B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCD0C053-79F2-29E8-E76F-991D3A19C9B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCD0C053-79F2-29E8-E76F-991D3A19C9B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23B5917B-C300-2C0C-1A13-B2B15EDA2810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23B5917B-C300-2C0C-1A13-B2B15EDA2810}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23B5917B-C300-2C0C-1A13-B2B15EDA2810}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23B5917B-C300-2C0C-1A13-B2B15EDA2810}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35C1CBE6-16EB-FE59-599D-A3A2A284F63B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35C1CBE6-16EB-FE59-599D-A3A2A284F63B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35C1CBE6-16EB-FE59-599D-A3A2A284F63B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35C1CBE6-16EB-FE59-599D-A3A2A284F63B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AD175B9-07D7-447F-0A0E-7506FF63E459}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AD175B9-07D7-447F-0A0E-7506FF63E459}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AD175B9-07D7-447F-0A0E-7506FF63E459}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AD175B9-07D7-447F-0A0E-7506FF63E459}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -453,6 +471,9 @@ Global
 		{17B1FEA0-4939-D4C0-BEB0-13E727A0A741} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{12FBA733-DD5A-8A4A-BE35-5E21580FE5AF} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{FCD0C053-79F2-29E8-E76F-991D3A19C9B8} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
+		{23B5917B-C300-2C0C-1A13-B2B15EDA2810} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
+		{35C1CBE6-16EB-FE59-599D-A3A2A284F63B} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
+		{2AD175B9-07D7-447F-0A0E-7506FF63E459} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C218ADB7-210D-4A37-BC47-800268D4894F}
