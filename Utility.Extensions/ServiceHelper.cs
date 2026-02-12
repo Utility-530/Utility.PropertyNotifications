@@ -96,7 +96,7 @@ namespace Utility.Extensions
 
         public static void ReactTo<TParam, TInput, TOutput>(this IServiceResolver serviceResolver, INodeViewModel tModel, Func<TInput, TOutput>? transformation = null) where TParam : IParameter
         {
-
+       
             IPropertyNode propertyNode;
             if (tModel.Data() is not IPropertyNode node)
             {
