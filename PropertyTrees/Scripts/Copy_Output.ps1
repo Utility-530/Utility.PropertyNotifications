@@ -1,1 +1,0 @@
- Copy-Item -Path "C:\Users\declan\source\Utility\Utility.PropertyTrees\Source\Utility.PropertyTrees.WPF.Demo\bin\Debug\net7.0-windows" -Recurse -Destination "C:\Users\declan\source\Puttshack\Gaming_Core_HUD" -Container -Force

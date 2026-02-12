@@ -1,8 +1,0 @@
-﻿using System;
-
-namespace Utility.Attributes
-{
-    public class YieldAttribute : Attribute
-    {
-    }
-}

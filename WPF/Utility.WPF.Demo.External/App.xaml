@@ -1,7 +1,0 @@
-﻿<Application x:Class="Utility.WPF.Demo.External.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Application.Resources>
-        <ResourceDictionary Source="/Utility.WPF.Demo.Data;component/Themes/Generic.xaml" />
-    </Application.Resources>
-</Application>
